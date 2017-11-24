@@ -4,7 +4,7 @@
   "authors": [
     "Activeeon"
   ],
-  "description": "Navigation Pannel for Proactive views",
+  "description": "Navigation Panel for Proactive views",
   "main": "app/index.html",
   "private": true,
   "ignore": [

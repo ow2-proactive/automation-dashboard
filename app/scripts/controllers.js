@@ -16,5 +16,5 @@ function MainCtrl() {
 
 
 angular
-    .module('inspinia')
+    .module('proactive-dashboard')
     .controller('MainCtrl', MainCtrl)

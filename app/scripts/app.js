@@ -3,7 +3,7 @@
  *
  */
 (function () {
-    angular.module('inspinia', [
+    angular.module('proactive-dashboard', [
         'ui.router',                    // Routing
         'ui.bootstrap'                 // Bootstrap
     ])
