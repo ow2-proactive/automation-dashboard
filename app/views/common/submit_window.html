@@ -1,0 +1,36 @@
+<div class="inmodal" ng-controller="PCACatalogController">
+    <div class="modal-header">
+        <i class="fa fa-laptop modal-icon"></i>
+        <h4 class="modal-title">{{workflow.name}} </h4>
+        <small class="font-bold">{{workflow.project_name}}</small>
+    </div>
+    <div ng-repeat="variable in workflow.object_key_values track by $index">
+        <div class="modal-body" ng-if="variable.label=='variable'">
+            <div class="form-group">
+            
+                <label class="col-sm-6 control-label">{{variable.key}}</label>
+                
+                <div class="col-sm-6" ng-if="variable.value.startsWith('#{')">
+                    {{variablesWithoutSpecialCharacters=variable.value.substring(2, variable.value.length - 1);""}}
+                    <select class="form-control" ng-model="workflow.newvariables[variable.key].value" ng-options="v for v in variablesWithoutSpecialCharacters.split(',') track by v">
+                 
+                    </select>
+                </div>
+                
+                <div class="col-sm-6" ng-if="variable.value.startsWith('${')">
+                    <select class="form-control" ng-model="workflow.newvariables[variable.key].value" ng-options="v for v in listOfNS() track by v">
+                 
+                    </select>
+                </div>
+                
+                <div class="col-sm-6" ng-if="!variable.value.startsWith('#{') && !variable.value.startsWith('${')">
+                    <input class="form-control" type="text" ng-model="variable.value">
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="modal-footer">
+        <button type="button" class="btn btn-white" ng-click="cancel()">Close</button>
+        <button type="button" class="btn btn-primary" ng-click="ok(workflow)">Submit</button>
+    </div>
+</div>

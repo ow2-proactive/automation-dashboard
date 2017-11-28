@@ -12,9 +12,12 @@ function pageTitle($rootScope, $timeout) {
         link: function(scope, element) {
             var listener = function(event, toState, toParams, fromState, fromParams) {
                 // Default title - load on Dashboard 1
-                var title = 'INSPINIA | Responsive Admin Theme';
+                var title = 'ProActive Cloud Automation';
                 // Create your own title pattern
-                if (toState.data && toState.data.pageTitle) title = 'INSPINIA | ' + toState.data.pageTitle;
+                if (toState.data && toState.data.pageTitle) {
+                    title = 'ProActive Cloud Automation | ' + toState.data.pageTitle;
+                }
+
                 $timeout(function() {
                     element.text(title);
                 });
@@ -34,25 +37,7 @@ function sideNavigation($timeout) {
             // Call the metsiMenu plugin and plug it to sidebar navigation
             $timeout(function(){
                 element.metisMenu();
-
             });
-
-            // Colapse menu in mobile mode after click on element
-            var menuElement = $('#side-menu a:not([href$="\\#"])');
-            menuElement.click(function(){
-                if ($(window).width() < 769) {
-                    $("body").toggleClass("mini-navbar");
-                }
-            });
-
-            // Enable initial fixed sidebar
-            if ($("body").hasClass('fixed-sidebar')) {
-                var sidebar = element.parent();
-                sidebar.slimScroll({
-                    height: '100%',
-                    railOpacity: 0.9
-                });
-            }
         }
     };
 };
@@ -70,7 +55,7 @@ function iboxTools($timeout) {
             $scope.showhide = function () {
                 var ibox = $element.closest('div.ibox');
                 var icon = $element.find('i:first');
-                var content = ibox.children('.ibox-content');
+                var content = ibox.find('div.ibox-content');
                 content.slideToggle(200);
                 // Toggle icon from up to down
                 icon.toggleClass('fa-chevron-up').toggleClass('fa-chevron-down');
@@ -95,7 +80,7 @@ function iboxTools($timeout) {
 function minimalizaSidebar($timeout) {
     return {
         restrict: 'A',
-        template: '<a class="navbar-minimalize minimalize-styl-2 btn btn-primary " href="" ng-click="minimalize()"><i class="fa fa-bars"></i></a>',
+        template: '<a class="navbar-minimalize minimalize-styl-2 btn btn-primary" style="color: #002d66" href="" ng-click="minimalize()" ><i class="fa fa-bars" style="color: #002d66"></i></a>',
         controller: function ($scope, $element) {
             $scope.minimalize = function () {
                 $("body").toggleClass("mini-navbar");
@@ -135,7 +120,7 @@ function iboxToolsFullScreen($timeout) {
             $scope.showhide = function () {
                 var ibox = $element.closest('div.ibox');
                 var icon = $element.find('i:first');
-                var content = ibox.children('.ibox-content');
+                var content = ibox.find('div.ibox-content');
                 content.slideToggle(200);
                 // Toggle icon from up to down
                 icon.toggleClass('fa-chevron-up').toggleClass('fa-chevron-down');
@@ -165,16 +150,36 @@ function iboxToolsFullScreen($timeout) {
     };
 }
 
+/**
+ * slimScroll - Directive for slimScroll with custom height
+ */
+function slimScroll($timeout){
+    return {
+        restrict: 'A',
+        scope: {
+            boxHeight: '@'
+        },
+        link: function(scope, element) {
+            $timeout(function(){
+                element.slimscroll({
+                    height: scope.boxHeight,
+                    railOpacity: 0.9
+                });
 
+            });
+        }
+    };
+}
 
 /**
  *
  * Pass all functions into module
  */
 angular
-    .module('proactive-dashboard')
+    .module('inspinia')
     .directive('pageTitle', pageTitle)
     .directive('sideNavigation', sideNavigation)
     .directive('iboxTools', iboxTools)
     .directive('minimalizaSidebar', minimalizaSidebar)
-    .directive('iboxToolsFullScreen', iboxToolsFullScreen);
+    .directive('iboxToolsFullScreen', iboxToolsFullScreen)
+    .directive('slimScroll', slimScroll);

@@ -1,0 +1,38 @@
+<div id="login-view">
+    <div class="login-container">
+        <img src="styles/patterns/logo_350.png" class="login-logo-image"/>
+
+        <div class="login-header-container">
+            <div class="login-header">Cloud Automation <span class="login-font-normal">login</span></div>
+
+            <div ng-controller="loginController" class="login-form-container">
+
+                <form action="/" class="form-horizontal" id="login-form">
+
+                    <div class="form-group">
+                        <label class="control-label">Username: </label>
+                        <div class="controls">
+                            <input type="text" id="username" ng-model="username" required autofocus>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label">Password: </label>
+                        <div class="controls">
+                            <input type="password" id="password" ng-model="password" required>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <div class="buttons-container">
+                           <button type="button" class="btn btn-primary pull-right" ng-click="login()">Connect</button>
+                        </div>
+                    </div>
+
+                </form>
+
+            </div>
+
+        </div>
+    </div>
+</div>

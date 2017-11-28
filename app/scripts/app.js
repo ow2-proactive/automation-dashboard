@@ -3,8 +3,11 @@
  *
  */
 (function () {
-    angular.module('proactive-dashboard', [
+    angular.module('inspinia', [
         'ui.router',                    // Routing
-        'ui.bootstrap'                 // Bootstrap
+        'ui.bootstrap',                 // Bootstrap
+        'service-automation',
+        'pca-rest',
+        'app-rest'
     ])
 })();

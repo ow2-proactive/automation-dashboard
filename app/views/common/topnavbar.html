@@ -1,18 +1,41 @@
+<div class="row">
+    <nav class="navbar" role="navigation" style="margin-bottom: 0;margin-left:-210px">    
+    	                    <div style="display: inline-block; width: 55%; white-space: normal;float: left;"><a href="#" target="_blank"><img src="styles/patterns/extra-logo-center.png" style="height:40px;width:135px;" align="right"></a></div>
+    	                                    <div style="display: inline-block; width: 45%; white-space: normal;float: right;"><a href="http://activeeon.com/" target="_blank"> <img src="styles/patterns/AE-Logo.png" style="height:40px;padding-right: 25px" align="right"></a></div>
+    </nav>
+</div>
 <div class="row border-bottom">
-    <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">
-        <div class="navbar-header">
-            <span minimaliza-sidebar></span>
-            <form role="search" class="navbar-form-custom" method="post" action="">
-                <div class="form-group">
-                    <input type="text" placeholder="Search for something..." class="form-control" name="top-search" id="top-search">
+    <nav class="navbar navbar-static-top white-bg" role="navigation" style="margin-bottom: 0">        
+
+        <ul class="nav navbar-nav navbar-right">
+            <li style="padding-right: 12px; padding-bottom: 6px">
+                <div>
+                    <a class="btn btn-small btn-default" href="/studio" target="_blank" style="color:#333;border-color: #ccc"><img src="styles/patterns/studio_30.png" style="height:25px;padding-right:10px">Workflow Studio</a>
                 </div>
-            </form>
-        </div>
-        <ul class="nav navbar-top-links navbar-right">
-            <li>
-                <a href="">
-                    <i class="fa fa-sign-out"></i> Log out
-                </a>
+            </li>
+            <li style="padding-right: 12px; padding-bottom: 6px">
+                <div>
+                    <a class="btn btn-small btn-default" href="/scheduler" target="_blank" style="color:#333;border-color: #ccc"><img src="styles/patterns/scheduler_30.png" style="height:25px;padding-right:10px">Scheduling &amp; Orchestration</a>
+                </div>
+            </li>
+            <li style="padding-right: 6px; padding-bottom: 6px">
+                <div>
+                    <a class="btn btn-small btn-default" href="/rm" target="_blank" style="color:#333;border-color: #ccc"><img src="styles/patterns/rm_30.png" style="height:25px;padding-right:10px">Resource Manager</a>
+                </div>
+            </li>
+
+            <li style="padding-right: 0px; padding-bottom: 6px">
+                <div>
+                    <a class="btn" href="/notification-portal" target="_blank" style="color:#333"><img src="styles/patterns/notification_30.png" style="height:25px"></a>
+                </div>
+            </li>
+
+            <li style="height: 38px;margin: 0 5px; border-right: 1px solid #777;border-left:  1px solid #f2f2f2;"></li>
+
+            <li style ="padding-bottom: 6px;padding-right: 25px">
+                <div ng-controller="logoutController">
+                    <a ng-click="logout()" class="btn btn-small btn-default" style="color:#333;border-color: #ccc">Logout <b> {{main.userName}}</b> <img src="styles/patterns/logout_30.png" style="height:25px;  padding-left: 7px"></a>
+                </div>
             </li>
         </ul>
     </nav>

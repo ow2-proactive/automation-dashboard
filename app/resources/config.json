@@ -1,0 +1,34 @@
+{
+"confServer": {
+  "pcaServiceUrl": "../cloud-automation-service/",
+  "schedulerRestUrl": "../rest/scheduler/"
+},
+"view": [{
+  "viewname": "Workflow Automation",
+  "kpis": [{
+    "name": "Running Jobs",
+    "url": "http://pws/jobs/running/count"
+  }, {
+    "name": "Running Tasks",
+    "url": "http://pws/jobs/running/tasks"
+  }],
+  "catalog": {
+    "title": "Catalog of Workflows",
+    "bucketid": "1000",
+    "query": ""
+  },
+  "widgets": [{
+    "widget": "jobs",
+    "title": "Pending jobs",
+    "filter": "job.owner=me AND job.status=pending"
+  }, {
+    "widget": "jobs",
+    "title": "Running jobs",
+    "filter": "job.owner=me AND job.status=running"
+  }, {
+    "widget": "jobs",
+    "title": "Finished jobs",
+    "filter": "job.owner=me AND job.status=finished"
+  }]
+}]
+}
