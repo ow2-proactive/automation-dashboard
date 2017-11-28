@@ -2,19 +2,14 @@
  * Created by ActiveEon team on 28/02/2017.
  */
 
-
-var appCtrl = angular.module('app-rest', ['ngResource', 'spring-data-rest', 'angular-toArrayFilter', 'oitozero.ngSweetAlert', 'angular.filter']);
-
+var workflowAutomationModule = angular.module('workflow-automation', ['ngResource', 'spring-data-rest', 'angular-toArrayFilter', 'oitozero.ngSweetAlert', 'angular.filter']);
 
 // ---------- Variables ----------
-
-
-appCtrl
+workflowAutomationModule
     .value('schedulerRestUrl', null)
     .value('appCatalogWorkflowsUrl', null);
 
 // ---------- Utilities ----------
-
 var getByKey = function(propertyLabel, propertyName, collection) {
     var len = collection.length;
     var value = '';
@@ -28,9 +23,7 @@ var getByKey = function(propertyLabel, propertyName, collection) {
 
 
 // ------- Service ---------------
-
-
-appCtrl.factory('APPCatalog', function ($http, $rootScope, $filter, SpringDataRestAdapter, $interval) {
+workflowAutomationModule.factory('APPCatalog', function ($http, $rootScope, $filter, SpringDataRestAdapter, $interval) {
 
     var APPCatalogRefreshTime = 2000;
 
@@ -107,7 +100,7 @@ appCtrl.factory('APPCatalog', function ($http, $rootScope, $filter, SpringDataRe
 });
 
 
-pcaCtrl.factory('APPSchedulerService', function ($http, $rootScope, $state, SpringDataRestAdapter,
+workflowAutomationModule.factory('APPSchedulerService', function ($http, $rootScope, $state, SpringDataRestAdapter,
                                               LoadingPropertiesService, $interval) {
 
     var SchedulerServiceRefreshTime = 2000;
@@ -242,7 +235,7 @@ pcaCtrl.factory('APPSchedulerService', function ($http, $rootScope, $state, Spri
 
 // ---------- Controllers ----------
 
-appCtrl.controller('APPCatalogController', function ($scope, $rootScope, $uibModal, $http, $filter, APPCatalog, PCANodeSourcesService, $location, $q) {
+workflowAutomationModule.controller('APPCatalogController', function ($scope, $rootScope, $uibModal, $http, $filter, APPCatalog, PCANodeSourcesService, $location, $q) {
 
     $scope.view = [];
 
@@ -502,7 +495,7 @@ function extractVariablesFromModifiedWorkflow (modifiedWorkflow) {
 });
 
 
-appCtrl.controller('APPSchedulerController', function ($scope, $rootScope, $http, SpringDataRestAdapter, APPSchedulerService) {
+workflowAutomationModule.controller('APPSchedulerController', function ($scope, $rootScope, $http, SpringDataRestAdapter, APPSchedulerService) {
 
     $scope.runnninjobList = [];
     $scope.pendingjobList = [];
@@ -566,7 +559,7 @@ appCtrl.controller('APPSchedulerController', function ($scope, $rootScope, $http
 });
 
 
-pcaCtrl.controller('APPMonitoringController', function ($scope, $rootScope, $http, SpringDataRestAdapter, APPSchedulerService) {
+workflowAutomationModule.controller('APPMonitoringController', function ($scope, $rootScope, $http, SpringDataRestAdapter, APPSchedulerService) {
 
     $scope.nbTotalJobs = 0;
     $scope.nbRunningJobs = 0;

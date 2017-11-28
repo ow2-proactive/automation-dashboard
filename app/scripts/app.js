@@ -6,8 +6,9 @@
     angular.module('inspinia', [
         'ui.router',                    // Routing
         'ui.bootstrap',                 // Bootstrap
+        'loginModule',
+        'main',
         'service-automation',
-        'pca-rest',
-        'app-rest'
+        'workflow-automation'
     ])
 })();

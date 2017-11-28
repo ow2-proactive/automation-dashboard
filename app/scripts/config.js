@@ -8,8 +8,6 @@
  */
 function config($stateProvider, $urlRouterProvider) {
 
-    // HERE MAPPING URL <-> HTML
-    // ALL HTML WILL BE REDIRECTED TO <div ui-view></div> in index.html (and attached css are defined there)
     $stateProvider
         .state('login', {
             url: "/login",
@@ -27,13 +25,13 @@ function config($stateProvider, $urlRouterProvider) {
             templateUrl: "views/service-automation.html",
             data: {pageTitle: 'Service Automation'},
             authenticate: true,
-            onEnter : function (SchedulerService, PCACatalogService, PCAProcessService, PCARunningServicesService, PCANodeSourcesService){
-                SchedulerService.refreshSchedulerService();
-                PCACatalogService.refreshPCACatalogService();
-                PCAProcessService.refreshPCAProcessService();
-                PCARunningServicesService.refreshPCARunningServicesService();
+            onEnter : function (){
+                // SchedulerService.refreshSchedulerService();
+                // PCACatalogService.refreshPCACatalogService();
+                // PCAProcessService.refreshPCAProcessService();
+                // PCARunningServicesService.refreshPCARunningServicesService();
                 // Get existing Node Sources
-                PCANodeSourcesService.getNodeSourceList();
+                // PCANodeSourcesService.getNodeSourceList();
             },
             onExit: function($rootScope){
                 $rootScope.$broadcast('event:StopRefreshing');
@@ -44,9 +42,9 @@ function config($stateProvider, $urlRouterProvider) {
             templateUrl: "views/workflow-automation.html",
             data: {pageTitle: 'Workflow Automation'},
             authenticate: true,
-            onEnter : function (APPSchedulerService, APPCatalog){
-                APPSchedulerService.refreshAPPSchedulerService();
-                APPCatalog.refreshAPPCatalog();
+            onEnter : function (){
+                // APPSchedulerService.refreshAPPSchedulerService();
+                // APPCatalog.refreshAPPCatalog();
             },
             onExit: function($rootScope){
                $rootScope.$broadcast('event:StopRefreshing');
