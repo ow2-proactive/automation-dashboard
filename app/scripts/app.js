@@ -8,7 +8,8 @@
         'ui.bootstrap',                 // Bootstrap
         'loginModule',
         'main',
-        'service-automation',
-        'workflow-automation'
+        'pca-rest',
+        'app-rest',
+        'wcp-rest'
     ])
 })();

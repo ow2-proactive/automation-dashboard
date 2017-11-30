@@ -22,9 +22,11 @@ function config($stateProvider, $urlRouterProvider) {
         })
         .state('portal.subview1', {
             url: "/service-automation",
-            templateUrl: "views/service-automation.html",
+            templateUrl: "../bower_components/cloud-automation/app/views/main.html",
+            //controller is specified in html
             data: {pageTitle: 'Service Automation'},
             authenticate: true,
+            css: '../bower_components/cloud-automation/app/styles/portal_custom_style.css',
             onEnter : function (){
                 // SchedulerService.refreshSchedulerService();
                 // PCACatalogService.refreshPCACatalogService();
@@ -39,9 +41,10 @@ function config($stateProvider, $urlRouterProvider) {
         })
         .state('portal.subview2', {
             url: "/workflow-automation",
-            templateUrl: "views/workflow-automation.html",
+            templateUrl: "../bower_components/cloud-automation/app/views/minor.html",
             data: {pageTitle: 'Workflow Automation'},
             authenticate: true,
+            css: '../bower_components/cloud-automation/app/styles/portal_custom_style.css',
             onEnter : function (){
                 // APPSchedulerService.refreshAPPSchedulerService();
                 // APPCatalog.refreshAPPCatalog();
@@ -52,7 +55,8 @@ function config($stateProvider, $urlRouterProvider) {
         })
         .state('portal.subview3', {
             url: "/workflow-catalog",
-            templateUrl: "views/workflow-catalog.html",
+            templateUrl: "../bower_components/workflow-catalog-portal/app/views/workflow_catalog.html",
+            css: '../bower_components/workflow-catalog-portal/app/styles/wcportal_custom_style.css',
             data: {pageTitle: 'Workflow Catalog'},
             authenticate: true,
             onEnter : function (){
@@ -64,7 +68,7 @@ function config($stateProvider, $urlRouterProvider) {
         })
         .state('portal.subview4', {
             url: "/notification-portal",
-            templateUrl: "views/notification-portal.html",
+            templateUrl: "../bower_components/notification-portal/app/views/minor.html",
             data: {pageTitle: 'Notification Portal'},
             authenticate: true,
             onEnter : function (){
