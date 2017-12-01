@@ -10,6 +10,7 @@
         'main',
         'pca-rest',
         'app-rest',
-        'wcp-rest'
+        'wcp-rest',
+        'angularCSS'
     ])
 })();
