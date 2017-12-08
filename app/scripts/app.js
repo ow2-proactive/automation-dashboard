@@ -11,6 +11,7 @@
         'pca-rest',
         'app-rest',
         'wcp-rest',
+        'ns-rest',
         'angularCSS'
     ])
 })();

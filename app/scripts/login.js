@@ -9,6 +9,7 @@ loginModule.controller('loginController', function ($scope, $state) {
             transformResponse: []
         };
         // because of that wrong response type in that sched resource !!!
+        console.log('In do login : '+ localStorage['schedulerRestUrl'] + 'login' );
         return $http.post(JSON.parse(localStorage['schedulerRestUrl']) + 'login', authData, authConfig)
             .success(function (response) {
                 if (response.match(/^[A-Za-z0-9]+$/)) {
@@ -37,7 +38,7 @@ loginModule.controller('loginController', function ($scope, $state) {
                 console.log("loginController pa.session " + sessionid);
                 if (sessionid != undefined) {
                     console.log("loginController logged");
-                    $state.go('portal.main'); // where to defined the homepage.
+                    $state.go('portal.subview1'); // where to defined the homepage.
                 }
             })
             .error(function (response) {

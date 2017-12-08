@@ -22,8 +22,8 @@ function getProperties ($http, $location) {
         .success(function (response) {
             pcaServiceUrl = angular.toJson(response.confServer.pcaServiceUrl, true);
             schedulerRestUrl = angular.toJson(response.confServer.schedulerRestUrl, true);
-            appCatalogBucketsUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port() + "/catalog/buckets/?kind=workflow");
-            appCatalogWorkflowsUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port() + "/catalog/buckets/" + response.view[0].catalog.bucketid + "/resources");
+            appCatalogBucketsUrl =angular.toJson("https://trydev.activeeon.com/catalog/buckets/?kind=workflow", true);
+            appCatalogWorkflowsUrl = angular.toJson("https://trydev.activeeon.com/catalog/buckets/" + response.view[0].catalog.bucketid + "/resources", true);
             configViews = angular.toJson(response.view, true);
 
             localStorage['pcaServiceUrl'] = pcaServiceUrl;
@@ -41,29 +41,32 @@ function getProperties ($http, $location) {
         .error(function (response) {
             console.error('LoadingPropertiesService $http.get error', status, response);
         });
+
+        $http.get('resources/wcportal.properties')
+            .success(function (response) {
+                workflowCatalogPortalQueryPeriod = response.workflowCatalogPortalQueryPeriod;
+                catalogServiceUrl = angular.toJson(response.catalogServiceUrl, true);
+                schedulerRestUrl = angular.toJson(response.schedulerRestUrl, true);
+
+                localStorage['workflowCatalogPortalQueryPeriod'] = workflowCatalogPortalQueryPeriod;
+                localStorage['catalogServiceUrl'] = catalogServiceUrl;
+                localStorage['schedulerRestUrl'] = schedulerRestUrl;
+
+                console.log('LoadingPropertiesService has loaded workflowCatalogPortalQueryPeriod=', workflowCatalogPortalQueryPeriod);
+                console.log('LoadingPropertiesService has loaded catalogServiceUrl=', catalogServiceUrl);
+                console.log('LoadingPropertiesService has loaded schedulerRestUrl=', schedulerRestUrl);
+            })
+            .error(function (response) {
+                console.error('Error loading workflow catalog portal configuration:', response);
+            });
 }
 
 var isSessionValide = function ($http, sessionId) {
- return $http.get("../rest/rm/logins/sessionid/" + sessionId + "/userdata/").then(function(result){
-  return result.data !=""
-});
+    return $http.get("https://trydev.activeeon.com/rest/rm/logins/sessionid/" + sessionId + "/userdata/").then(function(result){
+        return result.data !=""
+    });
 };
 
-
-// ---------- Services ----------
-
-mainCtrl.factory('LoadingPropertiesService', function ($http, $location) {
-    console.log("LoadingPropertiesService factory");
-
-    getProperties($http, $location);
-
-    return {
-        doNothing: function () {
-            return null;
-        }
-    };
-
-});
 
 // factory used to get config data values from resources/config.json
 mainCtrl.factory('loadingConfigData', function($http, $location){
@@ -72,6 +75,36 @@ mainCtrl.factory('loadingConfigData', function($http, $location){
     return {
         doNothing: function () {
             return null;
+        }
+    };
+});
+
+mainCtrl.factory('MainService', function ($http, $interval, $rootScope, $state, LoadingPropertiesService) {
+    function doLogin(userName, userPass) {
+        var authData = $.param({'username': userName, 'password': userPass});
+        var authConfig = {
+            headers: {'Content-Type': 'application/x-www-form-urlencoded'},
+            transformResponse: []
+        };
+        // because of that wrong response type in that sched resource !!!
+        return $http.post(localStorage['schedulerRestUrl'] + 'login', authData, authConfig)
+            .success(function (response) {
+                if (response.match(/^[A-Za-z0-9]+$/)) {
+                    localStorage['pa.session'] = response;
+                    console.log('doLogin authentication has succeeded:', response);
+                }
+                else {
+                    console.log('doLogin authentication has failed:', response);
+                }
+            })
+            .error(function (response) {
+                console.error('doLogin authentication error:', status, response);
+            });
+    }
+
+    return {
+        doLogin: function (userName, userPass) {
+            return doLogin(userName, userPass);
         }
     };
 });
@@ -85,7 +118,7 @@ mainCtrl.controller('navBarController', function ($scope, loadingConfigData){
     console.log($scope.view);
 });
 
-mainCtrl.controller('loginController', function ($scope, $state, SchedulerService, PCACatalogService, PCAProcessService, PCARunningServicesService, PCANodeSourcesService, APPCatalog) {
+mainCtrl.controller('loginController', function ($scope, $state, MainService, PCACatalogService, PCAProcessService, PCARunningServicesService, PCANodeSourcesService, APPCatalog) {
 
     $scope.login = function () {
         var username = $scope.username;
@@ -93,14 +126,15 @@ mainCtrl.controller('loginController', function ($scope, $state, SchedulerServic
 
         localStorage['pa.login'] = username;
         $scope.main.userName = localStorage['pa.login'];
+        console.log("------------welcome "+localStorage['pa.login']);
 
-        SchedulerService.doLogin(username, password)
+        MainService.doLogin(username, password)
             .success(function (response) {
                 var sessionid = getSessionId();
                 console.log("loginController pa.session " + sessionid);
                 if (sessionid != undefined) {
                     console.log("loginController logged");
-                    $state.go('portal.main'); // where to defined the homepage.
+                    $state.go('portal.subview1'); // where to defined the homepage.
                 }
             })
             .error(function (response) {
