@@ -1,0 +1,90 @@
+// Color variables (appears count calculates by raw css)
+@color0: #003168; // Appears 2 times
+
+// Width variables (appears count calculates by raw css)
+@width3: 100%; // Appears 2 times
+
+// Height variables (appears count calculates by raw css)
+@height3: 100%; // Appears 4 times
+
+html {
+	height: @height3;
+	min-height: @height3;
+}
+body {
+	height: @height3;
+	min-height: @height3;
+	background: white;
+}
+.login-container {
+	background-color: rgb(255, 255, 255);
+	border-color: rgb(204, 204, 203);
+	border-style: solid;
+	border-width: 1px;
+	bottom: 0;
+	box-shadow: 5px 5px 5px #888888;
+	height: 270px;
+	left: 0;
+	margin: auto;
+	padding: 10px;
+	position: absolute;
+	right: 0;
+	text-align: center;
+	top: 0;
+	width: 370px;
+}
+.login-header-container {
+	background-color: rgb(240, 240, 240);
+	border-color: rgb(204, 204, 204);
+	border-style: solid;
+	border-width: 1px;
+	margin-top: 10px;
+}
+#login-form {
+	position: relative;
+}
+.login-header {
+	color: @color0;
+	font-family: Arial, Verdana, sans-serif;
+	font-size: 13px;
+	font-weight: bold;
+	padding-bottom: 20px;
+	padding-left: 20px;
+	padding-top: 10px;
+	text-align: left;
+	width: @width3;
+}
+.buttons-container {
+	left: -85px;
+	padding-top: 10px;
+	position: relative;
+	width: @width3;
+}
+.login-logo-image {
+	height: 75px;
+	width: 349px;
+}
+.login-font-normal {
+	font-weight: normal;
+}
+#login-view {
+	label {
+		color: @color0;
+		float: left;
+		font-size: 12px;
+		font-weight: bold !important;
+		padding-bottom: 5px !important;
+		padding-top: 5px !important;
+		width: 115px;
+	}
+	.form-group {
+		margin-bottom: 5px;
+	}
+	input {
+		height: 25px !important;
+	}
+	.controls {
+		left: -40px;
+		position: relative;
+	}
+}

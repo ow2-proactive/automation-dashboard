@@ -1,7 +1,7 @@
 {
 "confServer": {
-  "pcaServiceUrl": "https://trydev.activeeon.com/cloud-automation-service/",
-  "schedulerRestUrl": "https://trydev.activeeon.com/rest/scheduler/"
+  "pcaServiceUrl": "http://localhost:8080/cloud-automation-service/",
+  "schedulerRestUrl": "http://localhost:8080/rest/scheduler/"
 },
 "view": [{
   "viewname": "Workflow Automation",

@@ -22,8 +22,8 @@ function getProperties ($http, $location) {
         .success(function (response) {
             pcaServiceUrl = angular.toJson(response.confServer.pcaServiceUrl, true);
             schedulerRestUrl = angular.toJson(response.confServer.schedulerRestUrl, true);
-            appCatalogBucketsUrl =angular.toJson("https://trydev.activeeon.com/catalog/buckets/?kind=workflow", true);
-            appCatalogWorkflowsUrl = angular.toJson("https://trydev.activeeon.com/catalog/buckets/" + response.view[0].catalog.bucketid + "/resources", true);
+            appCatalogBucketsUrl =angular.toJson("http://localhost:8080/catalog/buckets/?kind=workflow", true);
+            appCatalogWorkflowsUrl = angular.toJson("http://localhost:8080/catalog/buckets/" + response.view[0].catalog.bucketid + "/resources", true);
             configViews = angular.toJson(response.view, true);
 
             localStorage['pcaServiceUrl'] = pcaServiceUrl;
@@ -62,7 +62,7 @@ function getProperties ($http, $location) {
 }
 
 var isSessionValide = function ($http, sessionId) {
-    return $http.get("https://trydev.activeeon.com/rest/rm/logins/sessionid/" + sessionId + "/userdata/").then(function(result){
+    return $http.get("http://localhost:8080/rest/rm/logins/sessionid/" + sessionId + "/userdata/").then(function(result){
         return result.data !=""
     });
 };
