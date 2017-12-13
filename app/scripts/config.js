@@ -27,13 +27,13 @@ function config($stateProvider, $urlRouterProvider) {
             data: {pageTitle: 'Service Automation'},
             authenticate: true,
             css: '../bower_components/cloud-automation/app/styles/portal_custom_style.css',
-            onEnter : function (){
-                // SchedulerService.refreshSchedulerService();
-                // PCACatalogService.refreshPCACatalogService();
-                // PCAProcessService.refreshPCAProcessService();
-                // PCARunningServicesService.refreshPCARunningServicesService();
+            onEnter : function (SchedulerService, PCACatalogService, PCAProcessService, PCARunningServicesService, PCANodeSourcesService){
+                SchedulerService.refreshSchedulerService();
+                PCACatalogService.refreshPCACatalogService();
+                PCAProcessService.refreshPCAProcessService();
+                PCARunningServicesService.refreshPCARunningServicesService();
                 // Get existing Node Sources
-                // PCANodeSourcesService.getNodeSourceList();
+                PCANodeSourcesService.getNodeSourceList();
             },
             onExit: function($rootScope){
                 $rootScope.$broadcast('event:StopRefreshing');
@@ -45,12 +45,13 @@ function config($stateProvider, $urlRouterProvider) {
             data: {pageTitle: 'Workflow Automation'},
             authenticate: true,
             css: '../bower_components/cloud-automation/app/styles/portal_custom_style.css',
-            onEnter : function (){
-                // APPSchedulerService.refreshAPPSchedulerService();
-                // APPCatalog.refreshAPPCatalog();
+            onEnter : function (APPSchedulerService, APPCatalog){
+               APPSchedulerService.refreshAPPSchedulerService();
+               APPCatalog.refreshAPPCatalog();
+
             },
             onExit: function($rootScope){
-               $rootScope.$broadcast('event:StopRefreshing');
+              $rootScope.$broadcast('event:StopRefreshing');
             }
         })
         .state('portal.subview3', {
@@ -59,24 +60,18 @@ function config($stateProvider, $urlRouterProvider) {
             css: '../bower_components/workflow-catalog-portal/app/styles/wcportal_custom_style.css',
             data: {pageTitle: 'Workflow Catalog'},
             authenticate: true,
-            onEnter : function (){
-                console.log("portal.subview3::onEnter");
+            onEnter : function (WorkflowCatalogService){
+                WorkflowCatalogService.startRegularWorkflowCatalogServiceQuery();
             },
-            onExit: function(){
-                console.log("portal.subview3::onExit");
+            onExit: function($rootScope){
+                $rootScope.$broadcast('event:StopRefreshing');
             }
         })
         .state('portal.subview4', {
             url: "/notification-portal",
             templateUrl: "../bower_components/notification-portal/app/views/minor.html",
             data: {pageTitle: 'Notification Portal'},
-            authenticate: true,
-            onEnter : function (){
-                console.log("portal.subview4::onEnter");
-            },
-            onExit: function(){
-                console.log("portal.subview4::onExit");
-            }
+            authenticate: true
         });
 }
 angular

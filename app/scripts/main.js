@@ -43,22 +43,38 @@ function getProperties ($http, $location) {
         });
 
         $http.get('resources/wcportal.properties')
-            .success(function (response) {
-                workflowCatalogPortalQueryPeriod = response.workflowCatalogPortalQueryPeriod;
-                catalogServiceUrl = angular.toJson(response.catalogServiceUrl, true);
-                schedulerRestUrl = angular.toJson(response.schedulerRestUrl, true);
+        .success(function (response) {
+            workflowCatalogPortalQueryPeriod = response.workflowCatalogPortalQueryPeriod;
+            catalogServiceUrl = angular.toJson(response.catalogServiceUrl, true);
+            schedulerRestUrl = angular.toJson(response.schedulerRestUrl, true);
 
-                localStorage['workflowCatalogPortalQueryPeriod'] = workflowCatalogPortalQueryPeriod;
-                localStorage['catalogServiceUrl'] = catalogServiceUrl;
-                localStorage['schedulerRestUrl'] = schedulerRestUrl;
+            localStorage['workflowCatalogPortalQueryPeriod'] = workflowCatalogPortalQueryPeriod;
+            localStorage['catalogServiceUrl'] = catalogServiceUrl;
 
-                console.log('LoadingPropertiesService has loaded workflowCatalogPortalQueryPeriod=', workflowCatalogPortalQueryPeriod);
-                console.log('LoadingPropertiesService has loaded catalogServiceUrl=', catalogServiceUrl);
-                console.log('LoadingPropertiesService has loaded schedulerRestUrl=', schedulerRestUrl);
-            })
-            .error(function (response) {
-                console.error('Error loading workflow catalog portal configuration:', response);
-            });
+            console.log('LoadingPropertiesService has loaded workflowCatalogPortalQueryPeriod=', workflowCatalogPortalQueryPeriod);
+            console.log('LoadingPropertiesService has loaded catalogServiceUrl=', catalogServiceUrl);
+            console.log('LoadingPropertiesService has loaded schedulerRestUrl=', schedulerRestUrl);
+        })
+        .error(function (response) {
+            console.error('Error loading workflow catalog portal configuration:', response);
+        });
+
+         $http.get('resources/nsportal.properties')
+        .success(function (response) {
+            notificationPortalQueryPeriod = response.notificationPortalQueryPeriod;
+            notificationServiceUrl = JSON.parse(angular.toJson(response.notificationServiceUrl, false));
+            schedulerRestUrl = JSON.parse(angular.toJson(response.schedulerRestUrl, true));
+
+            localStorage['notificationPortalQueryPeriod'] = notificationPortalQueryPeriod;
+            localStorage['notificationServiceUrl'] = notificationServiceUrl;
+
+            console.log('LoadingPropertiesService has loaded notificationPortalQueryPeriod=', notificationPortalQueryPeriod);
+            console.log('LoadingPropertiesService has loaded notificationServiceUrl=', notificationServiceUrl);
+            console.log('LoadingPropertiesService has loaded schedulerRestUrl=', schedulerRestUrl);
+        })
+        .error(function (response) {
+            console.error('Error loading notification portal configuration:', response);
+        });
 }
 
 var isSessionValide = function ($http, sessionId) {
@@ -87,7 +103,7 @@ mainCtrl.factory('MainService', function ($http, $interval, $rootScope, $state, 
             transformResponse: []
         };
         // because of that wrong response type in that sched resource !!!
-        return $http.post(localStorage['schedulerRestUrl'] + 'login', authData, authConfig)
+        return $http.post(JSON.parse(localStorage['schedulerRestUrl']) + 'login', authData, authConfig)
             .success(function (response) {
                 if (response.match(/^[A-Za-z0-9]+$/)) {
                     localStorage['pa.session'] = response;
