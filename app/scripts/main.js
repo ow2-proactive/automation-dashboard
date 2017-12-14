@@ -11,6 +11,7 @@ function getSessionId() {
 mainCtrl
     .value('pcaServiceUrl', null)
     .value('schedulerRestUrl', null)
+    .value('updateQueryPeriod', null)
     .value('appCatalogWorkflowsUrl', null)
     .value('appCatalogBucketsUrl', null)
     .value('configViews', null);
@@ -22,12 +23,14 @@ function getProperties ($http, $location) {
         .success(function (response) {
             pcaServiceUrl = angular.toJson(response.confServer.pcaServiceUrl, true);
             schedulerRestUrl = angular.toJson(response.confServer.schedulerRestUrl, true);
+            updateQueryPeriod = angular.toJson(response.updateQueryPeriod, true);
             appCatalogBucketsUrl =angular.toJson("http://localhost:8080/catalog/buckets/?kind=workflow", true);
             appCatalogWorkflowsUrl = angular.toJson("http://localhost:8080/catalog/buckets/" + response.view[0].catalog.bucketid + "/resources", true);
             configViews = angular.toJson(response.view, true);
 
             localStorage['pcaServiceUrl'] = pcaServiceUrl;
             localStorage['schedulerRestUrl'] = schedulerRestUrl;
+            localStorage['updateQueryPeriod'] = updateQueryPeriod;
             localStorage['appCatalogWorkflowsUrl'] = appCatalogWorkflowsUrl;
             localStorage['appCatalogBucketsUrl'] = appCatalogBucketsUrl;
             localStorage['configViews'] = configViews;

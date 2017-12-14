@@ -1,10 +1,15 @@
 <nav class="navbar-default navbar-static-side" role="navigation">
     <div class="sidebar-collapse" ng-controller="navBarController">
         <ul side-navigation class="nav metismenu" id="side-menu">
-            <li ui-sref-active="active">
-                <img src="styles/patterns/cloud-automation.png" style="height:50px; padding-right: 20px"> <span class="nav-label"></span>
+
+            <li ui-sref-active="active" id="logo-navigation-item">
+                <img src="styles/patterns/icon-proactive-medium.png" style="height:50px; padding-left: 10px"> ProActive Dashboard<span class="nav-label"></span>
             </li>
-            <br>
+
+            <li style="height:50px;margin-bottom: 3px;">
+                <!--Fake blank because template has navigation panel for whole height-->
+            </li>
+
             <li ui-sref-active="active">
                 <a ui-sref="portal.subview1"  style="background-color: #002d66"><i class="fa fa-desktop"></i> <span class="nav-label">Service Automation</span> </a>
             </li>

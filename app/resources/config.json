@@ -30,5 +30,6 @@
     "title": "Finished jobs",
     "filter": "job.owner=me AND job.status=finished"
   }]
-}]
+}],
+  "updateQueryPeriod" : 2000
 }
