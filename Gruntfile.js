@@ -124,7 +124,10 @@ module.exports = function (grunt) {
                             '*.html',
                             'views/{,*/}*.html',
                             'styles/patterns/*.*',
-                            'img/{,*/}*.*'
+                            'styles/patterns/img/*.*',
+                            'img/{,*/}*.*',
+                            'resources/{,*/}*.properties',
+                            'resources/{,*/}*.json'
                         ]
                     },
                     {
@@ -140,14 +143,55 @@ module.exports = function (grunt) {
                         cwd: 'bower_components/bootstrap',
                         src: ['fonts/*.*'],
                         dest: '<%= inspinia.dist %>'
-                    },
+                    }
                 ]
             },
-            styles: {
+            styles:
+            {
                 expand: true,
                 cwd: '<%= inspinia.app %>/styles',
                 dest: '.tmp/styles/',
                 src: '{,*/}*.css'
+            },
+            subviews: {
+                files: [
+                    {
+                        expand: true,
+                        cwd: 'bower_components/cloud-automation/app/views',
+                        src: ['*.html'],
+                        dest: '<%= inspinia.dist %>/views/cloud-automation'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'bower_components/workflow-catalog-portal/app/views',
+                        src: ['*.html'],
+                        dest: '<%= inspinia.dist %>/views/workflow-catalog-portal'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'bower_components/notification-portal/app/views',
+                        src: ['*.html'],
+                        dest: '<%= inspinia.dist %>/views/notification-portal'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'bower_components/cloud-automation/app/styles',
+                        src: ['portal_custom_style.css'],
+                        dest: '<%= inspinia.dist %>/styles/cloud-automation/'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'bower_components/workflow-catalog-portal/app/styles',
+                        src: ['wcportal_custom_style.css'],
+                        dest: '<%= inspinia.dist %>/styles/workflow-catalog-portal'
+                    },
+                    {
+                        expand: true,
+                        cwd: 'bower_components/notification-portal/app/styles',
+                        src: ['notifportal_custom_style.css'],
+                        dest: '<%= inspinia.dist %>/styles/notification-portal'
+                    }
+                ]
             }
         },
         // Renames files for browser caching purposes
@@ -213,7 +257,8 @@ module.exports = function (grunt) {
         'uglify',
         'filerev',
         'usemin',
-        'htmlmin'
+        'htmlmin',
+        'copy:subviews'
     ]);
 
 };
