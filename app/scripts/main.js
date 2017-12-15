@@ -8,28 +8,26 @@ function getSessionId() {
     return localStorage['pa.session'];
 }
 
-mainCtrl
-    .value('pcaServiceUrl', null)
-    .value('schedulerRestUrl', null)
-    .value('updateQueryPeriod', null)
-    .value('appCatalogWorkflowsUrl', null)
-    .value('appCatalogBucketsUrl', null)
-    .value('configViews', null);
-
 // ---------- Utilities -----------
 function getProperties ($http, $location) {
 
     $http.get('resources/config.json')
         .success(function (response) {
-            pcaServiceUrl = angular.toJson(response.confServer.pcaServiceUrl, true);
-            schedulerRestUrl = angular.toJson(response.confServer.schedulerRestUrl, true);
-            updateQueryPeriod = angular.toJson(response.updateQueryPeriod, true);
-            appCatalogBucketsUrl =angular.toJson("http://localhost:8080/catalog/buckets/?kind=workflow", true);
-            appCatalogWorkflowsUrl = angular.toJson("http://localhost:8080/catalog/buckets/" + response.view[0].catalog.bucketid + "/resources", true);
-            configViews = angular.toJson(response.view, true);
+            var pcaServiceUrl = angular.toJson(response.confServer.pcaServiceUrl, true);
+            var schedulerRestUrl = angular.toJson(response.confServer.schedulerRestUrl, true);
+            var notificationServiceUrl = angular.toJson(response.confServer.notificationServiceUrl, true);
+            var catalogServiceUrl = angular.toJson(response.confServer.catalogServiceUrl, true);
+            var updateQueryPeriod = angular.toJson(response.updateQueryPeriod, true);
+            var notificationPortalQueryPeriod = angular.toJson(response.updateQueryPeriod, true);
+            var workflowCatalogPortalQueryPeriod = angular.toJson(response.notificationPortalQueryPeriod, true);
+            var appCatalogBucketsUrl =angular.toJson("http://localhost:8080/catalog/buckets/?kind=workflow", true);
+            var appCatalogWorkflowsUrl = angular.toJson("http://localhost:8080/catalog/buckets/" + response.view[0].catalog.bucketid + "/resources", true);
+            var configViews = angular.toJson(response.view, true);
 
             localStorage['pcaServiceUrl'] = pcaServiceUrl;
             localStorage['schedulerRestUrl'] = schedulerRestUrl;
+            localStorage['notificationServiceUrl'] = notificationServiceUrl;
+            localStorage['catalogServiceUrl'] = catalogServiceUrl;
             localStorage['updateQueryPeriod'] = updateQueryPeriod;
             localStorage['appCatalogWorkflowsUrl'] = appCatalogWorkflowsUrl;
             localStorage['appCatalogBucketsUrl'] = appCatalogBucketsUrl;
@@ -43,40 +41,6 @@ function getProperties ($http, $location) {
         })
         .error(function (response) {
             console.error('LoadingPropertiesService $http.get error', status, response);
-        });
-
-        $http.get('resources/wcportal.properties')
-        .success(function (response) {
-            workflowCatalogPortalQueryPeriod = response.workflowCatalogPortalQueryPeriod;
-            catalogServiceUrl = angular.toJson(response.catalogServiceUrl, true);
-            schedulerRestUrl = angular.toJson(response.schedulerRestUrl, true);
-
-            localStorage['workflowCatalogPortalQueryPeriod'] = workflowCatalogPortalQueryPeriod;
-            localStorage['catalogServiceUrl'] = catalogServiceUrl;
-
-            console.log('LoadingPropertiesService has loaded workflowCatalogPortalQueryPeriod=', workflowCatalogPortalQueryPeriod);
-            console.log('LoadingPropertiesService has loaded catalogServiceUrl=', catalogServiceUrl);
-            console.log('LoadingPropertiesService has loaded schedulerRestUrl=', schedulerRestUrl);
-        })
-        .error(function (response) {
-            console.error('Error loading workflow catalog portal configuration:', response);
-        });
-
-         $http.get('resources/nsportal.properties')
-        .success(function (response) {
-            notificationPortalQueryPeriod = response.notificationPortalQueryPeriod;
-            notificationServiceUrl = JSON.parse(angular.toJson(response.notificationServiceUrl, false));
-            schedulerRestUrl = JSON.parse(angular.toJson(response.schedulerRestUrl, true));
-
-            localStorage['notificationPortalQueryPeriod'] = notificationPortalQueryPeriod;
-            localStorage['notificationServiceUrl'] = notificationServiceUrl;
-
-            console.log('LoadingPropertiesService has loaded notificationPortalQueryPeriod=', notificationPortalQueryPeriod);
-            console.log('LoadingPropertiesService has loaded notificationServiceUrl=', notificationServiceUrl);
-            console.log('LoadingPropertiesService has loaded schedulerRestUrl=', schedulerRestUrl);
-        })
-        .error(function (response) {
-            console.error('Error loading notification portal configuration:', response);
         });
 }
 
@@ -98,7 +62,7 @@ mainCtrl.factory('loadingConfigData', function($http, $location){
     };
 });
 
-mainCtrl.factory('MainService', function ($http, $interval, $rootScope, $state, LoadingPropertiesService) {
+mainCtrl.factory('MainService', function ($http, $interval, $rootScope, $state) {
     function doLogin(userName, userPass) {
         var authData = $.param({'username': userName, 'password': userPass});
         var authConfig = {

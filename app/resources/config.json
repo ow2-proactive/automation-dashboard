@@ -1,7 +1,9 @@
 {
 "confServer": {
   "pcaServiceUrl": "http://localhost:8080/cloud-automation-service/",
-  "schedulerRestUrl": "http://localhost:8080/rest/scheduler/"
+  "schedulerRestUrl": "http://localhost:8080/rest/scheduler/",
+  "notificationServiceUrl": "http://localhost:8080/notification-service/",
+  "catalogServiceUrl": "http://localhost:8080/catalog/"
 },
 "view": [{
   "viewname": "Workflow Automation",
@@ -31,5 +33,7 @@
     "filter": "job.owner=me AND job.status=finished"
   }]
 }],
-  "updateQueryPeriod" : 20000
+  "updateQueryPeriod" : 20000,
+  "notificationPortalQueryPeriod": 20000,
+  "workflowCatalogPortalQueryPeriod": 20000
 }
