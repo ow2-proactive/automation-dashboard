@@ -157,37 +157,37 @@ module.exports = function (grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: 'bower_components/cloud-automation/app/views',
+                        cwd: '../cloud-automation-fork/app/views',
                         src: ['*.html'],
                         dest: '<%= inspinia.dist %>/views/cloud-automation'
                     },
                     {
                         expand: true,
-                        cwd: 'bower_components/workflow-catalog-portal/app/views',
+                        cwd: '../workflow-catalog-portal-fork/app/views',
                         src: ['*.html'],
                         dest: '<%= inspinia.dist %>/views/workflow-catalog-portal'
                     },
                     {
                         expand: true,
-                        cwd: 'bower_components/notification-portal/app/views',
+                        cwd: '../notification-portal-fork/app/views',
                         src: ['*.html'],
                         dest: '<%= inspinia.dist %>/views/notification-portal'
                     },
                     {
                         expand: true,
-                        cwd: 'bower_components/cloud-automation/app/styles',
+                        cwd: '../cloud-automation-fork/app/styles',
                         src: ['portal_custom_style.css'],
                         dest: '<%= inspinia.dist %>/styles/cloud-automation/'
                     },
                     {
                         expand: true,
-                        cwd: 'bower_components/workflow-catalog-portal/app/styles',
+                        cwd: '../workflow-catalog-portal-fork/app/styles',
                         src: ['wcportal_custom_style.css'],
                         dest: '<%= inspinia.dist %>/styles/workflow-catalog-portal'
                     },
                     {
                         expand: true,
-                        cwd: 'bower_components/notification-portal/app/styles',
+                        cwd: '../notification-portal-fork/app/styles',
                         src: ['notifportal_custom_style.css'],
                         dest: '<%= inspinia.dist %>/styles/notification-portal'
                     }
