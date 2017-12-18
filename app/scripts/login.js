@@ -9,7 +9,6 @@ loginModule.controller('loginController', function ($scope, $state) {
             transformResponse: []
         };
         // because of that wrong response type in that sched resource !!!
-        console.log('In do login : '+ localStorage['schedulerRestUrl'] + 'login' );
         return $http.post(JSON.parse(localStorage['schedulerRestUrl']) + 'login', authData, authConfig)
             .success(function (response) {
                 if (response.match(/^[A-Za-z0-9]+$/)) {

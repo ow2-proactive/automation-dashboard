@@ -73,6 +73,14 @@ function config($stateProvider, $urlRouterProvider) {
             data: {pageTitle: 'Notification Portal'},
             authenticate: true
         });
+        /* Community edition
+        .state('portal.subview4', {
+            url: "/notification",
+            templateUrl: "views/not_available_page.html",
+            data: {pageTitle: 'Content not available'},
+            authenticate: false
+        });
+        End of community edition */
 }
 angular
     .module('inspinia')

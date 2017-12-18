@@ -109,7 +109,6 @@ mainCtrl.controller('loginController', function ($scope, $state, MainService, PC
 
         localStorage['pa.login'] = username;
         $scope.main.userName = localStorage['pa.login'];
-        console.log("------------welcome "+localStorage['pa.login']);
 
         MainService.doLogin(username, password)
             .success(function (response) {
