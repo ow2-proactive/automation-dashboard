@@ -1,0 +1,4 @@
+[submodule "cloud-automation"]
+	path = cloud-automation
+	url = git@bitbucket.org:activeeon/cloud-automation.git
+	branch = proactive-dashboard
