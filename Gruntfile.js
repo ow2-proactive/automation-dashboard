@@ -41,6 +41,7 @@ module.exports = function (grunt) {
                     }
                 }
             },
+
             dist: {
                 options: {
                     open: true,
@@ -157,37 +158,37 @@ module.exports = function (grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: '../cloud-automation-fork/app/views',
+                        cwd: 'cloud-automation/app/views',
                         src: ['*.html'],
                         dest: '<%= inspinia.dist %>/views/cloud-automation'
                     },
                     {
                         expand: true,
-                        cwd: '../workflow-catalog-portal-fork/app/views',
+                        cwd: 'workflow-catalog-portal/app/views',
                         src: ['*.html'],
                         dest: '<%= inspinia.dist %>/views/workflow-catalog-portal'
                     },
                     {
                         expand: true,
-                        cwd: '../notification-portal-fork/app/views',
+                        cwd: 'notification-portal/app/views',
                         src: ['*.html'],
                         dest: '<%= inspinia.dist %>/views/notification-portal'
                     },
                     {
                         expand: true,
-                        cwd: '../cloud-automation-fork/app/styles',
+                        cwd: 'cloud-automation/app/styles',
                         src: ['portal_custom_style.css'],
                         dest: '<%= inspinia.dist %>/styles/cloud-automation/'
                     },
                     {
                         expand: true,
-                        cwd: '../workflow-catalog-portal-fork/app/styles',
+                        cwd: 'workflow-catalog-portal/app/styles',
                         src: ['wcportal_custom_style.css'],
                         dest: '<%= inspinia.dist %>/styles/workflow-catalog-portal'
                     },
                     {
                         expand: true,
-                        cwd: '../notification-portal-fork/app/styles',
+                        cwd: 'notification-portal/app/styles',
                         src: ['notifportal_custom_style.css'],
                         dest: '<%= inspinia.dist %>/styles/notification-portal'
                     }
