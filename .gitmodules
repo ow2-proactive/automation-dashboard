@@ -1,0 +1,12 @@
+[submodule "cloud-automation"]
+	path = cloud-automation
+	url = git@bitbucket.org:activeeon/cloud-automation.git
+	branch = proactive-dashboard
+[submodule "notification-portal"]
+	path = notification-portal
+	url = git@bitbucket.org:activeeon/notification-portal.git
+	branch = master
+[submodule "workflow-catalog-portal"]
+	path = workflow-catalog-portal
+	url = git@bitbucket.org:activeeon/workflow-catalog-portal.git
+	branch = master
