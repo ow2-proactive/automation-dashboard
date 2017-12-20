@@ -20,79 +20,80 @@ function config($stateProvider, $urlRouterProvider) {
             templateUrl: "views/common/content.html",
             authenticate: true,
         })
-        .state('portal.subview1', {
-            url: "/service-automation",
-            templateUrl: "views/cloud-automation/main.html",
-            //controller is specified in html
-            data: {pageTitle: 'Service Automation'},
-            authenticate: true,
-            css: 'styles/cloud-automation/portal_custom_style.css',
-            onEnter : function (SchedulerService, PCACatalogService, PCAProcessService, PCARunningServicesService, PCANodeSourcesService){
-                SchedulerService.refreshSchedulerService();
-                PCACatalogService.refreshPCACatalogService();
-                PCAProcessService.refreshPCAProcessService();
-                PCARunningServicesService.refreshPCARunningServicesService();
-                // Get existing Node Sources
-                PCANodeSourcesService.getNodeSourceList();
-            },
-            onExit: function($rootScope){
-                $rootScope.$broadcast('event:StopRefreshing');
-            }
-        })
-        .state('portal.subview2', {
-            url: "/workflow-automation",
-            templateUrl: "views/cloud-automation/minor.html",
-            data: {pageTitle: 'Workflow Automation'},
-            authenticate: true,
-            css: 'styles/cloud-automation/portal_custom_style.css',
-            onEnter : function (APPSchedulerService, APPCatalog){
-               APPSchedulerService.refreshAPPSchedulerService();
-               APPCatalog.refreshAPPCatalog();
+        //The following code is automatically generated with grunt build. You can't modify it from here. See 'replace' task in Gruntfile.js.
+        //beginSubviews
 
+        .state('portal.subview1', {
+            url: '/service-automation',
+            templateUrl: 'service-automation/views/main.html',
+            css: 'service-automation/styles/portal_custom_style.css',
+            data: {
+                pageTitle: 'Service automation'
             },
-            onExit: function($rootScope){
-              $rootScope.$broadcast('event:StopRefreshing');
-            }
-        })
-        .state('portal.subview3', {
-            url: "/workflow-catalog",
-            templateUrl: "views/workflow-catalog-portal/workflow_catalog.html",
-            css: 'styles/workflow-catalog-portal/wcportal_custom_style.css',
-            data: {pageTitle: 'Workflow Catalog'},
             authenticate: true,
-            onEnter : function (WorkflowCatalogService){
-                WorkflowCatalogService.startRegularWorkflowCatalogServiceQuery();
+            onEnter: function(SchedulerService, PCACatalogService, PCAProcessService, PCARunningServicesService, PCANodeSourcesService) {
+                initServiceAutomation(SchedulerService, PCACatalogService, PCAProcessService, PCARunningServicesService, PCANodeSourcesService);
             },
-            onExit: function($rootScope){
+            onExit: function($rootScope) {
                 $rootScope.$broadcast('event:StopRefreshing');
             }
         })
+
+        .state('portal.subview2', {
+            url: '/workflow-automation',
+            templateUrl: 'workflow-automation/views/minor.html',
+            css: 'workflow-automation/styles/portal_custom_style.css',
+            data: {
+                pageTitle: 'Workflow automation'
+            },
+            authenticate: true,
+            onEnter: function(APPSchedulerService, APPCatalog) {
+                initWorkflowAutomation(APPSchedulerService, APPCatalog);
+            },
+            onExit: function($rootScope) {
+                $rootScope.$broadcast('event:StopRefreshing');
+            }
+        })
+
+        .state('portal.subview3', {
+            url: '/workflow-catalog',
+            templateUrl: 'workflow-catalog/views/workflow_catalog.html',
+            css: 'workflow-catalog/styles/portal_custom_style.css',
+            data: {
+                pageTitle: 'Workflow catalog'
+            },
+            authenticate: true,
+            onEnter: function(WorkflowCatalogService) {
+                initWorkflowCatalog(WorkflowCatalogService);
+            },
+            onExit: function($rootScope) {
+                $rootScope.$broadcast('event:StopRefreshing');
+            }
+        })
+
         .state('portal.subview4', {
-            url: "/notification-portal",
-            templateUrl: "views/notification-portal/minor.html",
-            data: {pageTitle: 'Notification Portal'},
-            authenticate: true
+            url: '/notification-portal',
+            templateUrl: 'notification-portal/views/minor.html',
+            css: 'notification-portal/undefined',
+            data: {
+                pageTitle: 'Notification portal'
+            },
+            authenticate: true,
         });
-        /* Community edition
-        .state('portal.subview4', {
-            url: "/notification",
-            templateUrl: "views/not_available_page.html",
-            data: {pageTitle: 'Content not available'},
-            authenticate: false
-        });
-        End of community edition */
+    //endSubviews
+
 }
 angular
     .module('inspinia')
     .config(config)
-    .run(function ($rootScope, $state, $interval) {
+    .run(function($rootScope, $state, $interval) {
         $rootScope.$state = $state;
         $rootScope.$interval = $interval;
     });
 
 angular
     .module('inspinia')
-    .config(function ($httpProvider) {
+    .config(function($httpProvider) {
         $httpProvider.defaults.headers.common = {};
         $httpProvider.defaults.headers.post = {};
         $httpProvider.defaults.headers.put = {};
@@ -104,22 +105,23 @@ angular
 
 angular
     .module('inspinia')
-    .run(function ($rootScope, $state, $http, $location) {
+    .run(function($rootScope, $state, $http, $location) {
         $rootScope.$on('$locationChangeStart', function(event) {
-            if (localStorage['pcaServiceUrl'] == undefined || angular.isObject(localStorage['schedulerRestUrl']) == false || localStorage['appCatalogWorkflowsUrl']  == undefined || localStorage['appCatalogBucketsUrl']  == undefined)
-            {
-            getProperties($http, $location);
+            if (localStorage['pcaServiceUrl'] == undefined || angular.isObject(localStorage['schedulerRestUrl']) == false || localStorage['appCatalogWorkflowsUrl'] == undefined || localStorage['appCatalogBucketsUrl'] == undefined) {
+                getProperties($http, $location);
             }
             var myDataPromise = isSessionValide($http, getSessionId());
-            myDataPromise.then(function(result){
+            myDataPromise.then(function(result) {
 
-            if (!result){
-              event.preventDefault();
-              $rootScope.$broadcast('event:StopRefreshing');
-              return $state.go('login');
-            }
+                if (!result) {
+                    event.preventDefault();
+                    $rootScope.$broadcast('event:StopRefreshing');
+                    return $state.go('login');
+                }
             });
-            if ($state.current.name == ''){$state.go('portal.subview1');}
+            if ($state.current.name == '') {
+                $state.go('portal.subview1');
+            }
 
-          })
+        })
     });

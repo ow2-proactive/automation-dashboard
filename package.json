@@ -6,7 +6,7 @@
     "grunt": "^0.4.5"
   },
   "devDependencies": {
-    "json-server": "^0.12.0",
+    "bower": "^1.7.9",
     "grunt": "^0.4.5",
     "grunt-concurrent": "^1.0.0",
     "grunt-contrib-clean": "^0.6.0",
@@ -19,10 +19,12 @@
     "grunt-contrib-uglify": "^0.6.0",
     "grunt-contrib-watch": "^0.6.1",
     "grunt-filerev": "^2.0.0",
+    "grunt-jsbeautifier": "^0.2.13",
+    "grunt-replace": "^1.0.1",
     "grunt-usemin": "^2.4.0",
     "jshint-stylish": "^1.0.0",
+    "json-server": "^0.12.0",
     "load-grunt-tasks": "^0.6.0",
-    "time-grunt": "^1.0.0",
-    "bower": "^1.7.9"
+    "time-grunt": "^1.0.0"
   }
 }

@@ -18,6 +18,7 @@ module.exports = function (grunt) {
 
         // Project settings
         inspinia: appConfig,
+        subviewsDefinition: grunt.file.readJSON('app/resources/subviews.json'),
 
         // The grunt server settings
         connect: {
@@ -157,41 +158,98 @@ module.exports = function (grunt) {
                 files: [
                     {
                         expand: true,
-                        cwd: '../cloud-automation-fork/app/views',
-                        src: ['*.html'],
-                        dest: '<%= inspinia.dist %>/views/cloud-automation'
+                        cwd: '<%= subviewsDefinition.serviceAutomation.appFolder %>',
+                        src: ['<%= subviewsDefinition.serviceAutomation.htmlFile %>'],
+                        dest: '<%= inspinia.dist %>/<%= subviewsDefinition.serviceAutomation.nameForUrl %>'
                     },
                     {
                         expand: true,
-                        cwd: '../workflow-catalog-portal-fork/app/views',
-                        src: ['*.html'],
-                        dest: '<%= inspinia.dist %>/views/workflow-catalog-portal'
+                        cwd: '<%= subviewsDefinition.workflowAutomation.appFolder %>',
+                        src: ['<%= subviewsDefinition.workflowAutomation.htmlFile %>'],
+                        dest: '<%= inspinia.dist %>/<%= subviewsDefinition.workflowAutomation.nameForUrl %>'
                     },
                     {
                         expand: true,
-                        cwd: '../notification-portal-fork/app/views',
-                        src: ['*.html'],
-                        dest: '<%= inspinia.dist %>/views/notification-portal'
+                        cwd: '<%= subviewsDefinition.workflowCatalog.appFolder %>',
+                        src: ['<%= subviewsDefinition.workflowCatalog.htmlFile %>'],
+                        dest: '<%= inspinia.dist %>/<%= subviewsDefinition.workflowCatalog.nameForUrl %>'
                     },
                     {
                         expand: true,
-                        cwd: '../cloud-automation-fork/app/styles',
-                        src: ['portal_custom_style.css'],
-                        dest: '<%= inspinia.dist %>/styles/cloud-automation/'
+                        cwd: '<%= subviewsDefinition.notificationPortal.appFolder %>',
+                        src: ['<%= subviewsDefinition.notificationPortal.htmlFile %>'],
+                        dest: '<%= inspinia.dist %>/<%= subviewsDefinition.notificationPortal.nameForUrl %>'
                     },
                     {
                         expand: true,
-                        cwd: '../workflow-catalog-portal-fork/app/styles',
-                        src: ['wcportal_custom_style.css'],
-                        dest: '<%= inspinia.dist %>/styles/workflow-catalog-portal'
+                        cwd: '<%= subviewsDefinition.serviceAutomation.appFolder %>',
+                        src: ['<%= subviewsDefinition.serviceAutomation.cssFile %>'],
+                        dest: '<%= inspinia.dist %>/<%= subviewsDefinition.serviceAutomation.nameForUrl %>'
                     },
                     {
                         expand: true,
-                        cwd: '../notification-portal-fork/app/styles',
-                        src: ['notifportal_custom_style.css'],
-                        dest: '<%= inspinia.dist %>/styles/notification-portal'
+                        cwd: '<%= subviewsDefinition.workflowAutomation.appFolder %>',
+                        src: ['<%= subviewsDefinition.workflowAutomation.cssFile %>'],
+                        dest: '<%= inspinia.dist %>/<%= subviewsDefinition.workflowAutomation.nameForUrl %>'
+                    },
+                    {
+                        expand: true,
+                        cwd: '<%= subviewsDefinition.workflowCatalog.appFolder %>',
+                        src: ['<%= subviewsDefinition.workflowCatalog.cssFile %>'],
+                        dest: '<%= inspinia.dist %>/<%= subviewsDefinition.workflowCatalog.nameForUrl %>'
                     }
                 ]
+            }
+        },
+        //Add subviews in router
+        replace: {
+            dist: {
+                options: {
+                    patterns: [
+                        {
+                            match: /\/\/beginSubviews[\s\S]*\/\/endSubviews/g,
+                            replacement: function(){
+                                var subviewsDefinition = grunt.file.readJSON('app/resources/subviews.json');
+                                var result = '';
+                                var cnt = 0;
+                                for (var key in subviewsDefinition) {
+                                    cnt++;
+                                    result+= "\n.state('portal.subview" + cnt +"', {";
+                                    result+= "\nurl:'/"+subviewsDefinition[key].nameForUrl+"',";
+                                    if (subviewsDefinition[key].isAvailable) {
+                                        result+= "\ntemplateUrl:'"+subviewsDefinition[key].nameForUrl+"/"+subviewsDefinition[key].htmlFile+"',";
+                                        result+= "\ncss:'"+subviewsDefinition[key].nameForUrl+"/"+subviewsDefinition[key].cssFile+"',";
+                                        result+= "\ndata: {pageTitle: '"+subviewsDefinition[key].name+"'},";
+                                        result+= "\nauthenticate:"+subviewsDefinition[key].authenticate+",";
+                                        if (subviewsDefinition[key].initFunction) {
+                                            var services = subviewsDefinition[key].initFunction.services.join(", ");
+                                            result+= "\nonEnter : function ("+ services +") {";
+                                            result+= "\n"+subviewsDefinition[key].initFunction.functionName+"("+ services +"); \n },";
+                                            result+= "\nonExit : function($rootScope){";
+                                            result+= "\n$rootScope.$broadcast('event:StopRefreshing');\n }";
+                                        }
+                                    } else {
+                                        result+= "\ntemplateUrl: 'views/not_available_page.html',";
+                                        result+= "\ndata: {pageTitle: 'Content not available'},";
+                                        result+= "\nauthenticate:false,";
+                                    }
+                                    result+= "\n})\n";
+                                }
+                                result = '//beginSubviews\n\t\t'+result +';\n\t\t//endSubviews';
+                                return result;
+                            }
+                        }
+                    ],
+                    usePrefix: false
+                },
+                files: [
+                    {expand: true, flatten: true, src: ['app/scripts/config.js'], dest: 'app/scripts/'}
+                ]
+            }
+        },
+        "jsbeautifier" : {
+            files : ["app/scripts/config.js"],
+            options : {
             }
         },
         // Renames files for browser caching purposes
@@ -249,6 +307,8 @@ module.exports = function (grunt) {
     // Build version for production
     grunt.registerTask('build', [
         'clean:dist',
+        'replace',
+        'jsbeautifier',
         'less',
         'useminPrepare',
         'concat',
