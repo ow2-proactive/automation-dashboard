@@ -21,7 +21,7 @@ function config($stateProvider, $urlRouterProvider) {
             authenticate: true,
         })
         //The following code is automatically generated with grunt build. You can't modify it from here. See 'replace' task in Gruntfile.js.
-        //beginSubviews
+        //beginSubviewsStates
 
         .state('portal.subview1', {
             url: '/service-automation',
@@ -74,13 +74,13 @@ function config($stateProvider, $urlRouterProvider) {
         .state('portal.subview4', {
             url: '/notification-portal',
             templateUrl: 'notification-portal/views/minor.html',
-            css: 'notification-portal/undefined',
+            css: 'notification-portal/styles/notifportal_custom_style.css',
             data: {
                 pageTitle: 'Notification portal'
             },
             authenticate: true,
         });
-    //endSubviews
+    //endSubviewsStates
 
 }
 angular

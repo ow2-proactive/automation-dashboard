@@ -2,16 +2,19 @@
  * INSPINIA - Responsive Admin Theme
  *
  */
-(function () {
+(function() {
     angular.module('inspinia', [
-        'ui.router',                    // Routing
-        'ui.bootstrap',                 // Bootstrap
+        'ui.router', // Routing
+        'ui.bootstrap', // Bootstrap
         'loginModule',
         'main',
-        'pca-rest',
+        //beginSubviewsModules
+
         'app-rest',
+        'pca-rest',
         'wcp-rest',
         'ns-rest',
+        //endSubviewsModules
         'angularCSS'
     ])
 })();

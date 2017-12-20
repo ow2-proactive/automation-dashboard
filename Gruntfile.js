@@ -207,7 +207,7 @@ module.exports = function (grunt) {
                 options: {
                     patterns: [
                         {
-                            match: /\/\/beginSubviews[\s\S]*\/\/endSubviews/g,
+                            match: /\/\/beginSubviewsStates[\s\S]*\/\/endSubviewsStates/g,
                             replacement: function(){
                                 var subviewsDefinition = grunt.file.readJSON('app/resources/subviews.json');
                                 var result = '';
@@ -235,7 +235,35 @@ module.exports = function (grunt) {
                                     }
                                     result+= "\n})\n";
                                 }
-                                result = '//beginSubviews\n\t\t'+result +';\n\t\t//endSubviews';
+                                result = '//beginSubviewsStates\n'+result +';\n//endSubviewsStates';
+                                return result;
+                            }
+                        },
+                        {
+                            match: /<!-- beginSubviews-->[\s\S]*<!-- endSubviews-->/g,
+                            replacement: function(){
+                                var subviewsDefinition = grunt.file.readJSON('app/resources/subviews.json');
+                                var result = '';
+                                var cnt = 0;
+                                for (var key in subviewsDefinition) {
+                                    cnt++;
+                                    result+= '\n<li ui-sref-active="active">'
+                                                + '\n<a ui-sref="portal.subview'+cnt+'" style="background-color: #002d66"><i class="fa fa-desktop"></i> <span class="nav-label">'
+                                                + subviewsDefinition[key].name + '</span> </a>\n</li>';
+                                }
+                                result = '<!-- beginSubviews-->\n'+result +'\n<!-- endSubviews-->';
+                                return result;
+                            }
+                        },
+                        {
+                            match: /\/\/beginSubviewsModules[\s\S]*\/\/endSubviewsModules/g,
+                            replacement: function(){
+                                var subviewsDefinition = grunt.file.readJSON('app/resources/subviews.json');
+                                var result = '';
+                                for (var key in subviewsDefinition) {
+                                    result+= "\n'"+subviewsDefinition[key].angularModuleName +"',";
+                                }
+                                result = '//beginSubviewsModules\n'+result +'\n//endSubviewsModules';
                                 return result;
                             }
                         }
@@ -243,12 +271,15 @@ module.exports = function (grunt) {
                     usePrefix: false
                 },
                 files: [
-                    {expand: true, flatten: true, src: ['app/scripts/config.js'], dest: 'app/scripts/'}
+                    {expand: true, flatten: true, src: ['app/scripts/config.js'], dest: 'app/scripts/'},
+                    {expand: true, flatten: true, src: ['app/views/common/navigation.html'], dest: 'app/views/common/'},
+                    {expand: true, flatten: true, src: ['app/scripts/app.js'], dest: 'app/scripts/'},
                 ]
             }
         },
-        "jsbeautifier" : {
-            files : ["app/scripts/config.js"],
+        //JS & HTML indentation for code added with replace
+        jsbeautifier : {
+            files : ["app/scripts/config.js",'app/views/common/navigation.html', "app/scripts/app.js"],
             options : {
             }
         },
