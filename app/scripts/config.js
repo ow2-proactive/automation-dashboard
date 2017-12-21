@@ -20,9 +20,10 @@ function config($stateProvider, $urlRouterProvider) {
             templateUrl: "views/common/content.html",
             authenticate: true,
         })
-        //The following code is automatically generated with grunt build. You can't modify it from here. See 'replace' task in Gruntfile.js.
-        //beginSubviewsStates
+        //!DO NOT EDIT! The following code related to subviews is automatically generated with grunt build. You can't modify it from here.
+        //See 'replace' task in Gruntfile.js and subviews definition in enterpriseSubviews.json.
 
+        //beginSubviewsStates
         .state('portal.subview1', {
             url: '/service-automation',
             templateUrl: 'service-automation/views/main.html',
@@ -58,7 +59,7 @@ function config($stateProvider, $urlRouterProvider) {
         .state('portal.subview3', {
             url: '/workflow-catalog',
             templateUrl: 'workflow-catalog/views/workflow_catalog.html',
-            css: 'workflow-catalog/styles/portal_custom_style.css',
+            css: 'workflow-catalog/styles/wcportal_custom_style.css',
             data: {
                 pageTitle: 'Workflow catalog'
             },

@@ -18,7 +18,7 @@ module.exports = function (grunt) {
 
         // Project settings
         inspinia: appConfig,
-        subviewsDefinition: grunt.file.readJSON('app/resources/subviews.json'),
+        subviewsDefinition: grunt.file.readJSON('app/resources/enterpriseSubviews.json'),
 
         // The grunt server settings
         connect: {
@@ -104,7 +104,10 @@ module.exports = function (grunt) {
                     src: [
                         '.tmp',
                         '<%= inspinia.dist %>/{,*/}*',
-                        '!<%= inspinia.dist %>/.git*'
+                        '!<%= inspinia.dist %>/.git*',
+                        '<%= inspinia.app %>/scripts/config.js',
+                        '<%= inspinia.app %>/scripts/app.js',
+                        '<%= inspinia.app %>/index.html'
                     ]
                 }]
             },
@@ -197,6 +200,28 @@ module.exports = function (grunt) {
                         cwd: '<%= subviewsDefinition.workflowCatalog.appFolder %>',
                         src: ['<%= subviewsDefinition.workflowCatalog.cssFile %>'],
                         dest: '<%= inspinia.dist %>/<%= subviewsDefinition.workflowCatalog.nameForUrl %>'
+                    },
+                    {
+                        expand: true,
+                        cwd: '<%= subviewsDefinition.notificationPortal.appFolder %>',
+                        src: ['<%= subviewsDefinition.notificationPortal.cssFile %>'],
+                        dest: '<%= inspinia.dist %>/<%= subviewsDefinition.notificationPortal.nameForUrl %>'
+                    }
+                ]
+            },
+            modifiedSubviews: {
+                files: [
+                    {
+                        src: ['<%= inspinia.app %>/scripts/enterpriseConfig.js'],
+                        dest: '<%= inspinia.app %>/scripts/config.js'
+                    },
+                    {
+                        src: ['<%= inspinia.app %>/scripts/enterpriseApp.js'],
+                        dest: '<%= inspinia.app %>/scripts/app.js'
+                    },
+                    {
+                        src: ['<%= inspinia.app %>/enterpriseIndex.html'],
+                        dest: '<%= inspinia.app %>/index.html'
                     }
                 ]
             }
@@ -209,7 +234,7 @@ module.exports = function (grunt) {
                         {
                             match: /\/\/beginSubviewsStates[\s\S]*\/\/endSubviewsStates/g,
                             replacement: function(){
-                                var subviewsDefinition = grunt.file.readJSON('app/resources/subviews.json');
+                                var subviewsDefinition = grunt.file.readJSON('app/resources/enterpriseSubviews.json');
                                 var result = '';
                                 var cnt = 0;
                                 for (var key in subviewsDefinition) {
@@ -235,14 +260,14 @@ module.exports = function (grunt) {
                                     }
                                     result+= "\n})\n";
                                 }
-                                result = '//beginSubviewsStates\n'+result +';\n//endSubviewsStates';
+                                result = '//beginSubviewsStates'+result +';\n//endSubviewsStates';
                                 return result;
                             }
                         },
                         {
                             match: /<!-- beginSubviews-->[\s\S]*<!-- endSubviews-->/g,
                             replacement: function(){
-                                var subviewsDefinition = grunt.file.readJSON('app/resources/subviews.json');
+                                var subviewsDefinition = grunt.file.readJSON('app/resources/enterpriseSubviews.json');
                                 var result = '';
                                 var cnt = 0;
                                 for (var key in subviewsDefinition) {
@@ -251,19 +276,42 @@ module.exports = function (grunt) {
                                                 + '\n<a ui-sref="portal.subview'+cnt+'" style="background-color: #002d66"><i class="fa fa-desktop"></i> <span class="nav-label">'
                                                 + subviewsDefinition[key].name + '</span> </a>\n</li>';
                                 }
-                                result = '<!-- beginSubviews-->\n'+result +'\n<!-- endSubviews-->';
+                                result = '<!-- beginSubviews-->'+result +'\n<!-- endSubviews-->';
                                 return result;
                             }
                         },
                         {
                             match: /\/\/beginSubviewsModules[\s\S]*\/\/endSubviewsModules/g,
                             replacement: function(){
-                                var subviewsDefinition = grunt.file.readJSON('app/resources/subviews.json');
+                                var subviewsDefinition = grunt.file.readJSON('app/resources/enterpriseSubviews.json');
                                 var result = '';
                                 for (var key in subviewsDefinition) {
-                                    result+= "\n'"+subviewsDefinition[key].angularModuleName +"',";
+                                    if (subviewsDefinition[key].isAvailable) {
+                                        result+= "\n'"+subviewsDefinition[key].angularModuleName +"',";
+                                    }
                                 }
-                                result = '//beginSubviewsModules\n'+result +'\n//endSubviewsModules';
+                                result = '//beginSubviewsModules'+result +'\n//endSubviewsModules';
+                                return result;
+                            }
+                        },
+                        {
+                            match: /<!-- beginSubviewsScripts-->[\s\S]*<!-- endSubviewsScripts-->/g,
+                            replacement: function(){
+                                var subviewsDefinition = grunt.file.readJSON('app/resources/enterpriseSubviews.json');
+                                var result = '';
+                                var includedScripts = [];
+                                for (var key in subviewsDefinition) {
+                                    if (subviewsDefinition[key].isAvailable) {
+                                        for (var scriptKey in subviewsDefinition[key].jsFiles) {
+                                            var script = subviewsDefinition[key].jsFiles[scriptKey];
+                                            if (includedScripts.indexOf(script) < 0) {
+                                                result+= '\n<script src="'+ subviewsDefinition[key].appFolder + script +'"></script>';
+                                                includedScripts.push(script);
+                                            }
+                                        }
+                                    }
+                                }
+                                result = '<!-- beginSubviewsScripts-->'+result +'\n<!-- endSubviewsScripts-->';
                                 return result;
                             }
                         }
@@ -271,15 +319,16 @@ module.exports = function (grunt) {
                     usePrefix: false
                 },
                 files: [
-                    {expand: true, flatten: true, src: ['app/scripts/config.js'], dest: 'app/scripts/'},
+                    {flatten: true, src: ['app/scripts/enterpriseConfig.js'], dest: 'app/scripts/enterpriseConfig.js'},
                     {expand: true, flatten: true, src: ['app/views/common/navigation.html'], dest: 'app/views/common/'},
-                    {expand: true, flatten: true, src: ['app/scripts/app.js'], dest: 'app/scripts/'},
+                    {flatten: true, src: ['app/scripts/enterpriseApp.js'], dest: 'app/scripts/enterpriseApp.js'},
+                    {flatten: true, src: ['app/enterpriseIndex.html'], dest: 'app/enterpriseIndex.html'},
                 ]
             }
         },
         //JS & HTML indentation for code added with replace
         jsbeautifier : {
-            files : ["app/scripts/config.js",'app/views/common/navigation.html', "app/scripts/app.js"],
+            files : ["app/scripts/enterpriseConfig.js",'app/views/common/navigation.html', "app/scripts/enterpriseApp.js", 'app/enterpriseIndex.html'],
             options : {
             }
         },
@@ -322,12 +371,12 @@ module.exports = function (grunt) {
     });
 
     // Run live version of app
-    grunt.registerTask('live', [
+    /*grunt.registerTask('live', [
         'clean:server',
         'copy:styles',
         'connect:livereload',
         'watch'
-    ]);
+    ]);*/
 
     // Run build version of app
     grunt.registerTask('server', [
@@ -340,6 +389,7 @@ module.exports = function (grunt) {
         'clean:dist',
         'replace',
         'jsbeautifier',
+        'copy:modifiedSubviews',
         'less',
         'useminPrepare',
         'concat',
@@ -350,6 +400,12 @@ module.exports = function (grunt) {
         'usemin',
         'htmlmin',
         'copy:subviews'
+    ]);
+
+    // Build version for production
+    grunt.registerTask('injectEnterprise', [
+        'replace',
+        'jsbeautifier'
     ]);
 
 };
