@@ -20,7 +20,6 @@ module.exports = function (grunt) {
 
         // Project settings
         inspinia: appConfig,
-        subviewsDefinition: subviewsDefinition,
 
         // The grunt server settings
         connect: {
@@ -160,56 +159,24 @@ module.exports = function (grunt) {
                 src: '{,*/}*.css'
             },
             subviews: {
-                files: [
-                    {
-                        expand: true,
-                        cwd: '<%= subviewsDefinition.serviceAutomation.appFolder %>',
-                        src: ['<%= subviewsDefinition.serviceAutomation.htmlFile %>'],
-                        dest: '<%= inspinia.dist %>/<%= subviewsDefinition.serviceAutomation.nameForUrl %>'
-                    },
-                    {
-                        expand: true,
-                        cwd: '<%= subviewsDefinition.workflowAutomation.appFolder %>',
-                        src: ['<%= subviewsDefinition.workflowAutomation.htmlFile %>'],
-                        dest: '<%= inspinia.dist %>/<%= subviewsDefinition.workflowAutomation.nameForUrl %>'
-                    },
-                    {
-                        expand: true,
-                        cwd: '<%= subviewsDefinition.workflowCatalog.appFolder %>',
-                        src: ['<%= subviewsDefinition.workflowCatalog.htmlFile %>'],
-                        dest: '<%= inspinia.dist %>/<%= subviewsDefinition.workflowCatalog.nameForUrl %>'
-                    },
-                    {
-                        expand: true,
-                        cwd: '<%= subviewsDefinition.notificationPortal.appFolder %>',
-                        src: ['<%= subviewsDefinition.notificationPortal.htmlFile %>'],
-                        dest: '<%= inspinia.dist %>/<%= subviewsDefinition.notificationPortal.nameForUrl %>'
-                    },
-                    {
-                        expand: true,
-                        cwd: '<%= subviewsDefinition.serviceAutomation.appFolder %>',
-                        src: ['<%= subviewsDefinition.serviceAutomation.cssFile %>'],
-                        dest: '<%= inspinia.dist %>/<%= subviewsDefinition.serviceAutomation.nameForUrl %>'
-                    },
-                    {
-                        expand: true,
-                        cwd: '<%= subviewsDefinition.workflowAutomation.appFolder %>',
-                        src: ['<%= subviewsDefinition.workflowAutomation.cssFile %>'],
-                        dest: '<%= inspinia.dist %>/<%= subviewsDefinition.workflowAutomation.nameForUrl %>'
-                    },
-                    {
-                        expand: true,
-                        cwd: '<%= subviewsDefinition.workflowCatalog.appFolder %>',
-                        src: ['<%= subviewsDefinition.workflowCatalog.cssFile %>'],
-                        dest: '<%= inspinia.dist %>/<%= subviewsDefinition.workflowCatalog.nameForUrl %>'
-                    },
-                    {
-                        expand: true,
-                        cwd: '<%= subviewsDefinition.notificationPortal.appFolder %>',
-                        src: ['<%= subviewsDefinition.notificationPortal.cssFile %>'],
-                        dest: '<%= inspinia.dist %>/<%= subviewsDefinition.notificationPortal.nameForUrl %>'
-                    }
-                ]
+                files: (function() {
+                    var out = [];
+                    for (var key in subviewsDefinition) {
+                       out.push({
+                          expand: true,
+                          cwd: subviewsDefinition[key].appFolder,
+                          src: subviewsDefinition[key].htmlFile,
+                          dest: '<%= inspinia.dist %>/'+subviewsDefinition[key].nameForUrl
+                       });
+                        out.push({
+                            expand: true,
+                            cwd: subviewsDefinition[key].appFolder,
+                            src: subviewsDefinition[key].cssFile,
+                            dest: '<%= inspinia.dist %>/'+subviewsDefinition[key].nameForUrl
+                        });
+                    };
+                    return out;
+                 })()
             },
             modifiedSubviews: {
                 files: [
