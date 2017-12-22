@@ -13,12 +13,14 @@ module.exports = function (grunt) {
         dist: 'dist'
     };
 
+    var subviewsDefinition = grunt.file.readJSON('app/resources/enterpriseSubviews.json');
+
     // Grunt configuration
     grunt.initConfig({
 
         // Project settings
         inspinia: appConfig,
-        subviewsDefinition: grunt.file.readJSON('app/resources/enterpriseSubviews.json'),
+        subviewsDefinition: subviewsDefinition,
 
         // The grunt server settings
         connect: {
@@ -234,7 +236,6 @@ module.exports = function (grunt) {
                         {
                             match: /\/\/beginSubviewsStates[\s\S]*\/\/endSubviewsStates/g,
                             replacement: function(){
-                                var subviewsDefinition = grunt.file.readJSON('app/resources/enterpriseSubviews.json');
                                 var result = '';
                                 var cnt = 0;
                                 for (var key in subviewsDefinition) {
@@ -267,7 +268,6 @@ module.exports = function (grunt) {
                         {
                             match: /<!-- beginSubviews-->[\s\S]*<!-- endSubviews-->/g,
                             replacement: function(){
-                                var subviewsDefinition = grunt.file.readJSON('app/resources/enterpriseSubviews.json');
                                 var result = '';
                                 var cnt = 0;
                                 for (var key in subviewsDefinition) {
@@ -283,7 +283,6 @@ module.exports = function (grunt) {
                         {
                             match: /\/\/beginSubviewsModules[\s\S]*\/\/endSubviewsModules/g,
                             replacement: function(){
-                                var subviewsDefinition = grunt.file.readJSON('app/resources/enterpriseSubviews.json');
                                 var result = '';
                                 for (var key in subviewsDefinition) {
                                     if (subviewsDefinition[key].isAvailable) {
@@ -297,7 +296,6 @@ module.exports = function (grunt) {
                         {
                             match: /<!-- beginSubviewsScripts-->[\s\S]*<!-- endSubviewsScripts-->/g,
                             replacement: function(){
-                                var subviewsDefinition = grunt.file.readJSON('app/resources/enterpriseSubviews.json');
                                 var result = '';
                                 var includedScripts = [];
                                 for (var key in subviewsDefinition) {

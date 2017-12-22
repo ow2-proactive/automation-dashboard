@@ -5,8 +5,8 @@
 [submodule "notification-portal"]
 	path = notification-portal
 	url = git@bitbucket.org:activeeon/notification-portal.git
-	branch = master
+	branch = proactive-dashboard
 [submodule "workflow-catalog-portal"]
 	path = workflow-catalog-portal
 	url = git@bitbucket.org:activeeon/workflow-catalog-portal.git
-	branch = master
+	branch = proactive-dashboard
