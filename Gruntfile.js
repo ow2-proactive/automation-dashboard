@@ -402,10 +402,4 @@ module.exports = function (grunt) {
         'copy:subviews'
     ]);
 
-    // Build version for production
-    grunt.registerTask('injectEnterprise', [
-        'replace',
-        'jsbeautifier'
-    ]);
-
 };
