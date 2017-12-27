@@ -18,15 +18,13 @@ git submodule update
 
 ## Building
 
-To build the ProActive Dashboard, just use: 
-
-```grunt clean build``` (build enterprise version) , ```grunt clean build:enterprise``` or ```grunt clean build: community``` 
+To build the ProActive Dashboard, just use: `grunt clean build` (build enterprise version) , `grunt clean build:enterprise` or `grunt clean build: community`.
 
 Then, copy the `dist/` folder in `scheduling/dist/war/` and rename it "proactive-dashboard".
 
 Once scheduling/bin/proactive-server is started, the dashboard is available at `localhost:8080/proactive-dashboard`.
 
-# What does building do with subviews modules?
+### What does building do with subviews modules?
 
 With the following tasks, grunt injects subviews in the dashboard :
 * Replace:  
