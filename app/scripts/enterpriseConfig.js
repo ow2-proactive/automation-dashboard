@@ -25,11 +25,11 @@ function config($stateProvider, $urlRouterProvider) {
 
         //beginSubviewsStates
         .state('portal.subview1', {
-            url: '/service-automation',
-            templateUrl: 'service-automation/views/main.html',
-            css: 'service-automation/styles/portal_custom_style.css',
+            url: '/cloud-automation',
+            templateUrl: 'cloud-automation/views/main.html',
+            css: 'cloud-automation/styles/portal_custom_style.css',
             data: {
-                pageTitle: 'Service automation'
+                pageTitle: 'Cloud automation'
             },
             authenticate: true,
             onEnter: function(SchedulerService, PCACatalogService, PCAProcessService, PCARunningServicesService, PCANodeSourcesService) {

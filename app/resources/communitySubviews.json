@@ -1,8 +1,8 @@
 {
-	"serviceAutomation" : {
+	"cloudAutomation" : {
 		"isAvailable" : true,
-		"name": "Service automation",
-		"nameForUrl": "service-automation",
+		"name": "Cloud automation",
+		"nameForUrl": "cloud-automation",
 		"appFolder" : "cloud-automation/app/",
 		"htmlFile": "views/main.html",
 		"jsFiles": ["scripts/pca-rest.js", "scripts/app-rest.js"],
