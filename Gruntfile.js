@@ -13,13 +13,15 @@ module.exports = function (grunt) {
         dist: 'dist'
     };
 
-    var subviewsDefinition = grunt.file.readJSON('app/resources/enterpriseSubviews.json');
+   var subviewsDefinition = grunt.file.readJSON('app/resources/enterpriseSubviews.json');
+   var version = "enterprise";
 
     // Grunt configuration
     grunt.initConfig({
 
         // Project settings
         inspinia: appConfig,
+        version : version,
 
         // The grunt server settings
         connect: {
@@ -181,15 +183,15 @@ module.exports = function (grunt) {
             modifiedSubviews: {
                 files: [
                     {
-                        src: ['<%= inspinia.app %>/scripts/enterpriseConfig.js'],
+                        src: ['<%= inspinia.app %>/scripts/'+version+'Config.js'],
                         dest: '<%= inspinia.app %>/scripts/config.js'
                     },
                     {
-                        src: ['<%= inspinia.app %>/scripts/enterpriseApp.js'],
+                        src: ['<%= inspinia.app %>/scripts/'+version+'App.js'],
                         dest: '<%= inspinia.app %>/scripts/app.js'
                     },
                     {
-                        src: ['<%= inspinia.app %>/enterpriseIndex.html'],
+                        src: ['<%= inspinia.app %>/'+version+'Index.html'],
                         dest: '<%= inspinia.app %>/index.html'
                     }
                 ]
@@ -201,6 +203,7 @@ module.exports = function (grunt) {
                 options: {
                     patterns: [
                         {
+                            // replace for config.js :
                             match: /\/\/beginSubviewsStates[\s\S]*\/\/endSubviewsStates/g,
                             replacement: function(){
                                 var result = '';
@@ -233,6 +236,7 @@ module.exports = function (grunt) {
                             }
                         },
                         {
+                            // replace for navigation.html :
                             match: /<!-- beginSubviews-->[\s\S]*<!-- endSubviews-->/g,
                             replacement: function(){
                                 var result = '';
@@ -248,6 +252,7 @@ module.exports = function (grunt) {
                             }
                         },
                         {
+                            // replace for app.js :
                             match: /\/\/beginSubviewsModules[\s\S]*\/\/endSubviewsModules/g,
                             replacement: function(){
                                 var result = '';
@@ -261,6 +266,7 @@ module.exports = function (grunt) {
                             }
                         },
                         {
+                            // replace for index.html :
                             match: /<!-- beginSubviewsScripts-->[\s\S]*<!-- endSubviewsScripts-->/g,
                             replacement: function(){
                                 var result = '';
@@ -284,16 +290,16 @@ module.exports = function (grunt) {
                     usePrefix: false
                 },
                 files: [
-                    {flatten: true, src: ['app/scripts/enterpriseConfig.js'], dest: 'app/scripts/enterpriseConfig.js'},
+                    {flatten: true, src: ['app/scripts/'+version+'Config.js'], dest: 'app/scripts/'+version+'Config.js'},
                     {expand: true, flatten: true, src: ['app/views/common/navigation.html'], dest: 'app/views/common/'},
-                    {flatten: true, src: ['app/scripts/enterpriseApp.js'], dest: 'app/scripts/enterpriseApp.js'},
-                    {flatten: true, src: ['app/enterpriseIndex.html'], dest: 'app/enterpriseIndex.html'},
+                    {flatten: true, src: ['app/scripts/'+version+'App.js'], dest: 'app/scripts/'+version+'App.js'},
+                    {flatten: true, src: ['app/'+version+'Index.html'], dest: 'app/'+version+'Index.html'},
                 ]
             }
         },
         //JS & HTML indentation for code added with replace
         jsbeautifier : {
-            files : ["app/scripts/enterpriseConfig.js",'app/views/common/navigation.html', "app/scripts/enterpriseApp.js", 'app/enterpriseIndex.html'],
+            files : ["app/scripts/'+version+'Config.js",'app/views/common/navigation.html', "app/scripts/'+version+'App.js", 'app/'+version+'Index.html'],
             options : {
             }
         },
@@ -343,6 +349,11 @@ module.exports = function (grunt) {
         'watch'
     ]);*/
 
+    grunt.registerTask("changeToCommunity", function() {
+        subviewsDefinition = grunt.file.readJSON('app/resources/communitySubviews.json');
+        version = "community";
+    });
+
     // Run build version of app
     grunt.registerTask('server', [
         'build',
@@ -365,6 +376,15 @@ module.exports = function (grunt) {
         'usemin',
         'htmlmin',
         'copy:subviews'
+    ]);
+
+    grunt.registerTask('build-enterprise', [
+        'build'
+    ]);
+
+    grunt.registerTask('build-community', [
+        'changeToCommunity',
+        'build'
     ]);
 
 };

@@ -6,7 +6,7 @@
 		"appFolder" : "cloud-automation/app/",
 		"htmlFile": "views/main.html",
 		"jsFiles": ["scripts/pca-rest.js", "scripts/app-rest.js"],
-		"angularModuleName" : "app-rest",
+		"angularModuleName" : "pca-rest",
 		"cssFile": "styles/portal_custom_style.css",
 		"authenticate": true,
 		"initFunction": {
@@ -21,7 +21,7 @@
 		"appFolder" : "cloud-automation/app/",
 		"htmlFile": "views/minor.html",
 		"jsFiles": ["scripts/pca-rest.js", "scripts/app-rest.js"],
-		"angularModuleName" : "pca-rest",
+		"angularModuleName" : "app-rest",
 		"cssFile": "styles/portal_custom_style.css",
 		"authenticate": true,
 		"initFunction": {
