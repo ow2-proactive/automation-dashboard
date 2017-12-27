@@ -24,7 +24,56 @@ function config($stateProvider, $urlRouterProvider) {
         //See 'replace' task in Gruntfile.js and subviews definition in enterpriseSubviews.json.
 
         //beginSubviewsStates
+        .state('portal.subview1', {
+            url: '/service-automation',
+            templateUrl: 'service-automation/views/main.html',
+            css: 'service-automation/styles/portal_custom_style.css',
+            data: {
+                pageTitle: 'Service automation'
+            },
+            authenticate: true,
+            onEnter: function(SchedulerService, PCACatalogService, PCAProcessService, PCARunningServicesService, PCANodeSourcesService) {
+                initServiceAutomation(SchedulerService, PCACatalogService, PCAProcessService, PCARunningServicesService, PCANodeSourcesService);
+            },
+            onExit: function($rootScope) {
+                $rootScope.$broadcast('event:StopRefreshing');
+            }
+        })
 
+        .state('portal.subview2', {
+            url: '/workflow-automation',
+            templateUrl: 'views/not_available_page.html',
+            data: {
+                pageTitle: 'Content not available'
+            },
+            authenticate: false,
+        })
+
+        .state('portal.subview3', {
+            url: '/workflow-catalog',
+            templateUrl: 'workflow-catalog/views/workflow_catalog.html',
+            css: 'workflow-catalog/styles/wcportal_custom_style.css',
+            data: {
+                pageTitle: 'Workflow catalog'
+            },
+            authenticate: true,
+            onEnter: function(WorkflowCatalogService) {
+                initWorkflowCatalog(WorkflowCatalogService);
+            },
+            onExit: function($rootScope) {
+                $rootScope.$broadcast('event:StopRefreshing');
+            }
+        })
+
+        .state('portal.subview4', {
+            url: '/notification-portal',
+            templateUrl: 'notification-portal/views/minor.html',
+            css: 'notification-portal/styles/notifportal_custom_style.css',
+            data: {
+                pageTitle: 'Notification portal'
+            },
+            authenticate: true,
+        });
     //endSubviewsStates
 
 }

@@ -12,10 +12,11 @@
         //See 'replace' task in Gruntfile.js and subviews definition in enterpriseSubviews.json.
 
         //beginSubviewsModules
-'pca-rest',
-'wcp-rest',
-'ns-rest',
-//endSubviewsModules
+        'pca-rest',
+        'app-rest',
+        'wcp-rest',
+        'ns-rest',
+        //endSubviewsModules
         'angularCSS'
     ])
 })();

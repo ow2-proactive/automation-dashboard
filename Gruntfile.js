@@ -10,18 +10,17 @@ module.exports = function (grunt) {
     // Configurable paths for the app
     var appConfig = {
         app: 'app',
-        dist: 'dist'
+        dist: 'dist',
+        version: 'enterprise'
     };
 
    var subviewsDefinition = grunt.file.readJSON('app/resources/enterpriseSubviews.json');
-   var version = "enterprise";
 
     // Grunt configuration
     grunt.initConfig({
 
         // Project settings
         inspinia: appConfig,
-        version : version,
 
         // The grunt server settings
         connect: {
@@ -183,15 +182,15 @@ module.exports = function (grunt) {
             modifiedSubviews: {
                 files: [
                     {
-                        src: ['<%= inspinia.app %>/scripts/'+version+'Config.js'],
+                        src: ['<%= inspinia.app %>/scripts/<%= inspinia.version %>Config.js'],
                         dest: '<%= inspinia.app %>/scripts/config.js'
                     },
                     {
-                        src: ['<%= inspinia.app %>/scripts/'+version+'App.js'],
+                        src: ['<%= inspinia.app %>/scripts/<%= inspinia.version %>App.js'],
                         dest: '<%= inspinia.app %>/scripts/app.js'
                     },
                     {
-                        src: ['<%= inspinia.app %>/'+version+'Index.html'],
+                        src: ['<%= inspinia.app %>/<%= inspinia.version %>Index.html'],
                         dest: '<%= inspinia.app %>/index.html'
                     }
                 ]
@@ -290,16 +289,16 @@ module.exports = function (grunt) {
                     usePrefix: false
                 },
                 files: [
-                    {flatten: true, src: ['app/scripts/'+version+'Config.js'], dest: 'app/scripts/'+version+'Config.js'},
+                    {flatten: true, src: ['app/scripts/<%= inspinia.version %>Config.js'], dest: 'app/scripts/<%= inspinia.version %>Config.js'},
                     {expand: true, flatten: true, src: ['app/views/common/navigation.html'], dest: 'app/views/common/'},
-                    {flatten: true, src: ['app/scripts/'+version+'App.js'], dest: 'app/scripts/'+version+'App.js'},
-                    {flatten: true, src: ['app/'+version+'Index.html'], dest: 'app/'+version+'Index.html'},
+                    {flatten: true, src: ['app/scripts/<%= inspinia.version %>App.js'], dest: 'app/scripts/<%= inspinia.version %>App.js'},
+                    {flatten: true, src: ['app/<%= inspinia.version %>Index.html'], dest: 'app/<%= inspinia.version %>Index.html'},
                 ]
             }
         },
         //JS & HTML indentation for code added with replace
         jsbeautifier : {
-            files : ["app/scripts/'+version+'Config.js",'app/views/common/navigation.html', "app/scripts/'+version+'App.js", 'app/'+version+'Index.html'],
+            files : ["app/scripts/<%= inspinia.version %>Config.js",'app/views/common/navigation.html', "app/scripts/<%= inspinia.version %>App.js", 'app/<%= inspinia.version %>Index.html'],
             options : {
             }
         },
@@ -351,7 +350,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask("changeToCommunity", function() {
         subviewsDefinition = grunt.file.readJSON('app/resources/communitySubviews.json');
-        version = "community";
+        appConfig.version = 'community';
     });
 
     // Run build version of app
@@ -378,11 +377,11 @@ module.exports = function (grunt) {
         'copy:subviews'
     ]);
 
-    grunt.registerTask('build-enterprise', [
+    grunt.registerTask('build:enterprise', [
         'build'
     ]);
 
-    grunt.registerTask('build-community', [
+    grunt.registerTask('build:community', [
         'changeToCommunity',
         'build'
     ]);
