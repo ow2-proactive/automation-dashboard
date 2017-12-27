@@ -33,7 +33,7 @@
     "filter": "job.owner=me AND job.status=finished"
   }]
 }],
-  "updateQueryPeriod" : 20000,
+  "cloudAutomationQueryPeriod" : 20000,
   "notificationPortalQueryPeriod": 20000,
   "workflowCatalogPortalQueryPeriod": 20000
 }

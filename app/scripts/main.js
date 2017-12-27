@@ -17,9 +17,9 @@ function getProperties ($http, $location) {
             var schedulerRestUrl = angular.toJson(response.confServer.schedulerRestUrl, true);
             var notificationServiceUrl = angular.toJson(response.confServer.notificationServiceUrl, true);
             var catalogServiceUrl = angular.toJson(response.confServer.catalogServiceUrl, true);
-            var updateQueryPeriod = angular.toJson(response.updateQueryPeriod, true);
-            var notificationPortalQueryPeriod = angular.toJson(response.updateQueryPeriod, true);
-            var workflowCatalogPortalQueryPeriod = angular.toJson(response.notificationPortalQueryPeriod, true);
+            var cloudAutomationQueryPeriod = angular.toJson(response.cloudAutomationQueryPeriod, true);
+            var notificationPortalQueryPeriod = angular.toJson(response.notificationPortalQueryPeriod, true);
+            var workflowCatalogPortalQueryPeriod = angular.toJson(response.workflowCatalogPortalQueryPeriod, true);
             var appCatalogBucketsUrl =angular.toJson("http://localhost:8080/catalog/buckets/?kind=workflow", true);
             var appCatalogWorkflowsUrl = angular.toJson("http://localhost:8080/catalog/buckets/" + response.view[0].catalog.bucketid + "/resources", true);
             var configViews = angular.toJson(response.view, true);
@@ -28,7 +28,9 @@ function getProperties ($http, $location) {
             localStorage['schedulerRestUrl'] = schedulerRestUrl;
             localStorage['notificationServiceUrl'] = notificationServiceUrl;
             localStorage['catalogServiceUrl'] = catalogServiceUrl;
-            localStorage['updateQueryPeriod'] = updateQueryPeriod;
+            localStorage['workflowCatalogPortalQueryPeriod'] = workflowCatalogPortalQueryPeriod;
+            localStorage['notificationPortalQueryPeriod'] = notificationPortalQueryPeriod;
+            localStorage['cloudAutomationQueryPeriod'] = cloudAutomationQueryPeriod;
             localStorage['appCatalogWorkflowsUrl'] = appCatalogWorkflowsUrl;
             localStorage['appCatalogBucketsUrl'] = appCatalogBucketsUrl;
             localStorage['configViews'] = configViews;
