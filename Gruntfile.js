@@ -17,7 +17,39 @@ module.exports = function (grunt) {
     // The default build is the enterprise version
     var enterpriseConfigPath = 'app/templates_versions/enterprise/subviews.json';
     var communityConfigPath = 'app/templates_versions/community/subviews.json';
-    var subviewsDefinition = grunt.file.readJSON(enterpriseConfigPath);
+
+    // Convenience function to retrieve the subviews definition payload associated
+    // to the requested version
+    function getSubviewsDefinition() {
+        var subviewsDefinition = grunt.file.readJSON(enterpriseConfigPath);
+        if (appConfig.version == 'community') {
+            subviewsDefinition = grunt.file.readJSON(communityConfigPath);
+        }
+        return subviewsDefinition;
+    }
+
+    // Convenience function to generate the list of subviews to copy
+    // with regards to the requested version
+    function listSubviewsToCopy(subviewsDefinition) {
+        var out = [];
+        for (var key in subviewsDefinition) {
+            if (subviewsDefinition[key].isAvailable) {
+                out.push({
+                    expand: true,
+                    cwd: subviewsDefinition[key].appFolder + '/views/',
+                    src: subviewsDefinition[key].htmlFile,
+                    dest: '<%= inspinia.dist %>/views/' + subviewsDefinition[key].nameForUrl
+                 });
+                  out.push({
+                      expand: true,
+                      cwd: subviewsDefinition[key].appFolder + '/styles',
+                      src: subviewsDefinition[key].cssFile,
+                      dest: '<%= inspinia.dist %>/styles/'+subviewsDefinition[key].nameForUrl
+                  });
+            }
+        };
+        return out;
+    }
 
     // Grunt configuration
     grunt.initConfig({
@@ -161,24 +193,16 @@ module.exports = function (grunt) {
                 dest: '.tmp/styles/',
                 src: '{,*/}*.css'
             },
-            subviews: {
+            communitySubviews: {
                 files: (function() {
-                    var out = [];
-                    for (var key in subviewsDefinition) {
-                       out.push({
-                          expand: true,
-                          cwd: subviewsDefinition[key].appFolder + '/views/',
-                          src: subviewsDefinition[key].htmlFile,
-                          dest: '<%= inspinia.dist %>/views/' + subviewsDefinition[key].nameForUrl
-                       });
-                        out.push({
-                            expand: true,
-                            cwd: subviewsDefinition[key].appFolder + '/styles',
-                            src: subviewsDefinition[key].cssFile,
-                            dest: '<%= inspinia.dist %>/styles/'+subviewsDefinition[key].nameForUrl
-                        });
-                    };
-                    return out;
+                    var subviewsDefinition = grunt.file.readJSON(communityConfigPath);
+                    return listSubviewsToCopy(subviewsDefinition);
+                 })()
+            },
+            enterpriseSubviews: {
+                files: (function() {
+                    var subviewsDefinition = grunt.file.readJSON(enterpriseConfigPath);
+                    return listSubviewsToCopy(subviewsDefinition);
                  })()
             }
         },
@@ -193,6 +217,7 @@ module.exports = function (grunt) {
                             replacement: function(){
                                 var result = '';
                                 var cnt = 0;
+                                var subviewsDefinition = getSubviewsDefinition();
                                 for (var key in subviewsDefinition) {
                                     cnt++;
                                     result+= "\n.state('portal.subview" + cnt +"', {";
@@ -226,6 +251,7 @@ module.exports = function (grunt) {
                             replacement: function(){
                                 var result = '';
                                 var cnt = 0;
+                                var subviewsDefinition = getSubviewsDefinition();
                                 for (var key in subviewsDefinition) {
                                     cnt++;
                                     result+= '\n<li ui-sref-active="active">'
@@ -241,6 +267,7 @@ module.exports = function (grunt) {
                             match: /\/\/beginSubviewsModules[\s\S]*\/\/endSubviewsModules/g,
                             replacement: function(){
                                 var result = '';
+                                var subviewsDefinition = getSubviewsDefinition();
                                 for (var key in subviewsDefinition) {
                                     if (subviewsDefinition[key].isAvailable) {
                                         result+= "\n'"+subviewsDefinition[key].angularModuleName +"',";
@@ -256,6 +283,7 @@ module.exports = function (grunt) {
                             replacement: function(){
                                 var result = '';
                                 var includedScripts = [];
+                                var subviewsDefinition = getSubviewsDefinition();
                                 for (var key in subviewsDefinition) {
                                     if (subviewsDefinition[key].isAvailable) {
                                         for (var scriptKey in subviewsDefinition[key].jsFiles) {
@@ -350,7 +378,6 @@ module.exports = function (grunt) {
 
     grunt.registerTask("changeToCommunity", function() {
         appConfig.version = 'community';
-        subviewsDefinition = grunt.file.readJSON(communityConfigPath);
     });
 
     // Run build version of app
@@ -359,8 +386,8 @@ module.exports = function (grunt) {
         'connect:dist:keepalive'
     ]);
 
-    // Build version for production
-    grunt.registerTask('build', [
+    // building of the common parts of a build
+    grunt.registerTask('pre-build', [
         'clean:dist',
         'replace',
         'jsbeautifier',
@@ -369,20 +396,24 @@ module.exports = function (grunt) {
         'concat',
         'copy:dist',
         'cssmin',
-        'uglify', // is copying the vendor.js and script.js from .tmp to dist
+        'uglify',
         'filerev',
         'usemin',
-        'htmlmin',
-        'copy:subviews'
+        'htmlmin'
     ]);
 
     grunt.registerTask('build:enterprise', [
-        'build'
+        'pre-build',
+        'copy:enterpriseSubviews'
     ]);
 
     grunt.registerTask('build:community', [
         'changeToCommunity',
-        'build'
+        'pre-build',
+        'copy:communitySubviews'
     ]);
 
+    grunt.registerTask('build', [
+        'build:enterprise'
+    ]);
 };
