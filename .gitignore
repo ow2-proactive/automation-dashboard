@@ -12,6 +12,7 @@ dist/
 app/index.html
 app/scripts/app.js
 app/scripts/config.js
+app/views/common/navigation.html
 
 ### Intellij+all ###
 # Covers JetBrains IDEs: IntelliJ, RubyMine, PhpStorm, AppCode, PyCharm, CLion, Android Studio and Webstorm
