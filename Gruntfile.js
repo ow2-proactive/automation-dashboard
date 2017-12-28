@@ -317,7 +317,12 @@ module.exports = function (grunt) {
         },
         //JS & HTML indentation for code added with replace
         jsbeautifier : {
-            files : ["app/scripts/<%= inspinia.version %>Config.js",'app/views/common/navigation.html', "app/scripts/<%= inspinia.version %>App.js", 'app/<%= inspinia.version %>Index.html'],
+            files : [
+                '<%= inspinia.app %>/scripts/config.js',
+                '<%= inspinia.app %>/views/common/navigation.html',
+                '<%= inspinia.app %>/scripts/app.js',
+                '<%= inspinia.app %>/index.html'
+            ],
             options : {
             }
         },
@@ -382,8 +387,7 @@ module.exports = function (grunt) {
     grunt.registerTask('build', [
         'clean:dist',
         'replace',
-        //'jsbeautifier', // n'est plus pertinent si on ne modifie plus les fichiers source
-        //'copy:selectedVersion',
+        'jsbeautifier',
         //'less', // necessaire ?
         //'useminPrepare',
         //'concat',
