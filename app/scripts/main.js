@@ -103,7 +103,7 @@ mainCtrl.controller('navBarController', function ($scope, loadingConfigData){
     console.log($scope.view);
 });
 
-mainCtrl.controller('loginController', function ($scope, $state, MainService, PCACatalogService, PCAProcessService, PCARunningServicesService, PCANodeSourcesService, APPCatalog) {
+mainCtrl.controller('loginController', function ($scope, $state, MainService) {
 
     $scope.login = function () {
         var username = $scope.username;

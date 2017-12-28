@@ -29,16 +29,8 @@ function config($stateProvider, $urlRouterProvider) {
             data: {
                 pageTitle: 'Cloud automation'
             },
-            title: 'Cloud automation',
-            templateUrl: 'cloud-automation/views/main.html',
-            css: 'cloud-automation/styles/portal_custom_style.css',
-            authenticate: true,
-            onEnter: function(SchedulerService, PCACatalogService, PCAProcessService, PCARunningServicesService, PCANodeSourcesService) {
-                initServiceAutomation(SchedulerService, PCACatalogService, PCAProcessService, PCARunningServicesService, PCANodeSourcesService);
-            },
-            onExit: function($rootScope) {
-                $rootScope.$broadcast('event:StopRefreshing');
-            }
+            templateUrl: 'cloud-automation/views/page_not_available_cloud_automation.html',
+            authenticate: false,
         })
 
         .state('portal.subview2', {
@@ -46,8 +38,16 @@ function config($stateProvider, $urlRouterProvider) {
             data: {
                 pageTitle: 'Workflow automation'
             },
-            templateUrl: 'workflow-automation/views/page_not_available_wf_automation.html',
-            authenticate: false,
+            title: 'Workflow automation',
+            templateUrl: 'workflow-automation/views/minor.html',
+            css: 'workflow-automation/styles/portal_custom_style.css',
+            authenticate: true,
+            onEnter: function(APPSchedulerService, APPCatalog) {
+                initWorkflowAutomation(APPSchedulerService, APPCatalog);
+            },
+            onExit: function($rootScope) {
+                $rootScope.$broadcast('event:StopRefreshing');
+            }
         })
 
         .state('portal.subview3', {

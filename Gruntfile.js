@@ -186,6 +186,19 @@ module.exports = function (grunt) {
                                 dest: '<%= inspinia.dist %>/'+subviewsDefinition[key].nameForUrl
                             });
                         }
+                        grunt.verbose.write("------A");
+                        if (subviewsDefinition[key].images) {
+                            grunt.verbose.write("-------B");
+                            for (var imageKey in subviewsDefinition[key].images) {
+                                grunt.verbose.write("-------C");
+                                out.push({
+                                    expand: true,
+                                    cwd: subviewsDefinition[key].appFolder,
+                                    src: subviewsDefinition[key].images[imageKey],
+                                    dest: '<%= inspinia.dist %>/'+subviewsDefinition[key].nameForUrl
+                                });
+                            }
+                        }
                     };
                     return out;
                  })()
