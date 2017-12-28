@@ -11,10 +11,10 @@ module.exports = function (grunt) {
     var appConfig = {
         app: 'app',
         dist: 'dist',
-        version: 'enterprise'
+        version: grunt.option('target')
     };
 
-   var subviewsDefinition = grunt.file.readJSON('app/resources/enterpriseSubviews.json');
+   var subviewsDefinition = grunt.file.readJSON('app/resources/'+grunt.option('target')+'Subviews.json');
 
     // Grunt configuration
     grunt.initConfig({
@@ -161,20 +161,31 @@ module.exports = function (grunt) {
             },
             subviews: {
                 files: (function() {
+                    //var subviewsDefinition = grunt.file.readJSON('app/resources/communitySubviews.json');
                     var out = [];
                     for (var key in subviewsDefinition) {
-                       out.push({
-                          expand: true,
-                          cwd: subviewsDefinition[key].appFolder,
-                          src: subviewsDefinition[key].htmlFile,
-                          dest: '<%= inspinia.dist %>/'+subviewsDefinition[key].nameForUrl
-                       });
                         out.push({
                             expand: true,
                             cwd: subviewsDefinition[key].appFolder,
                             src: subviewsDefinition[key].cssFile,
                             dest: '<%= inspinia.dist %>/'+subviewsDefinition[key].nameForUrl
                         });
+                        if (subviewsDefinition[key].isAvailable) {
+                            out.push({
+                                  expand: true,
+                                  cwd: subviewsDefinition[key].appFolder,
+                                  src: subviewsDefinition[key].htmlFile,
+                                  dest: '<%= inspinia.dist %>/'+subviewsDefinition[key].nameForUrl
+                               });
+
+                        } else {
+                            out.push({
+                                expand: true,
+                                cwd: subviewsDefinition[key].appFolder,
+                                src: subviewsDefinition[key].notAvailablePage,
+                                dest: '<%= inspinia.dist %>/'+subviewsDefinition[key].nameForUrl
+                            });
+                        }
                     };
                     return out;
                  })()
@@ -211,10 +222,11 @@ module.exports = function (grunt) {
                                     cnt++;
                                     result+= "\n.state('portal.subview" + cnt +"', {";
                                     result+= "\nurl:'/"+subviewsDefinition[key].nameForUrl+"',";
+                                    result+= "\ndata: { pageTitle: '"+subviewsDefinition[key].name+"'},";
                                     if (subviewsDefinition[key].isAvailable) {
+                                        result+= "\ntitle:'"+subviewsDefinition[key].name+"',";
                                         result+= "\ntemplateUrl:'"+subviewsDefinition[key].nameForUrl+"/"+subviewsDefinition[key].htmlFile+"',";
                                         result+= "\ncss:'"+subviewsDefinition[key].nameForUrl+"/"+subviewsDefinition[key].cssFile+"',";
-                                        result+= "\ndata: {pageTitle: '"+subviewsDefinition[key].name+"'},";
                                         result+= "\nauthenticate:"+subviewsDefinition[key].authenticate+",";
                                         if (subviewsDefinition[key].initFunction) {
                                             var services = subviewsDefinition[key].initFunction.services.join(", ");
@@ -224,8 +236,7 @@ module.exports = function (grunt) {
                                             result+= "\n$rootScope.$broadcast('event:StopRefreshing');\n }";
                                         }
                                     } else {
-                                        result+= "\ntemplateUrl: 'views/not_available_page.html',";
-                                        result+= "\ndata: {pageTitle: 'Content not available'},";
+                                        result+= "\ntemplateUrl:'"+subviewsDefinition[key].nameForUrl+"/"+subviewsDefinition[key].notAvailablePage+"',";
                                         result+= "\nauthenticate:false,";
                                     }
                                     result+= "\n})\n";
@@ -340,19 +351,6 @@ module.exports = function (grunt) {
         }
     });
 
-    // Run live version of app
-    /*grunt.registerTask('live', [
-        'clean:server',
-        'copy:styles',
-        'connect:livereload',
-        'watch'
-    ]);*/
-
-    grunt.registerTask("changeToCommunity", function() {
-        subviewsDefinition = grunt.file.readJSON('app/resources/communitySubviews.json');
-        appConfig.version = 'community';
-    });
-
     // Run build version of app
     grunt.registerTask('server', [
         'build',
@@ -375,15 +373,6 @@ module.exports = function (grunt) {
         'usemin',
         'htmlmin',
         'copy:subviews'
-    ]);
-
-    grunt.registerTask('build:enterprise', [
-        'build'
-    ]);
-
-    grunt.registerTask('build:community', [
-        'changeToCommunity',
-        'build'
     ]);
 
 };
