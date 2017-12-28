@@ -26,11 +26,12 @@ function config($stateProvider, $urlRouterProvider) {
         //beginSubviewsStates
         .state('portal.subview1', {
             url: '/cloud-automation',
-            templateUrl: 'cloud-automation/views/main.html',
-            css: 'cloud-automation/styles/portal_custom_style.css',
             data: {
                 pageTitle: 'Cloud automation'
             },
+            title: 'Cloud automation',
+            templateUrl: 'cloud-automation/views/main.html',
+            css: 'cloud-automation/styles/portal_custom_style.css',
             authenticate: true,
             onEnter: function(SchedulerService, PCACatalogService, PCAProcessService, PCARunningServicesService, PCANodeSourcesService) {
                 initServiceAutomation(SchedulerService, PCACatalogService, PCAProcessService, PCARunningServicesService, PCANodeSourcesService);
@@ -42,11 +43,12 @@ function config($stateProvider, $urlRouterProvider) {
 
         .state('portal.subview2', {
             url: '/workflow-automation',
-            templateUrl: 'workflow-automation/views/minor.html',
-            css: 'workflow-automation/styles/portal_custom_style.css',
             data: {
                 pageTitle: 'Workflow automation'
             },
+            title: 'Workflow automation',
+            templateUrl: 'workflow-automation/views/minor.html',
+            css: 'workflow-automation/styles/portal_custom_style.css',
             authenticate: true,
             onEnter: function(APPSchedulerService, APPCatalog) {
                 initWorkflowAutomation(APPSchedulerService, APPCatalog);
@@ -58,11 +60,12 @@ function config($stateProvider, $urlRouterProvider) {
 
         .state('portal.subview3', {
             url: '/workflow-catalog',
-            templateUrl: 'workflow-catalog/views/workflow_catalog.html',
-            css: 'workflow-catalog/styles/wcportal_custom_style.css',
             data: {
                 pageTitle: 'Workflow catalog'
             },
+            title: 'Workflow catalog',
+            templateUrl: 'workflow-catalog/views/workflow_catalog.html',
+            css: 'workflow-catalog/styles/wcportal_custom_style.css',
             authenticate: true,
             onEnter: function(WorkflowCatalogService) {
                 initWorkflowCatalog(WorkflowCatalogService);
@@ -74,11 +77,12 @@ function config($stateProvider, $urlRouterProvider) {
 
         .state('portal.subview4', {
             url: '/notification-portal',
-            templateUrl: 'notification-portal/views/minor.html',
-            css: 'notification-portal/styles/notifportal_custom_style.css',
             data: {
                 pageTitle: 'Notification portal'
             },
+            title: 'Notification portal',
+            templateUrl: 'notification-portal/views/minor.html',
+            css: 'notification-portal/styles/notifportal_custom_style.css',
             authenticate: true,
         });
     //endSubviewsStates

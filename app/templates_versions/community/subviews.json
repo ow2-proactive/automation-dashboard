@@ -20,6 +20,7 @@
 		"nameForUrl": "workflow-automation",
 		"appFolder" : "cloud-automation/app/",
 		"htmlFile": "minor.html",
+		"notAvailablePage": "page_not_available_wf_automation.html",
 		"jsFiles": ["scripts/pca-rest.js", "scripts/app-rest.js"],
 		"angularModuleName" : "app-rest",
 		"cssFile": "portal_custom_style.css",

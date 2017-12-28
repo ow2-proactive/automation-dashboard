@@ -18,7 +18,7 @@ git submodule update
 
 ## Building
 
-To build the ProActive Dashboard, just use: `grunt clean build` (build enterprise version) , `grunt clean build:enterprise` or `grunt clean build: community`.
+To build the ProActive Dashboard, just use: `grunt clean build --target=enterprise` (to build enterprise version) or `grunt clean build --target=community`.
 
 Then, copy the `dist/` folder in `scheduling/dist/war/` and rename it "proactive-dashboard".
 

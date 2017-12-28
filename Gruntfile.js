@@ -11,41 +11,40 @@ module.exports = function (grunt) {
     var appConfig = {
         app: 'app',
         dist: 'dist',
-        version: 'enterprise'
+        version: grunt.option('target') || 'enterprise'
     };
 
-    // The default build is the enterprise version
     var enterpriseConfigPath = 'app/templates_versions/enterprise/subviews.json';
     var communityConfigPath = 'app/templates_versions/community/subviews.json';
+    var subviewsDefinition = grunt.file.readJSON('app/templates_versions/' + appConfig.version + '/subviews.json');
 
-    // Convenience function to retrieve the subviews definition payload associated
-    // to the requested version
-    function getSubviewsDefinition() {
-        var subviewsDefinition = grunt.file.readJSON(enterpriseConfigPath);
-        if (appConfig.version == 'community') {
-            subviewsDefinition = grunt.file.readJSON(communityConfigPath);
-        }
-        return subviewsDefinition;
-    }
-
-    // Convenience function to generate the list of subviews to copy
-    // with regards to the requested version
-    function listSubviewsToCopy(subviewsDefinition) {
+    // Convenience function to list all subviews
+    // associated to the target
+    function listSubviewsDefinition(configPath) {
         var out = [];
+        var subviewsDefinition = grunt.file.readJSON(configPath);
         for (var key in subviewsDefinition) {
+            out.push({
+                expand: true,
+                cwd: subviewsDefinition[key].appFolder + '/styles/',
+                src: subviewsDefinition[key].cssFile,
+                dest: '<%= inspinia.dist %>/styles/' + subviewsDefinition[key].nameForUrl
+            });
             if (subviewsDefinition[key].isAvailable) {
                 out.push({
                     expand: true,
                     cwd: subviewsDefinition[key].appFolder + '/views/',
                     src: subviewsDefinition[key].htmlFile,
                     dest: '<%= inspinia.dist %>/views/' + subviewsDefinition[key].nameForUrl
-                 });
-                  out.push({
-                      expand: true,
-                      cwd: subviewsDefinition[key].appFolder + '/styles',
-                      src: subviewsDefinition[key].cssFile,
-                      dest: '<%= inspinia.dist %>/styles/'+subviewsDefinition[key].nameForUrl
-                  });
+                });
+            } else {
+                grunt.log.writeln(key + " is not available");
+                out.push({
+                    expand: true,
+                    cwd: subviewsDefinition[key].appFolder + '/views/',
+                    src: subviewsDefinition[key].notAvailablePage,
+                    dest: '<%= inspinia.dist %>/views/' + subviewsDefinition[key].nameForUrl
+                });
             }
         };
         return out;
@@ -187,23 +186,21 @@ module.exports = function (grunt) {
                     }
                 ]
             },
-            styles:{
+            styles: {
                 expand: true,
                 cwd: '<%= inspinia.app %>/styles',
                 dest: '.tmp/styles/',
                 src: '{,*/}*.css'
             },
             communitySubviews: {
-                files: (function() {
-                    var subviewsDefinition = grunt.file.readJSON(communityConfigPath);
-                    return listSubviewsToCopy(subviewsDefinition);
-                 })()
+                files: (function () {
+                    return listSubviewsDefinition(communityConfigPath);
+                })()
             },
             enterpriseSubviews: {
-                files: (function() {
-                    var subviewsDefinition = grunt.file.readJSON(enterpriseConfigPath);
-                    return listSubviewsToCopy(subviewsDefinition);
-                 })()
+                files: (function () {
+                    return listSubviewsDefinition(enterpriseConfigPath);
+                })()
             }
         },
         // Configure files specific to the version
@@ -214,88 +211,84 @@ module.exports = function (grunt) {
                         {
                             // replace for config.js :
                             match: /\/\/beginSubviewsStates[\s\S]*\/\/endSubviewsStates/g,
-                            replacement: function(){
+                            replacement: function () {
                                 var result = '';
                                 var cnt = 0;
-                                var subviewsDefinition = getSubviewsDefinition();
                                 for (var key in subviewsDefinition) {
                                     cnt++;
-                                    result+= "\n.state('portal.subview" + cnt +"', {";
-                                    result+= "\nurl:'/"+subviewsDefinition[key].nameForUrl+"',";
+                                    result += "\n.state('portal.subview" + cnt + "', {";
+                                    result += "\nurl:'/" + subviewsDefinition[key].nameForUrl + "',";
+                                    result += "\ndata: { pageTitle: '" + subviewsDefinition[key].name + "'},";
                                     if (subviewsDefinition[key].isAvailable) {
-                                        result+= "\ntemplateUrl:'views/"+subviewsDefinition[key].nameForUrl+"/"+subviewsDefinition[key].htmlFile+"',";
-                                        result+= "\ncss:'style/"+subviewsDefinition[key].nameForUrl+"/"+subviewsDefinition[key].cssFile+"',";
-                                        result+= "\ndata: {pageTitle: '"+subviewsDefinition[key].name+"'},";
-                                        result+= "\nauthenticate:"+subviewsDefinition[key].authenticate+",";
+                                        result += "\ntitle:'" + subviewsDefinition[key].name + "',";
+                                        result += "\ntemplateUrl:'views/" + subviewsDefinition[key].nameForUrl + "/" + subviewsDefinition[key].htmlFile + "',";
+                                        result += "\ncss:'style/" + subviewsDefinition[key].nameForUrl + "/" + subviewsDefinition[key].cssFile + "',";
+                                        result += "\nauthenticate:" + subviewsDefinition[key].authenticate + ",";
                                         if (subviewsDefinition[key].initFunction) {
                                             var services = subviewsDefinition[key].initFunction.services.join(", ");
-                                            result+= "\nonEnter : function ("+ services +") {";
-                                            result+= "\n"+subviewsDefinition[key].initFunction.functionName+"("+ services +"); \n },";
-                                            result+= "\nonExit : function($rootScope){";
-                                            result+= "\n$rootScope.$broadcast('event:StopRefreshing');\n }";
+                                            result += "\nonEnter : function (" + services + ") {";
+                                            result += "\n" + subviewsDefinition[key].initFunction.functionName + "(" + services + "); \n },";
+                                            result += "\nonExit : function($rootScope){";
+                                            result += "\n$rootScope.$broadcast('event:StopRefreshing');\n }";
                                         }
                                     } else {
-                                        result+= "\ntemplateUrl: 'views/not_available_page.html',";
-                                        result+= "\ndata: {pageTitle: 'Content not available'},";
-                                        result+= "\nauthenticate:false,";
+                                        result += "\ntemplateUrl:'views/" + subviewsDefinition[key].nameForUrl + "/" + subviewsDefinition[key].notAvailablePage + "',";
+                                        result += "\nauthenticate:false,";
                                     }
-                                    result+= "\n})\n";
+                                    result += "\n})\n";
                                 }
-                                result = '//beginSubviewsStates'+result +';\n//endSubviewsStates';
+                                result = '//beginSubviewsStates' + result + ';\n//endSubviewsStates';
                                 return result;
                             }
                         },
                         {
                             // replace for navigation.html :
                             match: /<!-- beginSubviews-->[\s\S]*<!-- endSubviews-->/g,
-                            replacement: function(){
+                            replacement: function () {
                                 var result = '';
                                 var cnt = 0;
-                                var subviewsDefinition = getSubviewsDefinition();
                                 for (var key in subviewsDefinition) {
                                     cnt++;
-                                    result+= '\n<li ui-sref-active="active">'
-                                                + '\n<a ui-sref="portal.subview'+cnt+'" style="background-color: #002d66"><i class="fa fa-desktop"></i> <span class="nav-label">'
-                                                + subviewsDefinition[key].name + '</span> </a>\n</li>';
+                                    result += '\n<li ui-sref-active="active">'
+                                        + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66"><i class="fa fa-desktop"></i> <span class="nav-label">'
+                                        + subviewsDefinition[key].name + '</span> </a>\n</li>';
                                 }
-                                result = '<!-- beginSubviews-->'+result +'\n<!-- endSubviews-->';
+                                result = '<!-- beginSubviews-->' + result + '\n<!-- endSubviews-->';
                                 return result;
                             }
                         },
                         {
                             // replace for app.js :
                             match: /\/\/beginSubviewsModules[\s\S]*\/\/endSubviewsModules/g,
-                            replacement: function(){
+                            replacement: function () {
                                 var result = '';
-                                var subviewsDefinition = getSubviewsDefinition();
                                 for (var key in subviewsDefinition) {
                                     if (subviewsDefinition[key].isAvailable) {
-                                        result+= "\n'"+subviewsDefinition[key].angularModuleName +"',";
+                                        result += "\n'" + subviewsDefinition[key].angularModuleName + "',";
                                     }
                                 }
-                                result = '//beginSubviewsModules'+result +'\n//endSubviewsModules';
+                                result = '//beginSubviewsModules' + result + '\n//endSubviewsModules';
                                 return result;
                             }
                         },
                         {
                             // replace for index.html :
                             match: /<!-- beginSubviewsScripts-->[\s\S]*<!-- endSubviewsScripts-->/g,
-                            replacement: function(){
+                            replacement: function () {
                                 var result = '';
                                 var includedScripts = [];
-                                var subviewsDefinition = getSubviewsDefinition();
                                 for (var key in subviewsDefinition) {
                                     if (subviewsDefinition[key].isAvailable) {
                                         for (var scriptKey in subviewsDefinition[key].jsFiles) {
                                             var script = subviewsDefinition[key].jsFiles[scriptKey];
                                             if (includedScripts.indexOf(script) < 0) {
-                                                result+= '\n<script src="'+ subviewsDefinition[key].appFolder + script +'"></script>';
+                                                result += '\n<script src="' + subviewsDefinition[key].appFolder + script + '"></script>';
                                                 includedScripts.push(script);
                                             }
                                         }
                                     }
                                 }
-                                result = '<!-- beginSubviewsScripts-->'+result +'\n<!-- endSubviewsScripts-->';
+                                result = '<!-- beginSubviewsScripts-->' + result + '\n<!-- endSubviewsScripts-->';
                                 return result;
                             }
                         }
@@ -328,14 +321,14 @@ module.exports = function (grunt) {
             }
         },
         //JS & HTML indentation for code added with replace
-        jsbeautifier : {
-            files : [
+        jsbeautifier: {
+            files: [
                 '<%= inspinia.app %>/scripts/config.js',
                 '<%= inspinia.app %>/views/common/navigation.html',
                 '<%= inspinia.app %>/scripts/app.js',
                 '<%= inspinia.app %>/index.html'
             ],
-            options : {
+            options: {
             }
         },
         // Renames files for browser caching purposes
@@ -376,10 +369,6 @@ module.exports = function (grunt) {
         }
     });
 
-    grunt.registerTask("changeToCommunity", function() {
-        appConfig.version = 'community';
-    });
-
     // Run build version of app
     grunt.registerTask('server', [
         'build',
@@ -402,18 +391,16 @@ module.exports = function (grunt) {
         'htmlmin'
     ]);
 
-    grunt.registerTask('build:enterprise', [
-        'pre-build',
-        'copy:enterpriseSubviews'
-    ]);
+    grunt.registerTask('build', function() {
+        var target = grunt.option('target') || 'enterprise';
+        grunt.task.run('pre-build');
+        grunt.log.writeln("target=" + target);
+        if (target == 'community') {
+            grunt.task.run('copy:communitySubviews');
+        }
+        else {
+            grunt.task.run('copy:enterpriseSubviews');
+        }
+    });
 
-    grunt.registerTask('build:community', [
-        'changeToCommunity',
-        'pre-build',
-        'copy:communitySubviews'
-    ]);
-
-    grunt.registerTask('build', [
-        'build:enterprise'
-    ]);
 };
