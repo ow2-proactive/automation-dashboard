@@ -51,3 +51,8 @@ Views will be displayed in the navigation panel in the same order as they are gi
 
 All attributes are mandatory, except `initFunction`, which can be omitted.
 
+### Subviews project
+
+Each subview is defined in a bitbucket repository and then imported in this project as a submodules (see `.gitmodules` file).
+To modify a subview: open the submodule's folder associated in the proactive-dashboard project, make the modifications, build the **proactive-dashboard** (no need to build the submodule). Once all modifications are done, you can commit your code to the subview's repository from the submodule's folder. 
+
