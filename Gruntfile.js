@@ -15,7 +15,9 @@ module.exports = function (grunt) {
     };
 
     // The default build is the enterprise version
-    var subviewsDefinition = grunt.file.readJSON('app/templates_versions/enterprise/subviews.json');
+    var enterpriseConfigPath = 'app/templates_versions/enterprise/subviews.json';
+    var communityConfigPath = 'app/templates_versions/community/subviews.json';
+    var subviewsDefinition = grunt.file.readJSON(enterpriseConfigPath);
 
     // Grunt configuration
     grunt.initConfig({
@@ -357,7 +359,7 @@ module.exports = function (grunt) {
 
     grunt.registerTask("changeToCommunity", function() {
         appConfig.version = 'community';
-        subviewsDefinition = grunt.file.readJSON('app/templates_versions/<%= inspinia.version %>/subviews.json');
+        subviewsDefinition = grunt.file.readJSON(communityConfigPath);
     });
 
     // Run build version of app
