@@ -14,7 +14,8 @@ module.exports = function (grunt) {
         version: 'enterprise'
     };
 
-   var subviewsDefinition = grunt.file.readJSON('app/resources/enterpriseSubviews.json');
+    // The default build is the enterprise version
+    var subviewsDefinition = grunt.file.readJSON('app/templates_versions/enterprise/subviews.json');
 
     // Grunt configuration
     grunt.initConfig({
@@ -178,25 +179,7 @@ module.exports = function (grunt) {
                     };
                     return out;
                  })()
-            },
-            // Generate the missing files required to build the dashboard
-            // the selected version of the dashboard
-            // selectedVersion: {
-            //     files: [
-            //         {
-            //             src: ['<%= inspinia.app %>/templates_versions/<%= inspinia.version %>/config.js'],
-            //             dest: '<%= inspinia.app %>/scripts/config.js'
-            //         },
-            //         {
-            //             src: ['<%= inspinia.app %>/templates_versions/<%= inspinia.version %>/app.js'],
-            //             dest: '<%= inspinia.app %>/scripts/app.js'
-            //         },
-            //         {
-            //             src: ['<%= inspinia.app %>/templates_versions/<%= inspinia.version %>/index.html'],
-            //             dest: '<%= inspinia.app %>/index.html'
-            //         }
-            //     ]
-            // }
+            }
         },
         //Add subviews in router
         replace: {
@@ -373,8 +356,8 @@ module.exports = function (grunt) {
     ]);*/
 
     grunt.registerTask("changeToCommunity", function() {
-        subviewsDefinition = grunt.file.readJSON('app/resources/communitySubviews.json');
         appConfig.version = 'community';
+        subviewsDefinition = grunt.file.readJSON('app/templates_versions/<%= inspinia.version %>/subviews.json');
     });
 
     // Run build version of app
@@ -388,16 +371,16 @@ module.exports = function (grunt) {
         'clean:dist',
         'replace',
         'jsbeautifier',
-        //'less', // necessaire ?
-        //'useminPrepare',
-        //'concat',
-        //'copy:dist',
-        //'cssmin',
-        //'uglify',
-        //'filerev',
-        //'usemin',
-        //'htmlmin',
-        //'copy:subviews'
+        'less',
+        'useminPrepare',
+        'concat',
+        'copy:dist',
+        'cssmin',
+        'uglify',
+        'filerev',
+        'usemin',
+        'htmlmin',
+        'copy:subviews'
     ]);
 
     grunt.registerTask('build:enterprise', [
