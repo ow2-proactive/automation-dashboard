@@ -4,10 +4,10 @@
 		"name": "Cloud automation",
 		"nameForUrl": "cloud-automation",
 		"appFolder" : "cloud-automation/app/",
-		"htmlFile": "views/main.html",
+		"htmlFile": "main.html",
 		"jsFiles": ["scripts/pca-rest.js", "scripts/app-rest.js"],
 		"angularModuleName" : "pca-rest",
-		"cssFile": "styles/portal_custom_style.css",
+		"cssFile": "portal_custom_style.css",
 		"authenticate": true,
 		"initFunction": {
 			"functionName" : "initServiceAutomation",
@@ -19,10 +19,10 @@
 		"name": "Workflow automation",
 		"nameForUrl": "workflow-automation",
 		"appFolder" : "cloud-automation/app/",
-		"htmlFile": "views/minor.html",
+		"htmlFile": "minor.html",
 		"jsFiles": ["scripts/pca-rest.js", "scripts/app-rest.js"],
 		"angularModuleName" : "app-rest",
-		"cssFile": "styles/portal_custom_style.css",
+		"cssFile": "portal_custom_style.css",
 		"authenticate": true,
 		"initFunction": {
 			"functionName" : "initWorkflowAutomation",
@@ -34,10 +34,10 @@
 		"name": "Workflow catalog",
 		"nameForUrl": "workflow-catalog",
 		"appFolder" : "workflow-catalog-portal/app/",
-		"htmlFile": "views/workflow_catalog.html",
+		"htmlFile": "workflow_catalog.html",
 		"jsFiles": ["scripts/wcp-rest.js", "scripts/factory/catalogRestService.js","scripts/factory/schedulerGroupService.js"],
 		"angularModuleName" : "wcp-rest",
-		"cssFile": "styles/wcportal_custom_style.css",
+		"cssFile": "wcportal_custom_style.css",
 		"authenticate": true,
 		"initFunction": {
 			"functionName" : "initWorkflowCatalog",
@@ -49,10 +49,10 @@
 		"name": "Notification portal",
 		"nameForUrl": "notification-portal",
 		"appFolder" : "notification-portal/app/",
-		"htmlFile": "views/minor.html",
+		"htmlFile": "minor.html",
 		"jsFiles": ["scripts/ns-rest.js"],
 		"angularModuleName" : "ns-rest",
-		"cssFile": "styles/notifportal_custom_style.css",
+		"cssFile": "notifportal_custom_style.css",
 		"authenticate": true
 	}
 }

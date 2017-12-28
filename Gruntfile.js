@@ -155,8 +155,7 @@ module.exports = function (grunt) {
                     }
                 ]
             },
-            styles:
-            {
+            styles:{
                 expand: true,
                 cwd: '<%= inspinia.app %>/styles',
                 dest: '.tmp/styles/',
@@ -168,22 +167,22 @@ module.exports = function (grunt) {
                     for (var key in subviewsDefinition) {
                        out.push({
                           expand: true,
-                          cwd: subviewsDefinition[key].appFolder,
+                          cwd: subviewsDefinition[key].appFolder + '/views/',
                           src: subviewsDefinition[key].htmlFile,
-                          dest: '<%= inspinia.dist %>/'+subviewsDefinition[key].nameForUrl
+                          dest: '<%= inspinia.dist %>/views/' + subviewsDefinition[key].nameForUrl
                        });
                         out.push({
                             expand: true,
-                            cwd: subviewsDefinition[key].appFolder,
+                            cwd: subviewsDefinition[key].appFolder + '/styles',
                             src: subviewsDefinition[key].cssFile,
-                            dest: '<%= inspinia.dist %>/'+subviewsDefinition[key].nameForUrl
+                            dest: '<%= inspinia.dist %>/styles/'+subviewsDefinition[key].nameForUrl
                         });
                     };
                     return out;
                  })()
             }
         },
-        //Add subviews in router
+        // Configure files specific to the version
         replace: {
             dist: {
                 options: {
@@ -199,8 +198,8 @@ module.exports = function (grunt) {
                                     result+= "\n.state('portal.subview" + cnt +"', {";
                                     result+= "\nurl:'/"+subviewsDefinition[key].nameForUrl+"',";
                                     if (subviewsDefinition[key].isAvailable) {
-                                        result+= "\ntemplateUrl:'"+subviewsDefinition[key].nameForUrl+"/"+subviewsDefinition[key].htmlFile+"',";
-                                        result+= "\ncss:'"+subviewsDefinition[key].nameForUrl+"/"+subviewsDefinition[key].cssFile+"',";
+                                        result+= "\ntemplateUrl:'views/"+subviewsDefinition[key].nameForUrl+"/"+subviewsDefinition[key].htmlFile+"',";
+                                        result+= "\ncss:'style/"+subviewsDefinition[key].nameForUrl+"/"+subviewsDefinition[key].cssFile+"',";
                                         result+= "\ndata: {pageTitle: '"+subviewsDefinition[key].name+"'},";
                                         result+= "\nauthenticate:"+subviewsDefinition[key].authenticate+",";
                                         if (subviewsDefinition[key].initFunction) {
@@ -349,14 +348,6 @@ module.exports = function (grunt) {
         }
     });
 
-    // Run live version of app
-    /*grunt.registerTask('live', [
-        'clean:server',
-        'copy:styles',
-        'connect:livereload',
-        'watch'
-    ]);*/
-
     grunt.registerTask("changeToCommunity", function() {
         appConfig.version = 'community';
         subviewsDefinition = grunt.file.readJSON(communityConfigPath);
@@ -378,7 +369,7 @@ module.exports = function (grunt) {
         'concat',
         'copy:dist',
         'cssmin',
-        'uglify',
+        'uglify', // is copying the vendor.js and script.js from .tmp to dist
         'filerev',
         'usemin',
         'htmlmin',
