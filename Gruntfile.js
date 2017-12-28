@@ -179,22 +179,24 @@ module.exports = function (grunt) {
                     return out;
                  })()
             },
-            modifiedSubviews: {
-                files: [
-                    {
-                        src: ['<%= inspinia.app %>/scripts/<%= inspinia.version %>Config.js'],
-                        dest: '<%= inspinia.app %>/scripts/config.js'
-                    },
-                    {
-                        src: ['<%= inspinia.app %>/scripts/<%= inspinia.version %>App.js'],
-                        dest: '<%= inspinia.app %>/scripts/app.js'
-                    },
-                    {
-                        src: ['<%= inspinia.app %>/<%= inspinia.version %>Index.html'],
-                        dest: '<%= inspinia.app %>/index.html'
-                    }
-                ]
-            }
+            // Generate the missing files required to build the dashboard
+            // the selected version of the dashboard
+            // selectedVersion: {
+            //     files: [
+            //         {
+            //             src: ['<%= inspinia.app %>/templates_versions/<%= inspinia.version %>/config.js'],
+            //             dest: '<%= inspinia.app %>/scripts/config.js'
+            //         },
+            //         {
+            //             src: ['<%= inspinia.app %>/templates_versions/<%= inspinia.version %>/app.js'],
+            //             dest: '<%= inspinia.app %>/scripts/app.js'
+            //         },
+            //         {
+            //             src: ['<%= inspinia.app %>/templates_versions/<%= inspinia.version %>/index.html'],
+            //             dest: '<%= inspinia.app %>/index.html'
+            //         }
+            //     ]
+            // }
         },
         //Add subviews in router
         replace: {
@@ -289,10 +291,27 @@ module.exports = function (grunt) {
                     usePrefix: false
                 },
                 files: [
-                    {flatten: true, src: ['app/scripts/<%= inspinia.version %>Config.js'], dest: 'app/scripts/<%= inspinia.version %>Config.js'},
-                    {expand: true, flatten: true, src: ['app/views/common/navigation.html'], dest: 'app/views/common/'},
-                    {flatten: true, src: ['app/scripts/<%= inspinia.version %>App.js'], dest: 'app/scripts/<%= inspinia.version %>App.js'},
-                    {flatten: true, src: ['app/<%= inspinia.version %>Index.html'], dest: 'app/<%= inspinia.version %>Index.html'},
+                    {
+                        flatten: true,
+                        src: ['<%= inspinia.app %>/templates_versions/<%= inspinia.version %>/config.js'],
+                        dest: '<%= inspinia.app %>/scripts/config.js'
+                    },
+                    {
+                        expand: true,
+                        flatten: true,
+                        src: ['<%= inspinia.app %>/templates_versions/common/navigation.html'],
+                        dest: 'app/views/common/'
+                    },
+                    {
+                        flatten: true,
+                        src: ['<%= inspinia.app %>/templates_versions/<%= inspinia.version %>/app.js'],
+                        dest: '<%= inspinia.app %>/scripts/app.js'
+                    },
+                    {
+                        flatten: true,
+                        src: ['<%= inspinia.app %>/templates_versions/<%= inspinia.version %>/index.html'],
+                        dest: '<%= inspinia.app %>/index.html'
+                    },
                 ]
             }
         },
@@ -363,18 +382,18 @@ module.exports = function (grunt) {
     grunt.registerTask('build', [
         'clean:dist',
         'replace',
-        'jsbeautifier',
-        'copy:modifiedSubviews',
-        'less',
-        'useminPrepare',
-        'concat',
-        'copy:dist',
-        'cssmin',
-        'uglify',
-        'filerev',
-        'usemin',
-        'htmlmin',
-        'copy:subviews'
+        //'jsbeautifier', // n'est plus pertinent si on ne modifie plus les fichiers source
+        //'copy:selectedVersion',
+        //'less', // necessaire ?
+        //'useminPrepare',
+        //'concat',
+        //'copy:dist',
+        //'cssmin',
+        //'uglify',
+        //'filerev',
+        //'usemin',
+        //'htmlmin',
+        //'copy:subviews'
     ]);
 
     grunt.registerTask('build:enterprise', [
