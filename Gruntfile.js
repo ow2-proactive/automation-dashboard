@@ -46,6 +46,16 @@ module.exports = function (grunt) {
                     dest: '<%= inspinia.dist %>/views/' + subviewsDefinition[key].nameForUrl
                 });
             }
+            if (subviewsDefinition[key].images) {
+                for (var imageKey in subviewsDefinition[key].images) {
+                    out.push({
+                        expand: true,
+                        cwd: subviewsDefinition[key].appFolder + '/styles/patterns/',
+                        src: subviewsDefinition[key].images[imageKey],
+                        dest: '<%= inspinia.dist %>/styles/patterns/'
+                    });
+                }
+            }
         };
         return out;
     }

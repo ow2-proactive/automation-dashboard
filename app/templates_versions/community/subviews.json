@@ -1,6 +1,6 @@
 {
 	"cloudAutomation" : {
-		"isAvailable" : true,
+		"isAvailable" : false,
 		"name": "Cloud automation",
 		"nameForUrl": "cloud-automation",
 		"appFolder" : "cloud-automation/app/",
@@ -13,10 +13,11 @@
 		"initFunction": {
 			"functionName" : "initServiceAutomation",
 			"services" : ["SchedulerService", "PCACatalogService", "PCAProcessService", "PCARunningServicesService", "PCANodeSourcesService"]
-		}
+		},
+        "images": ["not_available_image_cloud_automation.png"]
 	}, 
 	"workflowAutomation" : {
-		"isAvailable" : false,
+		"isAvailable" : true,
 		"name": "Workflow automation",
 		"nameForUrl": "workflow-automation",
 		"appFolder" : "cloud-automation/app/",
@@ -37,7 +38,7 @@
 		"nameForUrl": "workflow-catalog",
 		"appFolder" : "workflow-catalog-portal/app/",
 		"htmlFile": "workflow_catalog.html",
-		"notAvailablePage": "page_not_available_wf_catalog.html",
+		"notAvailablePage": "page_not_available.html",
 		"jsFiles": ["scripts/wcp-rest.js", "scripts/factory/catalogRestService.js","scripts/factory/schedulerGroupService.js"],
 		"angularModuleName" : "wcp-rest",
 		"cssFile": "wcportal_custom_style.css",
@@ -53,7 +54,7 @@
 		"nameForUrl": "notification-portal",
 		"appFolder" : "notification-portal/app/",
 		"htmlFile": "minor.html",
-		"notAvailablePage": "page_not_available_notif_portal.html",
+		"notAvailablePage": "page_not_available.html",
 		"jsFiles": ["scripts/ns-rest.js"],
 		"angularModuleName" : "ns-rest",
 		"cssFile": "notifportal_custom_style.css",
