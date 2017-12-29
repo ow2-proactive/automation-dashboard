@@ -232,7 +232,7 @@ module.exports = function (grunt) {
                                     if (subviewsDefinition[key].isAvailable) {
                                         result += "\ntitle:'" + subviewsDefinition[key].name + "',";
                                         result += "\ntemplateUrl:'views/" + subviewsDefinition[key].nameForUrl + "/" + subviewsDefinition[key].htmlFile + "',";
-                                        result += "\ncss:'style/" + subviewsDefinition[key].nameForUrl + "/" + subviewsDefinition[key].cssFile + "',";
+                                        result += "\ncss:'styles/" + subviewsDefinition[key].nameForUrl + "/" + subviewsDefinition[key].cssFile + "',";
                                         result += "\nauthenticate:" + subviewsDefinition[key].authenticate + ",";
                                         if (subviewsDefinition[key].initFunction) {
                                             var services = subviewsDefinition[key].initFunction.services.join(", ");
