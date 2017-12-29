@@ -15,6 +15,7 @@ The dashboard subviews are git submodules that need to be retrieved by using the
 git submodule init
 git submodule update
 ```
+This repository expects that you have an authorized SSH key to fetch the submodules (they are hosted on private repositories).
 
 ## Building
 
