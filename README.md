@@ -46,9 +46,9 @@ With the following tasks, grunt injects subviews in the dashboard, depending on 
   * in `app/templates_versions/VERSION/app.js`, it adds modules needed for subviews
   * in `app/templates_versions/VERSION/index.html`, it adds scripts needed for subviews
   * when all files are replaced accordingly to the requested version, they are copied into the `app/` folder:
-    * `app/templates_versions/VERSION/config.js` to `app/scripts/config.js` 
-    * `app/templates_versions/VERSION/app.js` to `app/scripts/app.js` 
-    * `app/templates_versions/VERSION/index.html` to `app/index.html` 
+    * `app/templates_versions/VERSION/config.js` to `app/scripts/config.js`
+    * `app/templates_versions/VERSION/app.js` to `app/scripts/app.js`
+    * `app/templates_versions/VERSION/index.html` to `app/index.html`
     * `app/templates_versions/common/navigation.html` to `app/views/common/navigation.html`
 * jsbeautifier: re-indents all these files that were not well indented with generated code.
 * copy:communitySubviews: copies the community subviews html content (or the _unavailable_ alternative pages if necessary) into the final `dist/` folder.
@@ -75,7 +75,7 @@ When building the dashboard, grunt will first copy those files (depending on the
 
 Any modification to those files will need to be done from the `app/templates_versions/VERSION` folder instead. What you want to modify is between `<!-- beginSubviewsScripts-->` and `<!-- endSubviewsScripts-->`, you need to change the way it is generated in `Gruntfile.js` (`replace` task) and `enterprise/community.json`. Otherwise, you can modify enterprise/community sources files.
 
-To add/remove a subview, you need to change `app/templates_versions/VERSION/subviews.json`. If you want a view to be in the portal but with its content not available (visible in the navigation panel but "not available" page displays when you click on it), you need to add it in theses files with the attribute `isAvailable` set to `false`. If a view shouldn't be displayed at all, just remove it from the 2 JSON files. 
+To add/remove a subview, you need to change `app/templates_versions/VERSION/subviews.json`. If you want a view to be in the portal but with its content not available (visible in the navigation panel but "not available" page displays when you click on it), you need to add it in theses files with the attribute `isAvailable` set to `false`. If a view shouldn't be displayed at all, just remove it from the 2 JSON files.
 
 Views will be displayed in the navigation panel in the same order as they are given in `app/templates_versions/VERSION/subviews.json`. The order of `jsFiles` attribute values is also very important as scripts will be injected in `index.html` in the same order.
 
