@@ -13,6 +13,7 @@ bower install
 The dashboard subviews are git submodules that need to be retrieved by using the following commands:
 ```
 git submodule init
+git submodule sync
 git submodule update
 ```
 
