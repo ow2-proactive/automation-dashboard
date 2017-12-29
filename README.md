@@ -49,7 +49,9 @@ To add/remove a subview, you need to change `resources/enterpriseSubviews.json` 
 
 Views will be displayed in the navigation panel in the same order as they are given in `resources/enterpriseSubviews.json` and `resources/communitySubviews.json`. The order of `jsFiles` attribute values is also very important as scripts will be injected in `index.html` in the same order.
 
-All attributes are mandatory, except `initFunction`, which can be omitted.
+Images used in the view must be put in `images` attribute.
+
+All attributes are mandatory, except `initFunction` and `images`, which can be omitted.
 
 ### Subviews project
 
