@@ -11,6 +11,7 @@ module.exports = function (grunt) {
     var appConfig = {
         app: 'app',
         dist: 'dist',
+        conf: 'templates_versions',
         version: grunt.option('target') || 'enterprise'
     };
 
@@ -336,7 +337,8 @@ module.exports = function (grunt) {
                 '<%= inspinia.app %>/scripts/config.js',
                 '<%= inspinia.app %>/views/common/navigation.html',
                 '<%= inspinia.app %>/scripts/app.js',
-                '<%= inspinia.app %>/index.html'
+                '<%= inspinia.app %>/index.html',
+                '<%= inspinia.app %>/<%= inspinia.conf %>/{,*/}*.*'
             ],
             options: {
             }
