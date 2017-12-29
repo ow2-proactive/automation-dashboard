@@ -35,6 +35,7 @@ app/views/common/navigation.html
 # Gradle:
 .idea/**/gradle.xml
 .idea/**/libraries
+/gradle/ext/
 
 # CMake
 cmake-build-debug/

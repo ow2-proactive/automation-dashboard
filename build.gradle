@@ -1,0 +1,154 @@
+apply plugin: 'maven'
+apply plugin: 'java'
+apply plugin: 'com.moowork.grunt'
+apply plugin: 'com.moowork.node'
+apply from: "$rootDir/gradle/ext/coding-format.gradle"
+
+// Configure the maven repository deployment
+install {
+    repositories.mavenInstaller {
+        // Set the version
+        pom.version = proactiveDashboardVersion
+        // Set the group/namespace for the maven repository deployment.
+        pom.groupId = 'org.ow2.proactive'
+        // Give the artifact a 'base name' (The version is added to the 'base name')
+        pom.artifactId = 'proactive-dashboard'
+    }
+}
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+    }
+    dependencies {
+        classpath 'com.moowork.gradle:gradle-grunt-plugin:0.12'
+        classpath 'com.moowork.gradle:gradle-node-plugin:0.12'
+    }
+}
+
+node {
+    // Version of node to use.
+    version = '4.4.4'
+
+    // Version of npm to use.
+    // npmVersion = '3.8.6'
+
+    // Base URL for fetching node distributions (change if you have a mirror).
+    distBaseUrl = 'https://nodejs.org/dist'
+
+    // If true, it will download node using above parameters.
+    // If false, it will try to use globally installed node.
+    download = true
+
+    // Set the work directory for unpacking node
+    workDir = file("${project.buildDir}/nodejs")
+
+    // Set the work directory where node_modules should be located
+    nodeModulesDir = file("${project.projectDir}")
+}
+
+grunt {
+    // Set the directory where Gruntfile.js should be found
+    workDir = file("${project.projectDir}")
+
+    // Whether colors should output on the terminal
+    colors = true
+
+    // Whether output from Grunt should be buffered - useful when running tasks in parallel
+    bufferOutput = false
+}
+
+repositories {
+    mavenLocal()
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            snapshotRepository(url: "http://repository.activeeon.com/content/repositories/snapshots/") {
+                authentication(userName: "${System.getProperty('nexusUsername')}",
+                        password: "${System.getProperty('nexusPassword')}")
+            }
+            repository(url: "http://repository.activeeon.com/content/repositories/releases/") {
+                authentication(userName: "${System.getProperty('nexusUsername')}",
+                        password: "${System.getProperty('nexusPassword')}")
+            }
+        }
+    }
+}
+
+task packageDist(type: Zip) {
+    from 'dist'
+    dependsOn grunt_build
+}
+
+task packageDev(type: Zip) {
+    from 'app'
+    classifier 'dev'
+}
+
+task bowerInstall(type: NodeTask) {
+    script = file('node_modules/bower/bin/bower')
+    args = ["--config.storage.cache=${gradle.getGradleUserHomeDir()}/caches/bower/cache",
+            "--config.storage.packages=${gradle.getGradleUserHomeDir()}/caches/bower/packages",
+            "--config.storage.registry=${gradle.getGradleUserHomeDir()}/caches/bower/registry",
+            '--allow-root',
+            'install']
+    inputs.files file('bower.json')
+    outputs.files file('bower_components')
+    dependsOn npmInstall
+}
+
+
+// makes sure on each build that bower downloaded the dependencies
+grunt_build.dependsOn 'bowerInstall'
+
+// makes sure on each build that grunt is installed
+grunt_build.dependsOn 'installGrunt'
+
+// processes your package.json before running grunt build
+grunt_build.dependsOn 'npmInstall'
+
+// runs "grunt build" as part of your gradle build
+build.dependsOn grunt_build
+
+task buildEnterprise(type: GruntTask) {
+  args = ["build", "--target=enterprise"]
+}
+
+task buildCommunity(type: GruntTask) {
+  args = ["build", "--target=community"]
+}
+
+// delete dist folder with clean
+clean{
+    delete "${project.projectDir}/dist"
+    delete "${project.projectDir}/.tmp"
+    delete "${project.projectDir}/build"
+    delete "${project.projectDir}/node_modules"
+    delete "${project.projectDir}/bower_components"
+}
+
+artifacts {
+    archives packageDist, packageDev
+}
+
+buildscript {
+    repositories {
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
+        maven {
+            url "http://repository.activeeon.com/content/groups/proactive/"
+        }
+    }
+
+    dependencies {
+        classpath "com.diffplug.gradle.spotless:spotless:2.4.0"
+        classpath "org.ow2.proactive:coding-rules:1.0.0"
+        delete "gradle/ext"
+        ant.unjar src: configurations.classpath.find { it.name.startsWith("coding-rules") }, dest: 'gradle/ext'
+    }
+}
