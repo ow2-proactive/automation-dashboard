@@ -114,6 +114,14 @@ grunt_build.dependsOn 'npmInstall'
 // runs "grunt build" as part of your gradle build
 build.dependsOn grunt_build
 
+task buildEnterprise(type: GruntTask) {
+  args = ["build", "--target=enterprise"]
+}
+
+task buildCommunity(type: GruntTask) {
+  args = ["build", "--target=community"]
+}
+
 // delete dist folder with clean
 clean{
     delete "${project.projectDir}/dist"
