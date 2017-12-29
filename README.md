@@ -16,6 +16,7 @@ git submodule init
 git submodule sync
 git submodule update
 ```
+This repository expects that you have an authorized SSH key to fetch the submodules (they are hosted on private repositories).
 
 ## Building
 
