@@ -86,7 +86,7 @@ All attributes are mandatory, except `initFunction` and `images`, which can be o
 
 ### Subviews project
 
-Each subview is defined in a bitbucket repository and then imported in this project as a submodules (see `.gitmodules` file). The branches are important for now, as we still have the subviews building standalone versions as well from their respective master branches.
+Each subview is defined in a bitbucket repository and then imported in this project as a submodule (see `.gitmodules` file). The branches are important for now, as we still have the subviews building standalone versions as well from their respective master branches.
 To modify a subview: open the submodule's folder associated in the proactive-dashboard project, make the modifications, build the **proactive-dashboard** (no need to build the submodule). Once all modifications are done:
 1. commit the submodule's changes from its own folder. This is important as the dashboard project relies on the hash of the commits to fetch the correct version of the submodule.
 2. commit the dashboard changes, it will detect that changes occured in the submodules, which is fine, you'll also need to add those changes on the submodule to your dashboard commit as well (just add the submodule folder, no need to add the inner changes)
