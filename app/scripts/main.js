@@ -21,7 +21,7 @@ function getProperties ($http, $location) {
             var notificationPortalQueryPeriod = angular.toJson(response.notificationPortalQueryPeriod, true);
             var workflowCatalogPortalQueryPeriod = angular.toJson(response.workflowCatalogPortalQueryPeriod, true);
             var appCatalogBucketsUrl =angular.toJson("http://localhost:8080/catalog/buckets/?kind=workflow", true);
-            var appCatalogWorkflowsUrl = angular.toJson("http://localhost:8080/catalog/buckets/" + response.view[0].catalog.bucketid + "/resources", true);
+            var appCatalogWorkflowsUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port() + "/catalog/buckets/" + response.view[0].catalog.bucketName + "/resources");
             var configViews = angular.toJson(response.view, true);
 
             localStorage['pcaServiceUrl'] = pcaServiceUrl;
@@ -64,6 +64,19 @@ mainCtrl.factory('loadingConfigData', function($http, $location){
     };
 });
 
+// get the username cookie variable
+
+function getCookie(name) {
+    var cookieName = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(cookieName) == 0) return c.substring(cookieName.length, c.length);
+    }
+    return null;
+}
+
 mainCtrl.factory('MainService', function ($http, $interval, $rootScope, $state) {
     function doLogin(userName, userPass) {
         var authData = $.param({'username': userName, 'password': userPass});
@@ -104,7 +117,12 @@ mainCtrl.controller('navBarController', function ($scope, loadingConfigData){
 });
 
 mainCtrl.controller('loginController', function ($scope, $state, MainService) {
-
+    var username = getCookie('username');
+    if (username == "null") {
+        $scope.username = localStorage['pa.login'];
+    } else {
+        $scope.username = username;
+    }
     $scope.login = function () {
         var username = $scope.username;
         var password = $scope.password;
