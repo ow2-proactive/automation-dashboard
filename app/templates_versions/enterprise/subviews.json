@@ -1,21 +1,4 @@
 {
-    "cloudAutomation": {
-        "isAvailable": true,
-        "name": "Cloud automation",
-        "nameForUrl": "cloud-automation",
-        "appFolder": "cloud-automation/app/",
-        "htmlFile": "main.html",
-        "notAvailablePage": "page_not_available_cloud_automation.html",
-        "jsFiles": ["scripts/pca-rest.js", "scripts/app-rest.js"],
-        "angularModuleName": "pca-rest",
-        "cssFile": "portal_custom_style.css",
-        "authenticate": true,
-        "initFunction": {
-            "functionName": "initServiceAutomation",
-            "services": ["SchedulerService", "PCACatalogService", "PCAProcessService", "PCARunningServicesService", "PCANodeSourcesService"]
-        },
-        "images": ["not_available_image_cloud_automation.png"]
-    },
     "workflowAutomation": {
         "isAvailable": true,
         "name": "Workflow automation",
@@ -31,6 +14,18 @@
             "functionName": "initWorkflowAutomation",
             "services": ["APPSchedulerService", "APPCatalog"]
         }
+    },
+    "notificationPortal": {
+        "isAvailable": true,
+        "name": "Notification portal",
+        "nameForUrl": "notification-portal",
+        "appFolder": "notification-portal/app/",
+        "htmlFile": "minor.html",
+        "notAvailablePage": "page_not_available.html",
+        "jsFiles": ["scripts/ns-rest.js"],
+        "angularModuleName": "ns-rest",
+        "cssFile": "notifportal_custom_style.css",
+        "authenticate": true
     },
     "workflowCatalog": {
         "isAvailable": true,
@@ -48,16 +43,21 @@
             "services": ["WorkflowCatalogService"]
         }
     },
-    "notificationPortal": {
+    "cloudAutomation": {
         "isAvailable": true,
-        "name": "Notification portal",
-        "nameForUrl": "notification-portal",
-        "appFolder": "notification-portal/app/",
-        "htmlFile": "minor.html",
-        "notAvailablePage": "page_not_available.html",
-        "jsFiles": ["scripts/ns-rest.js"],
-        "angularModuleName": "ns-rest",
-        "cssFile": "notifportal_custom_style.css",
-        "authenticate": true
+        "name": "Cloud automation",
+        "nameForUrl": "cloud-automation",
+        "appFolder": "cloud-automation/app/",
+        "htmlFile": "main.html",
+        "notAvailablePage": "page_not_available_cloud_automation.html",
+        "jsFiles": ["scripts/pca-rest.js", "scripts/app-rest.js"],
+        "angularModuleName": "pca-rest",
+        "cssFile": "portal_custom_style.css",
+        "authenticate": true,
+        "initFunction": {
+            "functionName": "initServiceAutomation",
+            "services": ["SchedulerService", "PCACatalogService", "PCAProcessService", "PCARunningServicesService", "PCANodeSourcesService"]
+        },
+        "images": ["not_available_image_cloud_automation.png"]
     }
 }
