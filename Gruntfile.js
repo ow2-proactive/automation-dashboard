@@ -53,7 +53,7 @@ module.exports = function (grunt) {
                         expand: true,
                         cwd: subviewsDefinition[key].appFolder + '/styles/patterns/',
                         src: subviewsDefinition[key].images[imageKey],
-                        dest: '<%= inspinia.dist %>/styles/patterns/'
+                        dest: '<%= inspinia.dist %>/styles/'+ subviewsDefinition[key].nameForUrl
                     });
                 }
             }
