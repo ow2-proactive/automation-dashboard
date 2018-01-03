@@ -16,7 +16,7 @@
   }],
   "catalog": {
     "title": "Catalog of Workflows",
-    "bucketid": "1000",
+    "bucketName": "basic-examples",
     "query": ""
   },
   "widgets": [{
