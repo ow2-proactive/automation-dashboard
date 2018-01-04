@@ -110,11 +110,10 @@ angular
 
 angular
     .module('inspinia')
-    .run(function($rootScope, $state, $http, $location) {
+    .run(function($rootScope, $state, $http, $location, $timeout) {
         $rootScope.$on('$locationChangeStart', function(event) {
-            if (localStorage['pcaServiceUrl'] == undefined || angular.isObject(localStorage['schedulerRestUrl']) == false || localStorage['appCatalogWorkflowsUrl'] == undefined || localStorage['appCatalogBucketsUrl'] == undefined) {
-                getProperties($http, $location);
-            }
+            //TODO : check if properties already set
+            getProperties($http, $location);
             var myDataPromise = isSessionValide($http, getSessionId());
             myDataPromise.then(function(result) {
 
@@ -128,5 +127,5 @@ angular
                 $state.go('portal.subview1');
             }
 
-        })
+        });
     });

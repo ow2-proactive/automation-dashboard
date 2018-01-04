@@ -232,7 +232,6 @@ module.exports = function (grunt) {
                                     result += "\nurl:'/" + subviewsDefinition[key].nameForUrl + "',";
                                     result += "\ndata: { pageTitle: '" + subviewsDefinition[key].name + "'},";
                                     if (subviewsDefinition[key].isAvailable) {
-                                        result += "\ntitle:'" + subviewsDefinition[key].name + "',";
                                         result += "\ntemplateUrl:'views/" + subviewsDefinition[key].nameForUrl + "/" + subviewsDefinition[key].htmlFile + "',";
                                         result += "\ncss:'styles/" + subviewsDefinition[key].nameForUrl + "/" + subviewsDefinition[key].cssFile + "',";
                                         result += "\nauthenticate:" + subviewsDefinition[key].authenticate + ",";
