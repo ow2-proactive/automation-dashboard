@@ -110,7 +110,8 @@ mainCtrl.controller('navBarController', function ($scope, loadingConfigData){
     console.log($scope.view);
 });
 
-mainCtrl.controller('loginController', function ($scope, $state, MainService) {
+mainCtrl.controller('loginController', function ($scope, $state, MainService, $stateParams, $location) {
+    $scope.redirectsTo = $stateParams.redirectsTo;
     var username = getCookie('username');
     if (username == "null") {
         $scope.username = localStorage['pa.login'];
@@ -129,8 +130,10 @@ mainCtrl.controller('loginController', function ($scope, $state, MainService) {
                 var sessionid = getSessionId();
                 console.log("loginController pa.session " + sessionid);
                 if (sessionid != undefined) {
-                    console.log("loginController logged");
-                    $state.go('portal.subview1'); // where to defined the homepage.
+                    if ($scope.redirectsTo)
+                        $location.path($scope.redirectsTo);
+                    else
+                        $state.go('portal.subview1');
                 }
             })
             .error(function (response) {
