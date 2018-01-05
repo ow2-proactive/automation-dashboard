@@ -115,8 +115,9 @@ angular
     .module('inspinia')
     .run(function($rootScope, $state, $http, $location) {
         $rootScope.$on('$locationChangeStart', function(event) {
-            //TODO : check if properties already set
-            getProperties($http, $location);
+            if (!localStorage['pcaServiceUrl'] || !localStorage['schedulerRestUrl'] || !localStorage['notificationServiceUrl'] ||
+                !localStorage['catalogServiceUrl'] || !localStorage['appCatalogWorkflowsUrl'] || !localStorage['appCatalogBucketsUrl'] || !localStorage['configViews'])
+                getProperties($http, $location);
             var myDataPromise = isSessionValide($http, getSessionId());
             myDataPromise.then(function(result) {
                 if (!result && $location.$$url != '/login') {
