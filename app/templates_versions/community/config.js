@@ -12,7 +12,10 @@ function config($stateProvider, $urlRouterProvider) {
         .state('login', {
             url: "/login",
             templateUrl: "views/login.html",
-            authenticate: false
+            authenticate: false,
+            params: {
+                redirectsTo: ''
+            }
         })
         .state('portal', {
             abstract: true,
@@ -102,22 +105,23 @@ angular
 
 angular
     .module('inspinia')
-    .run(function($rootScope, $state, $http, $location, $timeout) {
+    .run(function($rootScope, $state, $http, $location) {
         $rootScope.$on('$locationChangeStart', function(event) {
-            //TODO : check if properties already set
-            getProperties($http, $location);
+            if (!localStorage['pcaServiceUrl'] || !localStorage['schedulerRestUrl'] || !localStorage['notificationServiceUrl'] ||
+                !localStorage['catalogServiceUrl'] || !localStorage['appCatalogWorkflowsUrl'] || !localStorage['appCatalogBucketsUrl'] || !localStorage['configViews'])
+                getProperties($http, $location);
             var myDataPromise = isSessionValide($http, getSessionId());
             myDataPromise.then(function(result) {
-
-                if (!result) {
+                if (!result && $location.$$url != '/login') {
                     event.preventDefault();
                     $rootScope.$broadcast('event:StopRefreshing');
-                    return $state.go('login');
+                    return $state.go('login', {
+                        redirectsTo: $location.$$url
+                    });
                 }
             });
             if ($state.current.name == '') {
                 $state.go('portal.subview1');
             }
-
         });
     });
