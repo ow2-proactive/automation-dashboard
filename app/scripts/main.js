@@ -34,12 +34,6 @@ function getProperties ($http, $location) {
             localStorage['appCatalogWorkflowsUrl'] = appCatalogWorkflowsUrl;
             localStorage['appCatalogBucketsUrl'] = appCatalogBucketsUrl;
             localStorage['configViews'] = configViews;
-
-            console.log('LoadingPropertiesService pcaServiceUrl set to ', pcaServiceUrl);
-            console.log('LoadingPropertiesService schedulerRestUrl set to ', schedulerRestUrl);
-            console.log('LoadingPropertiesService appCatalogWorkflowsUrl set to ', appCatalogWorkflowsUrl);
-            console.log('LoadingPropertiesService appCatalogBucketsUrl set to ', appCatalogBucketsUrl);
-            console.log('LoadingPropertiesService configViews set to ', configViews);
         })
         .error(function (response) {
             console.error('LoadingPropertiesService $http.get error', status, response);

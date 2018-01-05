@@ -31,11 +31,11 @@ grunt clean build --target=community
 ```
 
 If no target is specified, grunt will build the enterprise version by default.
-Then, copy the `dist/` folder in `scheduling/dist/war/` and rename it "proactive-dashboard".
+Then, copy the `dist/` folder in `scheduling/dist/war/` and rename it "automation-dashboard".
 
 Once scheduling/bin/proactive-server is started, the dashboard is available at:
 ```
-localhost:8080/proactive-dashboard
+localhost:8080/automation-dashboard
 ```
 
 ### What does building do with subviews modules?
