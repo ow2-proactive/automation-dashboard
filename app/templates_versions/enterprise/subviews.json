@@ -4,15 +4,16 @@
         "name": "Workflow automation",
         "nameForUrl": "workflow-automation",
         "appFolder": "cloud-automation/app/",
-        "htmlFile": "minor.html",
+        "htmlFile": "wf_automation.html",
+        "secondaryHtmlFiles": "modals/submit_window_wf_automation.html",
         "notAvailablePage": "page_not_available_wf_automation.html",
-        "jsFiles": ["scripts/pca-rest.js", "scripts/app-rest.js"],
-        "angularModuleName": "app-rest",
+        "jsFiles": ["scripts/wf-automation-rest.js"],
+        "angularModuleName": "wfa-rest",
         "cssFile": "portal_custom_style.css",
         "authenticate": true,
         "initFunction": {
             "functionName": "initWorkflowAutomation",
-            "services": ["APPSchedulerService", "APPCatalog"]
+            "services": ["WFASchedulerService", "WFACatalog"]
         }
     },
     "notificationPortal": {
@@ -20,7 +21,7 @@
         "name": "Notification portal",
         "nameForUrl": "notification-portal",
         "appFolder": "notification-portal/app/",
-        "htmlFile": "minor.html",
+        "htmlFile": "ns-view.html",
         "notAvailablePage": "page_not_available.html",
         "jsFiles": ["scripts/ns-rest.js"],
         "angularModuleName": "ns-rest",
@@ -48,9 +49,10 @@
         "name": "Cloud automation",
         "nameForUrl": "cloud-automation",
         "appFolder": "cloud-automation/app/",
-        "htmlFile": "main.html",
+        "htmlFile": "cloud_automation.html",
+        "secondaryHtmlFiles": "modals/submit_window_cloud_automation.html",
         "notAvailablePage": "page_not_available_cloud_automation.html",
-        "jsFiles": ["scripts/pca-rest.js", "scripts/app-rest.js"],
+        "jsFiles": ["scripts/cloud-automation-rest.js"],
         "angularModuleName": "pca-rest",
         "cssFile": "portal_custom_style.css",
         "authenticate": true,
