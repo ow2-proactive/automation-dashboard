@@ -57,6 +57,14 @@ module.exports = function (grunt) {
                     });
                 }
             }
+            if (subviewsDefinition[key].secondaryHtmlFiles){
+                out.push({
+                    expand: true,
+                    cwd: subviewsDefinition[key].appFolder + '/views/',
+                    src: subviewsDefinition[key].secondaryHtmlFiles,
+                    dest: '<%= inspinia.dist %>/views/' + subviewsDefinition[key].nameForUrl
+                });
+            }
         };
         return out;
     }
