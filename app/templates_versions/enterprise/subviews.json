@@ -1,0 +1,83 @@
+{
+    "workflowAutomation": {
+        "isAvailable": true,
+        "name": "Workflow automation",
+        "nameForUrl": "workflow-automation",
+        "appFolder": "cloud-automation/app/",
+        "htmlFile": "wf_automation.html",
+        "secondaryHtmlFiles": "modals/submit_window_wf_automation.html",
+        "notAvailablePage": "page_not_available_wf_automation.html",
+        "jsFiles": ["scripts/wf-automation-rest.js"],
+        "angularModuleName": "wfa-rest",
+        "cssFile": "portal_custom_style.css",
+        "authenticate": true,
+        "initFunction": {
+            "functionName": "initWorkflowAutomation",
+            "services": ["WFASchedulerService", "WFACatalog"]
+        }
+    },
+    "notificationPortal": {
+        "isAvailable": true,
+        "name": "Notification portal",
+        "nameForUrl": "notification-portal",
+        "appFolder": "notification-portal/app/",
+        "htmlFile": "ns-view.html",
+        "notAvailablePage": "page_not_available.html",
+        "jsFiles": ["scripts/ns-rest.js"],
+        "angularModuleName": "ns-rest",
+        "cssFile": "notifportal_custom_style.css",
+        "authenticate": true
+    },
+    "workflowCatalog": {
+        "isAvailable": true,
+        "name": "Workflow catalog",
+        "nameForUrl": "workflow-catalog",
+        "appFolder": "workflow-catalog-portal/app/",
+        "htmlFile": "workflow_catalog.html",
+        "notAvailablePage": "page_not_available.html",
+        "jsFiles": ["scripts/wcp-rest.js", "scripts/factory/catalogRestService.js", "scripts/factory/schedulerGroupService.js"],
+        "angularModuleName": "wcp-rest",
+        "cssFile": "wcportal_custom_style.css",
+        "authenticate": true,
+        "initFunction": {
+            "functionName": "initWorkflowCatalog",
+            "services": ["WorkflowCatalogService"]
+        }
+    },
+    "cloudAutomation": {
+        "isAvailable": true,
+        "name": "Cloud automation",
+        "nameForUrl": "cloud-automation",
+        "appFolder": "cloud-automation/app/",
+        "htmlFile": "cloud_automation.html",
+        "secondaryHtmlFiles": "modals/submit_window_cloud_automation.html",
+        "notAvailablePage": "page_not_available_cloud_automation.html",
+        "jsFiles": ["scripts/cloud-automation-rest.js"],
+        "angularModuleName": "pca-rest",
+        "cssFile": "portal_custom_style.css",
+        "authenticate": true,
+        "initFunction": {
+            "functionName": "initServiceAutomation",
+            "services": ["SchedulerService", "PCACatalogService", "PCAProcessService", "PCARunningServicesService", "PCANodeSourcesService"]
+        },
+        "images": ["not_available_image_cloud_automation.png"]
+    },
+    "jobPlanner": {
+        "isAvailable": true,
+        "name": "Job planner portal",
+        "nameForUrl": "job-planner-portal",
+        "appFolder": "job-planner-portal/app/",
+        "htmlFile": "job-planner-portal.html",
+        "secondaryHtmlFiles": "modals/submit_window_cloud_automation.html",
+        "notAvailablePage": "page_not_available_job_planner_portal.html",
+        "jsFiles": ["scripts/job-planner-portal-rest.js"],
+        "angularModuleName": "pca-rest",
+        "cssFile": "portal_custom_style.css",
+        "authenticate": true,
+        "initFunction": {
+            "functionName": "initServiceAutomation",
+            "services": ["SchedulerService", "PCACatalogService", "PCAProcessService", "PCARunningServicesService", "PCANodeSourcesService"]
+        },
+        "images": ["not_available_image_cloud_automation.png"]
+    }
+}

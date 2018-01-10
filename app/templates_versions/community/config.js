@@ -12,7 +12,10 @@ function config($stateProvider, $urlRouterProvider) {
         .state('login', {
             url: "/login",
             templateUrl: "views/login.html",
-            authenticate: false
+            authenticate: false,
+            params: {
+                redirectsTo: ''
+            }
         })
         .state('portal', {
             abstract: true,
@@ -29,16 +32,8 @@ function config($stateProvider, $urlRouterProvider) {
             data: {
                 pageTitle: 'Cloud automation'
             },
-            title: 'Cloud automation',
-            templateUrl: 'cloud-automation/views/main.html',
-            css: 'cloud-automation/styles/portal_custom_style.css',
-            authenticate: true,
-            onEnter: function(SchedulerService, PCACatalogService, PCAProcessService, PCARunningServicesService, PCANodeSourcesService) {
-                initServiceAutomation(SchedulerService, PCACatalogService, PCAProcessService, PCARunningServicesService, PCANodeSourcesService);
-            },
-            onExit: function($rootScope) {
-                $rootScope.$broadcast('event:StopRefreshing');
-            }
+            templateUrl: 'cloud-automation/views/page_not_available_cloud_automation.html',
+            authenticate: false,
         })
 
         .state('portal.subview2', {
@@ -46,8 +41,16 @@ function config($stateProvider, $urlRouterProvider) {
             data: {
                 pageTitle: 'Workflow automation'
             },
-            templateUrl: 'workflow-automation/views/page_not_available_wf_automation.html',
-            authenticate: false,
+            title: 'Workflow automation',
+            templateUrl: 'workflow-automation/views/minor.html',
+            css: 'workflow-automation/styles/portal_custom_style.css',
+            authenticate: true,
+            onEnter: function(APPSchedulerService, APPCatalog) {
+                initWorkflowAutomation(APPSchedulerService, APPCatalog);
+            },
+            onExit: function($rootScope) {
+                $rootScope.$broadcast('event:StopRefreshing');
+            }
         })
 
         .state('portal.subview3', {
@@ -104,21 +107,21 @@ angular
     .module('inspinia')
     .run(function($rootScope, $state, $http, $location) {
         $rootScope.$on('$locationChangeStart', function(event) {
-            if (localStorage['pcaServiceUrl'] == undefined || angular.isObject(localStorage['schedulerRestUrl']) == false || localStorage['appCatalogWorkflowsUrl'] == undefined || localStorage['appCatalogBucketsUrl'] == undefined) {
+            if (!localStorage['pcaServiceUrl'] || !localStorage['schedulerRestUrl'] || !localStorage['notificationServiceUrl'] ||
+                !localStorage['catalogServiceUrl'] || !localStorage['appCatalogWorkflowsUrl'] || !localStorage['appCatalogBucketsUrl'] || !localStorage['configViews'])
                 getProperties($http, $location);
-            }
             var myDataPromise = isSessionValide($http, getSessionId());
             myDataPromise.then(function(result) {
-
-                if (!result) {
+                if (!result && $location.$$url != '/login') {
                     event.preventDefault();
                     $rootScope.$broadcast('event:StopRefreshing');
-                    return $state.go('login');
+                    return $state.go('login', {
+                        redirectsTo: $location.$$url
+                    });
                 }
             });
             if ($state.current.name == '') {
                 $state.go('portal.subview1');
             }
-
-        })
+        });
     });

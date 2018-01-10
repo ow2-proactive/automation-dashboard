@@ -10,7 +10,6 @@ function getSessionId() {
 
 // ---------- Utilities -----------
 function getProperties ($http, $location) {
-
     $http.get('resources/config.json')
         .success(function (response) {
             var pcaServiceUrl = angular.toJson(response.confServer.pcaServiceUrl, true);
@@ -20,8 +19,8 @@ function getProperties ($http, $location) {
             var cloudAutomationQueryPeriod = angular.toJson(response.cloudAutomationQueryPeriod, true);
             var notificationPortalQueryPeriod = angular.toJson(response.notificationPortalQueryPeriod, true);
             var workflowCatalogPortalQueryPeriod = angular.toJson(response.workflowCatalogPortalQueryPeriod, true);
-            var appCatalogBucketsUrl =angular.toJson("http://localhost:8080/catalog/buckets/?kind=workflow", true);
-            var appCatalogWorkflowsUrl = angular.toJson("http://localhost:8080/catalog/buckets/" + response.view[0].catalog.bucketid + "/resources", true);
+            var appCatalogBucketsUrl =angular.toJson(response.confServer.catalogServiceUrl+"/buckets/?kind=workflow", true);
+            var appCatalogWorkflowsUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port() + "/catalog/buckets/" + response.view[0].catalog.bucketName + "/resources");
             var configViews = angular.toJson(response.view, true);
 
             localStorage['pcaServiceUrl'] = pcaServiceUrl;
@@ -34,12 +33,6 @@ function getProperties ($http, $location) {
             localStorage['appCatalogWorkflowsUrl'] = appCatalogWorkflowsUrl;
             localStorage['appCatalogBucketsUrl'] = appCatalogBucketsUrl;
             localStorage['configViews'] = configViews;
-
-            console.log('LoadingPropertiesService pcaServiceUrl set to ', pcaServiceUrl);
-            console.log('LoadingPropertiesService schedulerRestUrl set to ', schedulerRestUrl);
-            console.log('LoadingPropertiesService appCatalogWorkflowsUrl set to ', appCatalogWorkflowsUrl);
-            console.log('LoadingPropertiesService appCatalogBucketsUrl set to ', appCatalogBucketsUrl);
-            console.log('LoadingPropertiesService configViews set to ', configViews);
         })
         .error(function (response) {
             console.error('LoadingPropertiesService $http.get error', status, response);
@@ -63,6 +56,19 @@ mainCtrl.factory('loadingConfigData', function($http, $location){
         }
     };
 });
+
+// get the username cookie variable
+
+function getCookie(name) {
+    var cookieName = name + "=";
+    var ca = document.cookie.split(';');
+    for (var i = 0; i < ca.length; i++) {
+        var c = ca[i];
+        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
+        if (c.indexOf(cookieName) == 0) return c.substring(cookieName.length, c.length);
+    }
+    return null;
+}
 
 mainCtrl.factory('MainService', function ($http, $interval, $rootScope, $state) {
     function doLogin(userName, userPass) {
@@ -103,8 +109,14 @@ mainCtrl.controller('navBarController', function ($scope, loadingConfigData){
     console.log($scope.view);
 });
 
-mainCtrl.controller('loginController', function ($scope, $state, MainService, PCACatalogService, PCAProcessService, PCARunningServicesService, PCANodeSourcesService, APPCatalog) {
-
+mainCtrl.controller('loginController', function ($scope, $state, MainService, $stateParams, $location) {
+    $scope.redirectsTo = $stateParams.redirectsTo;
+    var username = getCookie('username');
+    if (username == "null") {
+        $scope.username = localStorage['pa.login'];
+    } else {
+        $scope.username = username;
+    }
     $scope.login = function () {
         var username = $scope.username;
         var password = $scope.password;
@@ -117,8 +129,10 @@ mainCtrl.controller('loginController', function ($scope, $state, MainService, PC
                 var sessionid = getSessionId();
                 console.log("loginController pa.session " + sessionid);
                 if (sessionid != undefined) {
-                    console.log("loginController logged");
-                    $state.go('portal.subview1'); // where to defined the homepage.
+                    if ($scope.redirectsTo)
+                        $location.path($scope.redirectsTo);
+                    else
+                        $state.go('portal.subview1');
                 }
             })
             .error(function (response) {
