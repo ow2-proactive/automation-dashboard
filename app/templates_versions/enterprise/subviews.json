@@ -61,5 +61,23 @@
             "services": ["SchedulerService", "PCACatalogService", "PCAProcessService", "PCARunningServicesService", "PCANodeSourcesService"]
         },
         "images": ["not_available_image_cloud_automation.png"]
+    },
+    "jobPlanner": {
+        "isAvailable": true,
+        "name": "Job planner portal",
+        "nameForUrl": "job-planner-portal",
+        "appFolder": "job-planner-portal/app/",
+        "htmlFile": "job-planner-portal.html",
+        "secondaryHtmlFiles": "modals/submit_window_cloud_automation.html",
+        "notAvailablePage": "page_not_available_job_planner_portal.html",
+        "jsFiles": ["scripts/job-planner-portal-rest.js"],
+        "angularModuleName": "pca-rest",
+        "cssFile": "portal_custom_style.css",
+        "authenticate": true,
+        "initFunction": {
+            "functionName": "initServiceAutomation",
+            "services": ["SchedulerService", "PCACatalogService", "PCAProcessService", "PCARunningServicesService", "PCANodeSourcesService"]
+        },
+        "images": ["not_available_image_cloud_automation.png"]
     }
 }
