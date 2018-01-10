@@ -10,3 +10,7 @@
 	path = workflow-catalog-portal
 	url = git@bitbucket.org:activeeon/workflow-catalog-portal.git
 	branch = master
+[submodule "job-planner-portal"]
+	path = job-planner-portal
+	url = https://zeineb1904@bitbucket.org/activeeon/job-planner-portal.git
+	branch = master
