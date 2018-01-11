@@ -12,7 +12,7 @@ install {
         // Set the group/namespace for the maven repository deployment.
         pom.groupId = 'org.ow2.proactive'
         // Give the artifact a 'base name' (The version is added to the 'base name')
-        pom.artifactId = 'proactive-dashboard'
+        pom.artifactId = 'automation-dashboard'
     }
 }
 
