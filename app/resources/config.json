@@ -1,9 +1,9 @@
 {
 "confServer": {
-  "pcaServiceUrl": "http://localhost:8080/cloud-automation-service/",
-  "schedulerRestUrl": "http://localhost:8080/rest/scheduler/",
-  "notificationServiceUrl": "http://localhost:8080/notification-service/",
-  "catalogServiceUrl": "http://localhost:8080/catalog/"
+  "pcaServiceUrl": "/cloud-automation-service/",
+  "schedulerRestUrl": "/rest/scheduler/",
+  "notificationServiceUrl": "/notification-service/",
+  "catalogServiceUrl": "/catalog/"
 },
 "view": [{
   "viewname": "Workflow Automation",
