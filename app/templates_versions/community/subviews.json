@@ -1,7 +1,7 @@
 {
     "workflowAutomation": {
         "isAvailable": true,
-        "name": "Workflow automation",
+        "name": "Workflow Automation",
         "nameForUrl": "workflow-automation",
         "appFolder": "cloud-automation/app/",
         "htmlFile": "wf_automation.html",
@@ -18,7 +18,7 @@
     },
     "notificationPortal": {
         "isAvailable": true,
-        "name": "Notification portal",
+        "name": "Notification Service",
         "nameForUrl": "notification-portal",
         "appFolder": "notification-portal/app/",
         "htmlFile": "ns-view.html",
@@ -30,7 +30,7 @@
     },
     "workflowCatalog": {
         "isAvailable": true,
-        "name": "Workflow catalog",
+        "name": "Workflow Catalog",
         "nameForUrl": "workflow-catalog",
         "appFolder": "workflow-catalog-portal/app/",
         "htmlFile": "workflow_catalog.html",
@@ -46,7 +46,7 @@
     },
     "cloudAutomation": {
         "isAvailable": false,
-        "name": "Cloud automation",
+        "name": "Cloud Automation",
         "nameForUrl": "cloud-automation",
         "appFolder": "cloud-automation/app/",
         "htmlFile": "cloud_automation.html",
@@ -62,10 +62,26 @@
         },
         "images": ["not_available_image_cloud_automation.png"]
     },
-        "jobPlanner": {
+    "jobPlanner1": {
         "isAvailable": true,
-        "name": "Job planner portal",
-        "nameForUrl": "job-planner-portal",
+        "name": "Job Planner",
+        "nameForUrl": "job-planner-calendar-def",
+        "appFolder": "job-planner-portal/app/",
+        "htmlFile": "execution_calendars.html",
+        "jsFiles": ["scripts/execution-calendars-rest.js"],
+        "angularModuleName": "ec-rest",
+        "cssFile": "portal_custom_style.css",
+        "authenticate": true,
+        "initFunction": {
+            "functionName": "initJobPlannerEC",
+            "services": ["ExecutionCalendarsService"]
+        }
+    },
+    "jobPlanner2": {
+        "isAvailable": true,
+        "isSubSubview": true,
+        "name": "Workflow Association",
+        "nameForUrl": "job-planner-calendar-def-workflows",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "template.html",
         "notAvailablePage": "page_not_available_template.html",
@@ -76,7 +92,6 @@
         "initFunction": {
             "functionName": "initJobPlanner",
             "services": ["JobPlannerService"]
-        },
-        "images": ["not_available_image_cloud_automation.png"]
+        }
     }
 }

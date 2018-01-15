@@ -38,7 +38,8 @@
     "angular-filter": "^0.5.15",
     "icheck": "^1.0.2",
     "jquery-slimscroll": "^1.3.8",
-    "angular-css": "^1.0.8"
+    "angular-css": "^1.0.8",
+    "angular-cron-gen": "^0.0.26"
   },
   "resolutions": {
     "jquery": "~2.1.4",

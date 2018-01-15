@@ -268,9 +268,15 @@ module.exports = function (grunt) {
                                 var cnt = 0;
                                 for (var key in subviewsDefinition) {
                                     cnt++;
-                                    result += '\n<li ui-sref-active="active">'
-                                        + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66"><i class="fa fa-desktop"></i> <span class="nav-label">'
-                                        + subviewsDefinition[key].name + '</span> </a>\n</li>';
+                                    if (!subviewsDefinition[key].isSubSubview) {
+                                        result += '\n<li ui-sref-active="active">'
+                                            + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66"><i class="fa fa-desktop"></i> <span class="nav-label">'
+                                            + subviewsDefinition[key].name+ '</span> </a>\n</li>';
+                                    } else {
+                                        result += '\n<li ui-sref-active="active">'
+                                            + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66; padding-left: 45px; padding-top: 0px;"><span class="nav-label">'
+                                            + subviewsDefinition[key].name+ '</span> </a>\n</li>';
+                                    }
                                 }
                                 result = '<!-- beginSubviews-->' + result + '\n<!-- endSubviews-->';
                                 return result;
