@@ -79,7 +79,7 @@ function config($stateProvider, $urlRouterProvider) {
             templateUrl: 'notification-portal/views/minor.html',
             css: 'notification-portal/styles/notifportal_custom_style.css',
             authenticate: true,
-           })
+        })
 
         .state('portal.subview5', {
             url: '/job-planner-portal',
