@@ -64,8 +64,8 @@
     },
     "jobPlanner1": {
         "isAvailable": true,
-        "name": "Calendar Definitions",
-        "nameForUrl": "job-planner-portal",
+        "name": "Job Planner",
+        "nameForUrl": "job-planner-calendar-def",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "execution_calendars.html",
         "jsFiles": ["scripts/execution-calendars-rest.js"],
@@ -73,25 +73,25 @@
         "cssFile": "portal_custom_style.css",
         "authenticate": true,
         "initFunction": {
-            "functionName": "initJobPlanner",
+            "functionName": "initJobPlannerEC",
             "services": ["ExecutionCalendarsService"]
         }
     },
     "jobPlanner2": {
-      "isAvailable": true,
-      "name": "Calendar Definitions - Workflows",
-      "nameForUrl": "job-planner-portal",
-      "appFolder": "job-planner-portal/app/",
-      "htmlFile": "template.html",
-      "notAvailablePage": "page_not_available_template.html",
-      "jsFiles": ["scripts/template-rest.js"],
-      "angularModuleName": "template-rest",
-      "cssFile": "portal_custom_style.css",
-      "authenticate": true,
-      "initFunction": {
-        "functionName": "initJobPlanner",
-        "services": ["JobPlannerService"]
-      },
-      "images": ["not_available_image_cloud_automation.png"]
+        "isAvailable": true,
+        "isSubSubview": true,
+        "name": "Calendar Definitions Workflows Association",
+        "nameForUrl": "job-planner-calendar-def-workflows",
+        "appFolder": "job-planner-portal/app/",
+        "htmlFile": "template.html",
+        "notAvailablePage": "page_not_available_template.html",
+        "jsFiles": ["scripts/template-rest.js"],
+        "angularModuleName": "template-rest",
+        "cssFile": "portal_custom_style.css",
+        "authenticate": true,
+        "initFunction": {
+            "functionName": "initJobPlanner",
+            "services": ["JobPlannerService"]
+        }
     }
 }
