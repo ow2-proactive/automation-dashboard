@@ -10,7 +10,7 @@ function getSessionId() {
 
 // ---------- Utilities -----------
 function getProperties ($http, $location) {
-    $http.get('resources/config.json')
+    return $http.get('resources/config.json')
         .success(function (response) {
             var pcaServiceUrl = angular.toJson(response.confServer.pcaServiceUrl, true);
             var schedulerRestUrl = angular.toJson(response.confServer.schedulerRestUrl, true);
@@ -41,16 +41,14 @@ function getProperties ($http, $location) {
         });
 }
 
-var isSessionValide = function ($http, sessionId) {
-    if (localStorage['rmRestUrl']) {
-        return $http.get(rmRestUrl + "logins/sessionid/" + sessionId + "/userdata/").then(function(result){
-            return result.data !=""
+var isSessionValide = function ($http, sessionId, $location) {
+    return getProperties($http, $location).then(function () {
+        var rmRestUrl = localStorage['rmRestUrl'];
+        var userDataUrl = JSON.parse(rmRestUrl) + "logins/sessionid/" + sessionId + "/userdata/";
+        return $http.get(userDataUrl).then(function(result) {
+            return result.data !="";
         });
-    }
-    else {
-        console.log("sessionid is not valid");
-        return false;
-    }
+    });
 };
 
 
