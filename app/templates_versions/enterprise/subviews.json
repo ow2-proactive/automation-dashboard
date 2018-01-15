@@ -80,7 +80,7 @@
     "jobPlanner2": {
         "isAvailable": true,
         "isSubSubview": true,
-        "name": "Calendar Definitions Workflows Association",
+        "name": "Workflow Association",
         "nameForUrl": "job-planner-calendar-def-workflows",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "template.html",
