@@ -79,6 +79,22 @@ function config($stateProvider, $urlRouterProvider) {
             templateUrl: 'notification-portal/views/minor.html',
             css: 'notification-portal/styles/notifportal_custom_style.css',
             authenticate: true,
+           })
+
+        .state('portal.subview5', {
+            url: '/job-planner-portal',
+            data: {
+                pageTitle: 'Job planner portal'
+            },
+            templateUrl: 'views/job-planner-portal/template.html',
+            css: 'styles/job-planner-portal/portal_custom_style.css',
+            authenticate: true,
+            onEnter: function(JobPlannerService) {
+                initJobPlanner(JobPlannerService);
+            },
+            onExit: function($rootScope) {
+                $rootScope.$broadcast('event:StopRefreshing');
+            }
         });
     //endSubviewsStates
 

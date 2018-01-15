@@ -15,7 +15,7 @@
         'app-rest',
         'wcp-rest',
         'ns-rest',
-        'template-rest'
+        'template-rest',
         //endSubviewsModules
         'angularCSS'
     ])
