@@ -79,6 +79,22 @@ function config($stateProvider, $urlRouterProvider) {
             templateUrl: 'notification-portal/views/minor.html',
             css: 'notification-portal/styles/notifportal_custom_style.css',
             authenticate: true,
+           })
+
+        .state('portal.subview5', {
+            url: '/job-planner-portal',
+            data: {
+                pageTitle: 'Job planner portal'
+            },
+            templateUrl: 'views/job-planner-portal/template.html',
+            css: 'styles/job-planner-portal/portal_custom_style.css',
+            authenticate: true,
+            onEnter: function(JobPlannerService) {
+                initJobPlanner(JobPlannerService);
+            },
+            onExit: function($rootScope) {
+                $rootScope.$broadcast('event:StopRefreshing');
+            }
         });
     //endSubviewsStates
 
@@ -107,10 +123,13 @@ angular
     .module('inspinia')
     .run(function($rootScope, $state, $http, $location) {
         $rootScope.$on('$locationChangeStart', function(event) {
-            if (!localStorage['pcaServiceUrl'] || !localStorage['schedulerRestUrl'] || !localStorage['notificationServiceUrl'] ||
-                !localStorage['catalogServiceUrl'] || !localStorage['appCatalogWorkflowsUrl'] || !localStorage['appCatalogBucketsUrl'] || !localStorage['configViews'])
+            if (!localStorage['pcaServiceUrl'] || !localStorage['schedulerRestUrl'] ||
+                !localStorage['notificationServiceUrl'] || !localStorage['catalogServiceUrl'] ||
+                !localStorage['appCatalogWorkflowsUrl'] || !localStorage['appCatalogBucketsUrl'] ||
+                !localStorage['configViews'] || !localStorage['rmRestUrl']) {
                 getProperties($http, $location);
-            var myDataPromise = isSessionValide($http, getSessionId());
+            }
+            var myDataPromise = isSessionValide($http, getSessionId(), $location);
             myDataPromise.then(function(result) {
                 if (!result && $location.$$url != '/login') {
                     event.preventDefault();

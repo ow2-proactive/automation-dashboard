@@ -62,9 +62,9 @@
         },
         "images": ["not_available_image_cloud_automation.png"]
     },
-    "jobPlanner": {
+    "jobPlanner1": {
         "isAvailable": true,
-        "name": "Job planner portal",
+        "name": "Calendar Definitions",
         "nameForUrl": "job-planner-portal",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "execution_calendars.html",
@@ -76,5 +76,22 @@
             "functionName": "initJobPlanner",
             "services": ["ExecutionCalendarsService"]
         }
+    },
+    "jobPlanner2": {
+      "isAvailable": true,
+      "name": "Calendar Definitions - Workflows",
+      "nameForUrl": "job-planner-portal",
+      "appFolder": "job-planner-portal/app/",
+      "htmlFile": "template.html",
+      "notAvailablePage": "page_not_available_template.html",
+      "jsFiles": ["scripts/template-rest.js"],
+      "angularModuleName": "template-rest",
+      "cssFile": "portal_custom_style.css",
+      "authenticate": true,
+      "initFunction": {
+        "functionName": "initJobPlanner",
+        "services": ["JobPlannerService"]
+      },
+      "images": ["not_available_image_cloud_automation.png"]
     }
 }

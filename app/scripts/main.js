@@ -10,10 +10,11 @@ function getSessionId() {
 
 // ---------- Utilities -----------
 function getProperties ($http, $location) {
-    $http.get('resources/config.json')
+    return $http.get('resources/config.json')
         .success(function (response) {
             var pcaServiceUrl = angular.toJson(response.confServer.pcaServiceUrl, true);
             var schedulerRestUrl = angular.toJson(response.confServer.schedulerRestUrl, true);
+            var rmRestUrl = angular.toJson(response.confServer.rmRestUrl, true);
             var notificationServiceUrl = angular.toJson(response.confServer.notificationServiceUrl, true);
             var catalogServiceUrl = angular.toJson(response.confServer.catalogServiceUrl, true);
             var cloudAutomationQueryPeriod = angular.toJson(response.cloudAutomationQueryPeriod, true);
@@ -25,6 +26,7 @@ function getProperties ($http, $location) {
 
             localStorage['pcaServiceUrl'] = pcaServiceUrl;
             localStorage['schedulerRestUrl'] = schedulerRestUrl;
+            localStorage['rmRestUrl'] = rmRestUrl;
             localStorage['notificationServiceUrl'] = notificationServiceUrl;
             localStorage['catalogServiceUrl'] = catalogServiceUrl;
             localStorage['workflowCatalogPortalQueryPeriod'] = workflowCatalogPortalQueryPeriod;
@@ -39,9 +41,13 @@ function getProperties ($http, $location) {
         });
 }
 
-var isSessionValide = function ($http, sessionId) {
-    return $http.get("http://localhost:8080/rest/rm/logins/sessionid/" + sessionId + "/userdata/").then(function(result){
-        return result.data !=""
+var isSessionValide = function ($http, sessionId, $location) {
+    return getProperties($http, $location).then(function () {
+        var rmRestUrl = localStorage['rmRestUrl'];
+        var userDataUrl = JSON.parse(rmRestUrl) + "logins/sessionid/" + sessionId + "/userdata/";
+        return $http.get(userDataUrl).then(function(result) {
+            return result.data !="";
+        });
     });
 };
 
