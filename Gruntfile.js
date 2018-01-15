@@ -270,7 +270,7 @@ module.exports = function (grunt) {
                                     cnt++;
                                     result += '\n<li ui-sref-active="active">'
                                         + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66"><i class="fa fa-desktop"></i> <span class="nav-label">'
-                                        + subviewsDefinition[key].name + '</span> </a>\n</li>';
+                                        + subviewsDefinition[key].name+ '</span> </a>\n</li>';
                                 }
                                 result = '<!-- beginSubviews-->' + result + '\n<!-- endSubviews-->';
                                 return result;
