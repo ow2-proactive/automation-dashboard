@@ -70,12 +70,12 @@
         "htmlFile": "template.html",
         "notAvailablePage": "page_not_available_template.html",
         "jsFiles": ["scripts/template-rest.js"],
-        "angularModuleName": "pca-rest",
+        "angularModuleName": "template-rest",
         "cssFile": "portal_custom_style.css",
         "authenticate": true,
         "initFunction": {
-            "functionName": "initServiceAutomation",
-            "services": ["SchedulerService", "PCACatalogService", "PCAProcessService", "PCARunningServicesService", "PCANodeSourcesService"]
+            "functionName": "initJobPlanner",
+            "services": ["JobPlannerService"]
         },
         "images": ["not_available_image_cloud_automation.png"]
     }
