@@ -12,5 +12,5 @@
 	branch = master
 [submodule "job-planner-portal"]
 	path = job-planner-portal
-	url = https://zeineb1904@bitbucket.org/activeeon/job-planner-portal.git
+	url = git@bitbucket.org:activeeon/job-planner-portal.git
 	branch = master
