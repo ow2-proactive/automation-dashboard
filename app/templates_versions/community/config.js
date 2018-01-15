@@ -131,7 +131,6 @@ angular
             }
             var myDataPromise = isSessionValide($http, getSessionId(), $location);
             myDataPromise.then(function(result) {
-                console.log("isSessionValide ? " + result);
                 if (!result && $location.$$url != '/login') {
                     event.preventDefault();
                     $rootScope.$broadcast('event:StopRefreshing');

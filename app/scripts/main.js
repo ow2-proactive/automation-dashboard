@@ -42,10 +42,8 @@ function getProperties ($http, $location) {
 }
 
 var isSessionValide = function ($http, sessionId, $location) {
-    console.log("rmRestUrl before=" + localStorage['rmRestUrl']);
     return getProperties($http, $location).then(function () {
         var rmRestUrl = localStorage['rmRestUrl'];
-        console.log("rmRestUrl after=" + rmRestUrl);
         var userDataUrl = JSON.parse(rmRestUrl) + "logins/sessionid/" + sessionId + "/userdata/";
         return $http.get(userDataUrl).then(function(result) {
             return result.data !="";
