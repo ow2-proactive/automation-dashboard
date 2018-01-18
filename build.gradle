@@ -4,25 +4,20 @@ apply plugin: 'com.moowork.grunt'
 apply plugin: 'com.moowork.node'
 apply from: "$rootDir/gradle/ext/coding-format.gradle"
 
+
 group = 'org.ow2.proactive'
 version = proactiveDashboardVersion
 
-repositories {
-    mavenLocal()
-}
 
-uploadArchives {
-    repositories {
-        mavenDeployer {
-            snapshotRepository(url: "http://repository.activeeon.com/content/repositories/snapshots/") {
-                authentication(userName: "${System.getProperty('nexusUsername')}",
-                        password: "${System.getProperty('nexusPassword')}")
-            }
-            repository(url: "http://repository.activeeon.com/content/repositories/releases/") {
-                authentication(userName: "${System.getProperty('nexusUsername')}",
-                        password: "${System.getProperty('nexusPassword')}")
-            }
-        }
+// Configure the maven repository deployment
+install {
+    repositories.mavenInstaller {
+        // Set the version
+        pom.version = proactiveDashboardVersion
+        // Set the group/namespace for the maven repository deployment.
+        pom.groupId = 'org.ow2.proactive'
+        // Give the artifact a 'base name' (The version is added to the 'base name')
+        pom.artifactId = 'automation-dashboard'
     }
 }
 
@@ -68,6 +63,25 @@ grunt {
 
     // Whether output from Grunt should be buffered - useful when running tasks in parallel
     bufferOutput = false
+}
+
+repositories {
+    mavenLocal()
+}
+
+uploadArchives {
+    repositories {
+        mavenDeployer {
+            snapshotRepository(url: "http://repository.activeeon.com/content/repositories/snapshots/") {
+                authentication(userName: "${System.getProperty('nexusUsername')}",
+                        password: "${System.getProperty('nexusPassword')}")
+            }
+            repository(url: "http://repository.activeeon.com/content/repositories/releases/") {
+                authentication(userName: "${System.getProperty('nexusUsername')}",
+                        password: "${System.getProperty('nexusPassword')}")
+            }
+        }
+    }
 }
 
 task packageDist(type: Zip) {
@@ -143,6 +157,3 @@ buildscript {
         ant.unjar src: configurations.classpath.find { it.name.startsWith("coding-rules") }, dest: 'gradle/ext'
     }
 }
-
-apply from: "$rootDir/gradle/ext/coding-format.gradle"
-
