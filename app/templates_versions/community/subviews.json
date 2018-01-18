@@ -66,7 +66,7 @@
         },
         "images": ["not_available_image_cloud_automation.png"]
     },
-    "jobPlanner1": {
+    "job-planner": {
         "isAvailable": true,
         "name": "Job Planner (alpha)",
         "nameForUrl": "job-planner-calendar-def",
@@ -81,7 +81,7 @@
             "services": ["ExecutionCalendarsService"]
         }
     },
-    "jobPlanner2": {
+    "calendar-associations": {
         "isAvailable": true,
         "isSubSubview": true,
         "name": "Calendar Associations",
@@ -98,7 +98,7 @@
             "services": ["JobPlannerService"]
         }
     },
-    "jobPlanner3": {
+    "execution-planning": {
         "isAvailable": true,
         "isSubSubview": true,
         "name": "Execution Planning",
