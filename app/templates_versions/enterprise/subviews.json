@@ -97,5 +97,18 @@
             "functionName": "initJobPlanner",
             "services": ["JobPlannerService"]
         }
+    },
+    "jobPlanner3": {
+        "isAvailable": true,
+        "isSubSubview": true,
+        "name": "Execution Planning",
+        "nameForUrl": "job-planner-execution-planning",
+        "appFolder": "job-planner-portal/app/",
+        "htmlFile": "execution_planning.html",
+        "notAvailablePage": "page_not_available_template.html",
+        "jsFiles": ["scripts/execution-planning-rest.js"],
+        "angularModuleName": "execution-planning-rest",
+        "cssFile": "portal_custom_style.css",
+        "authenticate": true
     }
 }
