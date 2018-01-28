@@ -4,7 +4,8 @@
   "schedulerRestUrl": "/rest/scheduler/",
   "rmRestUrl": "/rest/rm/",
   "notificationServiceUrl": "/notification-service/",
-  "catalogServiceUrl": "/catalog/"
+  "catalogServiceUrl": "/catalog/",
+  "jobPlannerServiceUrl": "/job-planner/"
 },
 "view": [{
   "viewname": "Workflow Automation",
