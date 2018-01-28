@@ -96,7 +96,8 @@
         "initFunction": {
             "functionName": "initJobPlanner",
             "services": ["JobPlannerService"]
-        }
+        },
+        "images": ["orange-number-1-16.png", "orange-number-2-16.png", "orange-number-3-16.png"]
     },
     "execution-planning": {
         "isAvailable": true,
