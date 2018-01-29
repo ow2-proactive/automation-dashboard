@@ -3,6 +3,7 @@
   "version": "2.7.1",
   "description": "INSPINIA - Responsive Admin Theme",
   "dependencies": {
+    "activeeon-proactive-catalog-client-javascript": "^7.35.0-SNAPSHOT-1516831347",
     "grunt": "^0.4.5"
   },
   "devDependencies": {
