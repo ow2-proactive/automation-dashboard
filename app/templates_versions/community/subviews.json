@@ -72,13 +72,13 @@
         "nameForUrl": "job-planner-calendar-def",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "execution_calendars.html",
-        "jsFiles": ["scripts/execution-calendars-rest.js"],
+        "jsFiles": ["scripts/factory/jppRestService.js", "scripts/execution-calendars-rest.js"],
         "angularModuleName": "ec-rest",
         "cssFile": "portal_custom_style.css",
         "authenticate": true,
         "initFunction": {
             "functionName": "initJobPlannerEC",
-            "services": ["ExecutionCalendarsService"]
+            "services": ["JobPlannerRestService"]
         }
     },
     "calendar-associations": {
