@@ -23,6 +23,7 @@ function getProperties ($http, $location) {
             var jobPlannerQueryPeriod = angular.toJson(response.jobPlannerQueryPeriod, true);
             var appCatalogBucketsUrl =angular.toJson(response.confServer.catalogServiceUrl+"/buckets/?kind=workflow", true);
             var appCatalogWorkflowsUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port() + "/catalog/buckets/" + response.view[0].catalog.bucketName + "/resources");
+            var jobPlannerServiceUrl = angular.toJson(response.confServer.jobPlannerServiceUrl, true);
             var configViews = angular.toJson(response.view, true);
 
             localStorage['pcaServiceUrl'] = pcaServiceUrl;
@@ -37,6 +38,7 @@ function getProperties ($http, $location) {
             localStorage['appCatalogWorkflowsUrl'] = appCatalogWorkflowsUrl;
             localStorage['appCatalogBucketsUrl'] = appCatalogBucketsUrl;
             localStorage['configViews'] = configViews;
+            localStorage['jobPlannerServiceUrl'] = jobPlannerServiceUrl;
         })
         .error(function (response) {
             console.error('LoadingPropertiesService $http.get error', status, response);
