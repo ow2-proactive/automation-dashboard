@@ -323,7 +323,7 @@ module.exports = function (grunt) {
                 files: [
                     {
                         flatten: true,
-                        src: ['<%= inspinia.app %>/templates_versions/<%= inspinia.version %>/config.js'],
+                        src: ['<%= inspinia.app %>/templates_versions/common/config.js'],
                         dest: '<%= inspinia.app %>/scripts/config.js'
                     },
                     {
@@ -334,12 +334,12 @@ module.exports = function (grunt) {
                     },
                     {
                         flatten: true,
-                        src: ['<%= inspinia.app %>/templates_versions/<%= inspinia.version %>/app.js'],
+                        src: ['<%= inspinia.app %>/templates_versions/common/app.js'],
                         dest: '<%= inspinia.app %>/scripts/app.js'
                     },
                     {
                         flatten: true,
-                        src: ['<%= inspinia.app %>/templates_versions/<%= inspinia.version %>/index.html'],
+                        src: ['<%= inspinia.app %>/templates_versions/common/index.html'],
                         dest: '<%= inspinia.app %>/index.html'
                     },
                 ]
