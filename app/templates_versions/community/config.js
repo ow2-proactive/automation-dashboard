@@ -28,25 +28,31 @@ function config($stateProvider, $urlRouterProvider) {
 
         //beginSubviewsStates
         .state('portal.subview1', {
-            url: '/cloud-automation',
+            url: '/workflow-automation',
             data: {
-                pageTitle: 'Cloud automation'
+                pageTitle: 'Workflow Automation'
             },
-            templateUrl: 'cloud-automation/views/page_not_available_cloud_automation.html',
-            authenticate: false,
+            templateUrl: 'views/workflow-automation/wf_automation.html',
+            css: 'styles/workflow-automation/portal_custom_style.css',
+            authenticate: true,
+            onEnter: function(WFASchedulerService, WFACatalog) {
+                initWorkflowAutomation(WFASchedulerService, WFACatalog);
+            },
+            onExit: function($rootScope) {
+                $rootScope.$broadcast('event:StopRefreshing');
+            }
         })
 
         .state('portal.subview2', {
-            url: '/workflow-automation',
+            url: '/notification-portal',
             data: {
-                pageTitle: 'Workflow automation'
+                pageTitle: 'Notification Service'
             },
-            title: 'Workflow automation',
-            templateUrl: 'workflow-automation/views/minor.html',
-            css: 'workflow-automation/styles/portal_custom_style.css',
+            templateUrl: 'views/notification-portal/ns-view.html',
+            css: 'styles/notification-portal/notifportal_custom_style.css',
             authenticate: true,
-            onEnter: function(APPSchedulerService, APPCatalog) {
-                initWorkflowAutomation(APPSchedulerService, APPCatalog);
+            onEnter: function(NotificationService) {
+                initNotificationPortal(NotificationService);
             },
             onExit: function($rootScope) {
                 $rootScope.$broadcast('event:StopRefreshing');
@@ -56,11 +62,10 @@ function config($stateProvider, $urlRouterProvider) {
         .state('portal.subview3', {
             url: '/workflow-catalog',
             data: {
-                pageTitle: 'Workflow catalog'
+                pageTitle: 'Workflow Catalog'
             },
-            title: 'Workflow catalog',
-            templateUrl: 'workflow-catalog/views/workflow_catalog.html',
-            css: 'workflow-catalog/styles/wcportal_custom_style.css',
+            templateUrl: 'views/workflow-catalog/workflow_catalog.html',
+            css: 'styles/workflow-catalog/wcportal_custom_style.css',
             authenticate: true,
             onEnter: function(WorkflowCatalogService) {
                 initWorkflowCatalog(WorkflowCatalogService);
@@ -71,23 +76,37 @@ function config($stateProvider, $urlRouterProvider) {
         })
 
         .state('portal.subview4', {
-            url: '/notification-portal',
+            url: '/cloud-automation',
             data: {
-                pageTitle: 'Notification portal'
+                pageTitle: 'Cloud Automation'
             },
-            title: 'Notification portal',
-            templateUrl: 'notification-portal/views/minor.html',
-            css: 'notification-portal/styles/notifportal_custom_style.css',
-            authenticate: true,
+            templateUrl: 'views/cloud-automation/page_not_available_cloud_automation.html',
+            authenticate: false,
         })
 
         .state('portal.subview5', {
-            url: '/job-planner-portal',
+            url: '/job-planner-calendar-def',
             data: {
-                pageTitle: 'Job planner portal'
+                pageTitle: 'Job Planner (alpha)'
             },
-            templateUrl: 'views/job-planner-portal/template.html',
-            css: 'styles/job-planner-portal/portal_custom_style.css',
+            templateUrl: 'views/job-planner-calendar-def/execution_calendars.html',
+            css: 'styles/job-planner-calendar-def/portal_custom_style.css',
+            authenticate: true,
+            onEnter: function(ExecutionCalendarsService) {
+                initJobPlannerEC(ExecutionCalendarsService);
+            },
+            onExit: function($rootScope) {
+                $rootScope.$broadcast('event:StopRefreshing');
+            }
+        })
+
+        .state('portal.subview6', {
+            url: '/job-planner-calendar-def-workflows',
+            data: {
+                pageTitle: 'Calendar Associations'
+            },
+            templateUrl: 'views/job-planner-calendar-def-workflows/template.html',
+            css: 'styles/job-planner-calendar-def-workflows/portal_custom_style.css',
             authenticate: true,
             onEnter: function(JobPlannerService) {
                 initJobPlanner(JobPlannerService);
@@ -95,6 +114,16 @@ function config($stateProvider, $urlRouterProvider) {
             onExit: function($rootScope) {
                 $rootScope.$broadcast('event:StopRefreshing');
             }
+        })
+
+        .state('portal.subview7', {
+            url: '/job-planner-execution-planning',
+            data: {
+                pageTitle: 'Execution Planning'
+            },
+            templateUrl: 'views/job-planner-execution-planning/execution_planning.html',
+            css: 'styles/job-planner-execution-planning/portal_custom_style.css',
+            authenticate: true,
         });
     //endSubviewsStates
 
