@@ -221,6 +221,22 @@ module.exports = function (grunt) {
                 files: (function () {
                     return listSubviewsDefinition(enterpriseConfigPath);
                 })()
+            },
+            modifiedSubviews: {
+                files: [
+                    {
+                        src: ['<%= inspinia.app %>/templates_versions/<%= inspinia.version %>/config.js'],
+                        dest: '<%= inspinia.app %>/scripts/config.js'
+                    },
+                    {
+                        src: ['<%= inspinia.app %>/templates_versions/<%= inspinia.version %>/app.js'],
+                        dest: '<%= inspinia.app %>/scripts/app.js'
+                    },
+                    {
+                        src: ['<%= inspinia.app %>/templates_versions/<%= inspinia.version %>/index.html'],
+                        dest: '<%= inspinia.app %>/index.html'
+                    }
+                ]
             }
         },
         // Configure files specific to the version
@@ -324,7 +340,7 @@ module.exports = function (grunt) {
                     {
                         flatten: true,
                         src: ['<%= inspinia.app %>/templates_versions/<%= inspinia.version %>/config.js'],
-                        dest: '<%= inspinia.app %>/scripts/config.js'
+                        dest: '<%= inspinia.app %>/templates_versions/<%= inspinia.version %>/config.js'
                     },
                     {
                         expand: true,
@@ -335,12 +351,12 @@ module.exports = function (grunt) {
                     {
                         flatten: true,
                         src: ['<%= inspinia.app %>/templates_versions/<%= inspinia.version %>/app.js'],
-                        dest: '<%= inspinia.app %>/scripts/app.js'
+                        dest: '<%= inspinia.app %>/templates_versions/<%= inspinia.version %>/app.js'
                     },
                     {
                         flatten: true,
                         src: ['<%= inspinia.app %>/templates_versions/<%= inspinia.version %>/index.html'],
-                        dest: '<%= inspinia.app %>/index.html'
+                        dest: '<%= inspinia.app %>/templates_versions/<%= inspinia.version %>/index.html'
                     },
                 ]
             }
@@ -406,6 +422,7 @@ module.exports = function (grunt) {
         'clean:dist',
         'replace',
         'jsbeautifier',
+        'copy:modifiedSubviews',
         'less',
         'useminPrepare',
         'concat',

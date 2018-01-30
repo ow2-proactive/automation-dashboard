@@ -12,10 +12,12 @@
         //See 'replace' task in Gruntfile.js and subviews definition in enterpriseSubviews.json.
 
         //beginSubviewsModules
-        'app-rest',
-        'wcp-rest',
+        'wfa-rest',
         'ns-rest',
+        'wcp-rest',
+        'ec-rest',
         'template-rest',
+        'execution-planning-rest',
         //endSubviewsModules
         'angularCSS'
     ])
