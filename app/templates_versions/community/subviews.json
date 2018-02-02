@@ -110,5 +110,9 @@
         "angularModuleName": "execution-planning-rest",
         "cssFile": "portal_custom_style.css",
         "authenticate": true
+    },
+    "initFunction": {
+        "functionName": "initJobPlannerEP",
+        "services": ["JobPlannerRestService"]
     }
 }
