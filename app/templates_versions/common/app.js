@@ -9,6 +9,7 @@
             'main',
             'angular-cron-gen',
             'moment-picker',
+            'mwl.calendar',
             //!DO NOT EDIT! The following code related to subviews is automatically generated with grunt build. You can't modify it from here.
             //See 'replace' task in Gruntfile.js and subviews definition in enterpriseSubviews.json.
 
@@ -21,5 +22,8 @@
             momentPickerProvider.options({
                 minutesFormat: 'HH:mm'
             });
+        }])
+        .config(['calendarConfig', function(calendarConfig) {
+            calendarConfig.allDateFormats.moment.date.hour = 'HH:mm';
         }])
 })();
