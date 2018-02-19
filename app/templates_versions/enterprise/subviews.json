@@ -68,7 +68,7 @@
     },
     "job-planner": {
         "isAvailable": true,
-        "name": "Job Planner (alpha)",
+        "name": "Job Planner (beta)",
         "nameForUrl": "job-planner-calendar-def",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "execution_calendars.html",
