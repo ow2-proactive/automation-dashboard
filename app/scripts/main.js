@@ -121,6 +121,8 @@ mainCtrl.controller('navBarController', function ($scope, loadingConfigData){
 
 mainCtrl.controller('loginController', function ($scope, $state, MainService, $stateParams, $location) {
     $scope.redirectsTo = $stateParams.redirectsTo;
+    var host = $location.host();
+    $scope.showLinkAccountCreation =  (host === 'try.activeeon.com' || host === 'azure-try.activeeon.com');
     var username = getCookie('username');
     if (username == "null") {
         $scope.username = localStorage['pa.login'];
