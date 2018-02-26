@@ -1,11 +1,11 @@
-<div id="login-view">
+<div id="login-view"  ng-controller="loginController">
     <div class="login-container">
         <img src="styles/patterns/logo_350.png" class="login-logo-image"/>
 
         <div class="login-header-container">
             <div class="login-header">ProActive Automation Dashboard <span class="login-font-normal">login</span></div>
 
-            <div ng-controller="loginController" class="login-form-container">
+            <div class="login-form-container">
 
                 <form action="/" class="form-horizontal" id="login-form">
 
@@ -25,7 +25,7 @@
 
                     <div class="form-group">
                         <div class="buttons-container">
-                           <button type="button" class="btn btn-primary pull-right" ng-click="login()">Connect</button>
+                           <button type="button" class="btn btn-primary" ng-click="login()">Connect</button>
                         </div>
                     </div>
 
@@ -34,5 +34,6 @@
             </div>
 
         </div>
+        <a ng-if="showLinkAccountCreation" href="https://www.activeeon.com/register/web-download" target="_blank">Or create an account</a>
     </div>
 </div>
