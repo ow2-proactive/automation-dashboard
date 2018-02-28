@@ -6,8 +6,15 @@
                 <img src="styles/patterns/icon-proactive-medium.png" style="height:50px; padding-left: 10px"> ProActive Automation Dashboard
             </li>
 
-            <li style="height:50px;margin-bottom: 3px;background: #F3F3F4;">
-                <!--Fake blank because the template has navigation panel for whole height-->
+            <li ui-sref-active="active" style="height:50px;margin-bottom: 3px;background: #F3F3F4;padding-top: 25px;">
+                <div class="dropdown" id="help-dropdown">
+                    <a href="javascript:void(0)" data-toggle="dropdown" style="color: #676a6c;padding-left: 10px;font-size: 14px;"> Help <b class="caret"></b></a>
+                    <ul class="dropdown-menu">
+                        <li><a class="pointer" target="_blank" href="https://www.activeeon.com/public_content/documentation/latest/user/ProActiveUserGuide.html#_user_job_planner_service"><i class="glyphicon glyphicon-book"></i> Job Planner Documentation</a></li>
+                        <li><a class="pointer" target="_blank" href="http://doc.activeeon.com/"><i class="glyphicon glyphicon-book"></i> ProActive General Documentation</a></li>
+                        <li><a class="pointer" href="#" id="about-button"><i class="glyphicon glyphicon-question-sign"></i> About</a></li>
+                    </ul>
+                </div>
             </li>
 
             <!--!DO NOT EDIT! The following code related to subviews is automatically generated with grunt build. You can't modify it from here.
