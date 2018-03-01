@@ -1,39 +1,71 @@
-<nav class="navbar-default navbar-static-side" role="navigation">
-    <div class="sidebar-collapse" ng-controller="navBarController">
-        <ul side-navigation class="nav metismenu" id="side-menu">
+<div ng-controller="navBarController">
+    <nav class="navbar-default navbar-static-side" role="navigation">
+        <div class="sidebar-collapse">
+            <ul side-navigation class="nav metismenu" id="side-menu">
 
-            <li ui-sref-active="active" id="logo-navigation-item">
-                <img src="styles/patterns/icon-proactive-medium.png" style="height:50px; padding-left: 10px"> ProActive Automation Dashboard
-            </li>
+                <li ui-sref-active="active" id="logo-navigation-item">
+                    <img src="styles/patterns/icon-proactive-medium.png" style="height:50px; padding-left: 10px"> ProActive Automation Dashboard
+                </li>
 
-            <li ui-sref-active="active" style="height:50px;margin-bottom: 3px;background: #F3F3F4;padding-top: 25px;">
-                <div class="dropdown" id="help-dropdown">
-                    <a href="javascript:void(0)" data-toggle="dropdown" style="color: #676a6c;padding-left: 10px;font-size: 14px;"> Help <b class="caret"></b></a>
-                    <ul class="dropdown-menu">
-                        <li><a class="pointer" target="_blank" href="https://www.activeeon.com/public_content/documentation/latest/user/ProActiveUserGuide.html#_user_job_planner_service"><i class="glyphicon glyphicon-book"></i> Job Planner Documentation</a></li>
-                        <li><a class="pointer" target="_blank" href="http://doc.activeeon.com/"><i class="glyphicon glyphicon-book"></i> ProActive General Documentation</a></li>
-                        <li><a class="pointer" href="#" id="about-button"><i class="glyphicon glyphicon-question-sign"></i> About</a></li>
-                    </ul>
+                <li ui-sref-active="active" style="height:50px;margin-bottom: 3px;background: #F3F3F4;padding-top: 25px;">
+                    <div class="dropdown" id="help-dropdown">
+                        <a href="javascript:void(0)" data-toggle="dropdown" style="color: #676a6c;padding-left: 10px;font-size: 14px;"> Help <b class="caret"></b></a>
+                        <ul class="dropdown-menu">
+                            <li><a class="pointer" target="_blank" href="https://www.activeeon.com/public_content/documentation/latest/user/ProActiveUserGuide.html#_user_job_planner_service"><i class="glyphicon glyphicon-book"></i> Job Planner Documentation</a></li>
+                            <li><a class="pointer" target="_blank" href="http://doc.activeeon.com/"><i class="glyphicon glyphicon-book"></i> ProActive General Documentation</a></li>
+                            <li><a class="pointer" id="about-button" href ng-click="displayAbout()"><i class="glyphicon glyphicon-question-sign"></i> About</a></li>
+                        </ul>
+                    </div>
+                </li>
+
+                <!--!DO NOT EDIT! The following code related to subviews is automatically generated with grunt build. You can't modify it from here.
+                See 'replace' task in Gruntfile.js and subviews definition in enterpriseSubviews.json-->
+
+                <!-- beginSubviews-->
+                <li ui-sref-active="active">
+                    <a ui-sref="portal.subview1" style="background-color: #002d66"><i class="fa fa-desktop"></i> <span class="nav-label">Cloud automation</span> </a>
+                </li>
+                <li ui-sref-active="active">
+                    <a ui-sref="portal.subview2" style="background-color: #002d66"><i class="fa fa-desktop"></i> <span class="nav-label">Workflow automation</span> </a>
+                </li>
+                <li ui-sref-active="active">
+                    <a ui-sref="portal.subview3" style="background-color: #002d66"><i class="fa fa-desktop"></i> <span class="nav-label">Workflow catalog</span> </a>
+                </li>
+                <li ui-sref-active="active">
+                    <a ui-sref="portal.subview4" style="background-color: #002d66"><i class="fa fa-desktop"></i> <span class="nav-label">Notification portal</span> </a>
+                </li>
+                <!-- endSubviews-->
+            </ul>
+        </div>
+    </nav>
+
+    <div id="about-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                    <h3>ProActive Automation Dashboard</h3>
                 </div>
-            </li>
+                <div class="modal-body" style="height:100%">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <img src="images/about_115.png" style="height:100%;display:block;">
+                        </div>
+                        <div class="col-sm-9">
+                            <p>Version: <b> {{dashboardVersion}}</b></p>
+                            <p>Copyright (C) 1997-{{year}} INRIA/University of Nice-Sophia Antipolis/ActiveEon</p>
+                            <p>Visit <a target="_blank" href="http://proactive.inria.fr/">http://proactive.inria.fr/</a> and <a target="_blank" href="http://www.activeeon.com/">http://www.activeeon.com/</a></a>
+                            </p>
+                            <p>Contact: +33 (0)9 88 777 660, contact@activeeon.com</p>
+                            <p>REST server <a target="_blank" href="restUrl" id="restServer">{{restUrl}}</a></p>
+                            <p>REST version <b>{{dashboardVersion}}</b></p>
+                            <p>Proactive Dashboard version <b>{{dashboardVersion}}</b></p>
+                        </div>
+                    </div>
 
-            <!--!DO NOT EDIT! The following code related to subviews is automatically generated with grunt build. You can't modify it from here.
-            See 'replace' task in Gruntfile.js and subviews definition in enterpriseSubviews.json-->
+                </div>
 
-            <!-- beginSubviews-->
-            <li ui-sref-active="active">
-                <a ui-sref="portal.subview1" style="background-color: #002d66"><i class="fa fa-desktop"></i> <span class="nav-label">Cloud automation</span> </a>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="portal.subview2" style="background-color: #002d66"><i class="fa fa-desktop"></i> <span class="nav-label">Workflow automation</span> </a>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="portal.subview3" style="background-color: #002d66"><i class="fa fa-desktop"></i> <span class="nav-label">Workflow catalog</span> </a>
-            </li>
-            <li ui-sref-active="active">
-                <a ui-sref="portal.subview4" style="background-color: #002d66"><i class="fa fa-desktop"></i> <span class="nav-label">Notification portal</span> </a>
-            </li>
-            <!-- endSubviews-->
-        </ul>
+            </div>
+        </div>
     </div>
-</nav>
+</div>
