@@ -127,9 +127,10 @@ mainCtrl.controller('navBarController', function ($scope, $http){
             .error(function (response) {
                 $scope.dashboardVersion = "not available";
             });
-        var url = window.location.href;
-        var arr = url.split("/");
-        var result = arr[0] + "//" + arr[2] + "/rest";
+        var windowLocation = window.location;
+        var protocol = windowLocation.protocol;
+        var host = windowLocation.host;
+        var result = protocol + "//" + host + "/rest";
 
         $scope.restUrl = result;
         $scope.year = new Date().getFullYear();
