@@ -113,19 +113,24 @@ mainCtrl.factory('MainService', function ($http, $interval, $rootScope, $state) 
 // --------------- Controller -----------------
 
 // controller used in navigation.html :
-mainCtrl.controller('navBarController', function ($scope, loadingConfigData){
+mainCtrl.controller('navBarController', function ($scope, $http){
     $scope.view = JSON.parse(localStorage['configViews']);
     console.log($scope.view);
 
     $scope.displayAbout = function(){
+        $http.get('resources/config.json')
+            .success(function (response) {
+                $scope.dashboardVersion = response.proactiveDashboardVersion;
+            })
+            .error(function (response) {
+                $scope.dashboardVersion = "not available";
+            });
         var url = window.location.href;
         var arr = url.split("/");
         var result = arr[0] + "//" + arr[2] + "/rest";
 
-        $scope.dashboardVersion = "7.36.0-SNAPSHOT";
         $scope.restUrl = result;
         $scope.year = new Date().getFullYear();
-
         $('#about-modal').modal('show');
     }
 });
