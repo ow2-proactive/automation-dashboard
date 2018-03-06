@@ -115,10 +115,27 @@ mainCtrl.factory('MainService', function ($http, $interval, $rootScope, $state) 
 // --------------- Controller -----------------
 
 // controller used in navigation.html :
-mainCtrl.controller('navBarController', function ($scope, loadingConfigData){
-    console.log('config de navBarController:');
+mainCtrl.controller('navBarController', function ($scope, $http){
     $scope.view = JSON.parse(localStorage['configViews']);
     console.log($scope.view);
+
+    $scope.displayAbout = function(){
+        $http.get('resources/config.json')
+            .success(function (response) {
+                $scope.dashboardVersion = response.proactiveDashboardVersion;
+            })
+            .error(function (response) {
+                $scope.dashboardVersion = "not available";
+            });
+        var windowLocation = window.location;
+        var protocol = windowLocation.protocol;
+        var host = windowLocation.host;
+        var result = protocol + "//" + host + "/rest";
+
+        $scope.restUrl = result;
+        $scope.year = new Date().getFullYear();
+        $('#about-modal').modal('show');
+    }
 });
 
 mainCtrl.controller('loginController', function ($scope, $state, MainService, $stateParams, $location) {
