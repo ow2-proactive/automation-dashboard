@@ -25,6 +25,8 @@ module.exports = function (grunt) {
         var out = [];
         var subviewsDefinition = grunt.file.readJSON(configPath);
         for (var key in subviewsDefinition) {
+            if (subviewsDefinition[key].isSubMenuTitle)
+                continue;
             out.push({
                 expand: true,
                 cwd: subviewsDefinition[key].appFolder + '/styles/',
@@ -65,7 +67,7 @@ module.exports = function (grunt) {
                     dest: '<%= inspinia.dist %>/views/' + subviewsDefinition[key].nameForUrl
                 });
             }
-        };
+        }
         return out;
     }
 
@@ -235,6 +237,8 @@ module.exports = function (grunt) {
                                 var result = '';
                                 var cnt = 0;
                                 for (var key in subviewsDefinition) {
+                                    if (subviewsDefinition[key].isSubMenuTitle)
+                                        continue;
                                     cnt++;
                                     result += "\n.state('portal.subview" + cnt + "', {";
                                     result += "\nurl:'/" + subviewsDefinition[key].nameForUrl + "',";
@@ -267,14 +271,19 @@ module.exports = function (grunt) {
                                 var result = '';
                                 var cnt = 0;
                                 for (var key in subviewsDefinition) {
-                                    cnt++;
-                                    if (!subviewsDefinition[key].isSubSubview) {
+                                    if (subviewsDefinition[key].isSubMenuTitle) {
+                                        result += '\n<li ui-sref-active="active">'
+                                                + '<a href=".menu-item-'+subviewsDefinition[key].nameForUrl+'" style="background-color: #002d66" data-toggle="collapse">'
+                                                +'<i class="fa fa-chevron-down" style="margin-right: 6px;"></i> <span class="nav-label">'+subviewsDefinition[key].name+'</span> </a>';
+                                    } else if (subviewsDefinition[key].isSubMenuItem) {
+                                        cnt++;
+                                        result += '<li ui-sref-active="active" class="collapse in menu-item-'+subviewsDefinition[key].subMenuTitle+'">'
+                                                + '<a ui-sref="portal.subview'+ cnt +'" style="background-color: #002d66;padding-left: 45px; padding-top: 0px;"><span class="nav-label">'
+                                                + subviewsDefinition[key].name+'</span> </a> </li>';
+                                    } else {
+                                        cnt++;
                                         result += '\n<li ui-sref-active="active">'
                                             + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66"><i class="fa fa-desktop"></i> <span class="nav-label">'
-                                            + subviewsDefinition[key].name+ '</span> </a>\n</li>';
-                                    } else {
-                                        result += '\n<li ui-sref-active="active">'
-                                            + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66; padding-left: 45px; padding-top: 0px;"><span class="nav-label">'
                                             + subviewsDefinition[key].name+ '</span> </a>\n</li>';
                                     }
                                 }
@@ -288,7 +297,7 @@ module.exports = function (grunt) {
                             replacement: function () {
                                 var result = '';
                                 for (var key in subviewsDefinition) {
-                                    if (subviewsDefinition[key].isAvailable) {
+                                    if (subviewsDefinition[key].isAvailable && !subviewsDefinition[key].isSubMenuTitle) {
                                         result += "\n'" + subviewsDefinition[key].angularModuleName + "',";
                                     }
                                 }
@@ -303,7 +312,7 @@ module.exports = function (grunt) {
                                 var result = '';
                                 var includedScripts = [];
                                 for (var key in subviewsDefinition) {
-                                    if (subviewsDefinition[key].isAvailable) {
+                                    if (subviewsDefinition[key].isAvailable && !subviewsDefinition[key].isSubMenuTitle) {
                                         for (var scriptKey in subviewsDefinition[key].jsFiles) {
                                             var script = subviewsDefinition[key].jsFiles[scriptKey];
                                             if (includedScripts.indexOf(script) < 0) {
