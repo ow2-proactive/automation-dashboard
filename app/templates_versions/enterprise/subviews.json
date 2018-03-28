@@ -62,7 +62,7 @@
         "authenticate": true,
         "initFunction": {
             "functionName": "initServiceAutomation",
-            "services": ["SchedulerService", "PCACatalogService", "PCAProcessService", "PCARunningServicesService", "PCANodeSourcesService"]
+            "services": ["SchedulerService", "PCACatalogService", "PCARunningServicesService", "CloudAutomationWfCatalogService"]
         },
         "images": ["not_available_image_cloud_automation.png"]
     },
