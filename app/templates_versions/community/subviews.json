@@ -62,13 +62,21 @@
         "authenticate": true,
         "initFunction": {
             "functionName": "initServiceAutomation",
-            "services": ["SchedulerService", "PCACatalogService", "PCAProcessService", "PCARunningServicesService", "PCANodeSourcesService"]
+            "services": ["SchedulerService", "PCACatalogService", "PCARunningServicesService", "CloudAutomationWfCatalogService"]
         },
         "images": ["not_available_image_cloud_automation.png"]
     },
-    "job-planner": {
+    "job-planner-portal": {
         "isAvailable": true,
-        "name": "Job Planner (beta)",
+        "isSubMenuTitle": true,
+        "name": "Job Planner",
+        "nameForUrl": "job-planner-portal"
+    },
+    "calendar-definition": {
+        "isAvailable": true,
+        "isSubMenuItem": true,
+        "subMenuTitle": "job-planner-portal",
+        "name": "Calendar Definition",
         "nameForUrl": "job-planner-calendar-def",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "execution_calendars.html",
@@ -83,7 +91,8 @@
     },
     "calendar-associations": {
         "isAvailable": true,
-        "isSubSubview": true,
+        "isSubMenuItem": true,
+        "subMenuTitle": "job-planner-portal",
         "name": "Calendar Associations",
         "nameForUrl": "job-planner-calendar-def-workflows",
         "appFolder": "job-planner-portal/app/",
@@ -96,11 +105,13 @@
         "initFunction": {
             "functionName": "initJobPlanner",
             "services": ["JobPlannerService"]
-        }
+        },
+        "images": ["orange-number-1-16.png", "orange-number-2-16.png", "orange-number-3-16.png"]
     },
     "execution-planning": {
         "isAvailable": true,
-        "isSubSubview": true,
+        "isSubMenuItem": true,
+        "subMenuTitle": "job-planner-portal",
         "name": "Execution Planning",
         "nameForUrl": "job-planner-execution-planning",
         "appFolder": "job-planner-portal/app/",
@@ -109,10 +120,10 @@
         "jsFiles": ["scripts/execution-planning-rest.js"],
         "angularModuleName": "execution-planning-rest",
         "cssFile": "portal_custom_style.css",
-        "authenticate": true
-    },
-    "initFunction": {
-        "functionName": "initJobPlannerEP",
-        "services": ["JobPlannerRestService"]
+        "authenticate": true,
+        "initFunction": {
+            "functionName": "initJobPlannerEP",
+            "services": ["JobPlannerRestService"]
+        }
     }
 }

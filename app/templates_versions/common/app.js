@@ -25,5 +25,6 @@
         }])
         .config(['calendarConfig', function(calendarConfig) {
             calendarConfig.allDateFormats.moment.date.hour = 'HH:mm';
+            calendarConfig.showTimesOnWeekView = true;
         }])
 })();
