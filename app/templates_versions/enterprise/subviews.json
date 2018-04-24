@@ -62,15 +62,22 @@
         "name": "Calendar Associations",
         "nameForUrl": "job-planner-calendar-def-workflows",
         "appFolder": "job-planner-portal/app/",
-        "htmlFile": "calendar_association.html",
+        "htmlFile": "calendar-association/calendar_association.html",
+        "secondaryHtmlFiles": ["calendar-association/calendar_list.html"],
         "notAvailablePage": "page_not_available_calendar_association.html",
-        "jsFiles": ["scripts/calendar-association.js", "controllers/job-planner-controller.js", "services/job-planner-service.js"],
+        "jsFiles": ["scripts/calendar-association.js",
+            "services/catalog-service.js",
+            "components/calendar-list.component.js",
+            "controllers/job-planner-controller.js",
+            "services/job-planner-service.js",
+            "controllers/job-planner-controller.js"
+        ],
         "angularModuleName": "calendar-association",
         "cssFile": "portal_custom_style.css",
         "authenticate": true,
         "initFunction": {
             "functionName": "initJobPlanner",
-            "services": ["JobPlannerService"]
+            "services": ["JobPlannerService", "catalogService"]
         },
         "images": ["orange-number-1-16.png", "orange-number-2-16.png", "orange-number-3-16.png"]
     },
