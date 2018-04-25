@@ -5,7 +5,7 @@
         "nameForUrl": "workflow-automation",
         "appFolder": "cloud-automation/app/",
         "htmlFile": "wf_automation.html",
-        "secondaryHtmlFiles": "modals/submit_window_wf_automation.html",
+        "secondaryHtmlFiles": ["modals/submit_window_wf_automation.html"],
         "notAvailablePage": "page_not_available_wf_automation.html",
         "jsFiles": ["scripts/wf-automation-rest.js"],
         "angularModuleName": "wfa-rest",
@@ -14,22 +14,6 @@
         "initFunction": {
             "functionName": "initWorkflowAutomation",
             "services": ["WFASchedulerService", "WFACatalog"]
-        }
-    },
-    "notificationPortal": {
-        "isAvailable": true,
-        "name": "Notification Service",
-        "nameForUrl": "notification-portal",
-        "appFolder": "notification-portal/app/",
-        "htmlFile": "ns-view.html",
-        "notAvailablePage": "page_not_available.html",
-        "jsFiles": ["scripts/ns-rest.js"],
-        "angularModuleName": "ns-rest",
-        "cssFile": "notifportal_custom_style.css",
-        "authenticate": true,
-        "initFunction": {
-            "functionName": "initNotificationPortal",
-            "services": ["NotificationService"]
         }
     },
     "workflowCatalog": {
@@ -47,24 +31,6 @@
             "functionName": "initWorkflowCatalog",
             "services": ["WorkflowCatalogService"]
         }
-    },
-    "cloudAutomation": {
-        "isAvailable": false,
-        "name": "Cloud Automation",
-        "nameForUrl": "cloud-automation",
-        "appFolder": "cloud-automation/app/",
-        "htmlFile": "cloud_automation.html",
-        "secondaryHtmlFiles": "modals/submit_window_cloud_automation.html",
-        "notAvailablePage": "page_not_available_cloud_automation.html",
-        "jsFiles": ["scripts/cloud-automation-rest.js"],
-        "angularModuleName": "pca-rest",
-        "cssFile": "portal_custom_style.css",
-        "authenticate": true,
-        "initFunction": {
-            "functionName": "initServiceAutomation",
-            "services": ["SchedulerService", "PCACatalogService", "PCARunningServicesService", "CloudAutomationWfCatalogService"]
-        },
-        "images": ["not_available_image_cloud_automation.png"]
     },
     "job-planner-portal": {
         "isAvailable": true,
@@ -96,15 +62,22 @@
         "name": "Calendar Associations",
         "nameForUrl": "job-planner-calendar-def-workflows",
         "appFolder": "job-planner-portal/app/",
-        "htmlFile": "template.html",
-        "notAvailablePage": "page_not_available_template.html",
-        "jsFiles": ["scripts/template-rest.js"],
-        "angularModuleName": "template-rest",
+        "htmlFile": "calendar-association/calendar_association.html",
+        "secondaryHtmlFiles": ["calendar-association/calendar_list.html"],
+        "notAvailablePage": "page_not_available_calendar_association.html",
+        "jsFiles": ["scripts/calendar-association.js",
+            "services/catalog-service.js",
+            "components/calendar-list.component.js",
+            "controllers/job-planner-controller.js",
+            "services/job-planner-service.js",
+            "controllers/job-planner-controller.js"
+        ],
+        "angularModuleName": "calendar-association",
         "cssFile": "portal_custom_style.css",
         "authenticate": true,
         "initFunction": {
             "functionName": "initJobPlanner",
-            "services": ["JobPlannerService"]
+            "services": ["JobPlannerService", "catalogService"]
         },
         "images": ["orange-number-1-16.png", "orange-number-2-16.png", "orange-number-3-16.png"]
     },
@@ -124,6 +97,40 @@
         "initFunction": {
             "functionName": "initJobPlannerEP",
             "services": ["JobPlannerRestService"]
+        }
+    },
+    "cloudAutomation": {
+        "isAvailable": false,
+        "name": "Cloud Automation",
+        "nameForUrl": "cloud-automation",
+        "appFolder": "cloud-automation/app/",
+        "htmlFile": "cloud_automation.html",
+        "secondaryHtmlFiles": ["modals/submit_window_cloud_automation.html", "modals/service_instance_info_modal.html", "modals/service_instance_history_modal.html"],
+        "notAvailablePage": "page_not_available_cloud_automation.html",
+        "jsFiles": ["scripts/cloud-automation-rest.js"],
+        "angularModuleName": "pca-rest",
+        "cssFile": "portal_custom_style.css",
+        "authenticate": true,
+        "initFunction": {
+            "functionName": "initServiceAutomation",
+            "services": ["SchedulerService", "PCACatalogService", "PCARunningServicesService"]
+        },
+        "images": ["not_available_image_cloud_automation.png"]
+    },
+    "notificationPortal": {
+        "isAvailable": true,
+        "name": "Notification Service",
+        "nameForUrl": "notification-portal",
+        "appFolder": "notification-portal/app/",
+        "htmlFile": "ns-view.html",
+        "notAvailablePage": "page_not_available.html",
+        "jsFiles": ["scripts/ns-rest.js"],
+        "angularModuleName": "ns-rest",
+        "cssFile": "notifportal_custom_style.css",
+        "authenticate": true,
+        "initFunction": {
+            "functionName": "initNotificationPortal",
+            "services": ["NotificationService"]
         }
     }
 }
