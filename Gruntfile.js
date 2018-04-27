@@ -60,12 +60,14 @@ module.exports = function (grunt) {
                 }
             }
             if (subviewsDefinition[key].secondaryHtmlFiles){
-                out.push({
-                    expand: true,
-                    cwd: subviewsDefinition[key].appFolder + '/views/',
-                    src: subviewsDefinition[key].secondaryHtmlFiles,
-                    dest: '<%= inspinia.dist %>/views/' + subviewsDefinition[key].nameForUrl
-                });
+                for (var htmlFileKey in subviewsDefinition[key].secondaryHtmlFiles) {
+                    out.push({
+                        expand: true,
+                        cwd: subviewsDefinition[key].appFolder + '/views/',
+                        src: subviewsDefinition[key].secondaryHtmlFiles[htmlFileKey],
+                        dest: '<%= inspinia.dist %>/views/' + subviewsDefinition[key].nameForUrl
+                    });
+                }
             }
         }
         return out;
@@ -277,7 +279,7 @@ module.exports = function (grunt) {
                                                 +'<i class="fa fa-chevron-down" style="margin-right: 6px;"></i> <span class="nav-label">'+subviewsDefinition[key].name+'</span> </a>';
                                     } else if (subviewsDefinition[key].isSubMenuItem) {
                                         cnt++;
-                                        result += '<li ui-sref-active="active" class="collapse in menu-item-'+subviewsDefinition[key].subMenuTitle+'">'
+                                        result += '<li ui-sref-active="active" class="collapse menu-item-'+subviewsDefinition[key].subMenuTitle+'">'
                                                 + '<a ui-sref="portal.subview'+ cnt +'" style="background-color: #002d66;padding-left: 45px; padding-top: 0px;"><span class="nav-label">'
                                                 + subviewsDefinition[key].name+'</span> </a> </li>';
                                     } else {
