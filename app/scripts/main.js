@@ -118,17 +118,25 @@ mainCtrl.factory('MainService', function ($http, $interval, $rootScope, $state) 
 
 // controller used in navigation.html :
 mainCtrl.controller('navBarController', function ($scope, $http){
-    $scope.view = JSON.parse(localStorage['configViews']);
-    console.log($scope.view);
-
-    $scope.displayAbout = function(){
+    this.$onInit = function () {
+        $scope.view = JSON.parse(localStorage['configViews']);
+        $scope.docLink = "http://doc.activeeon.com/" ;
         $http.get('resources/config.json')
             .success(function (response) {
                 $scope.dashboardVersion = response.proactiveDashboardVersion;
+                if ($scope.dashboardVersion.indexOf("SNAPSHOT") > -1){
+                    $scope.docLink = $scope.docLink + "dev";
+                }
+                else{
+                    $scope.docLink = $scope.docLink + $scope.dashboardVersion;
+                }
             })
             .error(function (response) {
                 $scope.dashboardVersion = "not available";
-            });
+        });
+    }
+
+    $scope.displayAbout = function(){
         var windowLocation = window.location;
         var protocol = windowLocation.protocol;
         var host = windowLocation.host;
