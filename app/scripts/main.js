@@ -134,6 +134,13 @@ mainCtrl.controller('navBarController', function ($scope, $http){
             .error(function (response) {
                 $scope.dashboardVersion = "not available";
         });
+        $scope.notificationNavSpan = angular.element('#nav-span-notification-service');
+        if($scope.notificationNavSpan.length) {
+            $scope.newNotificationsLabel = angular.element('<div id="new-notifications-label" style="background:#d9534f;color:white;border-radius:10px;text-align:center;margin-left: 5px;padding: 0px 5px;"></div>');
+            $scope.notificationNavSpan.append($scope.newNotificationsLabel)
+            $scope.newNotificationsLabel.hide();
+            startRegularUpdateNotificationLabel();
+        }
     }
 
     $scope.displayAbout = function(){
@@ -145,6 +152,36 @@ mainCtrl.controller('navBarController', function ($scope, $http){
         $scope.restUrl = result;
         $scope.year = new Date().getFullYear();
         $('#about-modal').modal('show');
+    }
+
+    function startRegularUpdateNotificationLabel() {
+        queryNotificationService();
+        $scope.$interval(queryNotificationService, localStorage['notificationPortalQueryPeriod']);
+    }
+
+    function queryNotificationService() {
+        $http.get(JSON.parse(localStorage['notificationServiceUrl']) + 'notifications/')
+            .then(function (response) {
+                updateNotificationsLabel(response.data);
+            })
+            .catch(function (response) {
+                console.error("Error while querying notification service:", response);
+            });
+    }
+
+    function updateNotificationsLabel(notifications){
+        var nbNewNotifications = 0;
+        angular.forEach(notifications, function(notification){
+            if(!notification.validatedAt) {
+                nbNewNotifications++;
+            }
+        });
+        if(nbNewNotifications>0) {
+            $scope.newNotificationsLabel.html(nbNewNotifications);
+            $scope.newNotificationsLabel.show();
+        } else {
+            $scope.newNotificationsLabel.hide();
+        }
     }
 });
 
