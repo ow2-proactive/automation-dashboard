@@ -276,7 +276,8 @@ module.exports = function (grunt) {
                                     if (subviewsDefinition[key].isSubMenuTitle) {
                                         result += '\n<li ui-sref-active="active">'
                                                 + '<a href=".menu-item-'+subviewsDefinition[key].nameForUrl+'" style="background-color: #002d66" data-toggle="collapse">'
-                                                +'<i class="fa fa-chevron-down" style="margin-right: 6px;"></i> <span class="nav-label">'+subviewsDefinition[key].name+'</span> </a>';
+                                                +'<i class="fa fa-chevron-down" style="margin-right: 6px;"></i> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'
+                                                + subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">'+subviewsDefinition[key].name+'</span> </a>';
                                     } else if (subviewsDefinition[key].isSubMenuItem) {
                                         cnt++;
                                         result += '<li ui-sref-active="active" class="collapse menu-item-'+subviewsDefinition[key].subMenuTitle+'">'
@@ -285,8 +286,8 @@ module.exports = function (grunt) {
                                     } else {
                                         cnt++;
                                         result += '\n<li ui-sref-active="active">'
-                                            + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66"><i class="fa fa-desktop"></i> <span class="nav-label">'
-                                            + subviewsDefinition[key].name+ '</span> </a>\n</li>';
+                                            + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66"><i class="fa fa-desktop"></i> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
+                                            subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">'+ subviewsDefinition[key].name+ '</span> </a>\n</li>';
                                     }
                                 }
                                 result = '<!-- beginSubviews-->' + result + '\n<!-- endSubviews-->';
