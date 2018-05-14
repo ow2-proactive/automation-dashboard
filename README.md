@@ -92,3 +92,5 @@ To modify a subview: open the submodule's folder associated in the proactive-das
 2. commit the dashboard changes, it will detect that changes occured in the submodules, which is fine, you'll also need to add those changes on the submodule to your dashboard commit as well (just add the submodule folder, no need to add the inner changes)
 
 Don't forget that synchronizing your dashboard repo with the master is not going to automatically update the submodules, you'll need to update them with the `git submodule update` command.
+
+To add a new submodule, simply use the command `git submodule add repoUrl`, repoUrl beeing the url of the repository you want to add as subview.
