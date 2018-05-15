@@ -404,6 +404,26 @@ module.exports = function (grunt) {
         },
         usemin: {
             html: ['dist/index.html']
+        },
+        eslint : {
+            options: {
+                configFile : ".eslintrc.json"
+            },
+            target : "cloud-automation/app/scripts/cloud-automation-rest.js"
+                /*(function () {
+                var includedScripts = [];
+                for (var key in subviewsDefinition) {
+                    if (subviewsDefinition[key].isAvailable && !subviewsDefinition[key].isSubMenuTitle) {
+                        for (var scriptKey in subviewsDefinition[key].jsFiles) {
+                            var script = subviewsDefinition[key].jsFiles[scriptKey];
+                            if (includedScripts.indexOf(script) < 0) {
+                                includedScripts.push(subviewsDefinition[key].appFolder+script);
+                            }
+                        }
+                    }
+                }
+                return includedScripts;
+            })()*/
         }
     });
 
@@ -415,6 +435,7 @@ module.exports = function (grunt) {
 
     // building of the common parts of a build
     grunt.registerTask('pre-build', [
+        'eslint',
         'clean:dist',
         'replace',
         'jsbeautifier',
