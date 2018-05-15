@@ -140,13 +140,13 @@
         "appFolder": "generic-catalog-portal/app/",
         "htmlFile": "generic_catalog.html",
         "notAvailablePage": "page_not_available.html",
-        "jsFiles": ["scripts/generic-catalog-rest.js", "scripts/factory/catalogRestService.js", "scripts/factory/schedulerGroupService.js", "scripts/submitWorkflowModalWCP.js"],
+        "jsFiles": ["scripts/generic-catalog-rest.js", "scripts/factory/catalog-service.js", "scripts/factory/scheduler-service.js", "scripts/submitWorkflowModalGCP.js"],
         "angularModuleName": "gcp-rest",
         "cssFile": "gcportal_custom_style.css",
         "authenticate": true,
         "initFunction": {
             "functionName": "initGenericCatalog",
-            "services": ["GenericCatalogService"]
+            "services": ["CatalogRestService"]
         }
     }
 }
