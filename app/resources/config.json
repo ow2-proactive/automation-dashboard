@@ -39,5 +39,6 @@
   "cloudAutomationQueryPeriod" : 20000,
   "notificationPortalQueryPeriod": 20000,
   "workflowCatalogPortalQueryPeriod": 20000,
+  "genericCatalogPortalQueryPeriod": 20000,
   "jobPlannerQueryPeriod": 20000
 }
