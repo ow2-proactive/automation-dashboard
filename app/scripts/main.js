@@ -20,6 +20,7 @@ function getProperties ($http, $location) {
             var cloudAutomationQueryPeriod = angular.toJson(response.cloudAutomationQueryPeriod, true);
             var notificationPortalQueryPeriod = angular.toJson(response.notificationPortalQueryPeriod, true);
             var workflowCatalogPortalQueryPeriod = angular.toJson(response.workflowCatalogPortalQueryPeriod, true);
+            var genericCatalogPortalQueryPeriod = angular.toJson(response.genericCatalogPortalQueryPeriod, true);
             var jobPlannerQueryPeriod = angular.toJson(response.jobPlannerQueryPeriod, true);
             var appCatalogBucketsUrl =angular.toJson(response.confServer.catalogServiceUrl+"/buckets/?kind=workflow", true);
             var appCatalogWorkflowsUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port() + "/catalog/buckets/" + response.view[0].catalog.bucketName + "/resources");
@@ -34,6 +35,7 @@ function getProperties ($http, $location) {
             localStorage['notificationServiceUrl'] = notificationServiceUrl;
             localStorage['catalogServiceUrl'] = catalogServiceUrl;
             localStorage['workflowCatalogPortalQueryPeriod'] = workflowCatalogPortalQueryPeriod;
+            localStorage['genericCatalogPortalQueryPeriod'] = genericCatalogPortalQueryPeriod;
             localStorage['notificationPortalQueryPeriod'] = notificationPortalQueryPeriod;
             localStorage['cloudAutomationQueryPeriod'] = cloudAutomationQueryPeriod;
             localStorage['jobPlannerQueryPeriod'] = jobPlannerQueryPeriod;
