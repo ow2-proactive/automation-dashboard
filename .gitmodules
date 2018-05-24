@@ -14,3 +14,6 @@
 	path = job-planner-portal
 	url = git@bitbucket.org:activeeon/job-planner-portal.git
 	branch = master
+[submodule "generic-catalog-portal"]
+	path = generic-catalog-portal
+	url = git@bitbucket.org:activeeon/generic-catalog-portal.git
