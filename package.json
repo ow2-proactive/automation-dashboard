@@ -3,6 +3,7 @@
   "version": "2.7.1",
   "description": "INSPINIA - Responsive Admin Theme",
   "dependencies": {
+    "codemirror": "4.8.X",
     "grunt": "^0.4.5"
   },
   "devDependencies": {

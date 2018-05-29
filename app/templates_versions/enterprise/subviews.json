@@ -139,6 +139,7 @@
         "nameForUrl": "generic-catalog",
         "appFolder": "generic-catalog-portal/app/",
         "htmlFile": "generic_catalog.html",
+        "secondaryHtmlFiles": ["modals/catalog_object_edition.html"],
         "notAvailablePage": "page_not_available.html",
         "jsFiles": ["scripts/generic-catalog-rest.js", "scripts/factory/catalog-service.js", "scripts/factory/scheduler-service.js", "scripts/submitWorkflowModalGCP.js"],
         "angularModuleName": "gcp-rest",

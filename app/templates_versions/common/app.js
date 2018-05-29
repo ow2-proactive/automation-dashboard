@@ -16,7 +16,8 @@
             //beginSubviewsModules
 
             //endSubviewsModules
-            'angularCSS'
+            'angularCSS',
+            'ui.codemirror'
         ])
         .config(['momentPickerProvider', function(momentPickerProvider) {
             momentPickerProvider.options({
