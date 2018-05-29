@@ -41,7 +41,8 @@
     "angular-css": "^1.0.8",
     "angular-cron-gen": "^0.0.26",
     "angular-moment-picker": "moment-picker#^0.10.2",
-    "angular-bootstrap-calendar": "^1.0.0"
+    "angular-bootstrap-calendar": "^1.0.0",
+    "angular-ui-codemirror": "^0.3.0"
   },
   "resolutions": {
     "jquery": "~2.1.4",
