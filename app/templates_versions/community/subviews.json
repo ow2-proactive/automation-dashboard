@@ -23,7 +23,7 @@
         "appFolder": "workflow-catalog-portal/app/",
         "htmlFile": "workflow_catalog.html",
         "notAvailablePage": "page_not_available.html",
-        "jsFiles": ["scripts/wcp-rest.js", "scripts/factory/catalogRestService.js", "scripts/factory/schedulerGroupService.js" , "scripts/submitWorkflowModalWCP.js"],
+        "jsFiles": ["scripts/wcp-rest.js", "scripts/factory/catalogRestService.js", "scripts/factory/schedulerGroupService.js", "scripts/submitWorkflowModalWCP.js"],
         "angularModuleName": "wcp-rest",
         "cssFile": "wcportal_custom_style.css",
         "authenticate": true,
