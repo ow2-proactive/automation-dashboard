@@ -162,7 +162,7 @@ mainCtrl.controller('navBarController', function ($scope, $http){
     }
 
     function queryNotificationService() {
-        $http.get(JSON.parse(localStorage['notificationServiceUrl']) + 'notifications/')
+        $http.get(JSON.parse(localStorage['notificationServiceUrl']) + 'notifications/', { headers: { 'sessionID': getSessionId() } })
             .then(function (response) {
                 updateNotificationsLabel(response.data);
             })
