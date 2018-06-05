@@ -105,19 +105,6 @@ task bowerInstall(type: NodeTask) {
     dependsOn npmInstall
 }
 
-
-// makes sure on each build that bower downloaded the dependencies
-grunt_build.dependsOn 'bowerInstall'
-
-// makes sure on each build that grunt is installed
-grunt_build.dependsOn 'installGrunt'
-
-// processes your package.json before running grunt build
-grunt_build.dependsOn 'npmInstall'
-
-// runs "grunt build" as part of your gradle build
-build.dependsOn grunt_build
-
 task buildEnterprise(type: GruntTask) {
   args = ["build", "--target=enterprise"]
 }
@@ -141,18 +128,30 @@ artifacts {
 }
 
 configurations {
-    subviewsDeps
+    cloudAutomationDep
 }
 
 dependencies {
-    subviewsDeps "org.ow2.proactive:cloud-automation:$version@zip"
-    compile configurations.subviewsDeps
+    cloudAutomationDep "org.ow2.proactive:cloud-automation:$version@zip"
+    compile configurations.cloudAutomationDep
 }
 
 task copyCloudAutomationDep(type: Copy) {
-    from configurations.subviewsDeps
+    from zipTree(configurations.cloudAutomationDep.singleFile)
     into "./cloud-automation/app"
 }
 
 copyCloudAutomationDep.dependsOn clean
-build.dependsOn copyCloudAutomationDep
+grunt_build.dependsOn copyCloudAutomationDep
+
+// makes sure on each build that bower downloaded the dependencies
+grunt_build.dependsOn 'bowerInstall'
+
+// makes sure on each build that grunt is installed
+grunt_build.dependsOn 'installGrunt'
+
+// processes your package.json before running grunt build
+grunt_build.dependsOn 'npmInstall'
+
+// runs "grunt build" as part of your gradle build
+build.dependsOn grunt_build
