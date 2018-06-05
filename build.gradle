@@ -127,14 +127,32 @@ task buildCommunity(type: GruntTask) {
 }
 
 // delete dist folder with clean
-clean{
+clean {
     delete "${project.projectDir}/dist"
     delete "${project.projectDir}/.tmp"
     delete "${project.projectDir}/build"
     delete "${project.projectDir}/node_modules"
     delete "${project.projectDir}/bower_components"
+    delete "${project.projectDir}/cloud-automation"
 }
 
 artifacts {
     archives packageDist, packageDev
 }
+
+configurations {
+    subviewsDeps
+}
+
+dependencies {
+    subviewsDeps "org.ow2.proactive:cloud-automation:$version@zip"
+    compile configurations.subviewsDeps
+}
+
+task copyCloudAutomationDep(type: Copy) {
+    from configurations.subviewsDeps
+    into "./cloud-automation/app"
+}
+
+copyCloudAutomationDep.dependsOn clean
+build.dependsOn copyCloudAutomationDep
