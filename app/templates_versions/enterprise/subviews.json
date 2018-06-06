@@ -19,7 +19,7 @@
     "genericCatalog": {
         "isAvailable": true,
         "name": "Catalog",
-        "nameForUrl": "generic-catalog",
+        "nameForUrl": "catalog-portal",
         "appFolder": "generic-catalog-portal/app/",
         "htmlFile": "generic_catalog.html",
         "secondaryHtmlFiles": ["modals/catalog_object_edition.html", "modals/submit_workflow.html"],
@@ -132,22 +132,6 @@
         "initFunction": {
             "functionName": "initNotificationPortal",
             "services": ["NotificationService"]
-        }
-    },
-    "workflowCatalog": {
-        "isAvailable": true,
-        "name": "Workflow Catalog (deprecated)",
-        "nameForUrl": "workflow-catalog",
-        "appFolder": "workflow-catalog-portal/app/",
-        "htmlFile": "workflow_catalog.html",
-        "notAvailablePage": "page_not_available.html",
-        "jsFiles": ["scripts/wcp-rest.js", "scripts/factory/catalogRestService.js", "scripts/factory/schedulerGroupService.js", "scripts/submitWorkflowModalWCP.js"],
-        "angularModuleName": "wcp-rest",
-        "cssFile": "wcportal_custom_style.css",
-        "authenticate": true,
-        "initFunction": {
-            "functionName": "initWorkflowCatalog",
-            "services": ["WorkflowCatalogService"]
         }
     }
 }
