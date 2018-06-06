@@ -16,20 +16,21 @@
             "services": ["WFASchedulerService", "WFACatalog"]
         }
     },
-    "workflowCatalog": {
+    "genericCatalog": {
         "isAvailable": true,
-        "name": "Workflow Catalog",
-        "nameForUrl": "workflow-catalog",
-        "appFolder": "workflow-catalog-portal/app/",
-        "htmlFile": "workflow_catalog.html",
+        "name": "Catalog",
+        "nameForUrl": "catalog-portal",
+        "appFolder": "generic-catalog-portal/app/",
+        "htmlFile": "generic_catalog.html",
+        "secondaryHtmlFiles": ["modals/catalog_object_edition.html", "modals/submit_workflow.html"],
         "notAvailablePage": "page_not_available.html",
-        "jsFiles": ["scripts/wcp-rest.js", "scripts/factory/catalogRestService.js", "scripts/factory/schedulerGroupService.js", "scripts/submitWorkflowModalWCP.js"],
-        "angularModuleName": "wcp-rest",
-        "cssFile": "wcportal_custom_style.css",
+        "jsFiles": ["scripts/generic-catalog-rest.js", "scripts/factory/catalog-service.js", "scripts/factory/scheduler-service.js", "scripts/factory/cloud-automation-service.js", "scripts/submitWorkflowModalGCP.js"],
+        "angularModuleName": "gcp-rest",
+        "cssFile": "gcportal_custom_style.css",
         "authenticate": true,
         "initFunction": {
-            "functionName": "initWorkflowCatalog",
-            "services": ["WorkflowCatalogService"]
+            "functionName": "initGenericCatalog",
+            "services": ["CatalogRestService"]
         }
     },
     "job-planner-portal": {
@@ -131,23 +132,6 @@
         "initFunction": {
             "functionName": "initNotificationPortal",
             "services": ["NotificationService"]
-        }
-    },
-    "genericCatalog": {
-        "isAvailable": true,
-        "name": "Generic Catalog (beta)",
-        "nameForUrl": "generic-catalog",
-        "appFolder": "generic-catalog-portal/app/",
-        "htmlFile": "generic_catalog.html",
-        "secondaryHtmlFiles": ["modals/catalog_object_edition.html"],
-        "notAvailablePage": "page_not_available.html",
-        "jsFiles": ["scripts/generic-catalog-rest.js", "scripts/factory/catalog-service.js", "scripts/factory/scheduler-service.js", "scripts/submitWorkflowModalGCP.js"],
-        "angularModuleName": "gcp-rest",
-        "cssFile": "gcportal_custom_style.css",
-        "authenticate": true,
-        "initFunction": {
-            "functionName": "initGenericCatalog",
-            "services": ["CatalogRestService"]
         }
     }
 }

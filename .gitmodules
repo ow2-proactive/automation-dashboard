@@ -6,10 +6,6 @@
 	path = notification-portal
 	url = git@bitbucket.org:activeeon/notification-portal.git
 	branch = master
-[submodule "workflow-catalog-portal"]
-	path = workflow-catalog-portal
-	url = git@bitbucket.org:activeeon/workflow-catalog-portal.git
-	branch = master
 [submodule "job-planner-portal"]
 	path = job-planner-portal
 	url = git@bitbucket.org:activeeon/job-planner-portal.git
