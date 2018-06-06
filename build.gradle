@@ -121,6 +121,7 @@ clean {
     delete "${project.projectDir}/node_modules"
     delete "${project.projectDir}/bower_components"
     delete "${project.projectDir}/cloud-automation"
+    delete "${project.projectDir}/job-planner-portal"
 }
 
 artifacts {
@@ -129,20 +130,29 @@ artifacts {
 
 configurations {
     cloudAutomationDep
+    jobPlannerDep
 }
 
 dependencies {
     cloudAutomationDep "org.ow2.proactive:cloud-automation:$version@zip"
+    jobPlannerDep "org.ow2.proactive:job-planner-portal:$version@zip"
+
     compile configurations.cloudAutomationDep
+    compile configurations.jobPlannerDep
 }
 
 task copyCloudAutomationDep(type: Copy) {
     from zipTree(configurations.cloudAutomationDep.singleFile)
     into "./cloud-automation/app"
 }
+task copyJobPlannerDep(type: Copy) {
+    from zipTree(configurations.jobPlannerDep.singleFile)
+    into "./job-planner-portal/app"
+}
 
 copyCloudAutomationDep.dependsOn clean
-grunt_build.dependsOn copyCloudAutomationDep
+copyJobPlannerDep.dependsOn copyCloudAutomationDep
+grunt_build.dependsOn copyJobPlannerDep
 
 // makes sure on each build that bower downloaded the dependencies
 grunt_build.dependsOn 'bowerInstall'
