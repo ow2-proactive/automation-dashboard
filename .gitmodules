@@ -1,0 +1,16 @@
+[submodule "cloud-automation"]
+	path = cloud-automation
+	url = git@bitbucket.org:activeeon/cloud-automation.git
+	branch = master
+[submodule "notification-portal"]
+	path = notification-portal
+	url = git@bitbucket.org:activeeon/notification-portal.git
+	branch = master
+[submodule "job-planner-portal"]
+	path = job-planner-portal
+	url = git@bitbucket.org:activeeon/job-planner-portal.git
+	branch = master
+[submodule "generic-catalog-portal"]
+	path = generic-catalog-portal
+	url = git@bitbucket.org:activeeon/generic-catalog-portal.git
+    branch = master
