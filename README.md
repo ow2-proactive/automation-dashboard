@@ -10,13 +10,10 @@ npm install
 bower install
 ```
 
-The dashboard subviews are git submodules that need to be retrieved by using the following commands:
+The dashboard subviews are private bitbucket projects that need to be automatically retrieved from Nexus repository by using the following command:
 ```
-git submodule init
-git submodule sync
-git submodule update
+gradlew clean build
 ```
-This repository expects that you have an authorized SSH key to fetch the submodules (they are hosted on private repositories).
 
 ## Building
 
@@ -38,7 +35,7 @@ Once scheduling/bin/proactive-server is started, the dashboard is available at:
 localhost:8080/automation-dashboard
 ```
 
-### What does building do with subviews modules?
+### What does building do with subviews?
 
 With the following tasks, grunt injects subviews in the dashboard, depending on the requested VERSION :
 * replace:
@@ -86,11 +83,20 @@ All attributes are mandatory, except `initFunction` and `images`, which can be o
 
 ### Subviews project
 
-Each subview is defined in a bitbucket repository and then imported in this project as a submodule (see `.gitmodules` file). The branches are important for now, as we still have the subviews building standalone versions as well from their respective master branches.
-To modify a subview: open the submodule's folder associated in the proactive-dashboard project, make the modifications, build the **proactive-dashboard** (no need to build the submodule). Once all modifications are done:
-1. commit the submodule's changes from its own folder. This is important as the dashboard project relies on the hash of the commits to fetch the correct version of the submodule.
-2. commit the dashboard changes, it will detect that changes occured in the submodules, which is fine, you'll also need to add those changes on the submodule to your dashboard commit as well (just add the submodule folder, no need to add the inner changes)
+Each subview is defined in a bitbucket repository and then imported in this project.
+The idea behind for each subview project is building zip archive of subview and publishing it to Nexus repository. Every subview contains gradlew build file to build and publish the zip archive.
+In gradle building procedure of automation-dashboard project there are tasks to download zip archives for each subview and extract subview's sources. After building this project all subviews will be present in automation-dashboard.
+So it should be enough just to do ``gradle build`` for each subview and then build automation-dashboard, that will compose all subviews.
 
-Don't forget that synchronizing your dashboard repo with the master is not going to automatically update the submodules, you'll need to update them with the `git submodule update` command.
+### Local building and testing subviews project
 
-To add a new submodule, simply use the command `git submodule add repoUrl`, repoUrl beeing the url of the repository you want to add as submodule. You will then need to update subviews.json files to add the project as a subview.
+In order to test subviews and automation dashboard locally, it's required not to publish the subviews archives to main repository, but to local repository of machine.
+Each subview project should be build with next command:
+```
+gradlew clean build install
+```
+
+Then automation-dashboard project can be build with all subviews from local repository with next command:
+```
+gradlew clean build -Plocal
+```
