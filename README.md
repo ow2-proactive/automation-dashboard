@@ -100,3 +100,22 @@ Then automation-dashboard project can be build with all subviews from local repo
 ```
 gradlew clean build -Plocal
 ```
+
+### Local building and testing of the automation-dashboard project locally
+
+There exists another way to update the subviews locally without the need of publishing the changes to main repositories.
+After cloning the automation-dashboard project locally, you build it using this command:
+
+```
+grunt clean build
+```
+You can then make your changes and update the subviews that appear as subfolders in the automation-dashboard.
+
+For a fast building of the automation-dashboard locally, you can use this command:
+
+```
+grunt clean build
+```
+
+This command creates a /dist folder that you need to copy under scheduling/dist/war.
+Rename the copied folder to automation-dashboard, and launch the scheduling server as detailed in https://github.com/ow2-proactive/scheduling
