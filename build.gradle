@@ -136,6 +136,7 @@ clean {
     delete "${project.projectDir}/job-planner-portal"
     delete "${project.projectDir}/generic-catalog-portal"
     delete "${project.projectDir}/notification-portal"
+    delete "${project.projectDir}/cloud-watch-portal"
 }
 
 artifacts {
@@ -147,6 +148,7 @@ configurations {
     jobPlannerDep
     genericCatalogDep
     notificationDep
+    cloudWatchDep
 }
 
 dependencies {
@@ -154,11 +156,13 @@ dependencies {
     jobPlannerDep "org.ow2.proactive:job-planner-portal:$version@zip"
     genericCatalogDep "org.ow2.proactive:generic-catalog-portal:$version@zip"
     notificationDep "org.ow2.proactive:notification-portal:$version@zip"
+    cloudWatchDep "org.ow2.proactive:cloud-watch-portal:$version@zip"
 
     compile configurations.cloudAutomationDep
     compile configurations.jobPlannerDep
     compile configurations.genericCatalogDep
     compile configurations.notificationDep
+    compile configurations.cloudWatchDep
 }
 
 task copyCloudAutomationDep(type: Copy) {
@@ -180,11 +184,17 @@ task copyNotificationDep(type: Copy) {
     into "./notification-portal/app"
 }
 
+task copyCloudWatchDep(type: Copy) {
+    from zipTree(configurations.cloudWatchDep.singleFile)
+    into "./cloud-watch-portal/app"
+}
+
 copyCloudAutomationDep.dependsOn clean
 copyJobPlannerDep.dependsOn copyCloudAutomationDep
 copyGenericCatalogDep.dependsOn copyJobPlannerDep
 copyNotificationDep.dependsOn copyGenericCatalogDep
-grunt_build.dependsOn copyNotificationDep
+copyCloudWatchDep.dependsOn copyNotificationDep
+grunt_build.dependsOn copyCloudWatchDep
 
 // makes sure on each build that bower downloaded the dependencies
 grunt_build.dependsOn 'bowerInstall'
