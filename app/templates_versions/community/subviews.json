@@ -56,6 +56,19 @@
             "services": ["JobPlannerRestService"]
         }
     },
+    "cloudWatch": {
+        "isAvailable": true,
+        "name": "Cloud Watch",
+        "nameForUrl": "cloud-watch",
+        "appFolder": "cloud-watch-portal/app/",
+        "htmlFile": "cloud_watch.html",
+        "secondaryHtmlFiles": [],
+        "notAvailablePage": "page_not_available_cloud_watch.html",
+        "jsFiles": ["scripts/cloud-watch.js"],
+        "angularModuleName": "cloud-watch",
+        "cssFile": "cloud_watch_custom_style.css",
+        "authenticate": true
+    },
     "calendar-associations": {
         "isAvailable": true,
         "isSubMenuItem": true,
