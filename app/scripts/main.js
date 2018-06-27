@@ -214,9 +214,24 @@ mainCtrl.controller('loginController', function ($scope, $state, MainService, $s
                     else
                         $state.go('portal.subview1');
                 }
+                $scope.errorMessage = undefined;
             })
             .error(function (response) {
-                console.log("loginController error doLogin");
+                try {
+                    var error = JSON.parse(response);
+                    $scope.errorMessage = error.errorMessage;
+                    if (error.httpErrorCode === 404) {
+                        if (error.stackTrace.indexOf("login.LoginException") >= 0) {
+                            $scope.errorMessage = "Invalid Login or Password";
+                        } else {
+                            $scope.errorMessage = "The server is not available, please try again later.";
+                        }
+
+                    }
+                } catch (e) {
+                    $scope.errorMessage = "Please try again later."
+                }
+
             });
     };
 });
