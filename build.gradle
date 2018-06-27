@@ -22,10 +22,15 @@ install {
 
 buildscript {
     repositories {
+        jcenter()
         maven {
-            url "https://plugins.gradle.org/m2/"
+            url "http://repository.activeeon.com/content/groups/proactive/"
         }
-    }
+	    maven {
+	          url "https://plugins.gradle.org/m2/"
+	    }
+
+}
     dependencies {
         classpath 'com.moowork.gradle:gradle-grunt-plugin:0.12'
         classpath 'com.moowork.gradle:gradle-node-plugin:0.12'
@@ -65,7 +70,14 @@ grunt {
 }
 
 repositories {
-    mavenLocal()
+   if (project.hasProperty('local')) {
+       mavenLocal()
+   }
+
+   jcenter()
+   maven {
+       url "http://repository.activeeon.com/content/groups/proactive/"
+   }
 }
 
 uploadArchives {
@@ -105,6 +117,84 @@ task bowerInstall(type: NodeTask) {
     dependsOn npmInstall
 }
 
+task buildEnterprise(type: GruntTask) {
+  args = ["build", "--target=enterprise"]
+}
+
+task buildCommunity(type: GruntTask) {
+  args = ["build", "--target=community"]
+}
+
+// delete dist folder with clean
+clean {
+    delete "${project.projectDir}/dist"
+    delete "${project.projectDir}/.tmp"
+    delete "${project.projectDir}/build"
+    delete "${project.projectDir}/node_modules"
+    delete "${project.projectDir}/bower_components"
+    delete "${project.projectDir}/cloud-automation"
+    delete "${project.projectDir}/job-planner-portal"
+    delete "${project.projectDir}/generic-catalog-portal"
+    delete "${project.projectDir}/notification-portal"
+    delete "${project.projectDir}/cloud-watch-portal"
+}
+
+artifacts {
+    archives packageDist, packageDev
+}
+
+configurations {
+    cloudAutomationDep
+    jobPlannerDep
+    genericCatalogDep
+    notificationDep
+    cloudWatchDep
+}
+
+dependencies {
+    cloudAutomationDep "org.ow2.proactive:cloud-automation:$version@zip"
+    jobPlannerDep "org.ow2.proactive:job-planner-portal:$version@zip"
+    genericCatalogDep "org.ow2.proactive:generic-catalog-portal:$version@zip"
+    notificationDep "org.ow2.proactive:notification-portal:$version@zip"
+    cloudWatchDep "org.ow2.proactive:cloud-watch-portal:$version@zip"
+
+    compile configurations.cloudAutomationDep
+    compile configurations.jobPlannerDep
+    compile configurations.genericCatalogDep
+    compile configurations.notificationDep
+    compile configurations.cloudWatchDep
+}
+
+task copyCloudAutomationDep(type: Copy) {
+    from zipTree(configurations.cloudAutomationDep.singleFile)
+    into "./cloud-automation/app"
+}
+task copyJobPlannerDep(type: Copy) {
+    from zipTree(configurations.jobPlannerDep.singleFile)
+    into "./job-planner-portal/app"
+}
+
+task copyGenericCatalogDep(type: Copy) {
+    from zipTree(configurations.genericCatalogDep.singleFile)
+    into "./generic-catalog-portal/app"
+}
+
+task copyNotificationDep(type: Copy) {
+    from zipTree(configurations.notificationDep.singleFile)
+    into "./notification-portal/app"
+}
+
+task copyCloudWatchDep(type: Copy) {
+    from zipTree(configurations.cloudWatchDep.singleFile)
+    into "./cloud-watch-portal/app"
+}
+
+copyCloudAutomationDep.dependsOn clean
+copyJobPlannerDep.dependsOn copyCloudAutomationDep
+copyGenericCatalogDep.dependsOn copyJobPlannerDep
+copyNotificationDep.dependsOn copyGenericCatalogDep
+copyCloudWatchDep.dependsOn copyNotificationDep
+grunt_build.dependsOn copyCloudWatchDep
 
 // makes sure on each build that bower downloaded the dependencies
 grunt_build.dependsOn 'bowerInstall'
@@ -117,24 +207,3 @@ grunt_build.dependsOn 'npmInstall'
 
 // runs "grunt build" as part of your gradle build
 build.dependsOn grunt_build
-
-task buildEnterprise(type: GruntTask) {
-  args = ["build", "--target=enterprise"]
-}
-
-task buildCommunity(type: GruntTask) {
-  args = ["build", "--target=community"]
-}
-
-// delete dist folder with clean
-clean{
-    delete "${project.projectDir}/dist"
-    delete "${project.projectDir}/.tmp"
-    delete "${project.projectDir}/build"
-    delete "${project.projectDir}/node_modules"
-    delete "${project.projectDir}/bower_components"
-}
-
-artifacts {
-    archives packageDist, packageDev
-}

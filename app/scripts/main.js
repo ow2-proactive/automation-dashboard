@@ -162,7 +162,7 @@ mainCtrl.controller('navBarController', function ($scope, $http){
     }
 
     function queryNotificationService() {
-        $http.get(JSON.parse(localStorage['notificationServiceUrl']) + 'notifications/')
+        $http.get(JSON.parse(localStorage['notificationServiceUrl']) + 'notifications/', { headers: { 'sessionID': getSessionId() } })
             .then(function (response) {
                 updateNotificationsLabel(response.data);
             })
@@ -174,7 +174,7 @@ mainCtrl.controller('navBarController', function ($scope, $http){
     function updateNotificationsLabel(notifications){
         var nbNewNotifications = 0;
         angular.forEach(notifications, function(notification){
-            if(!notification.validatedAt) {
+            if(!notification.validatedAt && notification.validation) {
                 nbNewNotifications++;
             }
         });
@@ -229,5 +229,17 @@ mainCtrl.controller('logoutController', function ($rootScope, $scope, $state) {
         console.log("event:StopRefreshing emitted");
 
         $state.go('login');
+    };
+});
+
+mainCtrl.directive('ngRightClick', function($parse) {
+    return function(scope, element, attrs) {
+        var fn = $parse(attrs.ngRightClick);
+        element.bind('contextmenu', function(event) {
+            scope.$apply(function() {
+                event.preventDefault();
+                fn(scope, {$event:event});
+            });
+        });
     };
 });
