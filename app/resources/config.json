@@ -6,7 +6,8 @@
   "rmRestUrl": "/rest/rm/",
   "notificationServiceUrl": "/notification-service/",
   "catalogServiceUrl": "/catalog/",
-  "jobPlannerServiceUrl": "/job-planner/"
+  "jobPlannerServiceUrl": "/job-planner/",
+  "cloudWatchServiceUrl": "/proactive-cloud-watch/"
 },
 "view": [{
   "viewname": "Workflow Automation",
@@ -38,7 +39,7 @@
 }],
   "cloudAutomationQueryPeriod" : 20000,
   "notificationPortalQueryPeriod": 20000,
-  "workflowCatalogPortalQueryPeriod": 20000,
   "genericCatalogPortalQueryPeriod": 20000,
-  "jobPlannerQueryPeriod": 20000
+  "jobPlannerQueryPeriod": 20000,
+  "cloudWatchPortalQueryPeriod" : 20000
 }
