@@ -64,7 +64,7 @@
         "htmlFile": "cloud_watch.html",
         "secondaryHtmlFiles": [],
         "notAvailablePage": "page_not_available_cloud_watch.html",
-        "jsFiles": ["scripts/cloud-watch.js", "scripts/cloud-watch-monitoring.js", "scripts/services/cloud-watch-service.js", "scripts/services/cloud-automation-service.js", "scripts/services/scheduler-service.js"],
+        "jsFiles": ["scripts/cloud-watch.js", "scripts/cloud-watch-monitoring.js", "scripts/services/cloud-watch-service.js", "scripts/services/cloud-automation-service.js", "scripts/services/scheduler-service.js", "scripts/services/catalog-service.js"],
         "angularModuleName": "cloud-watch",
         "cssFile": "cloud_watch_custom_style.css",
         "authenticate": true
