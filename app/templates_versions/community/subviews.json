@@ -52,6 +52,19 @@
             "services": ["JobPlannerRestService"]
         }
     },
+    "cloudWatch": {
+        "isAvailable": true,
+        "name": "Cloud Watch",
+        "nameForUrl": "cloud-watch",
+        "appFolder": "cloud-watch-portal/app/",
+        "htmlFile": "cloud_watch.html",
+        "secondaryHtmlFiles": [],
+        "notAvailablePage": "page_not_available_cloud_watch.html",
+        "jsFiles": ["scripts/cloud-watch.js", "scripts/cloud-watch-monitoring.js", "scripts/cloud-watch-activated-rules.js", "scripts/services/cloud-watch-service.js", "scripts/services/cloud-automation-service.js", "scripts/services/scheduler-service.js", "scripts/services/catalog-service.js"],
+        "angularModuleName": "cloud-watch",
+        "cssFile": "cloud_watch_custom_style.css",
+        "authenticate": true
+    },
     "calendar-associations": {
         "isAvailable": true,
         "isSubMenuItem": true,
@@ -113,23 +126,6 @@
             "services": ["PCAService"]
         },
         "images": ["not_available_image_cloud_automation.png"]
-    },
-    "cloudWatch": {
-        "isAvailable": true,
-        "name": "Cloud Watch",
-        "nameForUrl": "cloud-watch",
-        "appFolder": "cloud-watch-portal/app/",
-        "htmlFile": "cloud_watch.html",
-        "secondaryHtmlFiles": ["modals/rule_edition.html"],
-        "notAvailablePage": "page_not_available_cloud_watch.html",
-        "jsFiles": ["scripts/cloud-watch.js", "scripts/cloud-watch-monitoring.js",
-            "scripts/cloud-watch-activated-rules.js", "scripts/editRuleModal.js", "scripts/cloud-watch-rules-tab.js",
-            "scripts/services/cloud-watch-service.js", "scripts/services/cloud-automation-service.js",
-            "scripts/services/scheduler-service.js", "scripts/services/catalog-service.js"
-        ],
-        "angularModuleName": "cloud-watch",
-        "cssFile": "cloud_watch_custom_style.css",
-        "authenticate": true
     },
     "notificationPortal": {
         "isAvailable": true,
