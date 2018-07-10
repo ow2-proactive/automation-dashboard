@@ -55,7 +55,7 @@ With the following tasks, grunt injects subviews in the dashboard, depending on 
 
 ## Development
 
-The dashboard have 2 versions available:
+The dashboard has 2 versions available:
 * community
 * enterprise
 

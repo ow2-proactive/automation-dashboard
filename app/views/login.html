@@ -34,6 +34,9 @@
             </div>
 
         </div>
+        <div class="alert alert-danger" ng-show="errorMessage">
+            <strong>Unable to login.</strong> {{errorMessage}}
+        </div>
         <a ng-if="showLinkAccountCreation" href="https://www.activeeon.com/register/web-download" target="_blank">Or create an account</a>
     </div>
 </div>
