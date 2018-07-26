@@ -121,7 +121,7 @@ mainCtrl.factory('MainService', function ($http, $interval, $rootScope, $state) 
 // --------------- Controller -----------------
 
 // controller used in navigation.html :
-mainCtrl.controller('navBarController', function ($scope, $http){
+mainCtrl.controller('navBarController', function ($scope, $state, $http){
     this.$onInit = function () {
         $scope.view = JSON.parse(localStorage['configViews']);
         $scope.docLink = "http://doc.activeeon.com/" ;
@@ -164,13 +164,18 @@ mainCtrl.controller('navBarController', function ($scope, $http){
     }
 
     function queryNotificationService() {
-        $http.get(JSON.parse(localStorage['notificationServiceUrl']) + 'notifications/', { headers: { 'sessionID': getSessionId() } })
-            .then(function (response) {
-                updateNotificationsLabel(response.data);
-            })
-            .catch(function (response) {
-                console.error("Error while querying notification service:", response);
+        var sessionId = getSessionId();
+        if (!sessionId) {
+            $state.go('login');
+        } else {
+            $http.get(JSON.parse(localStorage['notificationServiceUrl']) + 'notifications/', { headers: { 'sessionID': sessionId } })
+                .then(function (response) {
+                    updateNotificationsLabel(response.data);
+                })
+                .catch(function (response) {
+                    console.error("Error while querying notification service:", response);
             });
+        }
     }
 
     function updateNotificationsLabel(notifications){
