@@ -2,7 +2,7 @@
  * Created by ActiveEon Team on 18/04/2017.
  */
 
-var mainCtrl = angular.module('main', ['ngResource', 'spring-data-rest', 'angular-toArrayFilter', 'oitozero.ngSweetAlert']);
+var mainModule = angular.module('main', ['ngResource', 'spring-data-rest', 'angular-toArrayFilter', 'oitozero.ngSweetAlert']);
 
 function getSessionId() {
     return localStorage['pa.session'];
@@ -65,7 +65,7 @@ var isSessionValide = function ($http, sessionId, $location) {
 
 
 // factory used to get config data values from resources/config.json
-mainCtrl.factory('loadingConfigData', function($http, $location){
+mainModule.factory('loadingConfigData', function($http, $location){
     console.log("Loading configData values");
     getProperties($http, $location);
     return {
@@ -88,7 +88,7 @@ function getCookie(name) {
     return null;
 }
 
-mainCtrl.factory('MainService', function ($http, $interval, $rootScope, $state) {
+mainModule.factory('MainService', function ($http, $interval, $rootScope, $state) {
     function doLogin(userName, userPass) {
         var authData = $.param({'username': userName, 'password': userPass});
         var authConfig = {
@@ -118,10 +118,50 @@ mainCtrl.factory('MainService', function ($http, $interval, $rootScope, $state) 
     };
 });
 
-// --------------- Controller -----------------
+// --------------- Controllers -----------------
+
+mainModule.controller('mainController', function ($http, $scope, $rootScope, $state, $location, $interval) {
+    this.$onInit = function () {
+        $scope.main.userName = localStorage['pa.login'];
+        $scope.startRegularCheckSession()
+    }
+
+    $scope.startRegularCheckSession = function(){
+        if (!$scope.checkSessionInterval)
+            $scope.checkSessionInterval = $scope.$interval(checkSession, 30000);
+    }
+
+    function checkSession() {
+        var sessionId = getSessionId()
+        if (!sessionId) {
+            $scope.closeSession();
+        } else {
+            $http.get(JSON.parse(localStorage['schedulerRestUrl']) + 'isconnected/', { headers: { 'sessionID': sessionId } })
+                .then(function (response) {
+                    if (!response) {
+                        $scope.closeSession();
+                    }
+                })
+                .catch(function (response) {
+                    console.error("Error checking if session is valid:", response);
+            });
+        }
+    }
+
+    $scope.stopRegularCheckSession = function(){
+        $interval.cancel($scope.checkSessionInterval);
+        $scope.checkSessionInterval = undefined;
+    }
+
+    $scope.closeSession = function() {
+        $state.go('login');
+        $scope.stopRegularCheckSession();
+        $rootScope.$broadcast('event:StopRefreshing');
+    }
+});
 
 // controller used in navigation.html :
-mainCtrl.controller('navBarController', function ($scope, $state, $http){
+mainModule.controller('navBarController', function ($scope, $http, $interval){
     this.$onInit = function () {
         $scope.view = JSON.parse(localStorage['configViews']);
         $scope.docLink = "http://doc.activeeon.com/" ;
@@ -160,22 +200,17 @@ mainCtrl.controller('navBarController', function ($scope, $state, $http){
 
     function startRegularUpdateNotificationLabel() {
         queryNotificationService();
-        $scope.$interval(queryNotificationService, localStorage['notificationPortalQueryPeriod']);
+        $scope.intervalNotificationUpdate = $scope.$interval(queryNotificationService, localStorage['notificationPortalQueryPeriod']);
     }
 
     function queryNotificationService() {
-        var sessionId = getSessionId();
-        if (!sessionId) {
-            $state.go('login');
-        } else {
-            $http.get(JSON.parse(localStorage['notificationServiceUrl']) + 'notifications/', { headers: { 'sessionID': sessionId } })
-                .then(function (response) {
-                    updateNotificationsLabel(response.data);
-                })
-                .catch(function (response) {
-                    console.error("Error while querying notification service:", response);
+        $http.get(JSON.parse(localStorage['notificationServiceUrl']) + 'notifications/', { headers: { 'sessionID': getSessionId() } })
+            .then(function (response) {
+                updateNotificationsLabel(response.data);
+            })
+            .catch(function (response) {
+                console.error("Error while querying notification service:", response);
             });
-        }
     }
 
     function updateNotificationsLabel(notifications){
@@ -192,9 +227,16 @@ mainCtrl.controller('navBarController', function ($scope, $state, $http){
             $scope.newNotificationsLabel.hide();
         }
     }
+
+    this.$onDestroy = function() {
+        if (angular.isDefined($scope.intervalNotificationUpdate)) {
+            $interval.cancel($scope.intervalNotificationUpdate);
+            $scope.intervalNotificationUpdate = undefined;
+        }
+    }
 });
 
-mainCtrl.controller('loginController', function ($scope, $state, MainService, $stateParams, $location) {
+mainModule.controller('loginController', function ($scope, $state, MainService, $stateParams, $location) {
     $scope.redirectsTo = $stateParams.redirectsTo;
     var host = $location.host();
     $scope.showLinkAccountCreation =  (host === 'try.activeeon.com' || host === 'azure-try.activeeon.com');
@@ -222,6 +264,7 @@ mainCtrl.controller('loginController', function ($scope, $state, MainService, $s
                         $state.go('portal.subview1');
                 }
                 $scope.errorMessage = undefined;
+                $scope.startRegularCheckSession();
             })
             .error(function (response) {
                 try {
@@ -243,18 +286,14 @@ mainCtrl.controller('loginController', function ($scope, $state, MainService, $s
     };
 });
 
-mainCtrl.controller('logoutController', function ($rootScope, $scope, $state) {
+mainModule.controller('logoutController', function ($scope, $state) {
     $scope.logout = function () {
         localStorage.removeItem('pa.session');
-        // Stop all PCA refreshing services
-        $rootScope.$broadcast('event:StopRefreshing');
-        console.log("event:StopRefreshing emitted");
-
-        $state.go('login');
+        $scope.closeSession();
     };
 });
 
-mainCtrl.directive('ngRightClick', function($parse) {
+mainModule.directive('ngRightClick', function($parse) {
     return function(scope, element, attrs) {
         var fn = $parse(attrs.ngRightClick);
         element.bind('contextmenu', function(event) {
