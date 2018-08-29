@@ -72,11 +72,6 @@
   font-size: 14px;
 }
 
-.ibox-content table {
-    table-layout:fixed;
-    width:100%;
-}
-
 .ibox-heading {
     background-color : unset !important;
 }
