@@ -1,17 +1,17 @@
-.panel-default{
-    cursor:pointer;
-}
-
-.panel-body {
-    position: relative;
+.btn.nohover  {
+    pointer-events: none;
 }
 
 .btn.nohover:hover {
     pointer-events: none;
 }
 
-.btn.nohover  {
-    pointer-events: none;
+.panel-default{
+    cursor:pointer;
+}
+
+.panel-body {
+    position: relative;
 }
 
 .panel-selected {
@@ -22,14 +22,6 @@
   color: #353535;
   background-color: #bababa;
   border-color: #353535;
-}
-
-.panel-body img {
-    display: block;
-    max-width: 100%;
-    max-height: 100%;
-    margin-left : auto;
-    margin-right : auto;
 }
 
 .clickable-element{
@@ -56,6 +48,14 @@
     overflow: hidden;
     padding: 4px;
     font-size: 10px;
+}
+
+.object-box img {
+    display: block;
+    max-width: 100%;
+    max-height: 100%;
+    margin-left : auto;
+    margin-right : auto;
 }
 
 .object-box:hover > .panel-body {
