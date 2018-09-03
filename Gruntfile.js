@@ -189,6 +189,7 @@ module.exports = function (grunt) {
                             'styles/patterns/*.*',
                             'styles/patterns/img/*.*',
                             'styles/patterns/img/wf-icons/{,*/}*.*',
+                            'styles/patterns/img/objects-icons/{,*/}*.*',
                             'img/{,*/}*.*',
                             'resources/{,*/}*.properties',
                             'resources/{,*/}*.json'
