@@ -297,12 +297,13 @@ mainModule.directive('ngRightClick', function($parse) {
     return {
         restrict: 'A',
         link: {
+            //the pre function will determine which item of the contextual menu will be displayed
             pre: function(scope, element, attrs) {
-
                 //create a function that will invoke ngRightClick value
                 var fn = $parse(attrs.ngRightClick);
+                //attach the contextmenu event to the element
                 element.bind('contextmenu', function(event) {
-                    scope.$apply(function() {
+                    scope.$apply(function(scope) {
                         //cancel the os default contextual menu
                         event.preventDefault();
 
@@ -314,14 +315,14 @@ mainModule.directive('ngRightClick', function($parse) {
                     });
                 });
             },
-            post: function(scope, element, attrs) {
 
+            // the post function position the contextual menu regarding the click position and the contextual menu size
+            // this function must be executed after the ng-if directives because they will change the contextual menu size
+            post: function(scope, element, attrs) {
                 //create a function that will invoke ngRightClick value
                 var fn = $parse(attrs.ngRightClick);
                 element.bind('contextmenu', function(event) {
-                    scope.$apply(function() {
-                        scope.moveContextualMenu(event);
-                    });
+                    scope.moveContextualMenu(event)
                 });
             }
         }
