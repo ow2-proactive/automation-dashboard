@@ -327,3 +327,18 @@ mainModule.directive('ngRightClick', function($parse) {
         }
     }
 });
+
+mainModule .directive('ngWheel', ['$parse', function($parse){
+    return {
+        restrict: 'A',
+        link: function(scope, element, attr) {
+            var expr = $parse(attr['ngWheel']);
+            element.bind('wheel', function(event){
+                scope.$apply(function() {
+                    expr(scope);
+                });
+            });
+
+        }
+    };
+}]);
