@@ -306,12 +306,8 @@ mainModule.directive('ngRightClick', function($parse) {
                     scope.$apply(function(scope) {
                         //cancel the os default contextual menu
                         event.preventDefault();
-
                         //call the function that invoke the function included in ngRightClick value
-                        var appliedFunction = fn(scope, {$event:event});
-
-                        //call the function returned by the method in ngRightClick value
-                        appliedFunction(event);
+                        fn(scope, { $event:event} );
                     });
                 });
             },
