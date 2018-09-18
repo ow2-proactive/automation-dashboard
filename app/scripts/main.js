@@ -163,13 +163,8 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
         $rootScope.$broadcast('event:StopRefreshing');
     }
 
-    $scope.contextualMenu = function() {
-        $scope.contextPosition = "out";
-        $scope.contextDisplay = true;
-    }
-
-    $scope.contextualMenuOnItem = function(clickEvent) {
-        $scope.contextPosition = "onObject";
+    $scope.displayContextualMenu = function(clickEvent, position) {
+        $scope.contextPosition = position;
         $scope.contextDisplay = true;
         clickEvent.stopPropagation();
     }
@@ -179,7 +174,7 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
         $scope.contextDisplay = false;
     }
 
-    // Check if position is set to 'onObject' or 'out'
+    // Check if position match with the position set by displayContextualMenu
     $scope.isContextView = function(position){
         return $scope.contextPosition == position;
     }
