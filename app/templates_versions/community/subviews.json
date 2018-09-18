@@ -116,7 +116,7 @@
     },
     "cloudWatch": {
         "isAvailable": true,
-        "name": "Cloud Watch",
+        "name": "Cloud Watch (beta)",
         "nameForUrl": "cloud-watch",
         "appFolder": "cloud-watch-portal/app/",
         "htmlFile": "cloud_watch.html",
