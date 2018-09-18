@@ -294,13 +294,36 @@ mainModule.controller('logoutController', function ($scope, $state) {
 });
 
 mainModule.directive('ngRightClick', function($parse) {
-    return function(scope, element, attrs) {
-        var fn = $parse(attrs.ngRightClick);
-        element.bind('contextmenu', function(event) {
-            scope.$apply(function() {
-                event.preventDefault();
-                fn(scope, {$event:event});
-            });
-        });
-    };
+    return {
+        restrict: 'A',
+        link: {
+            pre: function(scope, element, attrs) {
+
+                //create a function that will invoke ngRightClick value
+                var fn = $parse(attrs.ngRightClick);
+                element.bind('contextmenu', function(event) {
+                    scope.$apply(function() {
+                        //cancel the os default contextual menu
+                        event.preventDefault();
+
+                        //call the function that invoke the function included in ngRightClick value
+                        var appliedFunction = fn(scope, {$event:event});
+
+                        //call the function returned by the method in ngRightClick value
+                        appliedFunction(event);
+                    });
+                });
+            },
+            post: function(scope, element, attrs) {
+
+                //create a function that will invoke ngRightClick value
+                var fn = $parse(attrs.ngRightClick);
+                element.bind('contextmenu', function(event) {
+                    scope.$apply(function() {
+                        scope.moveContextualMenu(event);
+                    });
+                });
+            }
+        }
+    }
 });
