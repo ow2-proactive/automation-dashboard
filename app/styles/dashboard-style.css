@@ -83,3 +83,46 @@
 .CodeMirror-focused .cm-matchhighlight {
     background-color: lightgreen;
 }
+
+.context-menu {
+  position: fixed;
+  top: 0px;
+  left: 0px;
+  z-index: 10;
+  padding: 12px 0;
+  width: 240px;
+  background-color: #fff;
+  border: solid 1px #dfdfdf;
+  box-shadow: 1px 1px 2px #cfcfcf;
+
+}
+
+.context-menu--active {
+  display: block;
+}
+
+.context-menu__items {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.context-menu__item {
+  display: block;
+  margin-bottom: 4px;
+}
+
+.context-menu__link {
+  display: block;
+  padding: 4px 12px;
+  color: #0066aa;
+  text-decoration: none;
+  cursor: pointer;
+}
+
+.context-menu__items li:hover {
+  background-color: #DEF;
+}
+
+
+

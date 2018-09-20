@@ -121,9 +121,13 @@ mainModule.factory('MainService', function ($http, $interval, $rootScope, $state
 // --------------- Controllers -----------------
 
 mainModule.controller('mainController', function ($http, $scope, $rootScope, $state, $location, $interval) {
+
     this.$onInit = function () {
         $scope.main.userName = localStorage['pa.login'];
         $scope.startRegularCheckSession()
+        $scope.contextDisplay = false;
+        // contextPosition enables directive to specify where the context menu was opened
+        $scope.contextPosition = ""
     }
 
     $scope.startRegularCheckSession = function(){
@@ -157,6 +161,43 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
         $state.go('login');
         $scope.stopRegularCheckSession();
         $rootScope.$broadcast('event:StopRefreshing');
+    }
+
+    $scope.displayContextualMenu = function(clickEvent, position) {
+        $scope.contextPosition = position;
+        $scope.contextDisplay = true;
+        clickEvent.stopPropagation();
+    }
+
+
+    $scope.hideContextualMenu = function(){
+        $scope.contextDisplay = false;
+    }
+
+    // Check if position match with the position set by displayContextualMenu
+    $scope.isContextView = function(position){
+        return $scope.contextPosition == position;
+    }
+
+    // Move the contextual menu near the click according to its position in the window
+    $scope.moveContextualMenu = function(clickEvent){
+
+        var contextMenuHeight = angular.element('#context-menu')[0].offsetHeight
+        //if contextual menu will get out of the panel catalog-tab-content, we display it upper
+        if (clickEvent["clientY"] + contextMenuHeight < window.innerHeight){
+            angular.element('#context-menu').css("top",clickEvent["clientY"]+"px")
+        }else{
+            angular.element('#context-menu').css("top",(clickEvent["clientY"]-contextMenuHeight)+"px")
+        }
+
+        var contextMenuWidth = angular.element('#context-menu')[0].offsetWidth
+        //if contextual menu will get out of the panel catalog-tab-content, we display it upper
+        if (clickEvent["clientX"] + contextMenuWidth < window.innerWidth){
+            angular.element('#context-menu').css("left",clickEvent["clientX"]+"px")
+        }else{
+            angular.element('#context-menu').css("left",(clickEvent["clientX"]-contextMenuWidth)+"px")
+        }
+
     }
 });
 
@@ -294,13 +335,54 @@ mainModule.controller('logoutController', function ($scope, $state) {
 });
 
 mainModule.directive('ngRightClick', function($parse) {
-    return function(scope, element, attrs) {
-        var fn = $parse(attrs.ngRightClick);
-        element.bind('contextmenu', function(event) {
-            scope.$apply(function() {
-                event.preventDefault();
-                fn(scope, {$event:event});
-            });
-        });
-    };
+    return {
+        restrict: 'A',
+        link: {
+            //the pre function will determine which item of the contextual menu will be displayed
+            pre: function(scope, element, attrs) {
+                //create a function that will invoke ngRightClick value
+
+                var fn = $parse(attrs.ngRightClick);
+                //attach the contextmenu event to the element
+                element.bind('contextmenu', function(event) {
+                    scope.$apply(function(scope) {
+                        //cancel the os default contextual menu
+                        event.preventDefault();
+
+                        if(attrs.ngRightClick != ""){
+                            //call the function that invoke the function included in ngRightClick value
+                            fn(scope, { $event:event} );
+                        }
+                    });
+                });
+            },
+
+            // the post function position the contextual menu regarding the click position and the contextual menu size
+            // this function must be executed after the ng-if directives because they will change the contextual menu size
+            post: function(scope, element, attrs) {
+                //create a function that will invoke ngRightClick value
+                if(attrs.ngRightClick != ""){
+                    element.bind('contextmenu', function(event) {
+                        scope.moveContextualMenu(event)
+
+                    });
+                }
+            }
+        }
+    }
 });
+
+mainModule .directive('ngWheel', ['$parse', function($parse){
+    return {
+        restrict: 'A',
+        link: function(scope, element, attr) {
+            var expr = $parse(attr['ngWheel']);
+            element.bind('wheel', function(event){
+                scope.$apply(function() {
+                    expr(scope);
+                });
+            });
+
+        }
+    };
+}]);

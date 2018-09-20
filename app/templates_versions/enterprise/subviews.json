@@ -104,14 +104,10 @@
         "htmlFile": "cloud_automation.html",
         "secondaryHtmlFiles": ["modals/submit_window_cloud_automation.html", "modals/service_instance_info_modal.html", "modals/service_instance_history_modal.html"],
         "notAvailablePage": "page_not_available_cloud_automation.html",
-        "jsFiles": ["scripts/cloud-automation-rest.js", "services/cloud-automation-service.js", "services/scheduler-service.js"],
+        "jsFiles": ["scripts/cloud-automation-rest.js", "services/cloud-automation-service.js", "services/scheduler-service.js", "services/catalog-service-automation.js"],
         "angularModuleName": "pca-rest",
         "cssFile": "portal_custom_style.css",
         "authenticate": true,
-        "initFunction": {
-            "functionName": "initServiceAutomation",
-            "services": ["PCAService"]
-        },
         "images": ["not_available_image_cloud_automation.png"]
     },
     "cloudWatch": {
