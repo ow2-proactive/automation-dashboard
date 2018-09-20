@@ -126,7 +126,7 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
         $scope.main.userName = localStorage['pa.login'];
         $scope.startRegularCheckSession()
         $scope.contextDisplay = false;
-        // contextPosition has two possible values : 'onObject' or 'out'
+        // contextPosition enables directive to specify where the context menu was opened
         $scope.contextPosition = ""
     }
 
