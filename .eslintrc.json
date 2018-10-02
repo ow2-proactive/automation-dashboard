@@ -12,6 +12,7 @@
     },
     "rules": {
         "require-jsdoc": "off",
-        "valid-jsdoc": "off"
+        "valid-jsdoc": "off",
+        "indent": ["error", 4]
     }
 }
