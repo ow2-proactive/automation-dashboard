@@ -124,5 +124,8 @@
   background-color: #DEF;
 }
 
+.footer {
+    z-index: 25;
+}
 
 
