@@ -386,3 +386,68 @@ mainModule .directive('ngWheel', ['$parse', function($parse){
         }
     };
 }]);
+
+mainModule.directive('ngDraggable', function($document) {
+    return {
+        restrict: 'A',
+        scope: {
+            dragScope: "@ngDraggable"
+        },
+        link: function(scope, elem, attr) {
+            var startX, startY, x = 0, y = 0,
+                container, width = 50, height = 50;
+
+            elem.on('mousedown', function(e) {
+                e.preventDefault();
+                if (scope.dragScope) {
+                    //Bounding rectangle of where we can move the element
+                    container = document.querySelector(scope.dragScope).getBoundingClientRect();
+                }
+                width  = elem[0].offsetWidth;
+                height = elem[0].offsetHeight;
+                startX = e.clientX - elem[0].offsetLeft;
+                startY = e.clientY - elem[0].offsetTop;
+                $document.on('mousemove', mousemove);
+                $document.on('mouseup', mouseup);
+            });
+
+            // Handles drag events
+            function mousemove(e) {
+                y = e.clientY - startY;
+                x = e.clientX - startX;
+                setPosition();
+            }
+
+            // Unbinds drag events
+            function mouseup(e) {
+                $document.unbind('mousemove', mousemove);
+                $document.unbind('mouseup', mouseup);
+            }
+
+            // Move element within container
+            function setPosition() {
+                if (container) {
+                    if (x < 0) {
+                        //out of left scope
+                        x = 0;
+                    } else if (x > container.width - width) {
+                        //out of right scope
+                        x = container.width - width;
+                    }
+                    if (y < 0) {
+                        //out of top scope
+                        y = 0;
+                    } else if (y > container.height - height) {
+                        //out of bottom scope
+                        y = container.height - height;
+                    }
+                }
+                elem.css({
+                    top: y + 'px',
+                    left:  x + 'px'
+                    });
+            }
+        }
+    }
+
+});

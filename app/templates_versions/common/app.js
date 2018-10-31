@@ -7,6 +7,7 @@
             'ui.router', // Routing
             'ui.bootstrap', // Bootstrap
             'main',
+            'angularMoment',
             'angular-cron-gen',
             'moment-picker',
             'mwl.calendar',
@@ -17,7 +18,13 @@
 
             //endSubviewsModules
             'angularCSS',
-            'ui.codemirror'
+            'ui.codemirror',
+            'gantt',
+            'gantt.tooltips',
+            'ui.tree',
+            'gantt.tree',
+            'gantt.groups',
+            'gantt.corner'
         ])
         .config(['momentPickerProvider', function(momentPickerProvider) {
             momentPickerProvider.options({
