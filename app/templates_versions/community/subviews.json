@@ -43,13 +43,16 @@
         "nameForUrl": "job-planner-calendar-def",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "execution_calendars.html",
-        "jsFiles": ["scripts/factory/jppRestService.js", "scripts/execution-calendars-rest.js"],
+        "jsFiles": ["scripts/services/catalog-service.js",
+            "scripts/services/scheduler-service.js",
+            "scripts/controllers/execution-calendars-controller.js"
+        ],
         "angularModuleName": "ec-rest",
         "cssFile": "portal_custom_style.css",
         "authenticate": true,
         "initFunction": {
             "functionName": "initJobPlannerEC",
-            "services": ["JobPlannerRestService"]
+            "services": ["CatalogService"]
         }
     },
     "calendar-associations": {
@@ -62,21 +65,20 @@
         "htmlFile": "calendar-association/calendar_association.html",
         "secondaryHtmlFiles": ["calendar-association/calendar_list.html"],
         "notAvailablePage": "page_not_available_calendar_association.html",
-        "jsFiles": ["scripts/calendar-association.js",
-            "services/catalog-service.js",
-            "components/calendar-list.component.js",
-            "controllers/job-planner-controller.js",
-            "services/job-planner-service.js",
-            "controllers/job-planner-controller.js"
+        "jsFiles": ["scripts/services/catalog-service.js",
+            "scripts/services/job-planner-service.js",
+            "scripts/controllers/calendar-association.js",
+            "scripts/controllers/components/calendar-list.component.js",
+            "scripts/controllers/calendar-association-controller.js",
+            "app/scripts/controllers/calendar-association.js"
         ],
         "angularModuleName": "calendar-association",
         "cssFile": "portal_custom_style.css",
         "authenticate": true,
         "initFunction": {
             "functionName": "initJobPlanner",
-            "services": ["JobPlannerService", "catalogService"]
-        },
-        "images": ["orange-number-1-16.png", "orange-number-2-16.png", "orange-number-3-16.png"]
+            "services": ["JobPlannerService"]
+        }
     },
     "execution-planning": {
         "isAvailable": true,
@@ -88,13 +90,13 @@
         "htmlFile": "execution_planning.html",
         "secondaryHtmlFiles": "modals/gantt_chart_view.html",
         "notAvailablePage": "page_not_available_template.html",
-        "jsFiles": ["scripts/execution-planning-rest.js", "scripts/gantt-chart-modal.js"],
+        "jsFiles": ["scripts/services/catalog-service.js", "scripts/services/job-planner-service.js", "scripts/controllers/execution-planning-controller.js", "scripts/controllers/components/gantt-chart-modal.js"],
         "angularModuleName": "execution-planning-rest",
         "cssFile": "portal_custom_style.css",
         "authenticate": true,
         "initFunction": {
             "functionName": "initJobPlannerEP",
-            "services": ["JobPlannerRestService"]
+            "services": ["CatalogService"]
         }
     },
     "cloudAutomation": {
