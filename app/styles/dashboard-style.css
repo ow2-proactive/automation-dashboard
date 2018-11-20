@@ -128,4 +128,10 @@
     z-index: 25;
 }
 
+.no-text-overflow {
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
 
