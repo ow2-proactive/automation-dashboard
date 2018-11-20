@@ -88,7 +88,7 @@
         "nameForUrl": "job-planner-execution-planning",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "execution_planning.html",
-        "secondaryHtmlFiles": "modals/gantt_chart_view.html",
+        "secondaryHtmlFiles": ["modals/gantt_chart_view.html", "gantt-chart/ganttEventTooltip.tmpl.html"],
         "notAvailablePage": "page_not_available_template.html",
         "jsFiles": ["scripts/services/catalog-service.js", "scripts/services/job-planner-service.js", "scripts/controllers/execution-planning-controller.js", "scripts/controllers/components/gantt-chart-modal.js"],
         "angularModuleName": "execution-planning-rest",
