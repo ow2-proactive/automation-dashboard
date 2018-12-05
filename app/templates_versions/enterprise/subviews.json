@@ -67,18 +67,13 @@
         "notAvailablePage": "page_not_available_calendar_association.html",
         "jsFiles": ["scripts/services/catalog-service.js",
             "scripts/services/job-planner-service.js",
-            "scripts/controllers/calendar-association.js",
             "scripts/controllers/calendar-association-controller.js",
             "scripts/controllers/components/calendar-list.component.js",
             "app/scripts/controllers/calendar-association.js"
         ],
         "angularModuleName": "calendar-association",
         "cssFile": "portal_custom_style.css",
-        "authenticate": true,
-        "initFunction": {
-            "functionName": "initJobPlanner",
-            "services": ["JobPlannerService"]
-        }
+        "authenticate": true
     },
     "execution-planning": {
         "isAvailable": true,

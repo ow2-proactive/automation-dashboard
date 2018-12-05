@@ -134,4 +134,8 @@
     white-space: nowrap;
 }
 
-
+@-moz-document url-prefix() {
+    button[class~="fa"] {
+        padding: 2px !important;
+    }
+}
