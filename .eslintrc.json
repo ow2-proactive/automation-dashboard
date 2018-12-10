@@ -7,12 +7,6 @@
         "eslint-config-airbnb-es5"
     ],
     "globals": {
-        "angular": 1,
-        "moment": 1
-    },
-    "rules": {
-        "require-jsdoc": "off",
-        "valid-jsdoc": "off",
-        "indent": ["error", 4]
+        "angular": 1
     }
 }
