@@ -1,0 +1,12 @@
+{
+    "env": {
+        "browser": 1
+    },
+    "extends": [
+        //"plugin:angular/johnpapa",
+        "eslint-config-airbnb-es5"
+    ],
+    "globals": {
+        "angular": 1
+    }
+}
