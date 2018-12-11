@@ -7,6 +7,19 @@
         "eslint-config-airbnb-es5"
     ],
     "globals": {
-        "angular": 1
+        "angular": 1,
+        "swal": 1
+    },
+    "rules" : {
+        "quotes": [1, "single"],
+        "indent": [2, 4],
+        "space-before-function-paren": [0,"always"],
+        "space-infix-ops": [0,"always"],
+        "space-before-blocks": [0,"always"],
+        "spaced-comment": [0,"always"],
+        "padded-blocks": [0,"always"],
+        "func-names": [0,"always"],
+        //"semi": [0,"always"],
+        "no-console": [1,{ "allow": ["warn", "error"] }]
     }
 }
