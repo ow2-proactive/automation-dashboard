@@ -8,7 +8,8 @@
     ],
     "globals": {
         "angular": 1,
-        "swal": 1
+        "swal": 1,
+        "moment" : 1
     },
     "rules" : {
         "quotes": [1, "single"],
@@ -20,6 +21,8 @@
         "padded-blocks": [0,"always"],
         "func-names": [0,"always"],
         //"semi": [0,"always"],
-        "no-console": [1,{ "allow": ["warn", "error"] }]
+        "no-console": [1,{ "allow": ["warn", "error"] }],
+        "no-else-return": [0,"always"],
+        "valid-jsdoc": [0,"always"]
     }
 }
