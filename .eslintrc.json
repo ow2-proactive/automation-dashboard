@@ -23,6 +23,7 @@
         //"semi": [0,"always"],
         "no-console": [1,{ "allow": ["warn", "error"] }],
         "no-else-return": [0,"always"],
-        "valid-jsdoc": [0,"always"]
+        "valid-jsdoc": [0,"always"],
+        "no-shadow": [0,"always"]
     }
 }
