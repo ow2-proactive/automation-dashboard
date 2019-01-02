@@ -49,7 +49,11 @@
         ],
         "angularModuleName": "ec-rest",
         "cssFile": "portal_custom_style.css",
-        "authenticate": true
+        "authenticate": true,
+        "initFunction": {
+            "functionName": "initJobPlannerEC",
+            "services": ["CatalogService"]
+        }
     },
     "calendar-associations": {
         "isAvailable": true,
