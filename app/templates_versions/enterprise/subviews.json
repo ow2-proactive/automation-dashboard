@@ -84,11 +84,7 @@
         "jsFiles": ["scripts/services/catalog-service.js", "scripts/services/job-planner-service.js", "scripts/controllers/execution-planning-controller.js", "scripts/controllers/components/gantt-chart-modal.js"],
         "angularModuleName": "execution-planning-rest",
         "cssFile": "portal_custom_style.css",
-        "authenticate": true,
-        "initFunction": {
-            "functionName": "initJobPlannerEP",
-            "services": ["CatalogService"]
-        }
+        "authenticate": true
     },
     "cloudAutomation": {
         "isAvailable": true,
