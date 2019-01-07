@@ -318,9 +318,9 @@ module.exports = function (grunt) {
                                 for (var key in subviewsDefinition) {
                                     if (subviewsDefinition[key].isAvailable && !subviewsDefinition[key].isSubMenuTitle) {
                                         for (var scriptKey in subviewsDefinition[key].jsFiles) {
-                                            var script = subviewsDefinition[key].jsFiles[scriptKey];
+                                            var script = subviewsDefinition[key].appFolder +  subviewsDefinition[key].jsFiles[scriptKey];
                                             if (includedScripts.indexOf(script) < 0) {
-                                                result += '\n<script src="' + subviewsDefinition[key].appFolder + script + '"></script>';
+                                                result += '\n<script src="' + script + '"></script>';
                                                 includedScripts.push(script);
                                             }
                                         }
