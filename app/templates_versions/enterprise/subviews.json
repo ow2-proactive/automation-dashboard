@@ -110,7 +110,7 @@
         "notAvailablePage": "page_not_available_cloud_watch.html",
         "jsFiles": ["scripts/cloud-watch.js", "scripts/services/cloud-watch-service.js", "scripts/services/cloud-automation-service.js",
             "scripts/services/scheduler-service.js", "scripts/services/catalog-service.js", "scripts/cloud-watch-monitoring.js",
-            "scripts/cloud-watch-activated-rules.js", "scripts/editRuleModal.js", "scripts/cloud-watch-rules-tab.js", "scripts/submit-rule-modal.js"
+            "scripts/cloud-watch-activated-rules.js", "scripts/cloud-watch-removed-rules.js", "scripts/editRuleModal.js", "scripts/cloud-watch-rules-tab.js", "scripts/submit-rule-modal.js"
         ],
         "angularModuleName": "cloud-watch",
         "cssFile": "cloud_watch_custom_style.css",
