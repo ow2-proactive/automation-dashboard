@@ -106,11 +106,12 @@
         "nameForUrl": "cloud-watch",
         "appFolder": "cloud-watch-portal/app/",
         "htmlFile": "cloud_watch.html",
-        "secondaryHtmlFiles": ["modals/rule_edition.html", "modals/rule_submission.html"],
+        "secondaryHtmlFiles": ["modals/rule_edition.html", "modals/rule_submission.html", "modals/rule_instance_info_modal.html"],
         "notAvailablePage": "page_not_available_cloud_watch.html",
         "jsFiles": ["scripts/cloud-watch.js", "scripts/services/cloud-watch-service.js", "scripts/services/cloud-automation-service.js",
             "scripts/services/scheduler-service.js", "scripts/services/catalog-service.js", "scripts/cloud-watch-monitoring.js",
-            "scripts/cloud-watch-activated-rules.js", "scripts/cloud-watch-removed-rules.js", "scripts/editRuleModal.js", "scripts/cloud-watch-rules-tab.js", "scripts/submit-rule-modal.js"
+            "scripts/cloud-watch-activated-rules.js", "scripts/cloud-watch-removed-rules.js", "scripts/modals/edit-rule-modal.js",
+            "scripts/cloud-watch-rules-tab.js", "scripts/modals/submit-rule-modal.js", "scripts/modals/rule-instance-info-modal.js"
         ],
         "angularModuleName": "cloud-watch",
         "cssFile": "cloud_watch_custom_style.css",
