@@ -34,6 +34,11 @@ module.exports = function (grunt) {
                 dest: '<%= inspinia.dist %>/styles/' + subviewsDefinition[key].nameForUrl
             });
             if (subviewsDefinition[key].isAvailable) {
+                var path = subviewsDefinition[key].appFolder + '/views/' + subviewsDefinition[key].htmlFile;
+                var exists = grunt.file.exists(path);
+                if (!exists) {
+                    grunt.fail.warn('File ' + path + ' doesn\'t exist.');
+                }
                 out.push({
                     expand: true,
                     cwd: subviewsDefinition[key].appFolder + '/views/',
@@ -41,7 +46,6 @@ module.exports = function (grunt) {
                     dest: '<%= inspinia.dist %>/views/' + subviewsDefinition[key].nameForUrl
                 });
             } else {
-                grunt.log.writeln(key + " is not available");
                 out.push({
                     expand: true,
                     cwd: subviewsDefinition[key].appFolder + '/views/',
@@ -61,6 +65,11 @@ module.exports = function (grunt) {
             }
             if (subviewsDefinition[key].secondaryHtmlFiles){
                 for (var htmlFileKey in subviewsDefinition[key].secondaryHtmlFiles) {
+                    var path = subviewsDefinition[key].appFolder + '/views/' + subviewsDefinition[key].secondaryHtmlFiles[htmlFileKey];
+                    var exists = grunt.file.exists(path);
+                    if (!exists) {
+                        grunt.fail.warn('File ' + path + ' doesn\'t exist.');
+                    }
                     out.push({
                         expand: true,
                         cwd: subviewsDefinition[key].appFolder + '/views/',
@@ -318,9 +327,13 @@ module.exports = function (grunt) {
                                 for (var key in subviewsDefinition) {
                                     if (subviewsDefinition[key].isAvailable && !subviewsDefinition[key].isSubMenuTitle) {
                                         for (var scriptKey in subviewsDefinition[key].jsFiles) {
-                                            var script = subviewsDefinition[key].jsFiles[scriptKey];
-                                            if (includedScripts.indexOf(script) < 0) {
-                                                result += '\n<script src="' + subviewsDefinition[key].appFolder + script + '"></script>';
+                                            var script = subviewsDefinition[key].appFolder +  subviewsDefinition[key].jsFiles[scriptKey];
+                                            var exists = grunt.file.exists(script);
+                                            if (!exists) {
+                                                grunt.fail.warn('File ' + script + ' doesn\'t exist.');
+                                            }
+                                            else if (includedScripts.indexOf(script) < 0) {
+                                                result += '\n<script src="' + script + '"></script>';
                                                 includedScripts.push(script);
                                             }
                                         }

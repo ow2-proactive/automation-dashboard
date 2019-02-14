@@ -49,11 +49,7 @@
         ],
         "angularModuleName": "ec-rest",
         "cssFile": "portal_custom_style.css",
-        "authenticate": true,
-        "initFunction": {
-            "functionName": "initJobPlannerEC",
-            "services": ["CatalogService"]
-        }
+        "authenticate": true
     },
     "calendar-associations": {
         "isAvailable": true,
@@ -68,8 +64,7 @@
         "jsFiles": ["scripts/services/catalog-service.js",
             "scripts/services/job-planner-service.js",
             "scripts/controllers/components/calendar-list.component.js",
-            "scripts/controllers/calendar-association-controller.js",
-            "app/scripts/controllers/calendar-association.js"
+            "scripts/controllers/calendar-association-controller.js"
         ],
         "angularModuleName": "calendar-association",
         "cssFile": "portal_custom_style.css",
@@ -88,11 +83,7 @@
         "jsFiles": ["scripts/services/catalog-service.js", "scripts/services/job-planner-service.js", "scripts/controllers/execution-planning-controller.js", "scripts/controllers/components/gantt-chart-modal.js"],
         "angularModuleName": "execution-planning-rest",
         "cssFile": "portal_custom_style.css",
-        "authenticate": true,
-        "initFunction": {
-            "functionName": "initJobPlannerEP",
-            "services": ["CatalogService"]
-        }
+        "authenticate": true
     },
     "cloudAutomation": {
         "isAvailable": false,
@@ -102,7 +93,10 @@
         "htmlFile": "cloud_automation.html",
         "secondaryHtmlFiles": ["modals/submit_window_cloud_automation.html", "modals/service_instance_info_modal.html", "modals/service_instance_history_modal.html"],
         "notAvailablePage": "page_not_available_cloud_automation.html",
-        "jsFiles": ["scripts/cloud-automation-rest.js", "services/cloud-automation-service.js", "services/scheduler-service.js", "services/catalog-service-automation.js"],
+        "jsFiles": ["scripts/cloud-automation/cloud-automation-main-controller.js", "services/cloud-automation-service.js", "services/scheduler-service.js", "services/catalog-service-automation.js",
+            "scripts/cloud-automation/activated-services-controller.js", "scripts/cloud-automation/finished-services-controller.js", "scripts/cloud-automation/monitoring-items-controller.js",
+            "scripts/cloud-automation/services-catalog-controller.js"
+        ],
         "angularModuleName": "pca-rest",
         "cssFile": "portal_custom_style.css",
         "authenticate": true,
@@ -114,12 +108,12 @@
         "nameForUrl": "cloud-watch",
         "appFolder": "cloud-watch-portal/app/",
         "htmlFile": "cloud_watch.html",
-        "secondaryHtmlFiles": ["modals/rule_edition.html", "modals/rule_submission.html"],
+        "secondaryHtmlFiles": ["modals/rule_edition.html", "modals/rule_submission.html", "modals/rule_instance_info_modal.html"],
         "notAvailablePage": "page_not_available_cloud_watch.html",
-        "jsFiles": ["scripts/cloud-watch.js", "scripts/cloud-watch-monitoring.js",
-            "scripts/cloud-watch-activated-rules.js", "scripts/editRuleModal.js", "scripts/cloud-watch-rules-tab.js",
-            "scripts/services/cloud-watch-service.js", "scripts/services/cloud-automation-service.js",
-            "scripts/services/scheduler-service.js", "scripts/services/catalog-service.js", "scripts/submit-rule-modal.js"
+        "jsFiles": ["scripts/cloud-watch.js", "scripts/services/cloud-watch-service.js", "scripts/services/cloud-automation-service.js",
+            "scripts/services/scheduler-service.js", "scripts/services/catalog-service.js", "scripts/cloud-watch-monitoring.js",
+            "scripts/cloud-watch-activated-rules.js", "scripts/cloud-watch-removed-rules.js", "scripts/modals/edit-rule-modal.js",
+            "scripts/cloud-watch-rules-tab.js", "scripts/modals/submit-rule-modal.js", "scripts/modals/rule-instance-info-modal.js"
         ],
         "angularModuleName": "cloud-watch",
         "cssFile": "cloud_watch_custom_style.css",

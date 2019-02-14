@@ -1,6 +1,13 @@
 
 # Created by https://www.gitignore.io/api/node,macos,grunt,linux,gradle,intellij+all
 
+### subviews ###
+cloud-automation/
+cloud-watch-portal/
+generic-catalog-portal/
+job-planner-portal/
+notification-portal/
+
 ### grunt ###
 # Grunt usually compiles files inside this directory
 dist/
