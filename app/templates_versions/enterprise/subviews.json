@@ -64,8 +64,7 @@
         "jsFiles": ["scripts/services/catalog-service.js",
             "scripts/services/job-planner-service.js",
             "scripts/controllers/calendar-association-controller.js",
-            "scripts/controllers/components/calendar-list.component.js",
-            "app/scripts/controllers/calendar-association.js"
+            "scripts/controllers/components/calendar-list.component.js"
         ],
         "angularModuleName": "calendar-association",
         "cssFile": "portal_custom_style.css",
@@ -94,7 +93,10 @@
         "htmlFile": "cloud_automation.html",
         "secondaryHtmlFiles": ["modals/submit_window_cloud_automation.html", "modals/service_instance_info_modal.html", "modals/service_instance_history_modal.html"],
         "notAvailablePage": "page_not_available_cloud_automation.html",
-        "jsFiles": ["scripts/cloud-automation-rest.js", "services/cloud-automation-service.js", "services/scheduler-service.js", "services/catalog-service-automation.js"],
+        "jsFiles": ["scripts/cloud-automation/cloud-automation-main-controller.js", "services/cloud-automation-service.js", "services/scheduler-service.js", "services/catalog-service-automation.js",
+            "scripts/cloud-automation/activated-services-controller.js", "scripts/cloud-automation/finished-services-controller.js", "scripts/cloud-automation/monitoring-items-controller.js",
+            "scripts/cloud-automation/services-catalog-controller.js", "scripts/cloud-automation/modals/info-modal-controller.js", "scripts/cloud-automation/modals/submit-modal-controller.js"
+        ],
         "angularModuleName": "pca-rest",
         "cssFile": "portal_custom_style.css",
         "authenticate": true,
