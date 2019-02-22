@@ -93,7 +93,7 @@
         "nameForUrl": "job-planner-gantt-chart",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "gantt-chart/gantt-view-main.html",
-        "secondaryHtmlFiles": ["gantt-chart/gantt_chart.html", "gantt-chart/ganttEventTooltip.tmpl.html", "gantt-chart/calendar_list_modal.html"],
+        "secondaryHtmlFiles": ["gantt-chart/ganttEventTooltip.tmpl.html", "gantt-chart/calendar_list_modal.html"],
         "notAvailablePage": "page_not_available_template.html",
         "jsFiles": ["scripts/services/catalog-service.js", "scripts/services/job-planner-service.js", "scripts/controllers/gantt-view-controller.js",
             "scripts/controllers/components/calendar-list-with-checkbox.js", "scripts/controllers/components/gantt-chart.js"
