@@ -16,6 +16,25 @@
             "services": ["WFASchedulerService", "WFACatalog"]
         }
     },
+    "jobAnalytics": {
+        "isAvailable": true,
+        "name": "Job Analytics (Beta)",
+        "nameForUrl": "job-analytics",
+        "appFolder": "job-analytics-portal/app/",
+        "htmlFile": "job_analytics.html",
+        "secondaryHtmlFiles": [],
+        "notAvailablePage": "page_not_available_job-analytics.html",
+        "jsFiles": [
+            "scripts/job-analytics.js",
+            "scripts/job-analytics-monitoring.js",
+            "scripts/job-analytics-jobs-table.js",
+            "scripts/services/scheduler-service.js",
+            "scripts/services/catalog-service.js"
+        ],
+        "angularModuleName": "job-analytics",
+        "cssFile": "job_analytics_custom_style.css",
+        "authenticate": true
+    },
     "genericCatalog": {
         "isAvailable": true,
         "name": "Catalog",
