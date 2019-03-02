@@ -1,4 +1,17 @@
 {
+    "genericCatalog": {
+        "isAvailable": true,
+        "name": "Catalog",
+        "nameForUrl": "catalog-portal",
+        "appFolder": "generic-catalog-portal/app/",
+        "htmlFile": "generic_catalog.html",
+        "secondaryHtmlFiles": ["modals/catalog_object_edition.html", "modals/submit_workflow.html", "modals/workflow_visualization.html"],
+        "notAvailablePage": "page_not_available.html",
+        "jsFiles": ["scripts/generic-catalog-rest.js", "scripts/factory/catalog-service.js", "scripts/factory/scheduler-service.js", "scripts/factory/cloud-automation-service.js", "scripts/submitWorkflowModalGCP.js", "scripts/editObjectModalGCP.js", "scripts/workflowVisualizationModalGCP.js"],
+        "angularModuleName": "gcp-rest",
+        "cssFile": "gcportal_custom_style.css",
+        "authenticate": true
+    },
     "workflowAutomation": {
         "isAvailable": true,
         "name": "Workflow Automation",
@@ -15,19 +28,6 @@
             "functionName": "initWorkflowAutomation",
             "services": ["WFASchedulerService", "WFACatalog"]
         }
-    },
-    "genericCatalog": {
-        "isAvailable": true,
-        "name": "Catalog",
-        "nameForUrl": "catalog-portal",
-        "appFolder": "generic-catalog-portal/app/",
-        "htmlFile": "generic_catalog.html",
-        "secondaryHtmlFiles": ["modals/catalog_object_edition.html", "modals/submit_workflow.html", "modals/workflow_visualization.html"],
-        "notAvailablePage": "page_not_available.html",
-        "jsFiles": ["scripts/generic-catalog-rest.js", "scripts/factory/catalog-service.js", "scripts/factory/scheduler-service.js", "scripts/factory/cloud-automation-service.js", "scripts/submitWorkflowModalGCP.js", "scripts/editObjectModalGCP.js", "scripts/workflowVisualizationModalGCP.js"],
-        "angularModuleName": "gcp-rest",
-        "cssFile": "gcportal_custom_style.css",
-        "authenticate": true
     },
     "job-planner-portal": {
         "isAvailable": true,
