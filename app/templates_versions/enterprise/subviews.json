@@ -82,7 +82,7 @@
         "secondaryHtmlFiles": ["calendar_list_with_checkbox.html"],
         "notAvailablePage": "page_not_available_template.html",
         "jsFiles": ["scripts/services/catalog-service.js", "scripts/services/job-planner-service.js", "scripts/services/calendar-list-service.js",
-            "scripts/controllers/execution-planning-controller.js"
+            "scripts/controllers/execution-planning-controller.js", "scripts/controllers/components/calendar-list-with-checkbox-component.js"
         ],
         "angularModuleName": "execution-planning-rest",
         "cssFile": "portal_custom_style.css",
@@ -99,7 +99,8 @@
         "secondaryHtmlFiles": ["gantt-chart/ganttEventTooltip.tmpl.html", "gantt-chart/calendar_list_modal.html", "gantt-chart/gantt_legend.html", "calendar_list_with_checkbox.html"],
         "notAvailablePage": "page_not_available_template.html",
         "jsFiles": ["scripts/services/catalog-service.js", "scripts/services/job-planner-service.js", "scripts/controllers/gantt-view-controller.js",
-            "scripts/controllers/components/calendar-list-modal.js", "scripts/controllers/components/gantt-chart.js", "scripts/services/calendar-list-service.js"
+            "scripts/controllers/components/calendar-list-modal.js", "scripts/controllers/components/gantt-chart.js", "scripts/services/calendar-list-service.js",
+            "scripts/controllers/components/calendar-list-with-checkbox-component.js"
         ],
         "angularModuleName": "gantt-chart",
         "cssFile": "portal_custom_style.css",
