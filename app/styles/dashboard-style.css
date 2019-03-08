@@ -134,6 +134,11 @@
     white-space: nowrap;
 }
 
+.disabled-fa-button, button[disabled="disabled"]{
+    color: darkgray;
+    cursor: not-allowed !important;
+}
+
 @-moz-document url-prefix() {
     button[class~="fa"] {
         padding: 2px !important;
