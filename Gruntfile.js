@@ -29,26 +29,26 @@ module.exports = function (grunt) {
                 continue;
             out.push({
                 expand: true,
-                cwd: subviewsDefinition[key].appFolder + '/styles/',
+                cwd: subviewsDefinition[key].appFolder + 'styles/',
                 src: subviewsDefinition[key].cssFile,
                 dest: '<%= inspinia.dist %>/styles/' + subviewsDefinition[key].nameForUrl
             });
             if (subviewsDefinition[key].isAvailable) {
-                var path = subviewsDefinition[key].appFolder + '/views/' + subviewsDefinition[key].htmlFile;
+                var path = subviewsDefinition[key].appFolder + 'views/' + subviewsDefinition[key].htmlFile;
                 var exists = grunt.file.exists(path);
                 if (!exists) {
                     grunt.fail.warn('File ' + path + ' doesn\'t exist.');
                 }
                 out.push({
                     expand: true,
-                    cwd: subviewsDefinition[key].appFolder + '/views/',
+                    cwd: subviewsDefinition[key].appFolder + 'views/',
                     src: subviewsDefinition[key].htmlFile,
                     dest: '<%= inspinia.dist %>/views/' + subviewsDefinition[key].nameForUrl
                 });
             } else {
                 out.push({
                     expand: true,
-                    cwd: subviewsDefinition[key].appFolder + '/views/',
+                    cwd: subviewsDefinition[key].appFolder + 'views/',
                     src: subviewsDefinition[key].notAvailablePage,
                     dest: '<%= inspinia.dist %>/views/' + subviewsDefinition[key].nameForUrl
                 });
@@ -57,7 +57,7 @@ module.exports = function (grunt) {
                 for (var imageKey in subviewsDefinition[key].images) {
                     out.push({
                         expand: true,
-                        cwd: subviewsDefinition[key].appFolder + '/styles/patterns/',
+                        cwd: subviewsDefinition[key].appFolder + 'styles/patterns/',
                         src: subviewsDefinition[key].images[imageKey],
                         dest: '<%= inspinia.dist %>/styles/'+ subviewsDefinition[key].nameForUrl
                     });
@@ -65,14 +65,14 @@ module.exports = function (grunt) {
             }
             if (subviewsDefinition[key].secondaryHtmlFiles){
                 for (var htmlFileKey in subviewsDefinition[key].secondaryHtmlFiles) {
-                    var path = subviewsDefinition[key].appFolder + '/views/' + subviewsDefinition[key].secondaryHtmlFiles[htmlFileKey];
+                    var path = subviewsDefinition[key].appFolder + 'views/' + subviewsDefinition[key].secondaryHtmlFiles[htmlFileKey];
                     var exists = grunt.file.exists(path);
                     if (!exists) {
                         grunt.fail.warn('File ' + path + ' doesn\'t exist.');
                     }
                     out.push({
                         expand: true,
-                        cwd: subviewsDefinition[key].appFolder + '/views/',
+                        cwd: subviewsDefinition[key].appFolder + 'views/',
                         src: subviewsDefinition[key].secondaryHtmlFiles[htmlFileKey],
                         dest: '<%= inspinia.dist %>/views/' + subviewsDefinition[key].nameForUrl
                     });

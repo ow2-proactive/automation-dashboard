@@ -7,7 +7,7 @@
 
             <div class="login-form-container">
 
-                <form action="/" class="form-horizontal" id="login-form">
+                <form class="form-horizontal" id="login-form" ng-submit="login()">
 
                     <div class="form-group">
                         <label class="control-label">Username: </label>
@@ -21,7 +21,7 @@
 
                     <div class="form-group">
                         <div class="buttons-container">
-                           <button type="button" class="btn btn-primary" ng-click="login()">Connect</button>
+                           <button type="submit" class="btn btn-primary">Connect</button>
                         </div>
                     </div>
 
