@@ -217,6 +217,13 @@ module.exports = function (grunt) {
                         cwd: 'bower_components/bootstrap',
                         src: ['fonts/*.*'],
                         dest: '<%= inspinia.dist %>'
+                    },
+                    {
+                        expand: true,
+                        flatten: true,
+                        cwd: 'node_modules/angular-ui-grid',
+                        src: ['fonts/ui-grid.*'],
+                        dest: '<%= inspinia.dist %>/styles/fonts/'
                     }
                 ]
             },
@@ -388,8 +395,7 @@ module.exports = function (grunt) {
             dist: {
                 src: [
                     '<%= inspinia.dist %>/scripts/{,*/}*.js',
-                    '<%= inspinia.dist %>/styles/{,*/}*.css',
-                    '<%= inspinia.dist %>/styles/fonts/*'
+                    '<%= inspinia.dist %>/styles/{,*/}*.css'
                 ]
             }
         },
