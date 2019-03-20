@@ -41,5 +41,6 @@
   "notificationPortalQueryPeriod": 20000,
   "genericCatalogPortalQueryPeriod": 20000,
   "jobPlannerQueryPeriod": 20000,
-  "cloudWatchPortalQueryPeriod" : 20000
+  "cloudWatchPortalQueryPeriod" : 20000,
+  "jobAnalyticsPortalRefreshRate" : 20000
 }

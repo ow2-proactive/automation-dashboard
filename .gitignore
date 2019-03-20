@@ -6,6 +6,7 @@ cloud-automation/
 cloud-watch-portal/
 generic-catalog-portal/
 job-planner-portal/
+job-analytics-portal/
 notification-portal/
 
 ### grunt ###
@@ -38,6 +39,9 @@ app/views/common/navigation.html
 .idea/**/sqlDataSources.xml
 .idea/**/dynamic.xml
 .idea/**/uiDesigner.xml
+
+# IML file
+*.iml
 
 # Gradle:
 .idea/**/gradle.xml
