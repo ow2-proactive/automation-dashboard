@@ -139,6 +139,10 @@
     cursor: not-allowed !important;
 }
 
+.waiting, .waiting * {
+    cursor: wait !important;
+}
+
 @-moz-document url-prefix() {
     button[class~="fa"] {
         padding: 2px !important;
