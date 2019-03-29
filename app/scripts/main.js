@@ -27,6 +27,7 @@ function getProperties ($http, $location) {
             var appCatalogWorkflowsUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port() + "/catalog/buckets/" + response.view[0].catalog.bucketName + "/resources");
             var jobPlannerServiceUrl = angular.toJson(response.confServer.jobPlannerServiceUrl, true);
             var cloudWatchServiceUrl = angular.toJson(response.confServer.cloudWatchServiceUrl, true);
+            var jobAnalyticsServiceUrl = angular.toJson(response.confServer.jobAnalyticsServiceUrl, true);
             var configViews = angular.toJson(response.view, true);
             var appUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port());
             var studioUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port() +'/studio');
@@ -47,6 +48,7 @@ function getProperties ($http, $location) {
             localStorage['configViews'] = configViews;
             localStorage['jobPlannerServiceUrl'] = jobPlannerServiceUrl;
             localStorage['cloudWatchServiceUrl'] = cloudWatchServiceUrl;
+            localStorage['jobAnalyticsServiceUrl'] = jobAnalyticsServiceUrl;
             localStorage['appUrl'] = appUrl;
             localStorage['studioUrl'] = studioUrl;
         })
