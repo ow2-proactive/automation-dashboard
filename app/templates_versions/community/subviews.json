@@ -221,7 +221,7 @@
             "scripts/cloud-watch-removed-rules.js",
             "scripts/modals/edit-rule-modal.js",
             "scripts/cloud-watch-rules-tab.js",
-            "scripts/modals/submit-rule-modal.js",
+            "scripts/modals/activate-rule-modal.js",
             "scripts/modals/rule-instance-info-modal.js",
             "scripts/modals/rule-instance-history-modal.js",
             "scripts/cloud-watch-rules-fired-jobs.js"
