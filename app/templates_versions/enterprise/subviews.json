@@ -62,7 +62,9 @@
             "scripts/job-analytics-charts-duration.js",
             "scripts/job-analytics-charts-status.js",
             "scripts/job-analytics-jobs-table.js",
-            "scripts/services/scheduler-service.js"
+            "scripts/job-analytics-search-form.js",
+            "scripts/services/scheduler-service.js",
+            "scripts/services/job-analytics-service.js"
         ],
         "angularModuleName": "job-analytics",
         "cssFile": "job_analytics_custom_style.css",
@@ -199,14 +201,15 @@
     },
     "cloudWatch": {
         "isAvailable": true,
-        "name": "Cloud Watch (beta)",
+        "name": "Cloud Watch",
         "nameForUrl": "cloud-watch",
         "appFolder": "cloud-watch-portal/app/",
         "htmlFile": "cloud_watch.html",
         "secondaryHtmlFiles": [
             "modals/rule_edition.html",
             "modals/rule_submission.html",
-            "modals/rule_instance_info_modal.html"
+            "modals/rule_instance_info_modal.html",
+            "modals/rule_instance_history_modal.html"
         ],
         "notAvailablePage": "page_not_available_cloud_watch.html",
         "jsFiles": [
@@ -222,6 +225,7 @@
             "scripts/cloud-watch-rules-tab.js",
             "scripts/modals/activate-rule-modal.js",
             "scripts/modals/rule-instance-info-modal.js",
+            "scripts/modals/rule-instance-history-modal.js",
             "scripts/cloud-watch-rules-fired-jobs.js"
         ],
         "angularModuleName": "cloud-watch",

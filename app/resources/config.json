@@ -7,7 +7,8 @@
   "notificationServiceUrl": "/notification-service/",
   "catalogServiceUrl": "/catalog/",
   "jobPlannerServiceUrl": "/job-planner/",
-  "cloudWatchServiceUrl": "/proactive-cloud-watch/"
+  "cloudWatchServiceUrl": "/proactive-cloud-watch/",
+  "jobAnalyticsServiceUrl": "/job-analytics/"
 },
 "view": [{
   "viewname": "Workflow Automation",
