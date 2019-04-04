@@ -31,6 +31,7 @@ function getProperties ($http, $location) {
             var configViews = angular.toJson(response.view, true);
             var appUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port());
             var studioUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port() +'/studio');
+            var schedulerPortalUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port() +'/scheduler');
 
             localStorage['pcaServiceUrl'] = pcaServiceUrl;
             localStorage['schedulerRestUrl'] = schedulerRestUrl;
@@ -51,6 +52,7 @@ function getProperties ($http, $location) {
             localStorage['jobAnalyticsServiceUrl'] = jobAnalyticsServiceUrl;
             localStorage['appUrl'] = appUrl;
             localStorage['studioUrl'] = studioUrl;
+            localStorage['schedulerPortalUrl'] = schedulerPortalUrl;
         })
         .error(function (response) {
             console.error('LoadingPropertiesService $http.get error', status, response);
