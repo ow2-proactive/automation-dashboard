@@ -168,35 +168,6 @@
         "cssFile": "portal_custom_style.css",
         "authenticate": true
     },
-    "cloudAutomation": {
-        "isAvailable": false,
-        "name": "Cloud Automation",
-        "nameForUrl": "cloud-automation",
-        "appFolder": "cloud-automation/app/",
-        "htmlFile": "cloud_automation.html",
-        "secondaryHtmlFiles": [
-            "modals/submit_window_cloud_automation.html",
-            "modals/service_instance_info_modal.html",
-            "modals/service_instance_history_modal.html"
-        ],
-        "notAvailablePage": "page_not_available_cloud_automation.html",
-        "jsFiles": [
-            "scripts/cloud-automation/cloud-automation-main-controller.js",
-            "services/cloud-automation-service.js",
-            "services/scheduler-service.js",
-            "services/catalog-service-automation.js",
-            "scripts/cloud-automation/activated-services-controller.js",
-            "scripts/cloud-automation/finished-services-controller.js",
-            "scripts/cloud-automation/monitoring-items-controller.js",
-            "scripts/cloud-automation/services-catalog-controller.js"
-        ],
-        "angularModuleName": "pca-rest",
-        "cssFile": "portal_custom_style.css",
-        "authenticate": true,
-        "images": [
-            "not_available_image_cloud_automation.png"
-        ]
-    },
     "cloudWatch": {
         "isAvailable": true,
         "name": "Cloud Watch",
@@ -229,6 +200,35 @@
         "angularModuleName": "cloud-watch",
         "cssFile": "cloud_watch_custom_style.css",
         "authenticate": true
+    },
+    "cloudAutomation": {
+        "isAvailable": false,
+        "name": "Cloud Automation",
+        "nameForUrl": "cloud-automation",
+        "appFolder": "cloud-automation/app/",
+        "htmlFile": "cloud_automation.html",
+        "secondaryHtmlFiles": [
+            "modals/submit_window_cloud_automation.html",
+            "modals/service_instance_info_modal.html",
+            "modals/service_instance_history_modal.html"
+        ],
+        "notAvailablePage": "page_not_available_cloud_automation.html",
+        "jsFiles": [
+            "scripts/cloud-automation/cloud-automation-main-controller.js",
+            "services/cloud-automation-service.js",
+            "services/scheduler-service.js",
+            "services/catalog-service-automation.js",
+            "scripts/cloud-automation/activated-services-controller.js",
+            "scripts/cloud-automation/finished-services-controller.js",
+            "scripts/cloud-automation/monitoring-items-controller.js",
+            "scripts/cloud-automation/services-catalog-controller.js"
+        ],
+        "angularModuleName": "pca-rest",
+        "cssFile": "portal_custom_style.css",
+        "authenticate": true,
+        "images": [
+            "not_available_image_cloud_automation.png"
+        ]
     },
     "notificationPortal": {
         "isAvailable": true,
