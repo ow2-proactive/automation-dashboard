@@ -50,7 +50,7 @@
     },
     "jobAnalytics": {
         "isAvailable": true,
-        "name": "Job Analytics (Beta)",
+        "name": "Job Analytics",
         "nameForUrl": "job-analytics",
         "appFolder": "job-analytics-portal/app/",
         "htmlFile": "job_analytics.html",
