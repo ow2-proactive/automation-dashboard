@@ -1,32 +1,74 @@
 {
-    "workflowAutomation": {
-        "isAvailable": true,
-        "name": "Workflow Automation",
-        "nameForUrl": "workflow-automation",
-        "appFolder": "cloud-automation/app/",
-        "htmlFile": "wf_automation.html",
-        "secondaryHtmlFiles": ["modals/submit_window_wf_automation.html"],
-        "notAvailablePage": "page_not_available_wf_automation.html",
-        "jsFiles": ["scripts/wf-automation-rest.js"],
-        "angularModuleName": "wfa-rest",
-        "cssFile": "portal_custom_style.css",
-        "authenticate": true,
-        "initFunction": {
-            "functionName": "initWorkflowAutomation",
-            "services": ["WFASchedulerService", "WFACatalog"]
-        }
-    },
     "genericCatalog": {
         "isAvailable": true,
         "name": "Catalog",
         "nameForUrl": "catalog-portal",
         "appFolder": "generic-catalog-portal/app/",
         "htmlFile": "generic_catalog.html",
-        "secondaryHtmlFiles": ["modals/catalog_object_edition.html", "modals/submit_workflow.html", "modals/workflow_visualization.html"],
+        "secondaryHtmlFiles": [
+            "modals/catalog_object_edition.html",
+            "modals/submit_workflow.html",
+            "modals/workflow_visualization.html"
+        ],
         "notAvailablePage": "page_not_available.html",
-        "jsFiles": ["scripts/generic-catalog-rest.js", "scripts/factory/catalog-service.js", "scripts/factory/scheduler-service.js", "scripts/factory/cloud-automation-service.js", "scripts/submitWorkflowModalGCP.js", "scripts/editObjectModalGCP.js", "scripts/workflowVisualizationModalGCP.js"],
+        "jsFiles": [
+            "scripts/generic-catalog-rest.js",
+            "scripts/factory/catalog-service.js",
+            "scripts/factory/scheduler-service.js",
+            "scripts/factory/cloud-automation-service.js",
+            "scripts/submitWorkflowModalGCP.js",
+            "scripts/editObjectModalGCP.js",
+            "scripts/workflowVisualizationModalGCP.js",
+            "scripts/workflowVisualizationController.js"
+        ],
         "angularModuleName": "gcp-rest",
         "cssFile": "gcportal_custom_style.css",
+        "authenticate": true
+    },
+    "workflowAutomation": {
+        "isAvailable": true,
+        "name": "Workflow Automation",
+        "nameForUrl": "workflow-automation",
+        "appFolder": "cloud-automation/app/",
+        "htmlFile": "wf_automation.html",
+        "secondaryHtmlFiles": [
+            "modals/submit_window_wf_automation.html"
+        ],
+        "notAvailablePage": "page_not_available_wf_automation.html",
+        "jsFiles": [
+            "scripts/wf-automation-rest.js"
+        ],
+        "angularModuleName": "wfa-rest",
+        "cssFile": "portal_custom_style.css",
+        "authenticate": true,
+        "initFunction": {
+            "functionName": "initWorkflowAutomation",
+            "services": [
+                "WFASchedulerService",
+                "WFACatalog"
+            ]
+        }
+    },
+    "jobAnalytics": {
+        "isAvailable": true,
+        "name": "Job Analytics (Beta)",
+        "nameForUrl": "job-analytics",
+        "appFolder": "job-analytics-portal/app/",
+        "htmlFile": "job_analytics.html",
+        "secondaryHtmlFiles": [],
+        "notAvailablePage": "page_not_available_job-analytics.html",
+        "jsFiles": [
+            "scripts/job-analytics.js",
+            "scripts/job-analytics-monitoring.js",
+            "scripts/job-analytics-charts-duration.js",
+            "scripts/job-analytics-charts-status.js",
+            "scripts/job-analytics-jobs-table.js",
+            "scripts/job-analytics-search-form.js",
+            "scripts/services/scheduler-service.js",
+            "scripts/services/job-analytics-service.js"
+        ],
+        "angularModuleName": "job-analytics",
+        "cssFile": "job_analytics_custom_style.css",
         "authenticate": true
     },
     "job-planner-portal": {
@@ -43,8 +85,10 @@
         "nameForUrl": "job-planner-calendar-def",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "execution_calendars.html",
-        "jsFiles": ["scripts/services/catalog-service.js",
+        "jsFiles": [
+            "scripts/services/catalog-service.js",
             "scripts/services/scheduler-service.js",
+            "scripts/services/calendar-list-service.js",
             "scripts/controllers/execution-calendars-controller.js"
         ],
         "angularModuleName": "ec-rest",
@@ -59,10 +103,14 @@
         "nameForUrl": "job-planner-calendar-def-workflows",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "calendar-association/calendar_association.html",
-        "secondaryHtmlFiles": ["calendar-association/calendar_list.html"],
+        "secondaryHtmlFiles": [
+            "calendar-association/calendar_list.html"
+        ],
         "notAvailablePage": "page_not_available_calendar_association.html",
-        "jsFiles": ["scripts/services/catalog-service.js",
+        "jsFiles": [
+            "scripts/services/catalog-service.js",
             "scripts/services/job-planner-service.js",
+            "scripts/services/calendar-list-service.js",
             "scripts/controllers/components/calendar-list.component.js",
             "scripts/controllers/calendar-association-controller.js"
         ],
@@ -78,10 +126,46 @@
         "nameForUrl": "job-planner-execution-planning",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "execution_planning.html",
-        "secondaryHtmlFiles": ["modals/gantt_chart_view.html", "gantt-chart/ganttEventTooltip.tmpl.html"],
+        "secondaryHtmlFiles": [
+            "calendar_list_with_checkbox.html"
+        ],
         "notAvailablePage": "page_not_available_template.html",
-        "jsFiles": ["scripts/services/catalog-service.js", "scripts/services/job-planner-service.js", "scripts/controllers/execution-planning-controller.js", "scripts/controllers/components/gantt-chart-modal.js"],
+        "jsFiles": [
+            "scripts/services/catalog-service.js",
+            "scripts/services/job-planner-service.js",
+            "scripts/services/calendar-list-service.js",
+            "scripts/controllers/execution-planning-controller.js",
+            "scripts/controllers/components/calendar-list-with-checkbox-component.js"
+        ],
         "angularModuleName": "execution-planning-rest",
+        "cssFile": "portal_custom_style.css",
+        "authenticate": true
+    },
+    "gantt-chart": {
+        "isAvailable": true,
+        "isSubMenuItem": true,
+        "subMenuTitle": "job-planner-portal",
+        "name": "Gantt Chart",
+        "nameForUrl": "job-planner-gantt-chart",
+        "appFolder": "job-planner-portal/app/",
+        "htmlFile": "gantt-chart/gantt_view_main.html",
+        "secondaryHtmlFiles": [
+            "gantt-chart/ganttEventTooltip.tmpl.html",
+            "gantt-chart/calendar_list_modal.html",
+            "gantt-chart/gantt_legend.html",
+            "calendar_list_with_checkbox.html"
+        ],
+        "notAvailablePage": "page_not_available_template.html",
+        "jsFiles": [
+            "scripts/services/catalog-service.js",
+            "scripts/services/job-planner-service.js",
+            "scripts/controllers/gantt-view-controller.js",
+            "scripts/controllers/components/calendar-list-modal.js",
+            "scripts/controllers/components/gantt-chart.js",
+            "scripts/services/calendar-list-service.js",
+            "scripts/controllers/components/calendar-list-with-checkbox-component.js"
+        ],
+        "angularModuleName": "gantt-chart",
         "cssFile": "portal_custom_style.css",
         "authenticate": true
     },
@@ -91,29 +175,57 @@
         "nameForUrl": "cloud-automation",
         "appFolder": "cloud-automation/app/",
         "htmlFile": "cloud_automation.html",
-        "secondaryHtmlFiles": ["modals/submit_window_cloud_automation.html", "modals/service_instance_info_modal.html", "modals/service_instance_history_modal.html"],
+        "secondaryHtmlFiles": [
+            "modals/submit_window_cloud_automation.html",
+            "modals/service_instance_info_modal.html",
+            "modals/service_instance_history_modal.html"
+        ],
         "notAvailablePage": "page_not_available_cloud_automation.html",
-        "jsFiles": ["scripts/cloud-automation/cloud-automation-main-controller.js", "services/cloud-automation-service.js", "services/scheduler-service.js", "services/catalog-service-automation.js",
-            "scripts/cloud-automation/activated-services-controller.js", "scripts/cloud-automation/finished-services-controller.js", "scripts/cloud-automation/monitoring-items-controller.js",
+        "jsFiles": [
+            "scripts/cloud-automation/cloud-automation-main-controller.js",
+            "services/cloud-automation-service.js",
+            "services/scheduler-service.js",
+            "services/catalog-service-automation.js",
+            "scripts/cloud-automation/activated-services-controller.js",
+            "scripts/cloud-automation/finished-services-controller.js",
+            "scripts/cloud-automation/monitoring-items-controller.js",
             "scripts/cloud-automation/services-catalog-controller.js"
         ],
         "angularModuleName": "pca-rest",
         "cssFile": "portal_custom_style.css",
         "authenticate": true,
-        "images": ["not_available_image_cloud_automation.png"]
+        "images": [
+            "not_available_image_cloud_automation.png"
+        ]
     },
     "cloudWatch": {
         "isAvailable": true,
-        "name": "Cloud Watch (beta)",
+        "name": "Cloud Watch",
         "nameForUrl": "cloud-watch",
         "appFolder": "cloud-watch-portal/app/",
         "htmlFile": "cloud_watch.html",
-        "secondaryHtmlFiles": ["modals/rule_edition.html", "modals/rule_submission.html", "modals/rule_instance_info_modal.html"],
+        "secondaryHtmlFiles": [
+            "modals/rule_edition.html",
+            "modals/rule_submission.html",
+            "modals/rule_instance_info_modal.html",
+            "modals/rule_instance_history_modal.html"
+        ],
         "notAvailablePage": "page_not_available_cloud_watch.html",
-        "jsFiles": ["scripts/cloud-watch.js", "scripts/services/cloud-watch-service.js", "scripts/services/cloud-automation-service.js",
-            "scripts/services/scheduler-service.js", "scripts/services/catalog-service.js", "scripts/cloud-watch-monitoring.js",
-            "scripts/cloud-watch-activated-rules.js", "scripts/cloud-watch-removed-rules.js", "scripts/modals/edit-rule-modal.js",
-            "scripts/cloud-watch-rules-tab.js", "scripts/modals/submit-rule-modal.js", "scripts/modals/rule-instance-info-modal.js"
+        "jsFiles": [
+            "scripts/cloud-watch.js",
+            "scripts/services/cloud-watch-service.js",
+            "scripts/services/cloud-automation-service.js",
+            "scripts/services/scheduler-service.js",
+            "scripts/services/catalog-service.js",
+            "scripts/cloud-watch-monitoring.js",
+            "scripts/cloud-watch-activated-rules.js",
+            "scripts/cloud-watch-removed-rules.js",
+            "scripts/modals/edit-rule-modal.js",
+            "scripts/cloud-watch-rules-tab.js",
+            "scripts/modals/activate-rule-modal.js",
+            "scripts/modals/rule-instance-info-modal.js",
+            "scripts/modals/rule-instance-history-modal.js",
+            "scripts/cloud-watch-rules-fired-jobs.js"
         ],
         "angularModuleName": "cloud-watch",
         "cssFile": "cloud_watch_custom_style.css",
@@ -126,13 +238,17 @@
         "appFolder": "notification-portal/app/",
         "htmlFile": "ns-view.html",
         "notAvailablePage": "page_not_available.html",
-        "jsFiles": ["scripts/ns-rest.js"],
+        "jsFiles": [
+            "scripts/ns-rest.js"
+        ],
         "angularModuleName": "ns-rest",
         "cssFile": "notifportal_custom_style.css",
         "authenticate": true,
         "initFunction": {
             "functionName": "initNotificationPortal",
-            "services": ["NotificationService"]
+            "services": [
+                "NotificationService"
+            ]
         }
     }
 }
