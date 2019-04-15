@@ -18,7 +18,8 @@
             "scripts/factory/cloud-automation-service.js",
             "scripts/submitWorkflowModalGCP.js",
             "scripts/editObjectModalGCP.js",
-            "scripts/workflowVisualizationModalGCP.js"
+            "scripts/workflowVisualizationModalGCP.js",
+            "scripts/workflowVisualizationController.js"
         ],
         "angularModuleName": "gcp-rest",
         "cssFile": "gcportal_custom_style.css",
@@ -50,7 +51,7 @@
     },
     "jobAnalytics": {
         "isAvailable": true,
-        "name": "Job Analytics (Beta)",
+        "name": "Job Analytics",
         "nameForUrl": "job-analytics",
         "appFolder": "job-analytics-portal/app/",
         "htmlFile": "job_analytics.html",
