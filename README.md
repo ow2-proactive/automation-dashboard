@@ -73,11 +73,10 @@ localhost:8080/automation-dashboard
 #### Code linting
 
 This project uses ESLint plugin for code linting. This tool provides code formatting errors according to specified rules. The `eslint` step is added to `pre-build` project process.
-It's required to install the ESLint dependencies for local development. The next command will automatically install all required dependencies:
+It's required to install the ESLint dependencies for local development. The next command will automatically install all required dependencies, **BUT be careful - this command will overwrite your clones of the subviews**:
 ```
 ./gradlew clean build
 ```
-**BUT be careful: this command will overwrite your clones of the subviews.**
 In this case you can install the dependencies manually with next commands:
 ```
 npm install grunt-eslint
