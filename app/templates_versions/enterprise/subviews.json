@@ -62,10 +62,13 @@
             "scripts/job-analytics-monitoring.js",
             "scripts/job-analytics-charts-duration.js",
             "scripts/job-analytics-charts-status.js",
+            "scripts/job-analytics-charts-variables.js",
+            "scripts/job-analytics-charts-results.js",
             "scripts/job-analytics-jobs-table.js",
             "scripts/job-analytics-search-form.js",
-            "scripts/services/scheduler-service.js",
-            "scripts/services/job-analytics-service.js"
+            "scripts/services/catalog-service.js",
+            "scripts/services/job-analytics-service.js",
+            "scripts/services/scheduler-service.js"
         ],
         "angularModuleName": "job-analytics",
         "cssFile": "job_analytics_custom_style.css",
