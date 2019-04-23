@@ -1,5 +1,5 @@
 {
-  "name": "proactive-dashboard",
+  "name": "automation-dashboard",
   "version": "2.7.1",
   "authors": [
     "Activeeon"
@@ -49,6 +49,6 @@
     "angular": "1.5.X",
     "angular-resource": "^1.5.1"
   },
-  "homepage": "https://github.com/chloegugli/proactive-dashboard",
+  "homepage": "https://github.com/ow2-proactive/automation-dashboard",
   "license": "MIT"
 }
