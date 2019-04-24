@@ -70,6 +70,22 @@ Once scheduling/bin/proactive-server is started, the dashboard is available at:
 localhost:8080/automation-dashboard
 ```
 
+#### Code linting
+
+This project uses ESLint plugin for code linting. This tool provides code formatting errors according to specified rules. The `eslint` step is added to `pre-build` project process.
+It's required to install the ESLint dependencies for local development. The next command will automatically install all required dependencies, **BUT be careful - this command will overwrite your clones of the subviews**:
+```
+./gradlew clean build
+```
+In this case you can install the dependencies manually with next commands:
+```
+npm install grunt-eslint
+npm install --save eslint-config-airbnb
+npm install
+```
+After installation with running `grunt clean build` in the output you should see the formatting issues in your code with mentioned file names.
+The formatting rule specification can be found in `.eslintrc.json` file.
+
 ### For production
 
 Automation-dashboard project can be build with all subviews from local repository with next command:
