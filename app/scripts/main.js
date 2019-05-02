@@ -18,6 +18,7 @@ function getProperties ($http, $location) {
             var notificationServiceUrl = angular.toJson(response.confServer.notificationServiceUrl, true);
             var catalogServiceUrl = angular.toJson(response.confServer.catalogServiceUrl, true);
             var cloudAutomationQueryPeriod = angular.toJson(response.cloudAutomationQueryPeriod, true);
+            var wfAutomationLast24hHistoryPeriod = angular.toJson(response.wfAutomationLast24hHistoryPeriod, true);
             var cloudWatchPortalQueryPeriod = angular.toJson(response.cloudWatchPortalQueryPeriod, true);
             var jobAnalyticsPortalRefreshRate = angular.toJson(response.jobAnalyticsPortalRefreshRate, true);
             var notificationPortalQueryPeriod = angular.toJson(response.notificationPortalQueryPeriod, true);
@@ -40,8 +41,8 @@ function getProperties ($http, $location) {
             localStorage['catalogServiceUrl'] = catalogServiceUrl;
             localStorage['genericCatalogPortalQueryPeriod'] = genericCatalogPortalQueryPeriod;
             localStorage['notificationPortalQueryPeriod'] = notificationPortalQueryPeriod;
-            localStorage['cloudAutomationQueryPeriod'] = cloudAutomationQueryPeriod;
             localStorage['cloudWatchPortalQueryPeriod'] = cloudWatchPortalQueryPeriod;
+            localStorage['wfAutomationLast24hHistoryPeriod'] = wfAutomationLast24hHistoryPeriod;
             localStorage['jobAnalyticsPortalRefreshRate'] = jobAnalyticsPortalRefreshRate;
             localStorage['jobPlannerQueryPeriod'] = jobPlannerQueryPeriod;
             localStorage['appCatalogWorkflowsUrl'] = appCatalogWorkflowsUrl;
