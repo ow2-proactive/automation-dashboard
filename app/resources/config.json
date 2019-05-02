@@ -39,6 +39,7 @@
   }]
 }],
   "cloudAutomationQueryPeriod" : 20000,
+  "wfAutomationLast24hHistoryPeriod": 120000,
   "notificationPortalQueryPeriod": 20000,
   "genericCatalogPortalQueryPeriod": 20000,
   "jobPlannerQueryPeriod": 20000,
