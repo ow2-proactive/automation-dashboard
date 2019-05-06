@@ -41,6 +41,7 @@ function getProperties ($http, $location) {
             localStorage['catalogServiceUrl'] = catalogServiceUrl;
             localStorage['genericCatalogPortalQueryPeriod'] = genericCatalogPortalQueryPeriod;
             localStorage['notificationPortalQueryPeriod'] = notificationPortalQueryPeriod;
+            localStorage['cloudAutomationQueryPeriod'] = cloudAutomationQueryPeriod;
             localStorage['cloudWatchPortalQueryPeriod'] = cloudWatchPortalQueryPeriod;
             localStorage['wfAutomationLast24hHistoryPeriod'] = wfAutomationLast24hHistoryPeriod;
             localStorage['jobAnalyticsPortalRefreshRate'] = jobAnalyticsPortalRefreshRate;
