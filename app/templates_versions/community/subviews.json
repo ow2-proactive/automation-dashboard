@@ -55,7 +55,9 @@
         "nameForUrl": "job-analytics",
         "appFolder": "job-analytics-portal/app/",
         "htmlFile": "job_analytics.html",
-        "secondaryHtmlFiles": [],
+        "secondaryHtmlFiles": [
+            "templates/advanced_search_hints.html"
+        ],
         "notAvailablePage": "page_not_available_job-analytics.html",
         "jsFiles": [
             "scripts/job-analytics.js",
