@@ -143,6 +143,55 @@
     cursor: wait !important;
 }
 
+.pa-shortcut {
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    overflow-x: hidden;
+    transition: width 300ms;
+    transition-timing-function: ease;
+    -webkit-transition: width 300ms;
+    -webkit-transition-timing-function: ease;
+    margin-left: 0px;
+    line-height: 25px;
+}
+
+.pa-shortcuts {
+    transition: width 500ms;
+    transition-timing-function: ease;
+    -webkit-transition: width 500ms;
+    -webkit-transition-timing-function: ease;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+}
+
+.btn-group.pa-shortcuts {
+    height: 40px;
+    display: -webkit-inline-flex;
+    display: -ms-inline-flexbox;
+    display: inline-flex;
+    margin-top: 5px;
+    margin-bottom: 3px;
+}
+
+@media (max-width: 1199px){
+    .pa-shortcut {
+        width: 0px !important;
+        padding: 0px;
+    }
+
+    .pa-shortcuts:not(.logout-btn){
+        width: 45px !important;
+    }
+}
+
+@media (max-width: 768px){
+    .second-row-bar {
+        display: none;
+    }
+}
+
 @-moz-document url-prefix() {
     button[class~="fa"] {
         padding: 2px !important;
