@@ -1,42 +1,52 @@
-<div class="row">
-    <nav class="navbar" role="navigation" style="margin-bottom: 0;margin-left:-210px;z-index: 5;background-color: #f4f3f4;">
-    	                    <div style="display: inline-block; width: 55%; white-space: normal;float: left;"><a href="#" target="_blank"><img src="styles/patterns/extra-logo-center.png" style="height:45px;width:135px;" align="right"></a></div>
-    	                                    <div style="display: inline-block; width: 45%; white-space: normal;float: right;"><a href="http://activeeon.com/" target="_blank"> <img src="styles/patterns/AE-Logo.png" style="height:45px;padding-right: 25px" align="right"></a></div>
-    </nav>
-</div>
-<div class="row border-bottom">
-    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0">
-
-        <ul class="nav navbar-nav navbar-right">
-            <li style="padding-right: 12px; padding-bottom: 6px">
-                <div>
-                    <a class="btn btn-small btn-default active" href="/automation-dashboard/" style="color:#333;border-color: #ccc;padding:5px;"><img src="styles/patterns/automation_dashboard_30.png" style="height:25px;padding-right:5px;">Automation Dashboard</a>
+<div class="row ng-scope">
+    <nav class="navbar navbar-static-top pull-right" role="navigation" style="margin-bottom: 0px;">
+        <ul class="nav navbar-nav navbar-right" style="display: inline-flex;">
+            <li style="padding-right: 5px;">
+                <div class="btn-group pa-shortcuts">
+                    <a class="btn btn-small btn-default active pa-shortcuts" href="/automation-dashboard/" style="color:#333;border-color: #ccc;padding:5px">
+                        <img src="styles/patterns/automation_dashboard_30.png" style="height:25px;padding-right: 0px;">
+                        <div class="pa-shortcut" style="width: 154px;">Automation Dashboard</div>
+                    </a>
                 </div>
             </li>
-            <li style="padding-right: 12px; padding-bottom: 6px">
-                <div>
-                    <a class="btn btn-small btn-default" href="/studio/" target="/studio/" style="color:#333;border-color: #ccc;padding:5px;"><img src="styles/patterns/studio_30.png" style="height:25px;padding-right:5px;">Workflow Studio</a>
+            <li style="padding-right: 5px;">
+                <div class="btn-group pa-shortcuts">
+                    <a class="btn btn-small btn-default pa-shortcuts" href="/studio/" target="/studio/" style="color:#333;border-color: #ccc;padding:5px">
+                        <img src="styles/patterns/studio_30.png" style="height:25px;padding-right:5px">
+                        <div class="pa-shortcut" style="width: 108px;">Workflow Studio</div>
+                    </a>
                 </div>
             </li>
-            <li style="padding-right: 12px; padding-bottom: 6px">
-                <div>
-                    <a class="btn btn-small btn-default" href="/scheduler/" target="/scheduler/" style="color:#333;border-color: #ccc;padding:5px;"><img src="styles/patterns/scheduler_30.png" style="height:25px;padding-right:5px;">Scheduling &amp; Orchestration</a>
+            <li style="padding-right: 5px;">
+                <div class="btn-group pa-shortcuts">
+                    <a class="btn btn-small btn-default pa-shortcuts" href="/scheduler/" target="/scheduler/" style="color:#333;border-color: #ccc;padding:5px">
+                        <img src="styles/patterns/scheduler_30.png" style="height:25px;padding-right:5px">
+                        <div class="pa-shortcut" style="width: 180px;">Scheduling &amp; Orchestration</div>
+                    </a>
                 </div>
             </li>
-            <li style="padding-bottom: 6px">
-                <div>
-                    <a class="btn btn-small btn-default" href="/rm/" target="/rm/" style="color:#333;border-color: #ccc;padding:5px;"><img src="styles/patterns/rm_30.png" style="height:25px;padding-right:5px;">Resource Manager</a>
+            <li>
+                <div class="btn-group pa-shortcuts">
+                    <a class="btn btn-small btn-default pa-shortcuts" href="/rm/" target="/rm/" style="color:#333;border-color: #ccc;padding:5px">
+                        <img src="styles/patterns/rm_30.png" style="height:25px;padding-right:5px">
+                        <div class="pa-shortcut" style="width: 123px;">Resource Manager</div>
+                    </a>
                 </div>
             </li>
-
-            <li style="height: 38px;margin: 0 5px; border-right: 1px solid #777;border-left:  1px solid #f2f2f2;"></li>
-
+            <li style="height: 38px; margin: 6px 5px; border-right: 1px solid #777;border-left:  1px solid #f2f2f2"></li>
             <li style ="padding-bottom: 6px;padding-right: 25px">
-                <div ng-controller="logoutController">
-                    <a ng-click="logout()" class="btn btn-small btn-default" style="color:#333;border-color:#ccc;padding:5px;"><b> {{main.userName}}</b> <img src="styles/patterns/logout_30.png" style="height:25px;  padding-left: 5px;"></a>
+                <div class="btn-group pa-shortcuts" ng-controller="logoutController">
+                    <a ng-click="logout()" class="btn btn-small btn-default pa-shortcuts" style="color:#333;border-color:#ccc;padding:6px;"><b> {{main.userName}}</b> <img src="styles/patterns/logout_30.png" style="height:25px;  padding-left: 5px;"></a>
                 </div>
             </li>
         </ul>
     </nav>
-    <div  style="height: 3px; background: #f47930;"></div>
+</div>
+<div class="row border-bottom">
+    <div class="second-row-bar" style="width: 100%; float: right;">
+        <a href="#" target="_blank">
+            <img src="styles/patterns/extra-logo-center.png" style="height:30px;" align="right">
+        </a>
+    </div>
+    <div  style="height: 3px; background: #f47930; width:100%; display: table;"></div>
 </div>
