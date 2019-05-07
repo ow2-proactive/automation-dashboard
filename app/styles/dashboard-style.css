@@ -180,6 +180,10 @@
         width: 0px !important;
         padding: 0px;
     }
+
+    .pa-shortcuts:not(.logout-btn){
+        width: 45px !important;
+    }
 }
 
 @media (max-width: 768px){
