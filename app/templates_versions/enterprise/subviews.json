@@ -32,7 +32,8 @@
         "appFolder": "cloud-automation/app/",
         "htmlFile": "wf_automation.html",
         "secondaryHtmlFiles": [
-            "modals/submit_window_wf_automation.html"
+            "modals/submit_window_wf_automation.html",
+            "modals/result_map_window_wf_automation.html"
         ],
         "notAvailablePage": "page_not_available_wf_automation.html",
         "jsFiles": [
