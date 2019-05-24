@@ -239,7 +239,7 @@
     },
     "notificationPortal": {
         "isAvailable": true,
-        "name": "Notification Service",
+        "name": "Notification",
         "nameForUrl": "notification-portal",
         "appFolder": "notification-portal/app/",
         "htmlFile": "ns-view.html",
