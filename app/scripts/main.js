@@ -213,16 +213,10 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
 mainModule.controller('navBarController', function ($scope, $http, $interval){
     this.$onInit = function () {
         $scope.view = JSON.parse(localStorage['configViews']);
-        $scope.docLink = "http://doc.activeeon.com/" ;
+        $scope.docLink = "/doc/" ;
         $http.get('resources/config.json')
             .success(function (response) {
                 $scope.dashboardVersion = response.proactiveDashboardVersion;
-                if ($scope.dashboardVersion.indexOf("SNAPSHOT") > -1){
-                    $scope.docLink = $scope.docLink + "dev";
-                }
-                else{
-                    $scope.docLink = $scope.docLink + $scope.dashboardVersion;
-                }
             })
             .error(function (response) {
                 $scope.dashboardVersion = "not available";
