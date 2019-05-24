@@ -142,6 +142,16 @@
 .waiting, .waiting * {
     cursor: wait !important;
 }
+.chart-toolbtn {
+    position: absolute;
+    top: 0px;
+    color: rgba(104, 106, 108, 0.5);
+}
+
+.chart-toolbtn:hover, .chart-toolbtn:active {
+    color: rgb(104, 106, 108);
+    cursor: pointer;
+}
 
 .pa-shortcut {
     display: -webkit-inline-flex;
