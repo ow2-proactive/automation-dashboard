@@ -70,6 +70,7 @@
             "scripts/job-analytics-jobs-table.js",
             "scripts/job-analytics-search-form.js",
             "scripts/services/catalog-service.js",
+            "scripts/services/chart-utils.js",
             "scripts/services/job-analytics-service.js",
             "scripts/services/scheduler-service.js"
         ],
