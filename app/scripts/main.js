@@ -18,6 +18,7 @@ function getProperties ($http, $location) {
             var notificationServiceUrl = angular.toJson(response.confServer.notificationServiceUrl, true);
             var catalogServiceUrl = angular.toJson(response.confServer.catalogServiceUrl, true);
             var cloudAutomationQueryPeriod = angular.toJson(response.cloudAutomationQueryPeriod, true);
+            var wfAutomationLast24hHistoryPeriod = angular.toJson(response.wfAutomationLast24hHistoryPeriod, true);
             var cloudWatchPortalQueryPeriod = angular.toJson(response.cloudWatchPortalQueryPeriod, true);
             var jobAnalyticsPortalRefreshRate = angular.toJson(response.jobAnalyticsPortalRefreshRate, true);
             var notificationPortalQueryPeriod = angular.toJson(response.notificationPortalQueryPeriod, true);
@@ -42,6 +43,7 @@ function getProperties ($http, $location) {
             localStorage['notificationPortalQueryPeriod'] = notificationPortalQueryPeriod;
             localStorage['cloudAutomationQueryPeriod'] = cloudAutomationQueryPeriod;
             localStorage['cloudWatchPortalQueryPeriod'] = cloudWatchPortalQueryPeriod;
+            localStorage['wfAutomationLast24hHistoryPeriod'] = wfAutomationLast24hHistoryPeriod;
             localStorage['jobAnalyticsPortalRefreshRate'] = jobAnalyticsPortalRefreshRate;
             localStorage['jobPlannerQueryPeriod'] = jobPlannerQueryPeriod;
             localStorage['appCatalogWorkflowsUrl'] = appCatalogWorkflowsUrl;
@@ -211,16 +213,10 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
 mainModule.controller('navBarController', function ($scope, $http, $interval){
     this.$onInit = function () {
         $scope.view = JSON.parse(localStorage['configViews']);
-        $scope.docLink = "http://doc.activeeon.com/" ;
+        $scope.docLink = "/doc/" ;
         $http.get('resources/config.json')
             .success(function (response) {
                 $scope.dashboardVersion = response.proactiveDashboardVersion;
-                if ($scope.dashboardVersion.indexOf("SNAPSHOT") > -1){
-                    $scope.docLink = $scope.docLink + "dev";
-                }
-                else{
-                    $scope.docLink = $scope.docLink + $scope.dashboardVersion;
-                }
             })
             .error(function (response) {
                 $scope.dashboardVersion = "not available";
