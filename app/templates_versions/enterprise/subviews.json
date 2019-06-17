@@ -57,7 +57,10 @@
         "appFolder": "job-analytics-portal/app/",
         "htmlFile": "job_analytics.html",
         "secondaryHtmlFiles": [
-            "templates/advanced_search_hints.html"
+            "templates/advanced_search_hints.html",
+            "templates/ui_grid_filter_date.html",
+            "templates/ui_grid_filter_time.html",
+            "templates/ui_grid_filter_input.html"
         ],
         "notAvailablePage": "page_not_available_job-analytics.html",
         "jsFiles": [

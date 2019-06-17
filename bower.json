@@ -43,7 +43,9 @@
     "angular-moment-picker": "moment-picker#^0.10.2",
     "angular-bootstrap-calendar": "^1.0.0",
     "angular-ui-codemirror": "^0.3.0",
-    "angular-ui-sortable": "^0.14.4"
+    "angular-ui-sortable": "^0.14.4",
+    "bootstrap-ui-datetime-picker": "^2.6.3",
+    "angular-touchspin": "^2.0.0"
   },
   "resolutions": {
     "jquery": "~2.1.4",
