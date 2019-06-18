@@ -16,7 +16,6 @@
     "moment": "^2.22.2",
     "moment-duration-format": "^2.2.2",
     "moment-precise-range-plugin": "^1.3.0",
-    "pdfmake": "^0.1.54",
     "ui-select": "^0.19.8"
   },
   "devDependencies": {
