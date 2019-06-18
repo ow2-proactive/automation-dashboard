@@ -59,8 +59,9 @@
         "secondaryHtmlFiles": [
             "templates/advanced_search_hints.html",
             "templates/ui_grid_filter_date.html",
-            "templates/ui_grid_filter_time.html",
-            "templates/ui_grid_filter_input.html"
+            "templates/ui_grid_filter_input.html",
+            "templates/ui_grid_filter_select.html",
+            "templates/ui_grid_filter_time.html"
         ],
         "notAvailablePage": "page_not_available_job-analytics.html",
         "jsFiles": [
