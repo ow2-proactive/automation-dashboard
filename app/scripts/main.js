@@ -221,7 +221,7 @@ mainModule.controller('navBarController', function ($scope, $http, $interval){
             .error(function (response) {
                 $scope.dashboardVersion = "not available";
         });
-        $scope.notificationNavSpan = angular.element('#nav-span-notification-service');
+        $scope.notificationNavSpan = angular.element('#nav-span-notification');
         if($scope.notificationNavSpan.length>0) {
             $scope.newNotificationsLabel = angular.element('<div id="new-notifications-label" style="background:#d9534f;color:white;border-radius:10px;text-align:center;margin-left: 5px;padding: 0px 5px;"></div>');
             $scope.notificationNavSpan.append($scope.newNotificationsLabel)
