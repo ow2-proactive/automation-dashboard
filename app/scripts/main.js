@@ -18,7 +18,9 @@ function getProperties ($http, $location) {
             var notificationServiceUrl = angular.toJson(response.confServer.notificationServiceUrl, true);
             var catalogServiceUrl = angular.toJson(response.confServer.catalogServiceUrl, true);
             var cloudAutomationQueryPeriod = angular.toJson(response.cloudAutomationQueryPeriod, true);
+            var wfAutomationLast24hHistoryPeriod = angular.toJson(response.wfAutomationLast24hHistoryPeriod, true);
             var cloudWatchPortalQueryPeriod = angular.toJson(response.cloudWatchPortalQueryPeriod, true);
+            var jobAnalyticsPortalRefreshRate = angular.toJson(response.jobAnalyticsPortalRefreshRate, true);
             var notificationPortalQueryPeriod = angular.toJson(response.notificationPortalQueryPeriod, true);
             var genericCatalogPortalQueryPeriod = angular.toJson(response.genericCatalogPortalQueryPeriod, true);
             var jobPlannerQueryPeriod = angular.toJson(response.jobPlannerQueryPeriod, true);
@@ -26,9 +28,11 @@ function getProperties ($http, $location) {
             var appCatalogWorkflowsUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port() + "/catalog/buckets/" + response.view[0].catalog.bucketName + "/resources");
             var jobPlannerServiceUrl = angular.toJson(response.confServer.jobPlannerServiceUrl, true);
             var cloudWatchServiceUrl = angular.toJson(response.confServer.cloudWatchServiceUrl, true);
+            var jobAnalyticsServiceUrl = angular.toJson(response.confServer.jobAnalyticsServiceUrl, true);
             var configViews = angular.toJson(response.view, true);
             var appUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port());
             var studioUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port() +'/studio');
+            var schedulerPortalUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port() +'/scheduler');
 
             localStorage['pcaServiceUrl'] = pcaServiceUrl;
             localStorage['schedulerRestUrl'] = schedulerRestUrl;
@@ -39,14 +43,18 @@ function getProperties ($http, $location) {
             localStorage['notificationPortalQueryPeriod'] = notificationPortalQueryPeriod;
             localStorage['cloudAutomationQueryPeriod'] = cloudAutomationQueryPeriod;
             localStorage['cloudWatchPortalQueryPeriod'] = cloudWatchPortalQueryPeriod;
+            localStorage['wfAutomationLast24hHistoryPeriod'] = wfAutomationLast24hHistoryPeriod;
+            localStorage['jobAnalyticsPortalRefreshRate'] = jobAnalyticsPortalRefreshRate;
             localStorage['jobPlannerQueryPeriod'] = jobPlannerQueryPeriod;
             localStorage['appCatalogWorkflowsUrl'] = appCatalogWorkflowsUrl;
             localStorage['appCatalogBucketsUrl'] = appCatalogBucketsUrl;
             localStorage['configViews'] = configViews;
             localStorage['jobPlannerServiceUrl'] = jobPlannerServiceUrl;
             localStorage['cloudWatchServiceUrl'] = cloudWatchServiceUrl;
+            localStorage['jobAnalyticsServiceUrl'] = jobAnalyticsServiceUrl;
             localStorage['appUrl'] = appUrl;
             localStorage['studioUrl'] = studioUrl;
+            localStorage['schedulerPortalUrl'] = schedulerPortalUrl;
         })
         .error(function (response) {
             console.error('LoadingPropertiesService $http.get error', status, response);
@@ -205,21 +213,15 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
 mainModule.controller('navBarController', function ($scope, $http, $interval){
     this.$onInit = function () {
         $scope.view = JSON.parse(localStorage['configViews']);
-        $scope.docLink = "http://doc.activeeon.com/" ;
+        $scope.docLink = "/doc/" ;
         $http.get('resources/config.json')
             .success(function (response) {
                 $scope.dashboardVersion = response.proactiveDashboardVersion;
-                if ($scope.dashboardVersion.indexOf("SNAPSHOT") > -1){
-                    $scope.docLink = $scope.docLink + "dev";
-                }
-                else{
-                    $scope.docLink = $scope.docLink + $scope.dashboardVersion;
-                }
             })
             .error(function (response) {
                 $scope.dashboardVersion = "not available";
         });
-        $scope.notificationNavSpan = angular.element('#nav-span-notification-service');
+        $scope.notificationNavSpan = angular.element('#nav-span-notification');
         if($scope.notificationNavSpan.length>0) {
             $scope.newNotificationsLabel = angular.element('<div id="new-notifications-label" style="background:#d9534f;color:white;border-radius:10px;text-align:center;margin-left: 5px;padding: 0px 5px;"></div>');
             $scope.notificationNavSpan.append($scope.newNotificationsLabel)

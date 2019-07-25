@@ -1,0 +1,38 @@
+{
+    "env": {
+        "browser": 1
+    },
+    "extends": [
+        "plugin:angular/johnpapa",
+        "eslint-config-airbnb-es5"
+    ],
+    "globals": {
+        "angular": true,
+        "swal": true,
+        "moment" : true,
+        "getSessionId" : true,
+        "$" : true,
+        "html2canvas": true
+    },
+    "rules" : {
+        "quotes": [1, "single"],
+        "indent": [1, 4],
+        "space-before-function-paren": [0,"always"],
+        "space-infix-ops": [0,"always"],
+        "space-before-blocks": [0,"always"],
+        "spaced-comment": [0,"always"],
+        "padded-blocks": [0,"always"],
+        "func-names": [0,"always"],
+        "semi": [0,"always"],
+        "no-console": [1,{ "allow": ["warn", "error"] }],
+        "no-else-return": [0,"always"],
+        "valid-jsdoc": [0,"always"],
+        "no-shadow": [0,"always"],
+        "angular/controller-as": [0,"always"],
+        "angular/file-name": [1,"always"],
+        "angular/controller-as-vm": [1,"always"],
+        "angular/function-type" : "warn",
+        "key-spacing" : 0,
+        "eol-last" : 0
+    }
+}
