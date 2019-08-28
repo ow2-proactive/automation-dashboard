@@ -69,7 +69,9 @@
             "templates/ui_grid_filter_date.html",
             "templates/ui_grid_filter_input.html",
             "templates/ui_grid_filter_select.html",
-            "templates/ui_grid_filter_time.html"
+            "templates/ui_grid_filter_time.html",
+            "modals/job_gantt.html",
+            "modals/job_analytics_gantt_tooltip.html"
         ],
         "notAvailablePage": "page_not_available_job-analytics.html",
         "jsFiles": [
