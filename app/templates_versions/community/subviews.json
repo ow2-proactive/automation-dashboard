@@ -69,9 +69,7 @@
             "templates/ui_grid_filter_date.html",
             "templates/ui_grid_filter_input.html",
             "templates/ui_grid_filter_select.html",
-            "templates/ui_grid_filter_time.html",
-            "modals/job_gantt.html",
-            "modals/job_analytics_gantt_tooltip.html"
+            "templates/ui_grid_filter_time.html"
         ],
         "notAvailablePage": "page_not_available_job-analytics.html",
         "jsFiles": [
@@ -83,7 +81,6 @@
             "scripts/job-analytics-charts-results.js",
             "scripts/job-analytics-jobs-table.js",
             "scripts/job-analytics-search-form.js",
-            "scripts/job-analytics-timeline.js",
             "scripts/services/catalog-service.js",
             "scripts/services/chart-utils.js",
             "scripts/services/job-analytics-service.js",
@@ -104,7 +101,7 @@
         "secondaryHtmlFiles": ["gantt-chart/job_analytics_gantt_tooltip.html"],
         "notAvailablePage": "page_not_available_job-analytics.html",
         "jsFiles": ["scripts/job-gantt.js",
-            "scripts/job-analytics-timeline.js",
+            "scripts/job-gantt-configuration.js",
             "scripts/job-gantt-search-form.js"
         ],
         "angularModuleName": "job-gantt",
