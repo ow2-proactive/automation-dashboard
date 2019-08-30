@@ -291,10 +291,18 @@ module.exports = function (grunt) {
                                 var cnt = 0;
                                 for (var key in subviewsDefinition) {
                                     if (subviewsDefinition[key].isSubMenuTitle) {
-                                        result += '\n<li ui-sref-active="active">'
-                                                + '<a href=".menu-item-'+subviewsDefinition[key].nameForUrl+'" style="background-color: #002d66" data-toggle="collapse">'
-                                                +'<i class="fa fa-chevron-down" style="margin-right: 6px;"></i> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'
-                                                + subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">'+subviewsDefinition[key].name+'</span> </a>';
+                                        if(subviewsDefinition[key].name == 'Analytics'){
+                                            result += '\n<li ui-sref-active="active">'
+                                                + '<a href=".menu-item-'+subviewsDefinition[key].nameForUrl+'" style="background-color: #002d66; padding-left:4px" data-toggle="collapse"><img src="styles/patterns/job-analytics.png" style="height:20px;padding-right: 4px;">'
+                                                +'<span class="nav-label" style="display:-webkit-inline-box; margin-left:3px" id="nav-span-'
+                                                + subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">'+subviewsDefinition[key].name+'</span> <i class="fa fa-chevron-down" style="margin-right: 6px;"></i></a>';
+                                        } else {
+                                            result += '\n<li ui-sref-active="active">'
+                                                + '<a href=".menu-item-'+subviewsDefinition[key].nameForUrl+'" style="background-color: #002d66; padding-left:4px" data-toggle="collapse"><img src="styles/patterns/job-planner-calendar.png" style="height:20px;padding-right: 4px;">'
+                                                +'<span class="nav-label" style="display:-webkit-inline-box; margin-left:3px" id="nav-span-'
+                                                + subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">'+subviewsDefinition[key].name+'</span> <i class="fa fa-chevron-down" style="margin-right: 6px;"></i></a>';
+                                        }
+
                                     } else if (subviewsDefinition[key].isSubMenuItem) {
                                         cnt++;
                                         result += '<li ui-sref-active="active" class="collapse menu-item-'+subviewsDefinition[key].subMenuTitle+'">'
@@ -302,9 +310,27 @@ module.exports = function (grunt) {
                                                 + subviewsDefinition[key].name+'</span> </a> </li>';
                                     } else {
                                         cnt++;
-                                        result += '\n<li ui-sref-active="active">'
-                                            + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66"><i class="fa fa-desktop"></i> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
-                                            subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">'+ subviewsDefinition[key].name+ '</span> </a>\n</li>';
+                                        if(subviewsDefinition[key].name == "Catalog"){
+                                            result += '\n<li ui-sref-active="active">'
+                                                + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/catalog.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
+                                                subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">'+ subviewsDefinition[key].name+ '</span> </a>\n</li>';
+                                        } else if(subviewsDefinition[key].name == "Cloud Watch"){
+                                            result += '\n<li ui-sref-active="active">'
+                                                + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/cloud-watch.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
+                                                subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">'+ subviewsDefinition[key].name+ '</span> </a>\n</li>';
+                                        } else if(subviewsDefinition[key].name == "Cloud Automation"){
+                                            result += '\n<li ui-sref-active="active">'
+                                                + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/cloud-automation.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
+                                                subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">'+ subviewsDefinition[key].name+ '</span> </a>\n</li>';
+                                        } else if(subviewsDefinition[key].name == "Notification"){
+                                            result += '\n<li ui-sref-active="active">'
+                                                + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/notification-portal.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
+                                                subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">'+ subviewsDefinition[key].name+ '</span> </a>\n</li>';
+                                        } else {
+                                            result += '\n<li ui-sref-active="active">'
+                                                                                            + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/automation_dashboard_30.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
+                                                                                            subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">'+ subviewsDefinition[key].name+ '</span> </a>\n</li>';
+                                        }
                                     }
                                 }
                                 result = '<!-- beginSubviews-->' + result + '\n<!-- endSubviews-->';
