@@ -328,8 +328,8 @@ module.exports = function (grunt) {
                                                 subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">'+ subviewsDefinition[key].name+ '</span> </a>\n</li>';
                                         } else {
                                             result += '\n<li ui-sref-active="active">'
-                                                                                            + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/automation_dashboard_30.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
-                                                                                            subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">'+ subviewsDefinition[key].name+ '</span> </a>\n</li>';
+                                                + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/automation_dashboard_30.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
+                                                subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">'+ subviewsDefinition[key].name+ '</span> </a>\n</li>';
                                         }
                                     }
                                 }
