@@ -50,8 +50,16 @@
             ]
         }
     },
+    "analytics-portal": {
+        "isAvailable": true,
+        "isSubMenuTitle": true,
+        "name": "Analytics",
+        "nameForUrl": "analytics-portal"
+    },
     "jobAnalytics": {
         "isAvailable": true,
+        "isSubMenuItem": true,
+        "subMenuTitle": "analytics-portal",
         "name": "Job Analytics",
         "nameForUrl": "job-analytics",
         "appFolder": "job-analytics-portal/app/",
@@ -82,6 +90,27 @@
             "scripts/services/scheduler-service.js"
         ],
         "angularModuleName": "job-analytics",
+        "cssFile": "job_analytics_custom_style.css",
+        "authenticate": true
+    },
+    "jobGantt": {
+        "isAvailable": true,
+        "isSubMenuItem": true,
+        "name": "Job Gantt",
+        "subMenuTitle": "analytics-portal",
+        "nameForUrl": "job-gantt",
+        "appFolder": "job-analytics-portal/app/",
+        "htmlFile": "gantt-chart/job_gantt.html",
+        "secondaryHtmlFiles": [
+            "gantt-chart/job_analytics_gantt_tooltip.html",
+            "gantt-chart/gantt_legend.html"
+        ],
+        "notAvailablePage": "page_not_available_job-analytics.html",
+        "jsFiles": ["scripts/job-gantt.js",
+            "scripts/job-gantt-configuration.js",
+            "scripts/job-gantt-search-form.js"
+        ],
+        "angularModuleName": "job-gantt",
         "cssFile": "job_analytics_custom_style.css",
         "authenticate": true
     },
