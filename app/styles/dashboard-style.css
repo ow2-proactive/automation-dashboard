@@ -186,6 +186,95 @@
     margin-bottom: 3px;
 }
 
+.gantt-date-change-button {
+    margin: 0px 2px;
+    height: 80%;
+    padding: 3px;
+    border-radius: 3px;
+    border: 1px solid #e7eaec;
+    background: none;
+}
+.gantt-date-change-button:active , .gantt-date-change-button:focus , .gantt-date-change-button:hover {
+    background : #e6e6e6
+}
+.gantt-scales-btn-group {
+    margin: 0px 10px;
+    display: flex;
+}
+.gantt-side {
+    min-width : 150px;
+    width : 300px;
+}
+.gantt-scales-btn-group label {
+    font-size: 12px;
+    height: 80%;
+}
+#gantt-legend-panel {
+    position: absolute;
+    top : 60px;
+    left: 60px;
+    z-index: 2002;
+    display: grid;
+    cursor : move;
+    width: 520px;
+}
+#gantt-legend-panel .legend-color {
+    width: 60px;
+    height:20px;
+    margin: 5px;
+    border-radius: 2px;
+}
+#gantt-legend-panel .legend-title {
+    margin-top: 7px;
+    font-weight: 600;
+}
+#legend-wrapper {
+    display: grid;
+}
+#legend-group-task-container {
+    display: inline-flex;
+    margin: 5px;
+}
+#legend-group-task-main {
+    width: 60px;
+    height: 10px;
+    background: rgb(99, 136, 205);
+}
+#legend-group-task-before {
+    margin-right: -10px;
+}
+#legend-group-task-after {
+    margin-left: -10px;
+}
+#legend-group-task-before, #legend-group-task-after {
+    margin-top: 10px;
+    border-left: 5px solid transparent;
+    border-right: 5px solid transparent;
+    border-top: 10px solid rgb(99, 136, 205);
+}
+#gantt-action-buttons-panel {
+    margin-left: auto;
+    display: inline-flex;
+}
+#gantt-action-buttons-panel button {
+    width: 140px;
+    height: 30px;
+    margin: 20px 5px 10px 5px;
+}
+#refresh-gantt-button {
+    margin-left: 10px;
+    background-color: #d9534f;
+    color: #FFF;
+    border-radius: 3px;
+    border: none;
+}
+#gantt-last-refresh-date {
+    color: #d9534f;
+    font-weight: bold;
+    font-size: 12px;
+    text-align: end;
+}
+
 @media (max-width: 1199px){
     .pa-shortcut {
         width: 0px !important;
