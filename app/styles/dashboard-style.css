@@ -268,6 +268,12 @@
     border-radius: 3px;
     border: none;
 }
+
+.gantt-current-date-line {
+    border:2px dotted #d9534f;
+    z-index: 1;
+}
+
 #gantt-last-refresh-date {
     color: #d9534f;
     font-weight: bold;
