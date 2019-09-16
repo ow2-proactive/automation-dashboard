@@ -111,6 +111,24 @@
         "cssFile": "job_analytics_custom_style.css",
         "authenticate": true
     },
+    "nodeGantt": {
+        "isAvailable": true,
+        "isSubMenuItem": true,
+        "name": "Node Gantt",
+        "subMenuTitle": "analytics-portal",
+        "nameForUrl": "node-gantt",
+        "appFolder": "job-analytics-portal/app/",
+        "htmlFile": "node_gantt.html",
+        "secondaryHtmlFiles": [],
+        "notAvailablePage": "page_not_available_job-analytics.html",
+        "jsFiles": [
+            "scripts/job-analytics-node-gantt.js",
+            "scripts/services/rm-service.js"
+        ],
+        "angularModuleName": "job-analytics",
+        "cssFile": "job_analytics_custom_style.css",
+        "authenticate": true
+    },
     "job-planner-portal": {
         "isAvailable": true,
         "isSubMenuTitle": true,
