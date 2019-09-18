@@ -26,6 +26,7 @@
     "bootstrap": "~3.3.6",
     "angular-bootstrap": "^2.5.0",
     "moment": "^2.20.1",
+    "moment-timezone": "^0.5.25",
     "animate.css": "~3.4.0",
     "angular": "1.X",
     "pace": "~1.0.2",
