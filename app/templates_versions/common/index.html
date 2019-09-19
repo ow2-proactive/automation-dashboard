@@ -88,133 +88,137 @@
 
 <body ng-controller="mainController as main">
 
-<!-- Main view  -->
-<div ui-view></div>
+    <!-- Main view  -->
+    <div ui-view></div>
 
 
-<!-- build:js(.) scripts/vendor.js -->
+    <!-- build:js(.) scripts/vendor.js -->
 
-<!-- jQuery and Bootstrap -->
-<script src="bower_components/jquery/dist/jquery.js"></script>
-<!--script src="bower_components/jquery-ui/jquery-ui.js"></script-->
-<script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
+    <!-- jQuery and Bootstrap -->
+    <script src="bower_components/jquery/dist/jquery.js"></script>
+    <!--script src="bower_components/jquery-ui/jquery-ui.js"></script-->
+    <script src="bower_components/bootstrap/dist/js/bootstrap.js"></script>
 
-<!-- MetsiMenu -->
-<script src="bower_components/metisMenu/dist/metisMenu.js"></script>
+    <!-- MetsiMenu -->
+    <script src="bower_components/metisMenu/dist/metisMenu.js"></script>
 
-<!-- SlimScroll -->
-<script src="bower_components/jquery-slimscroll/jquery.slimscroll.js"></script>
+    <!-- SlimScroll -->
+    <script src="bower_components/jquery-slimscroll/jquery.slimscroll.js"></script>
 
-<!-- Peace JS -->
-<script src="bower_components/pace/pace.js"></script>
+    <!-- Peace JS -->
+    <script src="bower_components/pace/pace.js"></script>
 
-<!-- Angular scripts-->
-<script src="bower_components/angular/angular.js"></script>
-<script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
-<script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
-<script src="bower_components/angular-filter/dist/angular-filter.min.js"></script>
+    <!-- Angular scripts-->
+    <script src="bower_components/angular/angular.js"></script>
+    <script src="bower_components/angular-ui-router/release/angular-ui-router.js"></script>
+    <script src="bower_components/angular-bootstrap/ui-bootstrap-tpls.js"></script>
+    <script src="bower_components/angular-filter/dist/angular-filter.min.js"></script>
 
-<!-- Angular Dependiences -->
-<script src="bower_components/angular-resource/angular-resource.js"></script>
-<script src="bower_components/angular-spring-data-rest/dist/angular-spring-data-rest.js"></script>
-<script src="bower_components/angular-toArrayFilter/toArrayFilter.js"></script>
-<script src="bower_components/ngSweetAlert/SweetAlert.min.js"></script>
-<!--script src="bower_components/angular-sanitize/angular-sanitize.js"></script-->
-<script src="bower_components/sweetalert/dist/sweetalert.min.js"></script>
-<script src="bower_components/icheck/icheck.min.js"></script>
-<script src="bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
-<script src="bower_components/angular-css/angular-css.min.js"></script>
-<script src="bower_components/angular-cron-gen/build/cron-gen.min.js"></script>
-<script src="bower_components/moment/moment.js"></script>
-<script src="bower_components/moment/locale/*.js"></script>
-<script src="bower_components/moment/min/moment-with-locales.js"></script>
-<script src="bower_components/angular-moment-picker/dist/angular-moment-picker.min.js"></script>
-<script src="bower_components/angular-bootstrap-calendar/dist/js/angular-bootstrap-calendar-tpls.min.js"></script>
-<script src="bower_components/angular-ui-sortable/sortable.min.js"></script>
-<script src="bower_components/bootstrap-ui-datetime-picker/dist/datetime-picker.min.js"></script>
-<script src="bower_components/angular-touchspin/dist/angular-touchspin.min.js"></script>
-<script src="bower_components/codemirror/lib/codemirror.js"></script>
-<script src="bower_components/angular-ui-codemirror/ui-codemirror.js"></script>
-<script src="bower_components/codemirror/addon/display/autorefresh.js"></script>
-<script src="bower_components/codemirror/addon/comment/comment.js"></script>
-<script src="bower_components/codemirror/addon/edit/matchbrackets.js"></script>
-<script src="bower_components/codemirror/addon/edit/closebrackets.js"></script>
-<script src="bower_components/codemirror/addon/edit/closetag.js"></script>
-<script src="bower_components/codemirror/addon/edit/matchtags.js"></script>
-<script src="bower_components/codemirror/addon/fold/foldcode.js"></script>
-<script src="bower_components/codemirror/addon/fold/foldgutter.js"></script>
-<script src="bower_components/codemirror/addon/fold/brace-fold.js"></script>
-<script src="bower_components/codemirror/addon/fold/indent-fold.js"></script>
-<script src="bower_components/codemirror/addon/fold/comment-fold.js"></script>
-<script src="bower_components/codemirror/addon/fold/xml-fold.js"></script>
-<script src="bower_components/codemirror/addon/fold/markdown-fold.js"></script>
-<script src="bower_components/codemirror/addon/dialog/dialog.js"></script>
-<script src="bower_components/codemirror/addon/scroll/annotatescrollbar.js"></script>
-<script src="bower_components/codemirror/addon/scroll/simplescrollbars.js"></script>
-<script src="bower_components/codemirror/addon/search/searchcursor.js"></script>
-<script src="bower_components/codemirror/addon/search/matchesonscrollbar.js"></script>
-<script src="bower_components/codemirror/addon/search/search.js"></script>
-<script src="bower_components/codemirror/addon/search/jump-to-line.js"></script>
-<script src="bower_components/codemirror/addon/search/match-highlighter.js"></script>
-<script src="bower_components/codemirror/addon/hint/show-hint.js"></script>
-<script src="bower_components/codemirror/addon/hint/anyword-hint.js"></script>
-<script src="bower_components/codemirror/addon/selection/active-line.js"></script>
-<script src="bower_components/codemirror/keymap/sublime.js"></script>
-<script src="bower_components/codemirror/addon/mode/simple.js"></script>
-<script src="bower_components/codemirror/mode/dockerfile/dockerfile.js"></script>
-<script src="bower_components/codemirror/mode/groovy/groovy.js"></script>
-<script src="bower_components/codemirror/mode/javascript/javascript.js"></script>
-<script src="bower_components/codemirror/mode/php/php.js"></script>
-<script src="bower_components/codemirror/mode/perl/perl.js"></script>
-<script src="bower_components/codemirror/mode/powershell/powershell.js"></script>
-<script src="bower_components/codemirror/mode/python/python.js"></script>
-<script src="bower_components/codemirror/mode/r/r.js"></script>
-<script src="bower_components/codemirror/mode/ruby/ruby.js"></script>
-<script src="bower_components/codemirror/mode/shell/shell.js"></script>
-<script src="bower_components/codemirror/mode/xml/xml.js"></script>
-<script src="bower_components/codemirror/mode/yaml/yaml.js"></script>
-<script src="bower_components/codemirror/mode/markdown/markdown.js"></script>
-<script src="node_modules/jsplumb/dist/js/jsplumb.min.js"></script>
-<script src="node_modules/angular-moment/angular-moment.js"></script>
-<script src="node_modules/css-element-queries/src/ElementQueries.js"></script>
-<script src="node_modules/css-element-queries/src/ResizeSensor.js"></script>
-<script src="node_modules/angular-gantt/dist/angular-gantt.js"></script>
-<script src="node_modules/angular-gantt/dist/angular-gantt-plugins.js"></script>
-<script src="node_modules/angular-gantt/dist/angular-gantt-core.js"></script>
-<script src="node_modules/angular-ui-tree/dist/angular-ui-tree.js"></script>
-<script src="node_modules/moment-precise-range-plugin/moment-precise-range.js"></script>
-<script src="node_modules/moment-duration-format/lib/moment-duration-format.js"></script>
-<script src="node_modules/html2canvas/dist/html2canvas.min.js"></script>
-<script src="node_modules/chart.js/dist/Chart.bundle.js"></script>
-<script src="node_modules/angular-chart.js/dist/angular-chart.min.js"></script>
-<script src="node_modules/angular-ui-grid/ui-grid.js"></script>
-<script src="node_modules/ui-select/dist/select.js"></script>
+    <!-- Angular Dependiences -->
+    <script src="bower_components/angular-resource/angular-resource.js"></script>
+    <script src="bower_components/angular-spring-data-rest/dist/angular-spring-data-rest.js"></script>
+    <script src="bower_components/angular-toArrayFilter/toArrayFilter.js"></script>
+    <script src="bower_components/ngSweetAlert/SweetAlert.min.js"></script>
+    <!--script src="bower_components/angular-sanitize/angular-sanitize.js"></script-->
+    <script src="bower_components/sweetalert/dist/sweetalert.min.js"></script>
+    <script src="bower_components/icheck/icheck.min.js"></script>
+    <script src="bower_components/jquery-slimscroll/jquery.slimscroll.min.js"></script>
+    <script src="bower_components/angular-css/angular-css.min.js"></script>
+    <script src="bower_components/angular-cron-gen/build/cron-gen.min.js"></script>
+    <script src="bower_components/moment/moment.js"></script>
+    <script src="bower_components/moment/locale/*.js"></script>
+    <script src="bower_components/moment/min/moment-with-locales.js"></script>
+    <script src="bower_components/angular-moment-picker/dist/angular-moment-picker.min.js"></script>
+    <script src="bower_components/angular-bootstrap-calendar/dist/js/angular-bootstrap-calendar-tpls.min.js"></script>
+    <script src="bower_components/angular-ui-sortable/sortable.min.js"></script>
+    <script src="bower_components/bootstrap-ui-datetime-picker/dist/datetime-picker.min.js"></script>
+    <script src="bower_components/angular-touchspin/dist/angular-touchspin.min.js"></script>
+    <script src="bower_components/codemirror/lib/codemirror.js"></script>
+    <script src="bower_components/angular-ui-codemirror/ui-codemirror.js"></script>
+    <script src="bower_components/codemirror/addon/display/autorefresh.js"></script>
+    <script src="bower_components/codemirror/addon/comment/comment.js"></script>
+    <script src="bower_components/codemirror/addon/edit/matchbrackets.js"></script>
+    <script src="bower_components/codemirror/addon/edit/closebrackets.js"></script>
+    <script src="bower_components/codemirror/addon/edit/closetag.js"></script>
+    <script src="bower_components/codemirror/addon/edit/matchtags.js"></script>
+    <script src="bower_components/codemirror/addon/fold/foldcode.js"></script>
+    <script src="bower_components/codemirror/addon/fold/foldgutter.js"></script>
+    <script src="bower_components/codemirror/addon/fold/brace-fold.js"></script>
+    <script src="bower_components/codemirror/addon/fold/indent-fold.js"></script>
+    <script src="bower_components/codemirror/addon/fold/comment-fold.js"></script>
+    <script src="bower_components/codemirror/addon/fold/xml-fold.js"></script>
+    <script src="bower_components/codemirror/addon/fold/markdown-fold.js"></script>
+    <script src="bower_components/codemirror/addon/dialog/dialog.js"></script>
+    <script src="bower_components/codemirror/addon/scroll/annotatescrollbar.js"></script>
+    <script src="bower_components/codemirror/addon/scroll/simplescrollbars.js"></script>
+    <script src="bower_components/codemirror/addon/search/searchcursor.js"></script>
+    <script src="bower_components/codemirror/addon/search/matchesonscrollbar.js"></script>
+    <script src="bower_components/codemirror/addon/search/search.js"></script>
+    <script src="bower_components/codemirror/addon/search/jump-to-line.js"></script>
+    <script src="bower_components/codemirror/addon/search/match-highlighter.js"></script>
+    <script src="bower_components/codemirror/addon/hint/show-hint.js"></script>
+    <script src="bower_components/codemirror/addon/hint/anyword-hint.js"></script>
+    <script src="bower_components/codemirror/addon/selection/active-line.js"></script>
+    <script src="bower_components/codemirror/keymap/sublime.js"></script>
+    <script src="bower_components/codemirror/addon/mode/simple.js"></script>
+    <script src="bower_components/codemirror/mode/dockerfile/dockerfile.js"></script>
+    <script src="bower_components/codemirror/mode/groovy/groovy.js"></script>
+    <script src="bower_components/codemirror/mode/javascript/javascript.js"></script>
+    <script src="bower_components/codemirror/mode/php/php.js"></script>
+    <script src="bower_components/codemirror/mode/perl/perl.js"></script>
+    <script src="bower_components/codemirror/mode/powershell/powershell.js"></script>
+    <script src="bower_components/codemirror/mode/python/python.js"></script>
+    <script src="bower_components/codemirror/mode/r/r.js"></script>
+    <script src="bower_components/codemirror/mode/ruby/ruby.js"></script>
+    <script src="bower_components/codemirror/mode/shell/shell.js"></script>
+    <script src="bower_components/codemirror/mode/xml/xml.js"></script>
+    <script src="bower_components/codemirror/mode/yaml/yaml.js"></script>
+    <script src="bower_components/codemirror/mode/markdown/markdown.js"></script>
+    <script src="node_modules/jsplumb/dist/js/jsplumb.min.js"></script>
+    <script src="bower_components/angular-translate/angular-translate.min.js"></script>
+    <script src="bower_components/angular-translate-loader-url/angular-translate-loader-url.min.js"></script>
+    <script src="bower_components/angular-translate-loader-static-files/angular-translate-loader-static-files.min.js"></script>
+    <script src="bower_components/angular-translate-loader-partial/angular-translate-loader-partial.min.js"></script>
+    <script src="node_modules/angular-moment/angular-moment.js"></script>
+    <script src="node_modules/css-element-queries/src/ElementQueries.js"></script>
+    <script src="node_modules/css-element-queries/src/ResizeSensor.js"></script>
+    <script src="node_modules/angular-gantt/dist/angular-gantt.js"></script>
+    <script src="node_modules/angular-gantt/dist/angular-gantt-plugins.js"></script>
+    <script src="node_modules/angular-gantt/dist/angular-gantt-core.js"></script>
+    <script src="node_modules/angular-ui-tree/dist/angular-ui-tree.js"></script>
+    <script src="node_modules/moment-precise-range-plugin/moment-precise-range.js"></script>
+    <script src="node_modules/moment-duration-format/lib/moment-duration-format.js"></script>
+    <script src="node_modules/html2canvas/dist/html2canvas.min.js"></script>
+    <script src="node_modules/chart.js/dist/Chart.bundle.js"></script>
+    <script src="node_modules/angular-chart.js/dist/angular-chart.min.js"></script>
+    <script src="node_modules/angular-ui-grid/ui-grid.js"></script>
+    <script src="node_modules/ui-select/dist/select.js"></script>
 
-<!--!DO NOT EDIT! The following code related to subviews is automatically generated with grunt build. You can't modify it from here.
+    <!--!DO NOT EDIT! The following code related to subviews is automatically generated with grunt build. You can't modify it from here.
 See 'replace' task in Gruntfile.js and subviews definition in community/enterpriseSubviews.json-->
-<!-- beginSubviewsScripts-->
+    <!-- beginSubviewsScripts-->
 
-<!-- endSubviewsScripts-->
-<!-- endbuild -->
+    <!-- endSubviewsScripts-->
+    <!-- endbuild -->
 
-<!-- build:js({.tmp,app}) scripts/scripts.js -->
-<!-- Custom and plugin javascript -->
-<script src="scripts/inspinia.js"></script>
+    <!-- build:js({.tmp,app}) scripts/scripts.js -->
+    <!-- Custom and plugin javascript -->
+    <script src="scripts/inspinia.js"></script>
 
-<!-- ProActive scripts -->
-<script src="scripts/login.js"></script>
-<script src="scripts/main.js"></script>
-<script src="scripts/utils.js"></script>
-<!-- app Layout script -->
+    <!-- ProActive scripts -->
+    <script src="scripts/login.js"></script>
+    <script src="scripts/main.js"></script>
+    <script src="scripts/utils.js"></script>
+    <!-- app Layout script -->
 
 
-<!-- Angular App Script -->
-<script src="scripts/app.js"></script>
-<script src="scripts/config.js"></script>
-<script src="scripts/directives.js"></script>
-<script src="scripts/controllers.js"></script>
+    <!-- Angular App Script -->
+    <script src="scripts/app.js"></script>
+    <script src="scripts/config.js"></script>
+    <script src="scripts/directives.js"></script>
+    <script src="scripts/controllers.js"></script>
 
-<!-- endbuild -->
+    <!-- endbuild -->
 
 </body>
 

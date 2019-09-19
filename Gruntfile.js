@@ -82,6 +82,18 @@ module.exports = function (grunt) {
         return out;
     }
 
+    //function used to get all translation files from automation dashboard and subviews in a table that will be passed as input to the 'json_merge' grunt task
+    function getJSONFilesToMerge(lang) {
+        var includedScripts = [];
+        for (var key in subviewsDefinition) {
+            if (subviewsDefinition[key].isAvailable && !subviewsDefinition[key].isSubMenuTitle) {
+                includedScripts.push(subviewsDefinition[key].appFolder + 'resources/locales/locale-' + lang + '.json');
+            }
+        }
+        includedScripts.push('<%= inspinia.app %>/resources/locales/locale-' + lang + '.json');
+        return includedScripts;
+    }
+
     // Grunt configuration
     grunt.initConfig({
 
@@ -295,41 +307,41 @@ module.exports = function (grunt) {
                                             result += '\n<li ui-sref-active="active">'
                                                 + '<a href=".menu-item-'+subviewsDefinition[key].nameForUrl+'" style="background-color: #002d66; padding-left:4px" data-toggle="collapse"><img src="styles/patterns/job-analytics.png" style="height:20px;padding-right: 4px;">'
                                                 +'<span class="nav-label" style="display:-webkit-inline-box; margin-left:3px" id="nav-span-'
-                                                + subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">'+subviewsDefinition[key].name+'</span> <i class="fa fa-chevron-down" style="margin-right: 6px;"></i></a>';
+                                                + subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+subviewsDefinition[key].name+'\' | translate}}</span> <i class="fa fa-chevron-down" style="margin-right: 6px;"></i></a>';
                                         } else {
                                             result += '\n<li ui-sref-active="active">'
                                                 + '<a href=".menu-item-'+subviewsDefinition[key].nameForUrl+'" style="background-color: #002d66; padding-left:4px" data-toggle="collapse"><img src="styles/patterns/job-planner-calendar.png" style="height:20px;padding-right: 4px;">'
                                                 +'<span class="nav-label" style="display:-webkit-inline-box; margin-left:3px" id="nav-span-'
-                                                + subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">'+subviewsDefinition[key].name+'</span> <i class="fa fa-chevron-down" style="margin-right: 6px;"></i></a>';
+                                                + subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+subviewsDefinition[key].name+'\' | translate}}</span> <i class="fa fa-chevron-down" style="margin-right: 6px;"></i></a>';
                                         }
 
                                     } else if (subviewsDefinition[key].isSubMenuItem) {
                                         cnt++;
-                                        result += '<li ui-sref-active="active" class="collapse menu-item-'+subviewsDefinition[key].subMenuTitle+'">'
-                                                + '<a ui-sref="portal.subview'+ cnt +'" style="background-color: #002d66;padding-left: 45px; padding-top: 0px;"><span class="nav-label">'
-                                                + subviewsDefinition[key].name+'</span> </a> </li>';
+                                        result += '<li ui-sref-active="active" class="collapse menu-item-' + subviewsDefinition[key].subMenuTitle + '">'
+                                            + '<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left: 45px; padding-top: 0px;"><span class="nav-label">{{\''
+                                            + subviewsDefinition[key].name + '\' | translate}}</span> </a> </li>';
                                     } else {
                                         cnt++;
                                         if(subviewsDefinition[key].name == "Catalog"){
                                             result += '\n<li ui-sref-active="active">'
                                                 + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/catalog.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
-                                                subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">'+ subviewsDefinition[key].name+ '</span> </a>\n</li>';
+                                                subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                         } else if(subviewsDefinition[key].name == "Cloud Watch"){
                                             result += '\n<li ui-sref-active="active">'
                                                 + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/cloud-watch.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
-                                                subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">'+ subviewsDefinition[key].name+ '</span> </a>\n</li>';
+                                                subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                         } else if(subviewsDefinition[key].name == "Cloud Automation"){
                                             result += '\n<li ui-sref-active="active">'
                                                 + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/cloud-automation.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
-                                                subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">'+ subviewsDefinition[key].name+ '</span> </a>\n</li>';
+                                                subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                         } else if(subviewsDefinition[key].name == "Notification"){
                                             result += '\n<li ui-sref-active="active">'
                                                 + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/notification-portal.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
-                                                subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">'+ subviewsDefinition[key].name+ '</span> </a>\n</li>';
+                                                subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                         } else {
                                             result += '\n<li ui-sref-active="active">'
                                                 + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/automation_dashboard_30.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
-                                                subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">'+ subviewsDefinition[key].name+ '</span> </a>\n</li>';
+                                                subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                         }
                                     }
                                 }
@@ -471,7 +483,18 @@ module.exports = function (grunt) {
                 }
                 return includedScripts;
             })()
-        }
+        },
+
+        json_merge: {
+            files: {
+                files: {
+                    '<%= inspinia.dist %>/resources/locales/locale-en.json': getJSONFilesToMerge("en"),
+                    '<%= inspinia.dist %>/resources/locales/locale-fr.json': getJSONFilesToMerge("fr"),
+                    '<%= inspinia.dist %>/resources/locales/locale-pt.json': getJSONFilesToMerge("pt")
+                }
+            },
+        },
+
     });
 
     // Run build version of app
@@ -494,7 +517,8 @@ module.exports = function (grunt) {
         'uglify',
         'filerev',
         'usemin',
-        'htmlmin'
+        'htmlmin',
+        'json_merge'
     ]);
 
     grunt.registerTask('build', function() {
@@ -508,5 +532,6 @@ module.exports = function (grunt) {
             grunt.task.run('copy:enterpriseSubviews');
         }
     });
+    grunt.loadNpmTasks('grunt-json-merge');
 
 };
