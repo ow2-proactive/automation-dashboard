@@ -275,6 +275,10 @@
     text-align: end;
 }
 
+.gantt-task-info-content hr {
+    margin: 7px 2px;
+}
+
 @media (max-width: 1199px){
     .pa-shortcut {
         width: 0px !important;
