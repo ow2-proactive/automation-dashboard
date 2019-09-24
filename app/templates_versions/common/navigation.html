@@ -9,13 +9,42 @@
                     </a>
                 </li>
 
-                <li ui-sref-active="active" style="height: 45px;margin-bottom: 3px;background: #F3F3F4;padding-top: 15px;margin-top: -5px;">
-                    <div class="dropdown" id="help-dropdown">
-                        <a href="javascript:void(0)" data-toggle="dropdown" style="color: #676a6c;padding-left: 10px;font-size: 14px;background-color: transparent;"> Help <b class="caret"></b></a>
-                        <ul class="dropdown-menu">
-                            <li><a class="pointer" target="_blank" href="{{docLink}}"><i class="glyphicon glyphicon-book"></i> ProActive Documentation</a></li>
-                            <li><a class="pointer" id="about-button" href ng-click="displayAbout()"><i class="glyphicon glyphicon-question-sign"></i> About</a></li>
-                        </ul>
+                <li style="height: 45px;margin-bottom: 3px;background: #F3F3F4;padding-top: 15px;margin-top: -5px;" ui-sref-active="active">
+                    <div style="display: inline-flex">
+                        <div class="dropdown">
+                            <a data-toggle="dropdown" href="javascript:void(0)" style="color: #676a6c;padding-left: 10px;font-size: 14px;background-color: transparent;">
+                                {{'Settings'|translate}} <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li class="dropdown-submenu">
+                                    <a class="pointer" href="#" tabindex="-1" target="_blank"><i aria-hidden="true" class="fa fa-language"></i>
+                                        {{'Language'|translate}} <i aria-hidden="true" class="fa fa-caret-right pull-right" style="margin-top:0.6em;"></i></a>
+                                    <ul class="dropdown-menu">
+                                        <li><a class="pointer" ng-click="changeLanguage('en')" style="
+    padding: 3px 5px;
+" tabindex="-1" target="_blank"><img src="styles/patterns/gb.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">English</a></li>
+                                        <li><a class="pointer" ng-click="changeLanguage('fr')" style="
+    padding: 3px 5px;
+" tabindex="-1" target="_blank"><img src="styles/patterns/fr.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">Français</a></li>
+                                        <li><a class="pointer" ng-click="changeLanguage('pt')" style="
+    padding: 3px 5px;
+" tabindex="-1" target="_blank"><img src="styles/patterns/pt.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">Brasil - Português</a>
+                                        </li>
+                                    </ul>
+                                </li>
+                            </ul>
+                        </div>
+                        <div class="dropdown" id="help-dropdown">
+                            <a data-toggle="dropdown" href="javascript:void(0)" style="color: #676a6c;padding-left: 10px;font-size: 14px;background-color: transparent;">
+                                {{'Help'|translate}} <b class="caret"></b></a>
+                            <ul class="dropdown-menu">
+                                <li><a class="pointer" href="{{docLink}}" target="_blank"><i aria-hidden="true" class="fa fa-book"></i>
+                                        {{'ProActive Documentations'|translate}}</a></li>
+                                <li><a class="pointer" href id="about-button" ng-click="displayAbout()"><i aria-hidden="true" class="fa fa-question-circle"></i>
+                                        {{'About'|translate}}</a></li>
+                            </ul>
+                        </div>
+
+
                     </div>
                 </li>
 
@@ -39,7 +68,7 @@
 
                 <!-- Documentation Link-->
                 <li style="position: fixed;bottom: 0px;left: 0px;width: 220px;height: 39px;">
-                    <a href="{{docLink}}" target="_blank" style="color: #002d66; background-color:rgba(255,255,255,0.5);padding: 11px 15px;"><i class="fa fa-book"></i> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-notification">Documentation</span> </a>
+                    <a href="{{docLink}}" target="_blank" style="color: #002d66; background-color:rgba(255,255,255,0.5);padding: 11px 15px;"><i class="fa fa-book"></i> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-notification">{{'Documentation'|translate}}</span> </a>
                 </li>
             </ul>
         </div>
@@ -49,8 +78,8 @@
         <div class="modal-dialog">
             <div class="modal-content">
                 <div class="modal-header">
-                    <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                    <h3>ProActive Automation Dashboard</h3>
+                    <button aria-hidden="true" class="close" data-dismiss="modal" type="button">×</button>
+                    <h3>{{'ProActive Automation Dashboard'|translate}}</h3>
                 </div>
                 <div class="modal-body" style="height:100%">
                     <div class="row">
@@ -58,14 +87,17 @@
                             <img src="styles/patterns/about_115.png" style="height:100%;display:block;">
                         </div>
                         <div class="col-sm-9">
-                            <p>Version: <b> {{dashboardVersion}}</b></p>
-                            <p>Copyright (C) 1997-{{year}} INRIA/University of Nice-Sophia Antipolis/ActiveEon</p>
-                            <p>Visit <a target="_blank" href="http://proactive.inria.fr/">http://proactive.inria.fr/</a> and <a target="_blank" href="http://www.activeeon.com/">http://www.activeeon.com/</a></a>
+                            <p>{{'Version'|translate}}: <b> {{dashboardVersion}}</b></p>
+                            <p>{{'Copyright'|translate}} (C) 1997-{{year}} INRIA/University of Nice-Sophia
+                                Antipolis/ActiveEon</p>
+                            <p>{{'Visit'|translate}} <a href="http://proactive.inria.fr/" target="_blank">http://proactive.inria.fr/</a>
+                                {{'and'|translate}} <a href="http://www.activeeon.com/" target="_blank">http://www.activeeon.com/</a></a>
                             </p>
-                            <p>Contact: +33 (0)9 88 777 660, contact@activeeon.com</p>
-                            <p>REST server: <a target="_blank" ng-href="{{restUrl}}" id="restServer">{{restUrl}}</a></p>
-                            <p>REST version: <b>{{dashboardVersion}}</b></p>
-                            <p>Proactive Dashboard version: <b>{{dashboardVersion}}</b></p>
+                            <p>{{'Contact'|translate}}: +33 (0)9 88 777 660, contact@activeeon.com</p>
+                            <p>{{'REST server'|translate}}: <a id="restServer" ng-href="{{restUrl}}" target="_blank">{{restUrl}}</a>
+                            </p>
+                            <p>{{'REST version'|translate}}: <b>{{dashboardVersion}}</b></p>
+                            <p>{{'Proactive Dashboard version'|translate}}: <b>{{dashboardVersion}}</b></p>
                         </div>
                     </div>
 
