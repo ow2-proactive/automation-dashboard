@@ -3,40 +3,51 @@
         <ul class="nav navbar-nav navbar-right" style="display: inline-flex;">
             <li style="padding-right: 5px;">
                 <div class="btn-group pa-shortcuts">
-                    <a class="btn btn-small btn-default active pa-shortcuts" href="/automation-dashboard/" style="color:#fff;border-color: #ccc;padding:5px; background-color: #E86D1F;">
-                        <img src="styles/patterns/automation_dashboard_30.png" style="height:25px;padding-left: 4px;padding-right: 4px;">
-                        <div class="pa-shortcut" style="width: 154px;">Automation Dashboard</div>
+                    <a class="btn btn-small btn-default active pa-shortcuts" href="/automation-dashboard/"
+                       style="color:#fff;border-color: #ccc;padding:5px; background-color: #E86D1F;">
+                        <img src="styles/patterns/automation_dashboard_30.png"
+                             style="height:25px;padding-left: 4px;padding-right: 4px;">
+                        <div class="pa-shortcut" style="max-width: 300px;">{{ 'Automation Dashboard' | translate}}</div>
                     </a>
                 </div>
             </li>
             <li style="padding-right: 5px;">
                 <div class="btn-group pa-shortcuts">
-                    <a class="btn btn-small btn-default pa-shortcuts" href="/studio/" target="/studio/" style="color:#333;border-color: #ccc;padding:5px">
-                        <img src="styles/patterns/studio_30.png" style="height:25px;padding-left: 4px;padding-right: 4px;">
-                        <div class="pa-shortcut" style="width: 108px;">Workflow Studio</div>
+                    <a class="btn btn-small btn-default pa-shortcuts" href="/studio/" style="color:#333;border-color: #ccc;padding:5px"
+                       target="/studio/">
+                        <img src="styles/patterns/studio_30.png"
+                             style="height:25px;padding-left: 4px;padding-right: 4px;">
+                        <div class="pa-shortcut" style="max-width: 300px;">{{ 'Workflow Studio' | translate}}</div>
                     </a>
                 </div>
             </li>
             <li style="padding-right: 5px;">
                 <div class="btn-group pa-shortcuts">
-                    <a class="btn btn-small btn-default pa-shortcuts" href="/scheduler/" target="/scheduler/" style="color:#333;border-color: #ccc;padding:5px">
-                        <img src="styles/patterns/scheduler_30.png" style="height:25px;padding-left: 4px;padding-right: 4px;">
-                        <div class="pa-shortcut" style="width: 180px;">Scheduling &amp; Orchestration</div>
+                    <a class="btn btn-small btn-default pa-shortcuts" href="/scheduler/" style="color:#333;border-color: #ccc;padding:5px"
+                       target="/scheduler/">
+                        <img src="styles/patterns/scheduler_30.png"
+                             style="height:25px;padding-left: 4px;padding-right: 4px;">
+                        <div class="pa-shortcut" style="max-width: 300px;">{{ 'Scheduling &amp; Orchestration' |
+                            translate}}
+                        </div>
                     </a>
                 </div>
             </li>
             <li>
                 <div class="btn-group pa-shortcuts">
-                    <a class="btn btn-small btn-default pa-shortcuts" href="/rm/" target="/rm/" style="color:#333;border-color: #ccc;padding:5px">
+                    <a class="btn btn-small btn-default pa-shortcuts" href="/rm/" style="color:#333;border-color: #ccc;padding:5px"
+                       target="/rm/">
                         <img src="styles/patterns/rm_30.png" style="height:25px;padding-left: 4px;padding-right: 4px;">
-                        <div class="pa-shortcut" style="width: 123px;">Resource Manager</div>
+                        <div class="pa-shortcut" style="max-width: 300px;">{{ 'Resource Manager' | translate}}</div>
                     </a>
                 </div>
             </li>
             <li style="height: 38px; margin: 6px 5px; border-right: 1px solid #777;border-left:  1px solid #f2f2f2"></li>
-            <li style ="padding-bottom: 6px;padding-right: 25px">
+            <li style="padding-bottom: 6px;padding-right: 25px">
                 <div class="btn-group logout-btn pa-shortcuts" ng-controller="logoutController">
-                    <a ng-click="logout()" class="btn btn-small btn-default logout-btn pa-shortcuts" style="color:#333;border-color:#ccc;padding:6px;"><b> {{main.userName}}</b> <img src="styles/patterns/logout_30.png" style="height:25px;  padding-left: 5px;"></a>
+                    <a class="btn btn-small btn-default logout-btn pa-shortcuts" ng-click="logout()"
+                       style="color:#333;border-color:#ccc;padding:6px;"><b> {{main.userName}}</b> <img
+                            src="styles/patterns/logout_30.png" style="height:25px;  padding-left: 5px;"></a>
                 </div>
             </li>
         </ul>
@@ -48,5 +59,5 @@
             <img src="styles/patterns/extra-logo-center.png" style="height:30px;" align="right">
         </a>
     </div>
-    <div  style="height: 3px; background: #f47930; width:100%; display: table;"></div>
+    <div style="height: 3px; background: #f47930; width:100%; display: table;"></div>
 </div>
