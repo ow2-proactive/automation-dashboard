@@ -97,10 +97,10 @@
         "subMenuTitle": "analytics-portal",
         "nameForUrl": "job-gantt",
         "appFolder": "job-analytics-portal/app/",
-        "htmlFile": "gantt-chart/job_gantt.html",
+        "htmlFile": "job-gantt/job_gantt.html",
         "secondaryHtmlFiles": [
-            "gantt-chart/job_gantt_tooltip.html",
-            "gantt-chart/job_gantt_legend.html"
+            "job-gantt/job_gantt_tooltip.html",
+            "job-gantt/job_gantt_legend.html"
         ],
         "notAvailablePage": "page_not_available_job-analytics.html",
         "jsFiles": ["scripts/job-gantt.js",
@@ -118,10 +118,10 @@
         "subMenuTitle": "analytics-portal",
         "nameForUrl": "node-gantt",
         "appFolder": "job-analytics-portal/app/",
-        "htmlFile": "gantt-chart/node_gantt.html",
+        "htmlFile": "node-gantt/node_gantt.html",
         "secondaryHtmlFiles": [
-            "gantt-chart/node_gantt_legend.html",
-            "gantt-chart/node_gantt_tooltip.html"
+            "node-gantt/node_gantt_legend.html",
+            "node-gantt/node_gantt_tooltip.html"
         ],
         "notAvailablePage": "page_not_available_job-analytics.html",
         "jsFiles": [
