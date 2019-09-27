@@ -130,7 +130,7 @@
             "scripts/services/rm-service.js"
         ],
         "angularModuleName": "job-gantt",
-        "cssFile": "job_analytics_custom_style.css",
+        "cssFile": "node_gantt_custom_style.css",
         "authenticate": true
     },
     "job-planner-portal": {

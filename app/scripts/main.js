@@ -2,7 +2,7 @@
  * Created by ActiveEon Team on 18/04/2017.
  */
 
-var mainModule = angular.module('main', ['ngResource', 'spring-data-rest', 'angular-toArrayFilter', 'oitozero.ngSweetAlert']);
+var mainModule = angular.module('main', ['ngResource', 'spring-data-rest', 'angular-toArrayFilter', 'oitozero.ngSweetAlert', 'pascalprecht.translate']);
 
 function getSessionId() {
     return localStorage['pa.session'];
@@ -33,6 +33,7 @@ function getProperties ($http, $location) {
             var appUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port());
             var studioUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port() +'/studio');
             var schedulerPortalUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port() +'/scheduler');
+            var proactiveLanguage = angular.toJson(response.proactiveLanguage, true).replace(/"/g, "");
 
             localStorage['pcaServiceUrl'] = pcaServiceUrl;
             localStorage['schedulerRestUrl'] = schedulerRestUrl;
@@ -55,6 +56,9 @@ function getProperties ($http, $location) {
             localStorage['appUrl'] = appUrl;
             localStorage['studioUrl'] = studioUrl;
             localStorage['schedulerPortalUrl'] = schedulerPortalUrl;
+            if (!localStorage['proactiveLanguage']) {
+                localStorage['proactiveLanguage'] = proactiveLanguage;
+            }
         })
         .error(function (response) {
             console.error('LoadingPropertiesService $http.get error', status, response);
@@ -126,17 +130,35 @@ mainModule.factory('MainService', function ($http, $interval, $rootScope, $state
     };
 });
 
+mainModule.run(['$rootScope', function ($rootScope) {
+    $rootScope.lang = 'en';
+}])
+
+mainModule.config(function ($translateProvider, $translatePartialLoaderProvider) {
+    $translatePartialLoaderProvider.addPart('resources');
+    $translateProvider.useLoader('$translatePartialLoader', {
+        urlTemplate: '{part}/locales/locale-{lang}.json'
+    })
+        .preferredLanguage(localStorage['proactiveLanguage']);
+});
+
 // --------------- Controllers -----------------
 
-mainModule.controller('mainController', function ($http, $scope, $rootScope, $state, $location, $interval) {
+mainModule.controller('mainController', function ($http, $scope, $rootScope, $state, $location, $interval, $translate) {
 
     this.$onInit = function () {
         $scope.main.userName = localStorage['pa.login'];
-        $scope.startRegularCheckSession()
+        $scope.startRegularCheckSession();
         $scope.contextDisplay = false;
         // contextPosition enables directive to specify where the context menu was opened
-        $scope.contextPosition = ""
+        $scope.contextPosition = "";
     }
+
+    $scope.changeLanguage = function (key) {
+        $rootScope.lang = key;
+        $translate.use(key);
+        localStorage['proactiveLanguage'] = key;
+    };
 
     $scope.startRegularCheckSession = function(){
         if (!$scope.checkSessionInterval)
