@@ -165,7 +165,7 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
         $('#language-dropdown').find('a').click(function() {
             var language = $(this).text();
             var flagObject = $(this).find('img').attr('src');
-            var flag = '<img style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;" src="' + flagObject + '"/>';
+            var flag = '<img alt="'+language+'" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;" src="' + flagObject + '"/>';
             $('#selected').html(flag + language);
         });
     };
@@ -307,7 +307,7 @@ mainModule.controller('navBarController', function ($scope, $http, $interval){
     function setDefaultSelectedLanguage(language) {
         var lang = $('#'+language+'').text();
         var flagObject = $('#'+language+'').find('img').attr('src');
-        var flag = '<img style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;" src="' + flagObject + '"/>';
+        var flag = '<img alt="'+language+'"style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;" src="' + flagObject + '"/>';
         $('#selected').html(flag + lang);
     }
 
