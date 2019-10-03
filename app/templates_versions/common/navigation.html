@@ -11,28 +11,6 @@
 
                 <li style="height: 45px;margin-bottom: 3px;background: #F3F3F4;padding-top: 15px;margin-top: -5px;" ui-sref-active="active">
                     <div style="display: inline-flex">
-                        <div class="dropdown">
-                            <a data-toggle="dropdown" href="javascript:void(0)" style="color: #676a6c;padding-left: 10px;font-size: 14px;background-color: transparent;">
-                                {{'Settings'|translate}} <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li class="dropdown-submenu">
-                                    <a class="pointer" href="#" tabindex="-1" target="_blank"><i aria-hidden="true" class="fa fa-language"></i>
-                                        {{'Language'|translate}} <i aria-hidden="true" class="fa fa-caret-right pull-right" style="margin-top:0.6em;"></i></a>
-                                    <ul class="dropdown-menu">
-                                        <li><a class="pointer" ng-click="changeLanguage('en')" style="
-    padding: 3px 5px;
-" tabindex="-1" target="_blank"><img src="styles/patterns/gb.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">English</a></li>
-                                        <li><a class="pointer" ng-click="changeLanguage('fr')" style="
-    padding: 3px 5px;
-" tabindex="-1" target="_blank"><img src="styles/patterns/fr.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">Français</a></li>
-                                        <li><a class="pointer" ng-click="changeLanguage('pt')" style="
-    padding: 3px 5px;
-" tabindex="-1" target="_blank"><img src="styles/patterns/pt.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">Brasil - Português</a>
-                                        </li>
-                                    </ul>
-                                </li>
-                            </ul>
-                        </div>
                         <div class="dropdown" id="help-dropdown">
                             <a data-toggle="dropdown" href="javascript:void(0)" style="color: #676a6c;padding-left: 10px;font-size: 14px;background-color: transparent;">
                                 {{'Help'|translate}} <b class="caret"></b></a>
@@ -43,8 +21,24 @@
                                         {{'About'|translate}}</a></li>
                             </ul>
                         </div>
-
-
+                        <div class="dropdown">
+                            <a data-toggle="dropdown" href="javascript:void(0)" style="color: #676a6c;padding-left: 10px;font-size: 14px;background-color: transparent;" ng-click="selectedLanguage()">
+                                <span id="selected">Language</span><span class="caret"></span></a>
+                            <ul class="dropdown-menu" id="language-dropdown">
+                                <li><a id="en" class="pointer" ng-click="changeLanguage('en')" style="
+      padding: 3px 5px;
+  " tabindex="-1" target="_blank"><img alt="En" id="en-flag" src="styles/patterns/gb.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">English</a>
+                                </li>
+                                <li><a id="fr" class="pointer" ng-click="changeLanguage('fr')" style="
+      padding: 3px 5px;
+  " tabindex="-1" target="_blank"><img alt="Fr" id="fr-flag" src="styles/patterns/fr.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">Français</a>
+                                </li>
+                                <li><a id="pt" class="pointer" ng-click="changeLanguage('pt')" style="
+      padding: 3px 5px;
+  " tabindex="-1" target="_blank"><img alt="Pt" id="pt-flag" src="styles/patterns/pt.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">Português</a>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
                 </li>
 
