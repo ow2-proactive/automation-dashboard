@@ -160,6 +160,16 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
         localStorage['proactiveLanguage'] = key;
     };
 
+    //Set the selected language as language dropdown value
+    $scope.selectedLanguage = function () {
+        $('#language-dropdown').find('a').click(function() {
+            var language = $(this).text();
+            var flagObject = $(this).find('img').attr('src');
+            var flag = '<img alt="'+language+'" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;" src="' + flagObject + '"/>';
+            $('#selected').html(flag + language);
+        });
+    };
+
     $scope.startRegularCheckSession = function(){
         if (!$scope.checkSessionInterval)
             $scope.checkSessionInterval = $scope.$interval(checkSession, 30000);
@@ -199,7 +209,6 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
         clickEvent.stopPropagation();
     }
 
-
     $scope.hideContextualMenu = function(){
         $scope.contextDisplay = false;
     }
@@ -234,6 +243,7 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
 // controller used in navigation.html :
 mainModule.controller('navBarController', function ($scope, $http, $interval){
     this.$onInit = function () {
+        setDefaultSelectedLanguage(localStorage['proactiveLanguage']);
         $scope.view = JSON.parse(localStorage['configViews']);
         $scope.docLink = "/doc/" ;
         $http.get('resources/config.json')
@@ -291,6 +301,14 @@ mainModule.controller('navBarController', function ($scope, $http, $interval){
         } else {
             $scope.newNotificationsLabel.hide();
         }
+    }
+
+    //Set the locally stored language as default value for the language dropdown menu
+    function setDefaultSelectedLanguage(language) {
+        var lang = $('#'+language+'').text();
+        var flagObject = $('#'+language+'').find('img').attr('src');
+        var flag = '<img alt="'+language+'"style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;" src="' + flagObject + '"/>';
+        $('#selected').html(flag + lang);
     }
 
     this.$onDestroy = function() {
