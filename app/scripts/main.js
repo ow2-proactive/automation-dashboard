@@ -2,7 +2,7 @@
  * Created by ActiveEon Team on 18/04/2017.
  */
 
-var mainModule = angular.module('main', ['ngResource', 'spring-data-rest', 'angular-toArrayFilter', 'oitozero.ngSweetAlert', 'pascalprecht.translate']);
+var mainModule = angular.module('main', ['ngResource', 'spring-data-rest', 'angular-toArrayFilter', 'oitozero.ngSweetAlert', 'ngSanitize', 'pascalprecht.translate']);
 
 function getSessionId() {
     return localStorage['pa.session'];
@@ -140,6 +140,7 @@ mainModule.config(function ($translateProvider, $translatePartialLoaderProvider)
         urlTemplate: '{part}/locales/locale-{lang}.json'
     })
         .preferredLanguage(localStorage['proactiveLanguage']);
+    $translateProvider.useSanitizeValueStrategy('escapeParameters');
 });
 
 // --------------- Controllers -----------------
