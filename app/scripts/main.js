@@ -9,7 +9,7 @@ function getSessionId() {
 }
 
 // ---------- Utilities -----------
-function getProperties ($http, $location) {
+function getProperties($http, $location) {
     return $http.get('resources/config.json')
         .success(function (response) {
             var pcaServiceUrl = angular.toJson(response.confServer.pcaServiceUrl, true);
@@ -24,16 +24,16 @@ function getProperties ($http, $location) {
             var notificationPortalQueryPeriod = angular.toJson(response.notificationPortalQueryPeriod, true);
             var genericCatalogPortalQueryPeriod = angular.toJson(response.genericCatalogPortalQueryPeriod, true);
             var jobPlannerQueryPeriod = angular.toJson(response.jobPlannerQueryPeriod, true);
-            var appCatalogBucketsUrl =angular.toJson(response.confServer.catalogServiceUrl+"/buckets/?kind=workflow", true);
-            var appCatalogWorkflowsUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port() + "/catalog/buckets/" + response.view[0].catalog.bucketName + "/resources");
+            var appCatalogBucketsUrl = angular.toJson(response.confServer.catalogServiceUrl + '/buckets/?kind=workflow', true);
+            var appCatalogWorkflowsUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/catalog/buckets/' + response.view[0].catalog.bucketName + '/resources');
             var jobPlannerServiceUrl = angular.toJson(response.confServer.jobPlannerServiceUrl, true);
             var cloudWatchServiceUrl = angular.toJson(response.confServer.cloudWatchServiceUrl, true);
             var jobAnalyticsServiceUrl = angular.toJson(response.confServer.jobAnalyticsServiceUrl, true);
             var configViews = angular.toJson(response.view, true);
-            var appUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port());
-            var studioUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port() +'/studio');
-            var schedulerPortalUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ":" + $location.port() +'/scheduler');
-            var proactiveLanguage = angular.toJson(response.proactiveLanguage, true).replace(/"/g, "");
+            var appUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port());
+            var studioUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/studio');
+            var schedulerPortalUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/scheduler');
+            var proactiveLanguage = angular.toJson(response.proactiveLanguage, true).replace(/"/g, '');
 
             localStorage['pcaServiceUrl'] = pcaServiceUrl;
             localStorage['schedulerRestUrl'] = schedulerRestUrl;
@@ -68,17 +68,16 @@ function getProperties ($http, $location) {
 var isSessionValide = function ($http, sessionId, $location) {
     return getProperties($http, $location).then(function () {
         var rmRestUrl = localStorage['rmRestUrl'];
-        var userDataUrl = JSON.parse(rmRestUrl) + "logins/sessionid/" + sessionId + "/userdata/";
-        return $http.get(userDataUrl).then(function(result) {
-            return result.data !="";
+        var userDataUrl = JSON.parse(rmRestUrl) + 'logins/sessionid/' + sessionId + '/userdata/';
+        return $http.get(userDataUrl).then(function (result) {
+            return result.data != '';
         });
     });
 };
 
 
 // factory used to get config data values from resources/config.json
-mainModule.factory('loadingConfigData', function($http, $location){
-    console.log("Loading configData values");
+mainModule.factory('loadingConfigData', function ($http, $location) {
     getProperties($http, $location);
     return {
         doNothing: function () {
@@ -90,7 +89,7 @@ mainModule.factory('loadingConfigData', function($http, $location){
 // get the username cookie variable
 
 function getCookie(name) {
-    var cookieName = name + "=";
+    var cookieName = name + '=';
     var ca = document.cookie.split(';');
     for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
@@ -112,10 +111,8 @@ mainModule.factory('MainService', function ($http, $interval, $rootScope, $state
             .success(function (response) {
                 if (response.match(/^[A-Za-z0-9]+$/)) {
                     localStorage['pa.session'] = response;
-                    console.log('doLogin authentication has succeeded:', response);
-                }
-                else {
-                    console.log('doLogin authentication has failed:', response);
+                } else {
+                    console.error('doLogin authentication has failed:', response);
                 }
             })
             .error(function (response) {
@@ -132,7 +129,7 @@ mainModule.factory('MainService', function ($http, $interval, $rootScope, $state
 
 mainModule.run(['$rootScope', function ($rootScope) {
     $rootScope.lang = 'en';
-}])
+}]);
 
 mainModule.config(function ($translateProvider, $translatePartialLoaderProvider) {
     $translatePartialLoaderProvider.addPart('resources');
@@ -152,8 +149,8 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
         $scope.startRegularCheckSession();
         $scope.contextDisplay = false;
         // contextPosition enables directive to specify where the context menu was opened
-        $scope.contextPosition = "";
-    }
+        $scope.contextPosition = '';
+    };
 
     $scope.changeLanguage = function (key) {
         $rootScope.lang = key;
@@ -163,116 +160,117 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
 
     //Set the selected language as language dropdown value
     $scope.selectedLanguage = function () {
-        $('#language-dropdown').find('a').click(function() {
+        $('#language-dropdown').find('a').click(function () {
             var language = $(this).text();
             var flagObject = $(this).find('img').attr('src');
-            var flag = '<img alt="'+language+'" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;" src="' + flagObject + '"/>';
+            var flag = '<img alt="' + language + '" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;" src="' + flagObject + '"/>';
             $('#selected').html(flag + language);
         });
     };
 
-    $scope.startRegularCheckSession = function(){
-        if (!$scope.checkSessionInterval)
+    $scope.startRegularCheckSession = function () {
+        if (!$scope.checkSessionInterval) {
             $scope.checkSessionInterval = $scope.$interval(checkSession, 30000);
-    }
+        }
+    };
 
     function checkSession() {
         var sessionId = getSessionId()
         if (!sessionId) {
             $scope.closeSession();
         } else {
-            $http.get(JSON.parse(localStorage['schedulerRestUrl']) + 'isconnected/', { headers: { 'sessionID': sessionId } })
+            $http.get(JSON.parse(localStorage['schedulerRestUrl']) + 'isconnected/', {headers: {'sessionID': sessionId}})
                 .then(function (response) {
                     if (!response) {
                         $scope.closeSession();
                     }
                 })
                 .catch(function (response) {
-                    console.error("Error checking if session is valid:", response);
-            });
+                    console.error('Error checking if session is valid:', response);
+                });
         }
     }
 
-    $scope.stopRegularCheckSession = function(){
+    $scope.stopRegularCheckSession = function () {
         $interval.cancel($scope.checkSessionInterval);
         $scope.checkSessionInterval = undefined;
-    }
+    };
 
-    $scope.closeSession = function() {
+    $scope.closeSession = function () {
         $state.go('login');
         $scope.stopRegularCheckSession();
         $rootScope.$broadcast('event:StopRefreshing');
-    }
+    };
 
-    $scope.displayContextualMenu = function(clickEvent, position) {
+    $scope.displayContextualMenu = function (clickEvent, position) {
         $scope.contextPosition = position;
         $scope.contextDisplay = true;
         clickEvent.stopPropagation();
-    }
+    };
 
-    $scope.hideContextualMenu = function(){
+    $scope.hideContextualMenu = function () {
         $scope.contextDisplay = false;
-    }
+    };
 
     // Check if position match with the position set by displayContextualMenu
-    $scope.isContextView = function(position){
+    $scope.isContextView = function (position) {
         return $scope.contextPosition == position;
-    }
+    };
 
     // Move the contextual menu near the click according to its position in the window
-    $scope.moveContextualMenu = function(clickEvent){
+    $scope.moveContextualMenu = function (clickEvent) {
 
         var contextMenuHeight = angular.element('#context-menu')[0].offsetHeight
         //if contextual menu will get out of the panel catalog-tab-content, we display it upper
-        if (clickEvent["clientY"] + contextMenuHeight < window.innerHeight){
-            angular.element('#context-menu').css("top",clickEvent["clientY"]+"px")
-        }else{
-            angular.element('#context-menu').css("top",(clickEvent["clientY"]-contextMenuHeight)+"px")
+        if (clickEvent['clientY'] + contextMenuHeight < window.innerHeight) {
+            angular.element('#context-menu').css('top', clickEvent['clientY'] + 'px')
+        } else {
+            angular.element('#context-menu').css('top', (clickEvent['clientY'] - contextMenuHeight) + 'px')
         }
 
         var contextMenuWidth = angular.element('#context-menu')[0].offsetWidth
         //if contextual menu will get out of the panel catalog-tab-content, we display it upper
-        if (clickEvent["clientX"] + contextMenuWidth < window.innerWidth){
-            angular.element('#context-menu').css("left",clickEvent["clientX"]+"px")
-        }else{
-            angular.element('#context-menu').css("left",(clickEvent["clientX"]-contextMenuWidth)+"px")
+        if (clickEvent['clientX'] + contextMenuWidth < window.innerWidth) {
+            angular.element('#context-menu').css('left', clickEvent['clientX'] + 'px')
+        } else {
+            angular.element('#context-menu').css('left', (clickEvent['clientX'] - contextMenuWidth) + 'px')
         }
 
     }
 });
 
 // controller used in navigation.html :
-mainModule.controller('navBarController', function ($scope, $http, $interval){
+mainModule.controller('navBarController', function ($scope, $http, $interval) {
     this.$onInit = function () {
         setDefaultSelectedLanguage(localStorage['proactiveLanguage']);
         $scope.view = JSON.parse(localStorage['configViews']);
-        $scope.docLink = "/doc/" ;
+        $scope.docLink = '/doc/';
         $http.get('resources/config.json')
             .success(function (response) {
                 $scope.dashboardVersion = response.proactiveDashboardVersion;
             })
             .error(function (response) {
-                $scope.dashboardVersion = "not available";
-        });
-        $scope.notificationNavSpan = angular.element('#nav-span-notification');
-        if($scope.notificationNavSpan.length>0) {
+                $scope.dashboardVersion = 'not available';
+            });
+        $scope.notificationNavSpan = angular.element('#nav-span-notifications');
+        if ($scope.notificationNavSpan.length) {
             $scope.newNotificationsLabel = angular.element('<div id="new-notifications-label" style="background:#d9534f;color:white;border-radius:10px;text-align:center;margin-left: 5px;padding: 0px 5px;"></div>');
-            $scope.notificationNavSpan.append($scope.newNotificationsLabel)
+            $scope.notificationNavSpan.append($scope.newNotificationsLabel);
             $scope.newNotificationsLabel.hide();
             startRegularUpdateNotificationLabel();
         }
-    }
+    };
 
-    $scope.displayAbout = function(){
+    $scope.displayAbout = function () {
         var windowLocation = window.location;
         var protocol = windowLocation.protocol;
         var host = windowLocation.host;
-        var result = protocol + "//" + host + "/rest";
+        var result = protocol + '//' + host + '/rest';
 
         $scope.restUrl = result;
         $scope.year = new Date().getFullYear();
         $('#about-modal').modal('show');
-    }
+    };
 
     function startRegularUpdateNotificationLabel() {
         queryNotificationService();
@@ -280,23 +278,24 @@ mainModule.controller('navBarController', function ($scope, $http, $interval){
     }
 
     function queryNotificationService() {
-        $http.get(JSON.parse(localStorage['notificationServiceUrl']) + 'notifications/', { headers: { 'sessionID': getSessionId() } })
-            .then(function (response) {
-                updateNotificationsLabel(response.data);
+        var eventsUrlPrefix = JSON.parse(localStorage['notificationServiceUrl']) + 'notifications';
+        $http.get(eventsUrlPrefix, { headers: { 'sessionID': getSessionId() } })
+            .success(function (response) {
+                updateNotificationsLabel(response);
             })
-            .catch(function (response) {
-                console.error("Error while querying notification service:", response);
+            .error(function (response) {
+                console.error('Error while querying notification service: ', response);
             });
     }
 
     function updateNotificationsLabel(notifications){
         var nbNewNotifications = 0;
         angular.forEach(notifications, function(notification){
-            if(!notification.validatedAt && notification.validation) {
+            if (!notification.hasRead) {
                 nbNewNotifications++;
             }
         });
-        if(nbNewNotifications>0) {
+        if(nbNewNotifications) {
             $scope.newNotificationsLabel.html(nbNewNotifications);
             $scope.newNotificationsLabel.show();
         } else {
@@ -306,13 +305,13 @@ mainModule.controller('navBarController', function ($scope, $http, $interval){
 
     //Set the locally stored language as default value for the language dropdown menu
     function setDefaultSelectedLanguage(language) {
-        var lang = $('#'+language+'').text();
-        var flagObject = $('#'+language+'').find('img').attr('src');
-        var flag = '<img alt="'+language+'"style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;" src="' + flagObject + '"/>';
+        var lang = $('#' + language + '').text();
+        var flagObject = $('#' + language + '').find('img').attr('src');
+        var flag = '<img alt="' + language + '"style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;" src="' + flagObject + '"/>';
         $('#selected').html(flag + lang);
     }
 
-    this.$onDestroy = function() {
+    this.$onDestroy = function () {
         if (angular.isDefined($scope.intervalNotificationUpdate)) {
             $interval.cancel($scope.intervalNotificationUpdate);
             $scope.intervalNotificationUpdate = undefined;
@@ -323,9 +322,9 @@ mainModule.controller('navBarController', function ($scope, $http, $interval){
 mainModule.controller('loginController', function ($scope, $state, MainService, $stateParams, $location) {
     $scope.redirectsTo = $stateParams.redirectsTo;
     var host = $location.host();
-    $scope.showLinkAccountCreation =  (host === 'try.activeeon.com' || host === 'azure-try.activeeon.com');
+    $scope.showLinkAccountCreation = (host === 'try.activeeon.com' || host === 'azure-try.activeeon.com');
     var username = getCookie('username');
-    if (username == "null") {
+    if (username === 'null') {
         $scope.username = localStorage['pa.login'];
     } else {
         $scope.username = username;
@@ -340,12 +339,12 @@ mainModule.controller('loginController', function ($scope, $state, MainService, 
         MainService.doLogin(username, password)
             .success(function (response) {
                 var sessionid = getSessionId();
-                console.log("loginController pa.session " + sessionid);
                 if (sessionid != undefined) {
-                    if ($scope.redirectsTo)
+                    if ($scope.redirectsTo) {
                         $location.path($scope.redirectsTo);
-                    else
+                    } else {
                         $state.go('portal.subview1');
+                    }
                 }
                 $scope.errorMessage = undefined;
                 $scope.startRegularCheckSession();
@@ -355,15 +354,15 @@ mainModule.controller('loginController', function ($scope, $state, MainService, 
                     var error = JSON.parse(response);
                     $scope.errorMessage = error.errorMessage;
                     if (error.httpErrorCode === 404) {
-                        if (error.stackTrace.indexOf("login.LoginException") >= 0) {
-                            $scope.errorMessage = "Invalid Login or Password";
+                        if (error.stackTrace.indexOf('login.LoginException') >= 0) {
+                            $scope.errorMessage = 'Invalid Login or Password';
                         } else {
-                            $scope.errorMessage = "The server is not available, please try again later.";
+                            $scope.errorMessage = 'The server is not available, please try again later.';
                         }
 
                     }
                 } catch (e) {
-                    $scope.errorMessage = "Please try again later."
+                    $scope.errorMessage = 'Please try again later.'
                 }
 
             });
@@ -377,24 +376,24 @@ mainModule.controller('logoutController', function ($scope, $state) {
     };
 });
 
-mainModule.directive('ngRightClick', function($parse) {
+mainModule.directive('ngRightClick', function ($parse) {
     return {
         restrict: 'A',
         link: {
             //the pre function will determine which item of the contextual menu will be displayed
-            pre: function(scope, element, attrs) {
+            pre: function (scope, element, attrs) {
                 //create a function that will invoke ngRightClick value
 
                 var fn = $parse(attrs.ngRightClick);
                 //attach the contextmenu event to the element
-                element.bind('contextmenu', function(event) {
-                    scope.$apply(function(scope) {
+                element.bind('contextmenu', function (event) {
+                    scope.$apply(function (scope) {
                         //cancel the os default contextual menu
                         event.preventDefault();
 
-                        if(attrs.ngRightClick != ""){
+                        if (attrs.ngRightClick != '') {
                             //call the function that invoke the function included in ngRightClick value
-                            fn(scope, { $event:event} );
+                            fn(scope, {$event: event});
                         }
                     });
                 });
@@ -402,10 +401,10 @@ mainModule.directive('ngRightClick', function($parse) {
 
             // the post function position the contextual menu regarding the click position and the contextual menu size
             // this function must be executed after the ng-if directives because they will change the contextual menu size
-            post: function(scope, element, attrs) {
+            post: function (scope, element, attrs) {
                 //create a function that will invoke ngRightClick value
-                if(attrs.ngRightClick != ""){
-                    element.bind('contextmenu', function(event) {
+                if (attrs.ngRightClick != '') {
+                    element.bind('contextmenu', function (event) {
                         scope.moveContextualMenu(event)
 
                     });
@@ -415,13 +414,13 @@ mainModule.directive('ngRightClick', function($parse) {
     }
 });
 
-mainModule .directive('ngWheel', ['$parse', function($parse){
+mainModule.directive('ngWheel', ['$parse', function ($parse) {
     return {
         restrict: 'A',
-        link: function(scope, element, attr) {
+        link: function (scope, element, attr) {
             var expr = $parse(attr['ngWheel']);
-            element.bind('wheel', function(event){
-                scope.$apply(function() {
+            element.bind('wheel', function (event) {
+                scope.$apply(function () {
                     expr(scope);
                 });
             });
@@ -430,23 +429,23 @@ mainModule .directive('ngWheel', ['$parse', function($parse){
     };
 }]);
 
-mainModule.directive('ngDraggable', function($document) {
+mainModule.directive('ngDraggable', function ($document) {
     return {
         restrict: 'A',
         scope: {
-            dragScope: "@ngDraggable"
+            dragScope: '@ngDraggable'
         },
-        link: function(scope, elem, attr) {
+        link: function (scope, elem, attr) {
             var startX, startY, x = 0, y = 0,
                 container, width = 50, height = 50;
 
-            elem.on('mousedown', function(e) {
+            elem.on('mousedown', function (e) {
                 e.preventDefault();
                 if (scope.dragScope) {
                     //Bounding rectangle of where we can move the element
                     container = document.querySelector(scope.dragScope).getBoundingClientRect();
                 }
-                width  = elem[0].offsetWidth;
+                width = elem[0].offsetWidth;
                 height = elem[0].offsetHeight;
                 startX = e.clientX - elem[0].offsetLeft;
                 startY = e.clientY - elem[0].offsetTop;
@@ -487,8 +486,8 @@ mainModule.directive('ngDraggable', function($document) {
                 }
                 elem.css({
                     top: y + 'px',
-                    left:  x + 'px'
-                    });
+                    left: x + 'px'
+                });
             }
         }
     }
