@@ -489,6 +489,7 @@ module.exports = function (grunt) {
             files: {
                 files: {
                     '<%= inspinia.dist %>/resources/locales/locale-en.json': getJSONFilesToMerge("en"),
+                    '<%= inspinia.dist %>/resources/locales/locale-es.json': getJSONFilesToMerge("es"),
                     '<%= inspinia.dist %>/resources/locales/locale-fr.json': getJSONFilesToMerge("fr"),
                     '<%= inspinia.dist %>/resources/locales/locale-pt.json': getJSONFilesToMerge("pt")
                 }
