@@ -127,7 +127,7 @@
         "notAvailablePage": "page_not_available_job-analytics.html",
         "jsFiles": [
             "scripts/node-gantt/job-analytics-node-gantt.js",
-            "scripts/node-gantt/services/rm-service.js"
+            "scripts/services/rm-service.js"
         ],
         "angularModuleName": "job-gantt",
         "cssFile": "node_gantt_custom_style.css",
