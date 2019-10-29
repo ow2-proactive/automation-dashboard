@@ -70,7 +70,7 @@ var isSessionValide = function ($http, sessionId, $location) {
         var rmRestUrl = localStorage['rmRestUrl'];
         var userDataUrl = JSON.parse(rmRestUrl) + 'logins/sessionid/' + sessionId + '/userdata/';
         return $http.get(userDataUrl).then(function (result) {
-            return result.data != '';
+            return result.data !== '';
         });
     });
 };
@@ -93,8 +93,8 @@ function getCookie(name) {
     var ca = document.cookie.split(';');
     for (var i = 0; i < ca.length; i++) {
         var c = ca[i];
-        while (c.charAt(0) == ' ') c = c.substring(1, c.length);
-        if (c.indexOf(cookieName) == 0) return c.substring(cookieName.length, c.length);
+        while (c.charAt(0) === ' ') c = c.substring(1, c.length);
+        if (c.indexOf(cookieName) === 0) return c.substring(cookieName.length, c.length);
     }
     return null;
 }
@@ -214,7 +214,7 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
 
     // Check if position match with the position set by displayContextualMenu
     $scope.isContextView = function (position) {
-        return $scope.contextPosition == position;
+        return $scope.contextPosition === position;
     };
 
     // Move the contextual menu near the click according to its position in the window
@@ -240,7 +240,7 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
 });
 
 // controller used in navigation.html :
-mainModule.controller('navBarController', function ($scope, $http, $interval) {
+mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval) {
     this.$onInit = function () {
         setDefaultSelectedLanguage(localStorage['proactiveLanguage']);
         $scope.view = JSON.parse(localStorage['configViews']);
@@ -273,8 +273,15 @@ mainModule.controller('navBarController', function ($scope, $http, $interval) {
     };
 
     function startRegularUpdateNotificationLabel() {
+        if (!$scope.intervalNotificationUpdate) {
+            $scope.intervalNotificationUpdate = $scope.$interval(queryNotificationService, localStorage['notificationPortalQueryPeriod']);
+        }
         queryNotificationService();
-        $scope.intervalNotificationUpdate = $scope.$interval(queryNotificationService, localStorage['notificationPortalQueryPeriod']);
+    }
+
+    function stopRegularUpdateNotificationLabel() {
+        $interval.cancel($scope.intervalNotificationUpdate);
+        $scope.intervalNotificationUpdate = undefined;
     }
 
     function queryNotificationService() {
@@ -287,6 +294,23 @@ mainModule.controller('navBarController', function ($scope, $http, $interval) {
                 console.error('Error while querying notification service: ', response);
             });
     }
+
+    $rootScope.$on('event:notificationsDestroyed', function () {
+        startRegularUpdateNotificationLabel();
+    });
+
+    $rootScope.$on('event:notificationsInitialized', function () {
+        stopRegularUpdateNotificationLabel();
+    });
+
+    $rootScope.$on('event:updatedNotificationsCount', function (event, data) {
+        if(data['count']) {
+            $scope.newNotificationsLabel.html(data['count']);
+            $scope.newNotificationsLabel.show();
+        } else {
+            $scope.newNotificationsLabel.hide();
+        }
+    });
 
     function updateNotificationsLabel(notifications){
         var nbNewNotifications = 0;
@@ -339,7 +363,7 @@ mainModule.controller('loginController', function ($scope, $state, MainService, 
         MainService.doLogin(username, password)
             .success(function (response) {
                 var sessionid = getSessionId();
-                if (sessionid != undefined) {
+                if (sessionid) {
                     if ($scope.redirectsTo) {
                         $location.path($scope.redirectsTo);
                     } else {
@@ -391,7 +415,7 @@ mainModule.directive('ngRightClick', function ($parse) {
                         //cancel the os default contextual menu
                         event.preventDefault();
 
-                        if (attrs.ngRightClick != '') {
+                        if (attrs.ngRightClick !== '') {
                             //call the function that invoke the function included in ngRightClick value
                             fn(scope, {$event: event});
                         }
@@ -403,7 +427,7 @@ mainModule.directive('ngRightClick', function ($parse) {
             // this function must be executed after the ng-if directives because they will change the contextual menu size
             post: function (scope, element, attrs) {
                 //create a function that will invoke ngRightClick value
-                if (attrs.ngRightClick != '') {
+                if (attrs.ngRightClick !== '') {
                     element.bind('contextmenu', function (event) {
                         scope.moveContextualMenu(event)
 
