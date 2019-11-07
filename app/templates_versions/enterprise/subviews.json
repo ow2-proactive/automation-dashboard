@@ -100,7 +100,8 @@
         "htmlFile": "job-gantt/job_gantt.html",
         "secondaryHtmlFiles": [
             "job-gantt/job_gantt_tooltip.html",
-            "job-gantt/job_gantt_legend.html"
+            "job-gantt/job_gantt_legend.html",
+            "job-gantt/modals/job_gantt_date_range_modal.html"
         ],
         "notAvailablePage": "page_not_available_job-analytics.html",
         "jsFiles": ["scripts/job-gantt/job-gantt.js",
