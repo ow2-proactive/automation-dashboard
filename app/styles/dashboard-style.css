@@ -371,3 +371,15 @@
         display: none;
     }
 }
+
+@media screen and (min-width:1625px) {
+    .smalltext {
+        display: none;
+    }
+}
+
+@media screen and (maxwidth:1625px) {
+    .largetext {
+        display: none;
+    }
+}
