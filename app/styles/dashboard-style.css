@@ -297,6 +297,7 @@
     transform: translateX(-100%);
     animation: loading 1s infinite;
 }
+
 .gantt-task-info-content {
     color:rgba(70,101,158);
     font-weight: 600;
@@ -381,4 +382,16 @@
     -webkit-border-radius: 6px 0 6px 6px;
     -moz-border-radius: 6px 0 6px 6px;
     border-radius: 6px 0 6px 6px;
+}
+
+@media screen and (min-width:1625px) {
+    .smalltext {
+        display: none;
+    }
+}
+
+@media screen and (maxwidth:1625px) {
+    .largetext {
+        display: none;
+    }
 }
