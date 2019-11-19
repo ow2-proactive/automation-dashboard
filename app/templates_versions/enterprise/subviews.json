@@ -8,8 +8,7 @@
         "secondaryHtmlFiles": [
             "modals/catalog_object_edition.html",
             "modals/submit_workflow.html",
-            "modals/workflow_visualization.html",
-            "modals/third_party_credentials.html"
+            "modals/workflow_visualization.html"
         ],
         "notAvailablePage": "page_not_available.html",
         "jsFiles": [
@@ -20,8 +19,7 @@
             "scripts/submitWorkflowModalGCP.js",
             "scripts/editObjectModalGCP.js",
             "scripts/workflowVisualizationModalGCP.js",
-            "scripts/workflowVisualizationController.js",
-            "scripts/thirdPartyCredentialModalGCP.js"
+            "scripts/workflowVisualizationController.js"
         ],
         "angularModuleName": "gcp-rest",
         "cssFile": "gcportal_custom_style.css",
