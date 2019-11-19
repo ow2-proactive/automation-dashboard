@@ -360,6 +360,19 @@
     border-radius: 6px 0 6px 6px;
 }
 
+.third-party-credential-modal.modal {
+    z-index: 2060 !important;
+}
+
+#add-3rd-party-cred-table td {
+    padding-left:10px;
+    padding-right:10px;
+}
+
+#new-cred-key.ng-invalid:focus {
+    border-color: #ed5565 !important;
+}
+
 @media screen and (min-width:1625px) {
     .small-text {
         display: none;
