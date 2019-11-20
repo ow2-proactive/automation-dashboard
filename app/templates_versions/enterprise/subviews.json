@@ -100,12 +100,13 @@
         "htmlFile": "job-gantt/job_gantt.html",
         "secondaryHtmlFiles": [
             "job-gantt/job_gantt_tooltip.html",
-            "job-gantt/job_gantt_legend.html"
+            "job-gantt/job_gantt_legend.html",
+            "job-gantt/modals/job_gantt_date_range_modal.html"
         ],
         "notAvailablePage": "page_not_available_job-analytics.html",
-        "jsFiles": ["scripts/job-gantt.js",
-            "scripts/job-gantt-configuration.js",
-            "scripts/job-gantt-search-form.js"
+        "jsFiles": ["scripts/job-gantt/job-gantt.js",
+            "scripts/job-gantt/job-gantt-configuration.js",
+            "scripts/job-gantt/job-gantt-search-form.js"
         ],
         "angularModuleName": "job-gantt",
         "cssFile": "job_analytics_custom_style.css",
@@ -125,7 +126,7 @@
         ],
         "notAvailablePage": "page_not_available_job-analytics.html",
         "jsFiles": [
-            "scripts/job-analytics-node-gantt.js",
+            "scripts/node-gantt/job-analytics-node-gantt.js",
             "scripts/services/rm-service.js"
         ],
         "angularModuleName": "job-gantt",
@@ -296,22 +297,20 @@
     },
     "notificationPortal": {
         "isAvailable": true,
-        "name": "Notification",
+        "name": "Notifications",
         "nameForUrl": "notification-portal",
         "appFolder": "notification-portal/app/",
-        "htmlFile": "ns-view.html",
+        "htmlFile": "notification-portal.html",
+        "secondaryHtmlFiles": [
+            "templates/notification.html"
+        ],
         "notAvailablePage": "page_not_available.html",
         "jsFiles": [
-            "scripts/ns-rest.js"
+            "scripts/notification-portal.js",
+            "scripts/services/notification-service-api.js"
         ],
-        "angularModuleName": "ns-rest",
+        "angularModuleName": "notification-service",
         "cssFile": "notifportal_custom_style.css",
-        "authenticate": true,
-        "initFunction": {
-            "functionName": "initNotificationPortal",
-            "services": [
-                "NotificationService"
-            ]
-        }
+        "authenticate": true
     }
 }
