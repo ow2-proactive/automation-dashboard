@@ -290,7 +290,7 @@
             "scripts/cloud-automation/monitoring-items-controller.js",
             "scripts/cloud-automation/services-catalog-controller.js"
         ],
-        "angularModuleName": "pca-rest",
+        "angularModuleName": "cloud-automation",
         "cssFile": "portal_custom_style.css",
         "authenticate": true,
         "images": [

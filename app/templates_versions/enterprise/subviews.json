@@ -291,7 +291,7 @@
             "scripts/cloud-automation/modals/info-modal-controller.js",
             "scripts/cloud-automation/modals/submit-modal-controller.js"
         ],
-        "angularModuleName": "pca-rest",
+        "angularModuleName": "cloud-automation",
         "cssFile": "portal_custom_style.css",
         "authenticate": true,
         "images": [
