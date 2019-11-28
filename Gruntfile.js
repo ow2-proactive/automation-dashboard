@@ -18,7 +18,6 @@ module.exports = function (grunt) {
     var enterpriseConfigPath = 'app/templates_versions/enterprise/subviews.json';
     var communityConfigPath = 'app/templates_versions/community/subviews.json';
     var subviewsDefinition = grunt.file.readJSON('app/templates_versions/' + appConfig.version + '/subviews.json');
-
     // Convenience function to list all subviews
     // associated to the target
     function listSubviewsDefinition(configPath) {
@@ -304,12 +303,12 @@ module.exports = function (grunt) {
                                 for (var key in subviewsDefinition) {
                                     if (subviewsDefinition[key].isSubMenuTitle) {
                                         if(subviewsDefinition[key].name == 'Analytics'){
-                                            result += '\n<li ui-sref-active="active">'
+                                            result += '\n<li ui-sref-active="active" ng-show="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
                                                 + '<a href=".menu-item-'+subviewsDefinition[key].nameForUrl+'" style="background-color: #002d66; padding-left:4px" data-toggle="collapse"><img src="styles/patterns/job-analytics.png" style="height:20px;padding-right: 4px;">'
                                                 +'<span class="nav-label" style="display:-webkit-inline-box; margin-left:3px" id="nav-span-'
                                                 + subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+subviewsDefinition[key].name+'\' | translate}}</span> <i class="fa fa-chevron-down" style="margin-right: 6px;"></i></a>';
                                         } else {
-                                            result += '\n<li ui-sref-active="active">'
+                                            result += '\n<li ui-sref-active="active" ng-show="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
                                                 + '<a href=".menu-item-'+subviewsDefinition[key].nameForUrl+'" style="background-color: #002d66; padding-left:4px" data-toggle="collapse"><img src="styles/patterns/job-planner-calendar.png" style="height:20px;padding-right: 4px;">'
                                                 +'<span class="nav-label" style="display:-webkit-inline-box; margin-left:3px" id="nav-span-'
                                                 + subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+subviewsDefinition[key].name+'\' | translate}}</span> <i class="fa fa-chevron-down" style="margin-right: 6px;"></i></a>';
@@ -317,29 +316,29 @@ module.exports = function (grunt) {
 
                                     } else if (subviewsDefinition[key].isSubMenuItem) {
                                         cnt++;
-                                        result += '<li ui-sref-active="active" class="collapse menu-item-' + subviewsDefinition[key].subMenuTitle + '">'
+                                        result += '<li ui-sref-active="active" ng-show="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']" class="collapse menu-item-' + subviewsDefinition[key].subMenuTitle + '">'
                                             + '<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left: 45px; padding-top: 0px;"><span class="nav-label">{{\''
                                             + subviewsDefinition[key].name + '\' | translate}}</span> </a> </li>';
                                     } else {
                                         cnt++;
                                         if(subviewsDefinition[key].name == "Catalog"){
-                                            result += '\n<li ui-sref-active="active">'
+                                            result += '\n<li ui-sref-active="active" ng-show="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
                                                 + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/catalog.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
                                                 subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                         } else if(subviewsDefinition[key].name == "Cloud Watch"){
-                                            result += '\n<li ui-sref-active="active">'
+                                            result += '\n<li ui-sref-active="active" ng-show="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
                                                 + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/cloud-watch.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
                                                 subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                         } else if(subviewsDefinition[key].name == "Cloud Automation"){
-                                            result += '\n<li ui-sref-active="active">'
+                                            result += '\n<li ui-sref-active="active" ng-show="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
                                                 + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/cloud-automation.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
                                                 subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                         } else if(subviewsDefinition[key].name == "Notification"){
-                                            result += '\n<li ui-sref-active="active">'
+                                            result += '\n<li ui-sref-active="active" ng-show="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
                                                 + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/notification-portal.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
                                                 subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                         } else {
-                                            result += '\n<li ui-sref-active="active">'
+                                            result += '\n<li ui-sref-active="active" ng-show="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
                                                 + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/automation_dashboard_30.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
                                                 subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                         }

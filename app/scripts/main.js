@@ -32,6 +32,7 @@ function getProperties($http, $location) {
             var configViews = angular.toJson(response.view, true);
             var appUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port());
             var studioUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/studio');
+            var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/rest');
             var schedulerPortalUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/scheduler');
             var proactiveLanguage = angular.toJson(response.proactiveLanguage, true).replace(/"/g, '');
 
@@ -55,6 +56,7 @@ function getProperties($http, $location) {
             localStorage['jobAnalyticsServiceUrl'] = jobAnalyticsServiceUrl;
             localStorage['appUrl'] = appUrl;
             localStorage['studioUrl'] = studioUrl;
+            localStorage['restUrl'] = restUrl;
             localStorage['schedulerPortalUrl'] = schedulerPortalUrl;
             if (!localStorage['proactiveLanguage']) {
                 localStorage['proactiveLanguage'] = proactiveLanguage;
@@ -99,7 +101,7 @@ function getCookie(name) {
     return null;
 }
 
-mainModule.factory('MainService', function ($http, $interval, $rootScope, $state) {
+mainModule.factory('permissionService', function ($http, $interval, $rootScope, $state) {
     function doLogin(userName, userPass) {
         var authData = $.param({'username': userName, 'password': userPass});
         var authConfig = {
@@ -118,11 +120,25 @@ mainModule.factory('MainService', function ($http, $interval, $rootScope, $state
             .error(function (response) {
                 console.error('doLogin authentication error:', status, response);
             });
-    }
+    };
+
+    function checkPortalAccessPermission(portal) {
+        var requestCheckPortalAccessPermissionUrl = JSON.parse(localStorage['restUrl']) + '/common/permissions/portals/' + portal;
+        var config = {
+            headers: {
+                'sessionid': getSessionId(),
+                'Content-Type': 'application/json'
+            },
+        };
+        return $http.get(requestCheckPortalAccessPermissionUrl, config);
+    };
 
     return {
         doLogin: function (userName, userPass) {
             return doLogin(userName, userPass);
+        },
+        checkPortalAccessPermission: function (portal) {
+            return checkPortalAccessPermission(portal);
         }
     };
 });
@@ -150,6 +166,8 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
         $scope.contextDisplay = false;
         // contextPosition enables directive to specify where the context menu was opened
         $scope.contextPosition = '';
+        $scope.firstAccessiblePortal = '';
+        $scope.portalsAccessPermission = {};
     };
 
     $scope.changeLanguage = function (key) {
@@ -175,7 +193,7 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
     };
 
     function checkSession() {
-        var sessionId = getSessionId()
+        var sessionId = getSessionId();
         if (!sessionId) {
             $scope.closeSession();
         } else {
@@ -220,7 +238,7 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
     // Move the contextual menu near the click according to its position in the window
     $scope.moveContextualMenu = function (clickEvent) {
 
-        var contextMenuHeight = angular.element('#context-menu')[0].offsetHeight
+        var contextMenuHeight = angular.element('#context-menu')[0].offsetHeight;
         //if contextual menu will get out of the panel catalog-tab-content, we display it upper
         if (clickEvent['clientY'] + contextMenuHeight < window.innerHeight) {
             angular.element('#context-menu').css('top', clickEvent['clientY'] + 'px')
@@ -228,7 +246,7 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
             angular.element('#context-menu').css('top', (clickEvent['clientY'] - contextMenuHeight) + 'px')
         }
 
-        var contextMenuWidth = angular.element('#context-menu')[0].offsetWidth
+        var contextMenuWidth = angular.element('#context-menu')[0].offsetWidth;
         //if contextual menu will get out of the panel catalog-tab-content, we display it upper
         if (clickEvent['clientX'] + contextMenuWidth < window.innerWidth) {
             angular.element('#context-menu').css('left', clickEvent['clientX'] + 'px')
@@ -286,7 +304,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
 
     function queryNotificationService() {
         var eventsUrlPrefix = JSON.parse(localStorage['notificationServiceUrl']) + 'notifications';
-        $http.get(eventsUrlPrefix, { headers: { 'sessionID': getSessionId() } })
+        $http.get(eventsUrlPrefix, {headers: {'sessionID': getSessionId()}})
             .success(function (response) {
                 updateNotificationsLabel(response);
             })
@@ -304,7 +322,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     });
 
     $rootScope.$on('event:updatedNotificationsCount', function (event, data) {
-        if(data['count']) {
+        if (data['count']) {
             $scope.newNotificationsLabel.html(data['count']);
             $scope.newNotificationsLabel.show();
         } else {
@@ -312,14 +330,14 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         }
     });
 
-    function updateNotificationsLabel(notifications){
+    function updateNotificationsLabel(notifications) {
         var nbNewNotifications = 0;
-        angular.forEach(notifications, function(notification){
+        angular.forEach(notifications, function (notification) {
             if (!notification.hasRead) {
                 nbNewNotifications++;
             }
         });
-        if(nbNewNotifications) {
+        if (nbNewNotifications) {
             $scope.newNotificationsLabel.html(nbNewNotifications);
             $scope.newNotificationsLabel.show();
         } else {
@@ -343,7 +361,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     }
 });
 
-mainModule.controller('loginController', function ($scope, $state, MainService, $stateParams, $location) {
+mainModule.controller('loginController', function ($scope, $state, permissionService, $stateParams, $location, $q) {
     $scope.redirectsTo = $stateParams.redirectsTo;
     var host = $location.host();
     $scope.showLinkAccountCreation = (host === 'try.activeeon.com' || host === 'azure-try.activeeon.com');
@@ -360,14 +378,29 @@ mainModule.controller('loginController', function ($scope, $state, MainService, 
         localStorage['pa.login'] = username;
         $scope.main.userName = localStorage['pa.login'];
 
-        MainService.doLogin(username, password)
+        permissionService.doLogin(username, password)
             .success(function (response) {
                 var sessionid = getSessionId();
                 if (sessionid) {
                     if ($scope.redirectsTo) {
-                        $location.path($scope.redirectsTo);
+                        var portal = $scope.redirectsTo.substring($scope.redirectsTo.lastIndexOf("/") + 1);
+                        permissionService.checkPortalAccessPermission(portal)
+                            .success(function (response) {
+                                if (typeof response !== "boolean") {
+                                    console.error('Portal access permission is not a boolean value:', response);
+                                }
+                                if (!response) {
+                                    $scope.errorMessage = 'Cannot connect to  ' + portal  + '. The access is not authorized';
+                                    $state.go('login');
+                                } else {
+                                    $location.path($scope.redirectsTo);
+                                }
+                            })
+                            .error(function (response) {
+                                console.error('Checking portal access permission failed:', status, response);
+                            });
                     } else {
-                        $state.go('portal.subview1');
+                        determineFirstAuthorizedPortalAndAllPortalsAccessPermission();
                     }
                 }
                 $scope.errorMessage = undefined;
@@ -390,6 +423,44 @@ mainModule.controller('loginController', function ($scope, $state, MainService, 
                 }
 
             });
+    };
+
+    function determineFirstAuthorizedPortalAndAllPortalsAccessPermission() {
+        var httpPromisePortalsAccessPermissionList = [];
+        var automationDashboardPortals = {};
+        $state.get().forEach(function (item) {
+            if(item.name && item.name !== 'login' && item.name !== 'portal'){
+                automationDashboardPortals[item.url.substring(1)] = item.name;
+            }
+        });
+        Object.keys(automationDashboardPortals).forEach(function (key) {
+            httpPromisePortalsAccessPermissionList.push(permissionService.checkPortalAccessPermission(key));
+        });
+        $q.all(httpPromisePortalsAccessPermissionList).then(function (httpResponses) {
+            for(var i=0; i<httpResponses.length; i++){
+                var portal = httpResponses[i].config.url.substring(httpResponses[i].config.url.lastIndexOf("/") + 1);
+                var authorization = httpResponses[i].data;
+                $scope.portalsAccessPermission[portal] = authorization;
+                if(authorization && !$scope.firstAccessiblePortal){
+                    $scope.firstAccessiblePortal =  portal;
+                }
+            }
+            handleAnalyticsAndJobPlannerPortals();
+            $state.go(automationDashboardPortals[$scope.firstAccessiblePortal]);
+        });
+    };
+
+    function handleAnalyticsAndJobPlannerPortals(){
+        if($scope.portalsAccessPermission['job-gantt'] || $scope.portalsAccessPermission['node-gantt'] || $scope.portalsAccessPermission['job-analytics']){
+            $scope.portalsAccessPermission['analytics-portal'] = true;
+        } else{
+            $scope.portalsAccessPermission['analytics-portal'] = false;
+        }
+        if($scope.portalsAccessPermission['job-planner-calendar-def'] || $scope.portalsAccessPermission['job-planner-calendar-workflows'] ||  $scope.portalsAccessPermission['job-planner-execution-planning'] ||  $scope.portalsAccessPermission['job-planner-gantt-chart']){
+            $scope.portalsAccessPermission['job-planner-portal'] = true;
+        } else{
+            $scope.portalsAccessPermission['job-planner-portal'] = false;
+        }
     };
 });
 
