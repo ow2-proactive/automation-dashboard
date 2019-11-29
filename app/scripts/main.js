@@ -173,6 +173,10 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
         }
     };
 
+    $scope.showParentPortal = function(id){
+        return angular.element(document.getElementById(id)).next().hasClass('childPortal');
+    };
+
     $scope.changeLanguage = function (key) {
         $rootScope.lang = key;
         $translate.use(key);
@@ -234,23 +238,10 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
                     $scope.firstAccessiblePortal =  portal;
                 }
             }
-            handleAnalyticsAndJobPlannerPortals();
             $state.go(automationDashboardPortals[$scope.firstAccessiblePortal]);
         });
     };
 
-    function handleAnalyticsAndJobPlannerPortals(){
-        if($scope.portalsAccessPermission['job-gantt'] || $scope.portalsAccessPermission['node-gantt'] || $scope.portalsAccessPermission['job-analytics']){
-            $scope.portalsAccessPermission['analytics-portal'] = true;
-        } else{
-            $scope.portalsAccessPermission['analytics-portal'] = false;
-        }
-        if($scope.portalsAccessPermission['job-planner-calendar-def'] || $scope.portalsAccessPermission['job-planner-calendar-workflows'] ||  $scope.portalsAccessPermission['job-planner-execution-planning'] ||  $scope.portalsAccessPermission['job-planner-gantt-chart']){
-            $scope.portalsAccessPermission['job-planner-portal'] = true;
-        } else{
-            $scope.portalsAccessPermission['job-planner-portal'] = false;
-        }
-    };
 
     $scope.stopRegularCheckSession = function () {
         $interval.cancel($scope.checkSessionInterval);
