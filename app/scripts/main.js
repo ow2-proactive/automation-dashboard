@@ -158,7 +158,7 @@ mainModule.config(function ($translateProvider, $translatePartialLoaderProvider)
 
 // --------------- Controllers -----------------
 
-mainModule.controller('mainController', function ($http, $scope, $rootScope, $state, $location, $interval, $translate) {
+mainModule.controller('mainController', function ($http, $scope, $rootScope, $state, $location, $interval, $translate, permissionService, $q) {
 
     this.$onInit = function () {
         $scope.main.userName = localStorage['pa.login'];
@@ -168,6 +168,9 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
         $scope.contextPosition = '';
         $scope.firstAccessiblePortal = '';
         $scope.portalsAccessPermission = {};
+        if(getSessionId()){
+            $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission();
+        }
     };
 
     $scope.changeLanguage = function (key) {
@@ -192,6 +195,7 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
         }
     };
 
+
     function checkSession() {
         var sessionId = getSessionId();
         if (!sessionId) {
@@ -208,6 +212,45 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
                 });
         }
     }
+
+
+    $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission = function() {
+        var httpPromisePortalsAccessPermissionList = [];
+        var automationDashboardPortals = {};
+        $state.get().forEach(function (item) {
+            if(item.name && item.name !== 'login' && item.name !== 'portal'){
+                automationDashboardPortals[item.url.substring(1)] = item.name;
+            }
+        });
+        Object.keys(automationDashboardPortals).forEach(function (key) {
+            httpPromisePortalsAccessPermissionList.push(permissionService.checkPortalAccessPermission(key));
+        });
+        $q.all(httpPromisePortalsAccessPermissionList).then(function (httpResponses) {
+            for(var i=0; i<httpResponses.length; i++){
+                var portal = httpResponses[i].config.url.substring(httpResponses[i].config.url.lastIndexOf("/") + 1);
+                var permission = httpResponses[i].data;
+                $scope.portalsAccessPermission[portal] = permission;
+                if(permission && !$scope.firstAccessiblePortal){
+                    $scope.firstAccessiblePortal =  portal;
+                }
+            }
+            handleAnalyticsAndJobPlannerPortals();
+            $state.go(automationDashboardPortals[$scope.firstAccessiblePortal]);
+        });
+    };
+
+    function handleAnalyticsAndJobPlannerPortals(){
+        if($scope.portalsAccessPermission['job-gantt'] || $scope.portalsAccessPermission['node-gantt'] || $scope.portalsAccessPermission['job-analytics']){
+            $scope.portalsAccessPermission['analytics-portal'] = true;
+        } else{
+            $scope.portalsAccessPermission['analytics-portal'] = false;
+        }
+        if($scope.portalsAccessPermission['job-planner-calendar-def'] || $scope.portalsAccessPermission['job-planner-calendar-workflows'] ||  $scope.portalsAccessPermission['job-planner-execution-planning'] ||  $scope.portalsAccessPermission['job-planner-gantt-chart']){
+            $scope.portalsAccessPermission['job-planner-portal'] = true;
+        } else{
+            $scope.portalsAccessPermission['job-planner-portal'] = false;
+        }
+    };
 
     $scope.stopRegularCheckSession = function () {
         $interval.cancel($scope.checkSessionInterval);
@@ -361,7 +404,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     }
 });
 
-mainModule.controller('loginController', function ($scope, $state, permissionService, $stateParams, $location, $q) {
+mainModule.controller('loginController', function ($scope, $state, permissionService, $stateParams, $location) {
     $scope.redirectsTo = $stateParams.redirectsTo;
     var host = $location.host();
     $scope.showLinkAccountCreation = (host === 'try.activeeon.com' || host === 'azure-try.activeeon.com');
@@ -400,7 +443,7 @@ mainModule.controller('loginController', function ($scope, $state, permissionSer
                                 console.error('Checking portal access permission failed:', status, response);
                             });
                     } else {
-                        determineFirstAuthorizedPortalAndAllPortalsAccessPermission();
+                        $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission();
                     }
                 }
                 $scope.errorMessage = undefined;
@@ -425,43 +468,6 @@ mainModule.controller('loginController', function ($scope, $state, permissionSer
             });
     };
 
-    function determineFirstAuthorizedPortalAndAllPortalsAccessPermission() {
-        var httpPromisePortalsAccessPermissionList = [];
-        var automationDashboardPortals = {};
-        $state.get().forEach(function (item) {
-            if(item.name && item.name !== 'login' && item.name !== 'portal'){
-                automationDashboardPortals[item.url.substring(1)] = item.name;
-            }
-        });
-        Object.keys(automationDashboardPortals).forEach(function (key) {
-            httpPromisePortalsAccessPermissionList.push(permissionService.checkPortalAccessPermission(key));
-        });
-        $q.all(httpPromisePortalsAccessPermissionList).then(function (httpResponses) {
-            for(var i=0; i<httpResponses.length; i++){
-                var portal = httpResponses[i].config.url.substring(httpResponses[i].config.url.lastIndexOf("/") + 1);
-                var authorization = httpResponses[i].data;
-                $scope.portalsAccessPermission[portal] = authorization;
-                if(authorization && !$scope.firstAccessiblePortal){
-                    $scope.firstAccessiblePortal =  portal;
-                }
-            }
-            handleAnalyticsAndJobPlannerPortals();
-            $state.go(automationDashboardPortals[$scope.firstAccessiblePortal]);
-        });
-    };
-
-    function handleAnalyticsAndJobPlannerPortals(){
-        if($scope.portalsAccessPermission['job-gantt'] || $scope.portalsAccessPermission['node-gantt'] || $scope.portalsAccessPermission['job-analytics']){
-            $scope.portalsAccessPermission['analytics-portal'] = true;
-        } else{
-            $scope.portalsAccessPermission['analytics-portal'] = false;
-        }
-        if($scope.portalsAccessPermission['job-planner-calendar-def'] || $scope.portalsAccessPermission['job-planner-calendar-workflows'] ||  $scope.portalsAccessPermission['job-planner-execution-planning'] ||  $scope.portalsAccessPermission['job-planner-gantt-chart']){
-            $scope.portalsAccessPermission['job-planner-portal'] = true;
-        } else{
-            $scope.portalsAccessPermission['job-planner-portal'] = false;
-        }
-    };
 });
 
 mainModule.controller('logoutController', function ($scope, $state) {
