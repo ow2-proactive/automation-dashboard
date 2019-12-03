@@ -25,7 +25,7 @@ function VarService($http) {
             })
         } else {
             for (var prop in variables) {
-                variable = variables[prop]
+                var variable = variables[prop]
                 if (variable.model && variable.model.toLowerCase().indexOf('pa:model_from_url') !== -1) {
                     variable.model = replaceModelWithFetched(variable.model, window);
                 }
