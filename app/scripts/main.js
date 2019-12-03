@@ -177,7 +177,7 @@ mainModule.config(function ($translateProvider, $translatePartialLoaderProvider)
 
 // --------------- Controllers -----------------
 
-mainModule.controller('mainController', function ($http, $scope, $rootScope, $state, $location, $interval, $translate, permissionService, $q) {
+mainModule.controller('mainController', function ($http, $scope, $rootScope, $state, $location, $interval, $translate, permissionService, SweetAlert) {
 
     this.$onInit = function () {
         $scope.main.userName = localStorage['pa.login'];
@@ -218,7 +218,6 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
         }
     };
 
-
     function checkSession() {
         var sessionId = getSessionId();
         if (!sessionId) {
@@ -236,6 +235,33 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
         }
     }
 
+    $scope.checkPortalAccessPermission = function(url){
+        var portal = url.substring(url.lastIndexOf("/") + 1);
+        permissionService.getPortalAccessPermission(portal)
+            .success(function (response) {
+                if (typeof response !== "boolean") {
+                    console.error('Error: portal access permission is not a boolean value', response);
+                }
+                if (!response) {
+                    SweetAlert.swal({
+                        title: 'Access not authorized',
+                        text: 'Cannot connect to  ' + portal  + '. The access is not authorized',
+                        type: 'warning'
+                    });
+                    if(getSessionId()){
+                        $location.path("/" + $scope.firstAccessiblePortal);
+                    } else{
+                        $scope.errorMessage = 'Cannot connect to  ' + portal  + '. The access is not authorized';
+                        $state.go('login');
+                    }
+                } else {
+                    $location.path(url);
+                }
+            })
+            .error(function (response) {
+                console.error('Error while checking portal access permission', status, response);
+            });
+    };
 
     $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission = function() {
         var automationDashboardPortals = {};
@@ -439,22 +465,7 @@ mainModule.controller('loginController', function ($scope, $state, permissionSer
                 var sessionid = getSessionId();
                 if (sessionid) {
                     if ($scope.redirectsTo) {
-                        var portal = $scope.redirectsTo.substring($scope.redirectsTo.lastIndexOf("/") + 1);
-                        permissionService.getPortalAccessPermission(portal)
-                            .success(function (response) {
-                                if (typeof response !== "boolean") {
-                                    console.error('Error: portal access permission is not a boolean value', response);
-                                }
-                                if (!response) {
-                                    $scope.errorMessage = 'Cannot connect to  ' + portal  + '. The access is not authorized';
-                                    $state.go('login');
-                                } else {
-                                    $location.path($scope.redirectsTo);
-                                }
-                            })
-                            .error(function (response) {
-                                console.error('Error while checking portal access permission', status, response);
-                            });
+                        $scope.checkPortalAccessPermission($scope.redirectsTo);
                     } else {
                         $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission();
                     }
