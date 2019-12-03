@@ -130,7 +130,16 @@ mainModule.factory('permissionService', function ($http, $interval, $rootScope, 
                 'Content-Type': 'application/json'
             },
         };
-        return $http.get(requestGetPortalAccessPermissionUrl, config);
+        return $http.get(requestGetPortalAccessPermissionUrl, config)
+            .then(function (response) {
+                if (typeof response.data !== "boolean") {
+                    console.error('Error: portal access permission is not a boolean value', response);
+                }
+                return response.data
+            })
+            .catch(function (response) {
+                console.error('Error while checking portal access permission', status, response);
+            });
     };
 
     function getPortalsAccessPermission(portals) {
@@ -141,7 +150,13 @@ mainModule.factory('permissionService', function ($http, $interval, $rootScope, 
                 'Content-Type': 'application/json'
             },
         };
-        return $http.get(decodeURIComponent(requestGetPortalsAccessPermissionUrl.slice(0, -1)), config);
+        return $http.get(decodeURIComponent(requestGetPortalsAccessPermissionUrl.slice(0, -1)), config)
+            .then(function (response) {
+                return response.data;
+            })
+            .catch(function (response) {
+                console.error('Error while checking portals access permission', status, response);
+            });
     };
 
 
@@ -235,32 +250,25 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
         }
     }
 
-    $scope.checkPortalAccessPermission = function(url){
+    $scope.checkPortalAccessPermission = function (url) {
         var portal = url.substring(url.lastIndexOf("/") + 1);
-        permissionService.getPortalAccessPermission(portal)
-            .success(function (response) {
-                if (typeof response !== "boolean") {
-                    console.error('Error: portal access permission is not a boolean value', response);
-                }
-                if (!response) {
-                    SweetAlert.swal({
-                        title: 'Access not authorized',
-                        text: 'Cannot connect to  ' + portal  + '. The access is not authorized',
-                        type: 'warning'
-                    });
-                    if(getSessionId()){
-                        $location.path("/" + $scope.firstAccessiblePortal);
-                    } else{
-                        $scope.errorMessage = 'Cannot connect to  ' + portal  + '. The access is not authorized';
-                        $state.go('login');
-                    }
+        permissionService.getPortalAccessPermission(portal).then(function (response) {
+            if (!response) {
+                SweetAlert.swal({
+                    title: 'Access not authorized',
+                    text: 'Cannot connect to  ' + portal + '. The access is not authorized',
+                    type: 'warning'
+                });
+                if (getSessionId()) {
+                    $location.path("/" + $scope.firstAccessiblePortal);
                 } else {
-                    $location.path(url);
+                    $scope.errorMessage = 'Cannot connect to  ' + portal + '. The access is not authorized';
+                    $state.go('login');
                 }
-            })
-            .error(function (response) {
-                console.error('Error while checking portal access permission', status, response);
-            });
+            } else {
+                $location.path(url);
+            }
+        })
     };
 
     $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission = function() {
@@ -272,22 +280,18 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
             }
         });
         var portals = Object.keys(automationDashboardPortals);
-        permissionService.getPortalsAccessPermission(portals)
-            .success(function (response) {
-                if(Array.isArray(response) && response.length){
-                    $scope.firstAccessiblePortal = response[0];
-                    response.forEach(function (authorizedPortal) {
-                        $scope.portalsAccessPermission[authorizedPortal] = true;
-                    });
-                    $state.go(automationDashboardPortals[$scope.firstAccessiblePortal]);
-                } else {
-                    console.error('This user is not allowed to access to the Automation Dashboard Portal', response);
-                }
+        permissionService.getPortalsAccessPermission(portals).then(function (response) {
+            if (Array.isArray(response) && response.length) {
+                $scope.firstAccessiblePortal = response[0];
+                response.forEach(function (authorizedPortal) {
+                    $scope.portalsAccessPermission[authorizedPortal] = true;
+                });
+                $state.go(automationDashboardPortals[$scope.firstAccessiblePortal]);
+            } else {
+                console.error('This user is not allowed to access to the Automation Dashboard Portal', response);
+            }
 
-            })
-            .error(function (response) {
-                console.error('Error while checking portals access permission', status, response);
-            });
+        });
     };
 
 
