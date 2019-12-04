@@ -381,6 +381,9 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         if (!$scope.intervalNotificationUpdate) {
             $scope.intervalNotificationUpdate = $scope.$interval(queryNotificationService, localStorage['notificationPortalQueryPeriod']);
         }
+        $rootScope.$on('event:StopRefreshing', function () {
+            stopRegularUpdateNotificationLabel();
+        });
         queryNotificationService();
     }
 
