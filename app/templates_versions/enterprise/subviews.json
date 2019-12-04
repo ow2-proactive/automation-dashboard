@@ -44,14 +44,7 @@
         ],
         "angularModuleName": "workflow-automation",
         "cssFile": "portal_custom_style.css",
-        "authenticate": true,
-        "initFunction": {
-            "functionName": "initWorkflowAutomation",
-            "services": [
-                "WFASchedulerService",
-                "WFACatalogService"
-            ]
-        }
+        "authenticate": true
     },
     "analytics-portal": {
         "isAvailable": true,
