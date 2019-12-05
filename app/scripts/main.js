@@ -204,7 +204,7 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
         $scope.portalsAccessPermission = {};
         $scope.automationDashboardPortals = {};
         if(getSessionId()){
-            $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission();
+            $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission('');
         }
     };
 
@@ -251,29 +251,34 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
         }
     }
 
+    function displayAlertAndRedirectToFirstAccessiblePortal(portal) {
+        if (getSessionId()) {
+            SweetAlert.swal({
+                title: 'Access not authorized',
+                text: 'Cannot connect to  ' + portal + '. The access is not authorized',
+                type: 'warning'
+            });
+            $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal]);
+        } else {
+            $scope.errorMessage = 'Cannot connect to  ' + portal + '. The access is not authorized';
+            $state.go('login');
+        }
+    }
+
+
     $scope.checkPortalAccessPermission = function (url) {
         var portal = url.substring(url.lastIndexOf("/") + 1);
         permissionService.getPortalAccessPermission(portal).then(function (response) {
             if (!response) {
-                SweetAlert.swal({
-                    title: 'Access not authorized',
-                    text: 'Cannot connect to  ' + portal + '. The access is not authorized',
-                    type: 'warning'
-                });
-                if (getSessionId()) {
-                    $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal]);
-                } else {
-                    $scope.errorMessage = 'Cannot connect to  ' + portal + '. The access is not authorized';
-                    $state.go('login');
-                }
+                displayAlertAndRedirectToFirstAccessiblePortal(portal);
             } else {
                 $location.path(url);
             }
         })
     };
 
-    $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission = function() {
-
+    $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission = function(url) {
+        var portal = url.substring(url.lastIndexOf("/") + 1);
         $state.get().forEach(function (item) {
             if(item.name && item.name !== 'login' && item.name !== 'portal'){
                 $scope.automationDashboardPortals[item.url.substring(1)] = item.name;
@@ -287,7 +292,16 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
                 response.forEach(function (authorizedPortal) {
                     $scope.portalsAccessPermission[authorizedPortal] = true;
                 });
-                $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal]);
+                if(portal){
+                    if($scope.portalsAccessPermission[portal]){
+                        $location.path(url);
+                    } else{
+                        displayAlertAndRedirectToFirstAccessiblePortal(portal);
+                    }
+                } else{
+                    $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal])
+                }
+
             } else {
                 console.error('This user is not allowed to access to the Automation Dashboard Portal', response);
             }
@@ -472,12 +486,7 @@ mainModule.controller('loginController', function ($scope, $state, permissionSer
             .success(function (response) {
                 var sessionid = getSessionId();
                 if (sessionid) {
-                    console.log($scope.redirectsTo);
-                    if ($scope.redirectsTo) {
-                        $scope.checkPortalAccessPermission($scope.redirectsTo);
-                    }
-                    $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission();
-
+                    $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($scope.redirectsTo);
                 }
                 $scope.errorMessage = undefined;
                 $scope.startRegularCheckSession();

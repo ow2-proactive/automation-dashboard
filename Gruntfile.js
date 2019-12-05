@@ -316,7 +316,7 @@ module.exports = function (grunt) {
 
                                     } else if (subviewsDefinition[key].isSubMenuItem) {
                                         cnt++;
-                                        result += '<li class="childPortal" ui-sref-active="active" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']" class="collapse menu-item-' + subviewsDefinition[key].subMenuTitle + '">'
+                                        result += '<li ui-sref-active="active" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']" class="childPortal collapse menu-item-' + subviewsDefinition[key].subMenuTitle + '">'
                                             + '<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left: 45px; padding-top: 0px;"><span class="nav-label">{{\''
                                             + subviewsDefinition[key].name + '\' | translate}}</span> </a> </li>';
                                     } else {
