@@ -203,6 +203,7 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
         $scope.firstAccessiblePortal = '';
         $scope.portalsAccessPermission = {};
         $scope.automationDashboardPortals = {};
+        $scope.errorMessage = undefined;
         if(getSessionId()){
             $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission('');
         }
@@ -258,7 +259,13 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
                 text: 'Cannot connect to  ' + portal + '. The access is not authorized',
                 type: 'warning'
             });
-            $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal]);
+            if(!$scope.firstAccessiblePortal){
+                $scope.errorMessage = 'This user is not allowed to access to the Automation Dashboard Portal';
+                $state.go('login');
+                console.error('This user is not allowed to access to the Automation Dashboard Portal', response);
+            } else{
+                $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal]);
+            }
         } else {
             $scope.errorMessage = 'Cannot connect to  ' + portal + '. The access is not authorized';
             $state.go('login');
@@ -303,6 +310,8 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
                 }
 
             } else {
+                $scope.errorMessage = 'This user is not allowed to access to the Automation Dashboard Portal';
+                $state.go('login');
                 console.error('This user is not allowed to access to the Automation Dashboard Portal', response);
             }
 
@@ -488,7 +497,6 @@ mainModule.controller('loginController', function ($scope, $state, permissionSer
                 if (sessionid) {
                     $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($scope.redirectsTo);
                 }
-                $scope.errorMessage = undefined;
                 $scope.startRegularCheckSession();
             })
             .error(function (response) {
