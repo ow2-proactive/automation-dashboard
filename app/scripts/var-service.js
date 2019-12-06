@@ -1,10 +1,10 @@
-function VarService($http) {
+function VarService($http, $window) {
 
-    function replaceModelWithFetched(model, window) {
+    function replaceModelWithFetched(model) {
         var indexBegin = model.indexOf('(');
         var indexEnd = model.lastIndexOf(')');
         var urlToFetch = model.substring(indexBegin + 1, indexEnd);
-        var origin = window.location.origin;
+        var origin = $window.location.origin;
         if (!origin.endsWith('/')) {
             origin += '/'
         }
@@ -14,20 +14,20 @@ function VarService($http) {
         return getStringByUrl(urlToFetch);
     };
 
-    function replaceVariableModelsIfNeeded(variables, window) {
+    function replaceVariableModelsIfNeeded(variables) {
         if (Array.isArray(variables)) {
             variables.filter(function (variable) {
                 // filter non empty models and models that should be replaced
                 return variable.model && variable.model.toLowerCase().indexOf('pa:model_from_url') !== -1;
             }).map(function (variable) {
                 // replace models with response
-                variable.model = replaceModelWithFetched(variable.model, window);
+                variable.model = replaceModelWithFetched(variable.model);
             })
         } else {
             for (var prop in variables) {
                 var variable = variables[prop]
                 if (variable.model && variable.model.toLowerCase().indexOf('pa:model_from_url') !== -1) {
-                    variable.model = replaceModelWithFetched(variable.model, window);
+                    variable.model = replaceModelWithFetched(variable.model);
                 }
             }
         }
@@ -41,8 +41,8 @@ function VarService($http) {
     }
 
     return {
-        replaceVariableModelsIfNeeded : function(variables, window) {
-            replaceVariableModelsIfNeeded(variables, window)
+        replaceVariableModelsIfNeeded : function(variables) {
+            replaceVariableModelsIfNeeded(variables)
         }
     };
 
