@@ -371,6 +371,7 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
 mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval) {
     this.$onInit = function () {
         setDefaultSelectedLanguage(localStorage['proactiveLanguage']);
+        $scope.changeFavicon('catalog')
         $scope.view = JSON.parse(localStorage['configViews']);
         $scope.docLink = '/doc/';
         $http.get('resources/config.json')
@@ -388,6 +389,26 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             startRegularUpdateNotificationLabel();
         }
     };
+
+    $scope.changeFavicon = function(portal){
+         var link = document.createElement('link'),
+         oldLink = document.getElementById('favicon');
+         link.id = 'favicon';
+         link.rel = 'icon';
+
+         if(portal === "job-planner-portal"){
+            link.href = "styles/patterns/job-planner-calendar.png";
+         } else if(portal === "analytics-portal"){
+            link.href = "styles/patterns/job-analytics.png";
+         } else {
+            link.href = "styles/patterns/"+ portal + ".png";
+         }
+
+         if (oldLink) {
+          document.head.removeChild(oldLink);
+         }
+         document.head.appendChild(link);
+    }
 
     $scope.displayAbout = function () {
         var windowLocation = window.location;

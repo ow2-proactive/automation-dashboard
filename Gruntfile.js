@@ -316,29 +316,29 @@ module.exports = function (grunt) {
 
                                     } else if (subviewsDefinition[key].isSubMenuItem) {
                                         cnt++;
-                                        result += '<li ui-sref-active="active" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']" class="childPortal collapse menu-item-' + subviewsDefinition[key].subMenuTitle + '">'
+                                        result += '<li ui-sref-active="active" ng-click ="changeFavicon(\'' + subviewsDefinition[key].subMenuTitle +'\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']" class="childPortal collapse menu-item-' + subviewsDefinition[key].subMenuTitle + '">'
                                             + '<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left: 45px; padding-top: 0px;"><span class="nav-label">{{\''
                                             + subviewsDefinition[key].name + '\' | translate}}</span> </a> </li>';
                                     } else {
                                         cnt++;
                                         if(subviewsDefinition[key].name == "Catalog"){
-                                            result += '\n<li ui-sref-active="active" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
+                                            result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'catalog\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
                                                 + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/catalog.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
                                                 subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                         } else if(subviewsDefinition[key].name == "Cloud Watch"){
-                                            result += '\n<li ui-sref-active="active" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
+                                            result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'cloud-watch\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
                                                 + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/cloud-watch.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
                                                 subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                         } else if(subviewsDefinition[key].name == "Cloud Automation"){
-                                            result += '\n<li ui-sref-active="active" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
+                                            result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'cloud-automation\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
                                                 + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/cloud-automation.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
                                                 subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                         } else if(subviewsDefinition[key].name == "Notification"){
-                                            result += '\n<li ui-sref-active="active" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
+                                            result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'notification\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
                                                 + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/notification-portal.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
                                                 subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                         } else {
-                                            result += '\n<li ui-sref-active="active" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
+                                            result += '\n<li ui-sref-active="active" ng-click="changeFavicon(\'automation_dashboard_30\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
                                                 + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/automation_dashboard_30.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
                                                 subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                         }
