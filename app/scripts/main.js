@@ -192,7 +192,7 @@ mainModule.config(function ($translateProvider, $translatePartialLoaderProvider)
 
 // --------------- Controllers -----------------
 
-mainModule.controller('mainController', function ($http, $scope, $rootScope, $state, $location, $interval, $translate, permissionService, SweetAlert) {
+mainModule.controller('mainController', function ($window, $http, $scope, $rootScope, $state, $location, $interval, $translate, permissionService, SweetAlert) {
 
     this.$onInit = function () {
         $scope.main.userName = localStorage['pa.login'];
@@ -205,7 +205,7 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
         $scope.automationDashboardPortals = {};
         $scope.errorMessage = undefined;
         if(getSessionId()){
-            $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission('');
+            $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($window.location.href.split('/portal')[1]);
         }
     };
 
@@ -267,7 +267,7 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
                 $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal]);
             }
         } else {
-            $scope.errorMessage = 'Cannot connect to  ' + portal + '. The access is not authorized';
+            $scope.errorMessage = 'Cannot connect to  ' + portal + '. Please login first';
             $state.go('login');
         }
     }
@@ -285,7 +285,10 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
     };
 
     $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission = function(url) {
-        var portal = url.substring(url.lastIndexOf("/") + 1);
+        var portal = '';
+        if(url){
+            portal = url.substring(url.lastIndexOf("/") + 1);
+        }
         $state.get().forEach(function (item) {
             if(item.name && item.name !== 'login' && item.name !== 'portal'){
                 $scope.automationDashboardPortals[item.url.substring(1)] = item.name;
@@ -301,14 +304,13 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
                 });
                 if(portal){
                     if($scope.portalsAccessPermission[portal]){
-                        $location.path(url);
+                        $state.go($scope.automationDashboardPortals[portal]);
                     } else{
                         displayAlertAndRedirectToFirstAccessiblePortal(portal);
                     }
                 } else{
-                    $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal])
+                    $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal]);
                 }
-
             } else {
                 $scope.errorMessage = 'This user is not allowed to access to the Automation Dashboard Portal';
                 $state.go('login');
