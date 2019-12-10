@@ -58,7 +58,7 @@ angular
             if (!localStorage['pcaServiceUrl'] || !localStorage['schedulerRestUrl'] ||
                 !localStorage['notificationServiceUrl'] || !localStorage['catalogServiceUrl'] ||
                 !localStorage['appCatalogWorkflowsUrl'] || !localStorage['appCatalogBucketsUrl'] ||
-                !localStorage['configViews'] || !localStorage['rmRestUrl']) {
+                !localStorage['configViews'] || !localStorage['rmRestUrl'] || !localStorage['restUrl']) {
                 getProperties($http, $location);
             }
             var myDataPromise = isSessionValide($http, getSessionId(), $location);
