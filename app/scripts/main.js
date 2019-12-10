@@ -55,8 +55,8 @@ function getProperties($http, $location) {
             localStorage['cloudWatchServiceUrl'] = cloudWatchServiceUrl;
             localStorage['jobAnalyticsServiceUrl'] = jobAnalyticsServiceUrl;
             localStorage['appUrl'] = appUrl;
-            localStorage['studioUrl'] = studioUrl;
             localStorage['restUrl'] = restUrl;
+            localStorage['studioUrl'] = studioUrl;
             localStorage['schedulerPortalUrl'] = schedulerPortalUrl;
             if (!localStorage['proactiveLanguage']) {
                 localStorage['proactiveLanguage'] = proactiveLanguage;
@@ -205,6 +205,8 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         $scope.automationDashboardPortals = {};
         $scope.errorMessage = undefined;
         if(getSessionId()){
+            var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/rest');
+            localStorage['restUrl'] = restUrl;
             $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($window.location.href.split('/portal')[1]);
         }
     };
@@ -373,8 +375,19 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval) {
     this.$onInit = function () {
         setDefaultSelectedLanguage(localStorage['proactiveLanguage']);
-        var splitUrl = window.location.hash.split("/")
-        $scope.changeFavicon(splitUrl[splitUrl.length-1]);
+        var splitUrl = window.location.hash.split("/");
+        var portal = splitUrl[splitUrl.length-1];
+        var jobAnalyticsChildren = ['job-analytics', 'job-gantt', 'node-gantt'];
+        var jobPlannerChildren = ['job-planner-calendar-def', 'job-planner-calendar-def-workflows', 'job-planner-execution-planning', 'job-planner-gantt-chart'];
+
+        if(jobAnalyticsChildren.indexOf(portal) !== -1){
+            $scope.changeFavicon('analytics-portal');
+        } else if(jobPlannerChildren.indexOf(portal) !== -1){
+            $scope.changeFavicon('job-planner-portal');
+        } else {
+            $scope.changeFavicon(splitUrl[splitUrl.length-1]);
+        }
+
         $scope.view = JSON.parse(localStorage['configViews']);
         $scope.docLink = '/doc/';
         $http.get('resources/config.json')
