@@ -304,12 +304,12 @@ module.exports = function (grunt) {
                                     if (subviewsDefinition[key].isSubMenuTitle) {
                                         if(subviewsDefinition[key].name == 'Analytics'){
                                             result += '\n<li id="'+subviewsDefinition[key].name+'" ui-sref-active="active" ng-show="showParentPortal(\''+subviewsDefinition[key].name+'\')">'
-                                                + '<a href=".menu-item-'+subviewsDefinition[key].nameForUrl+'" style="background-color: #002d66; padding-left:4px" data-toggle="collapse"><img src="styles/patterns/job-analytics.png" style="height:20px;padding-right: 4px;">'
+                                                + '<a href=".menu-item-'+subviewsDefinition[key].nameForUrl+'" style="background-color: #002d66; padding-left:4px" data-toggle="collapse"><img src="styles/patterns/analytics-portal.png" style="height:20px;padding-right: 4px;">'
                                                 +'<span class="nav-label" style="display:-webkit-inline-box; margin-left:3px" id="nav-span-'
                                                 + subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+subviewsDefinition[key].name+'\' | translate}}</span> <i class="fa fa-chevron-down" style="margin-right: 6px;"></i></a>';
                                         } else {
                                             result += '\n<li id="'+subviewsDefinition[key].name+'" ui-sref-active="active" ng-show="showParentPortal(\''+subviewsDefinition[key].name+'\')">'
-                                                + '<a href=".menu-item-'+subviewsDefinition[key].nameForUrl+'" style="background-color: #002d66; padding-left:4px" data-toggle="collapse"><img src="styles/patterns/job-planner-calendar.png" style="height:20px;padding-right: 4px;">'
+                                                + '<a href=".menu-item-'+subviewsDefinition[key].nameForUrl+'" style="background-color: #002d66; padding-left:4px" data-toggle="collapse"><img src="styles/patterns/job-planner-portal.png" style="height:20px;padding-right: 4px;">'
                                                 +'<span class="nav-label" style="display:-webkit-inline-box; margin-left:3px" id="nav-span-'
                                                 + subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+subviewsDefinition[key].name+'\' | translate}}</span> <i class="fa fa-chevron-down" style="margin-right: 6px;"></i></a>';
                                         }
@@ -322,8 +322,8 @@ module.exports = function (grunt) {
                                     } else {
                                         cnt++;
                                         if(subviewsDefinition[key].name == "Catalog"){
-                                            result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'catalog\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
-                                                + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/catalog.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
+                                            result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'catalog-portal\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
+                                                + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/catalog-portal.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
                                                 subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                         } else if(subviewsDefinition[key].name == "Cloud Watch"){
                                             result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'cloud-watch\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
