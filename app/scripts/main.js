@@ -371,6 +371,8 @@ mainModule.controller('mainController', function ($http, $scope, $rootScope, $st
 mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval) {
     this.$onInit = function () {
         setDefaultSelectedLanguage(localStorage['proactiveLanguage']);
+        var splitUrl = window.location.hash.split("/")
+        $scope.changeFavicon(splitUrl[splitUrl.length-1]);
         $scope.view = JSON.parse(localStorage['configViews']);
         $scope.docLink = '/doc/';
         $http.get('resources/config.json')
@@ -388,6 +390,18 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             startRegularUpdateNotificationLabel();
         }
     };
+
+    $scope.changeFavicon = function(portal){
+         var link = document.createElement('link');
+         oldLink = document.getElementById('favicon');
+         link.id = 'favicon';
+         link.rel = 'icon';
+         link.href = "styles/patterns/"+ portal + ".png";
+         if (oldLink) {
+          document.head.removeChild(oldLink);
+         }
+         document.head.appendChild(link);
+    }
 
     $scope.displayAbout = function () {
         var windowLocation = window.location;
