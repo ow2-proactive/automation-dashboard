@@ -245,6 +245,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
             $http.get(JSON.parse(localStorage['schedulerRestUrl']) + 'isconnected/', {headers: {'sessionID': sessionId}})
                 .then(function (response) {
                     if (!response) {
+                        localStorage.removeItem('pa.session');
                         $scope.closeSession();
                     }
                 })
@@ -269,7 +270,6 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                 $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal]);
             }
         } else {
-            $scope.errorMessage = 'Cannot connect to  ' + portal + '. Please login first';
             $state.go('login');
         }
     }
