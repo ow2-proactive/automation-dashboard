@@ -71,8 +71,5 @@ angular
                     });
                 }
             });
-            if ($state.current.name == '') {
-                $state.go('portal.subview1');
-            }
         });
     });

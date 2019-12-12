@@ -150,13 +150,7 @@ mainModule.factory('permissionService', function ($http, $interval, $rootScope, 
                 'Content-Type': 'application/json'
             },
         };
-        return $http.get(decodeURIComponent(requestGetPortalsAccessPermissionUrl.slice(0, -1)), config)
-            .then(function (response) {
-                return response.data;
-            })
-            .catch(function (response) {
-                console.error('Error while checking portals access permission', status, response);
-            });
+        return $http.get(decodeURIComponent(requestGetPortalsAccessPermissionUrl.slice(0, -1)), config);
     };
 
 
@@ -203,11 +197,11 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         $scope.firstAccessiblePortal = '';
         $scope.portalsAccessPermission = {};
         $scope.automationDashboardPortals = {};
-        $scope.errorMessage = undefined;
+        $rootScope.errorMessage = undefined;
         if(getSessionId()){
-        var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/rest');
-        localStorage['restUrl'] = restUrl;
-        $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($window.location.href.split('/portal')[1]);
+            var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/rest');
+            localStorage['restUrl'] = restUrl;
+            $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($window.location.href.split('/portal')[1]);
         }
     };
 
@@ -254,36 +248,35 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         }
     }
 
-    function displayAlertAndRedirectToFirstAccessiblePortal(portal) {
-        if (getSessionId()) {
-            SweetAlert.swal({
-                title: 'Access not authorized',
-                text: 'Cannot connect to  ' + portal + '. The access is not authorized',
-                type: 'warning'
-            });
-            if(!$scope.firstAccessiblePortal){
-                $scope.errorMessage = 'This user is not allowed to access to the Automation Dashboard Portal';
-                $state.go('login');
-                console.error('This user is not allowed to access to the Automation Dashboard Portal', response);
-            } else{
-                $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal]);
-            }
-        } else {
-            $scope.errorMessage = 'Cannot connect to  ' + portal + '. Please login first';
+    function displayAlertAndRedirectToFirstAccessiblePortalIfExist(portal) {
+        SweetAlert.swal({
+            title: 'Access not authorized',
+            text: 'Cannot connect to  ' + portal + '. The access is not authorized',
+            type: 'warning'
+        });
+        if(!$scope.firstAccessiblePortal){
+            $rootScope.errorMessage = 'The user ' + localStorage['pa.login'] + ' is not allowed to access to the Automation Dashboard Portal';
             $state.go('login');
+            console.error('The user ' + localStorage['pa.login'] + ' is not allowed to access to the Automation Dashboard Portal', response);
+        } else{
+            $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal]);
         }
     }
 
 
     $scope.checkPortalAccessPermission = function (url) {
         var portal = url.substring(url.lastIndexOf("/") + 1);
-        permissionService.getPortalAccessPermission(portal).then(function (response) {
-            if (!response) {
-                displayAlertAndRedirectToFirstAccessiblePortal(portal);
-            } else {
-                $location.path(url);
-            }
-        })
+        if (getSessionId()) {
+            permissionService.getPortalAccessPermission(portal).then(function (response) {
+                if (!response) {
+                    displayAlertAndRedirectToFirstAccessiblePortalIfExist(portal);
+                } else {
+                    $location.path(url);
+                }
+            })
+        }  else {
+            $state.go('login');
+        }
     };
 
     $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission = function(url) {
@@ -299,27 +292,31 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         });
         var portals = Object.keys($scope.automationDashboardPortals);
         permissionService.getPortalsAccessPermission(portals).then(function (response) {
-            if (Array.isArray(response) && response.length) {
-                $scope.firstAccessiblePortal = response[0];
-                response.forEach(function (authorizedPortal) {
+            if (Array.isArray(response.data) && response.data.length) {
+                $scope.firstAccessiblePortal = response.data[0];
+                response.data.forEach(function (authorizedPortal) {
                     $scope.portalsAccessPermission[authorizedPortal] = true;
                 });
                 if(portal){
                     if($scope.portalsAccessPermission[portal]){
                         $state.go($scope.automationDashboardPortals[portal]);
                     } else{
-                        displayAlertAndRedirectToFirstAccessiblePortal(portal);
+                        displayAlertAndRedirectToFirstAccessiblePortalIfExist(portal);
                     }
                 } else{
                     $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal]);
                 }
             } else {
-                $scope.errorMessage = 'This user is not allowed to access to the Automation Dashboard Portal';
+                $rootScope.errorMessage = 'This user is not allowed to access to the Automation Dashboard Portal';
                 $state.go('login');
-                console.error('This user is not allowed to access to the Automation Dashboard Portal', response);
+                console.error('This user is not allowed to access to the Automation Dashboard Portal', response.status);
             }
 
-        });
+        })
+        .catch(function(error){
+            $state.go('login');
+            console.error('Error while checking portals access permission',error)
+        })
     };
 
 
@@ -330,6 +327,9 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 
     $scope.closeSession = function () {
         $state.go('login');
+        $scope.firstAccessiblePortal = '';
+        $scope.portalsAccessPermission = {};
+        localStorage.removeItem('pa.session');
         $scope.stopRegularCheckSession();
         $rootScope.$broadcast('event:StopRefreshing');
     };
@@ -372,7 +372,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 });
 
 // controller used in navigation.html :
-mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval) {
+mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval, $rootScope) {
     this.$onInit = function () {
         setDefaultSelectedLanguage(localStorage['proactiveLanguage']);
         var splitUrl = window.location.hash.split("/");
@@ -503,7 +503,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     }
 });
 
-mainModule.controller('loginController', function ($scope, $state, permissionService, $stateParams, $location) {
+mainModule.controller('loginController', function ($scope, $state, permissionService, $stateParams, $location, $rootScope) {
     $scope.redirectsTo = $stateParams.redirectsTo;
     var host = $location.host();
     $scope.showLinkAccountCreation = (host === 'try.activeeon.com' || host === 'azure-try.activeeon.com');
@@ -531,19 +531,17 @@ mainModule.controller('loginController', function ($scope, $state, permissionSer
             .error(function (response) {
                 try {
                     var error = JSON.parse(response);
-                    $scope.errorMessage = error.errorMessage;
+                    $rootScope.errorMessage = error.errorMessage;
                     if (error.httpErrorCode === 404) {
                         if (error.stackTrace.indexOf('login.LoginException') >= 0) {
-                            $scope.errorMessage = 'Invalid Login or Password';
+                            $rootScope.errorMessage = 'Invalid Login or Password';
                         } else {
-                            $scope.errorMessage = 'The server is not available, please try again later.';
+                            $rootScope.errorMessage = 'The server is not available, please try again later.';
                         }
-
                     }
                 } catch (e) {
-                    $scope.errorMessage = 'Please try again later.'
+                    $rootScope.errorMessage = 'Please try again later.'
                 }
-
             });
     };
 
@@ -551,7 +549,6 @@ mainModule.controller('loginController', function ($scope, $state, permissionSer
 
 mainModule.controller('logoutController', function ($scope, $state) {
     $scope.logout = function () {
-        localStorage.removeItem('pa.session');
         $scope.closeSession();
     };
 });
