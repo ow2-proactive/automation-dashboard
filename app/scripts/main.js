@@ -150,13 +150,7 @@ mainModule.factory('permissionService', function ($http, $interval, $rootScope, 
                 'Content-Type': 'application/json'
             },
         };
-        return $http.get(decodeURIComponent(requestGetPortalsAccessPermissionUrl.slice(0, -1)), config)
-            .then(function (response) {
-                return response.data;
-            })
-            .catch(function (response) {
-                console.error('Error while checking portals access permission', status, response);
-            });
+        return $http.get(decodeURIComponent(requestGetPortalsAccessPermissionUrl.slice(0, -1)), config);
     };
 
 
@@ -203,7 +197,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         $scope.firstAccessiblePortal = '';
         $scope.portalsAccessPermission = {};
         $scope.automationDashboardPortals = {};
-        $scope.errorMessage = undefined;
+        $rootScope.errorMessage = undefined;
         if(getSessionId()){
             var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/rest');
             localStorage['restUrl'] = restUrl;
@@ -245,7 +239,6 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
             $http.get(JSON.parse(localStorage['schedulerRestUrl']) + 'isconnected/', {headers: {'sessionID': sessionId}})
                 .then(function (response) {
                     if (!response) {
-                        localStorage.removeItem('pa.session');
                         $scope.closeSession();
                     }
                 })
@@ -262,7 +255,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
             type: 'warning'
         });
         if(!$scope.firstAccessiblePortal){
-            $scope.errorMessage = 'The user ' + localStorage['pa.login'] + ' is not allowed to access to the Automation Dashboard Portal';
+            $rootScope.errorMessage = 'The user ' + localStorage['pa.login'] + ' is not allowed to access to the Automation Dashboard Portal';
             $state.go('login');
             console.error('The user ' + localStorage['pa.login'] + ' is not allowed to access to the Automation Dashboard Portal', response);
         } else{
@@ -299,9 +292,9 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         });
         var portals = Object.keys($scope.automationDashboardPortals);
         permissionService.getPortalsAccessPermission(portals).then(function (response) {
-            if (Array.isArray(response) && response.length) {
-                $scope.firstAccessiblePortal = response[0];
-                response.forEach(function (authorizedPortal) {
+            if (Array.isArray(response.data) && response.data.length) {
+                $scope.firstAccessiblePortal = response.data[0];
+                response.data.forEach(function (authorizedPortal) {
                     $scope.portalsAccessPermission[authorizedPortal] = true;
                 });
                 if(portal){
@@ -314,23 +307,16 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                     $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal]);
                 }
             } else {
-                $http.get(JSON.parse(localStorage['schedulerRestUrl']) + 'isconnected/', {headers: {'sessionID': getSessionId()}})
-                    .then(function (response) {
-                        if (response) {
-                            $scope.errorMessage = 'The user ' + localStorage['pa.login'] + ' is not allowed to access to the Automation Dashboard Portal';
-                            $state.go('login');
-                            console.error('The user ' + localStorage['pa.login'] + ' is not allowed to access to the Automation Dashboard Portal', response);
-                        } else {
-                            $state.go('login');
-                        }
-                    })
-                    .catch(function (response) {
-                        console.error('Error checking if session is valid:', response);
-                    });
-
+                $rootScope.errorMessage = 'This user is not allowed to access to the Automation Dashboard Portal';
+                $state.go('login');
+                console.error('This user is not allowed to access to the Automation Dashboard Portal', response.status);
             }
 
-        });
+        })
+        .catch(function(error){
+            $state.go('login');
+            console.error('Error while checking portals access permission',error)
+        })
     };
 
 
@@ -517,7 +503,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     }
 });
 
-mainModule.controller('loginController', function ($scope, $state, permissionService, $stateParams, $location) {
+mainModule.controller('loginController', function ($scope, $state, permissionService, $stateParams, $location, $rootScope) {
     $scope.redirectsTo = $stateParams.redirectsTo;
     var host = $location.host();
     $scope.showLinkAccountCreation = (host === 'try.activeeon.com' || host === 'azure-try.activeeon.com');
@@ -545,19 +531,17 @@ mainModule.controller('loginController', function ($scope, $state, permissionSer
             .error(function (response) {
                 try {
                     var error = JSON.parse(response);
-                    $scope.errorMessage = error.errorMessage;
+                    $rootScope.errorMessage = error.errorMessage;
                     if (error.httpErrorCode === 404) {
                         if (error.stackTrace.indexOf('login.LoginException') >= 0) {
-                            $scope.errorMessage = 'Invalid Login or Password';
+                            $rootScope.errorMessage = 'Invalid Login or Password';
                         } else {
-                            $scope.errorMessage = 'The server is not available, please try again later.';
+                            $rootScope.errorMessage = 'The server is not available, please try again later.';
                         }
-
                     }
                 } catch (e) {
-                    $scope.errorMessage = 'Please try again later.'
+                    $rootScope.errorMessage = 'Please try again later.'
                 }
-
             });
     };
 
