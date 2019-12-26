@@ -192,7 +192,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         if(getSessionId()){
             var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/rest');
             localStorage['restUrl'] = restUrl;
-            $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($window.location.href.split('/portal')[1]);
+            $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($window.location.href);
         }
     };
 
@@ -368,7 +368,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 });
 
 // controller used in navigation.html :
-mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval) {
+mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval, $rootScope) {
     this.$onInit = function () {
         setDefaultSelectedLanguage(localStorage['proactiveLanguage']);
         var splitUrl = window.location.hash.split("/");
