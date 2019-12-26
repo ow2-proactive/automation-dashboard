@@ -201,7 +201,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         if(getSessionId()){
             var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/rest');
             localStorage['restUrl'] = restUrl;
-            $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($window.location.href.split('/portal')[1]);
+            $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($window.location.href);
         }
     };
 
