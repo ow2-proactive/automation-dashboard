@@ -130,16 +130,7 @@ mainModule.factory('permissionService', function ($http, $interval, $rootScope, 
                 'Content-Type': 'application/json'
             },
         };
-        return $http.get(requestGetPortalAccessPermissionUrl, config)
-            .then(function (response) {
-                if (typeof response.data !== "boolean") {
-                    console.error('Error: portal access permission is not a boolean value', response);
-                }
-                return response.data
-            })
-            .catch(function (response) {
-                console.error('Error while checking portal access permission', status, response);
-            });
+        return $http.get(requestGetPortalAccessPermissionUrl, config);
     };
 
     function getPortalsAccessPermission(portals) {
@@ -268,14 +259,18 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         var portal = url.substring(url.lastIndexOf("/") + 1);
         if (getSessionId()) {
             permissionService.getPortalAccessPermission(portal).then(function (response) {
-                if (!response) {
+                if (!response.data) {
                     displayAlertAndRedirectToFirstAccessiblePortalIfExist(portal);
                 } else {
                     $location.path(url);
                 }
             })
+            .catch(function (error, status) {
+                $scope.closeSession();
+                console.error('Error while checking portal access permission', status, error);
+            });
         }  else {
-            $state.go('login');
+            $scope.closeSession();
         }
     };
 
@@ -314,7 +309,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 
         })
         .catch(function(error){
-            $state.go('login');
+            $scope.closeSession();
             console.error('Error while checking portals access permission',error)
         })
     };
@@ -328,6 +323,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
     $scope.closeSession = function () {
         $state.go('login');
         $scope.firstAccessiblePortal = '';
+        $rootScope.errorMessage = undefined;
         $scope.portalsAccessPermission = {};
         localStorage.removeItem('pa.session');
         $scope.stopRegularCheckSession();
