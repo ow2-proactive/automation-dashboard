@@ -393,18 +393,13 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             .error(function (response) {
                 $scope.dashboardVersion = 'not available';
             });
-        $scope.notificationNavSpan = angular.element('#nav-span-notifications');
-        if ($scope.notificationNavSpan.length) {
-            $scope.newNotificationsLabel = angular.element('<div id="new-notifications-label" style="background:#d9534f;color:white;border-radius:10px;text-align:center;margin-left: 5px;padding: 0px 5px;"></div>');
-            $scope.notificationNavSpan.append($scope.newNotificationsLabel);
-            $scope.newNotificationsLabel.hide();
-            startRegularUpdateNotificationLabel();
-        }
+        $scope.nbNewNotifications = 0;
+        startRegularUpdateNotificationLabel();
     };
 
     $scope.changeFavicon = function(portal){
          var link = document.createElement('link');
-         oldLink = document.getElementById('favicon');
+         var oldLink = document.getElementById('favicon');
          link.id = 'favicon';
          link.rel = 'icon';
          link.href = "styles/patterns/"+ portal + ".png";
@@ -412,7 +407,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
           document.head.removeChild(oldLink);
          }
          document.head.appendChild(link);
-    }
+    };
 
     $scope.displayAbout = function () {
         var windowLocation = window.location;
@@ -460,12 +455,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     });
 
     $rootScope.$on('event:updatedNotificationsCount', function (event, data) {
-        if (data['count']) {
-            $scope.newNotificationsLabel.html(data['count']);
-            $scope.newNotificationsLabel.show();
-        } else {
-            $scope.newNotificationsLabel.hide();
-        }
+        $scope.nbNewNotifications = data['count'];
     });
 
     function updateNotificationsLabel(notifications) {
@@ -475,12 +465,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
                 nbNewNotifications++;
             }
         });
-        if (nbNewNotifications) {
-            $scope.newNotificationsLabel.html(nbNewNotifications);
-            $scope.newNotificationsLabel.show();
-        } else {
-            $scope.newNotificationsLabel.hide();
-        }
+        $scope.nbNewNotifications = nbNewNotifications;
     }
 
     //Set the locally stored language as default value for the language dropdown menu
