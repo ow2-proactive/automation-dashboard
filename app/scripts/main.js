@@ -130,16 +130,7 @@ mainModule.factory('permissionService', function ($http, $interval, $rootScope, 
                 'Content-Type': 'application/json'
             },
         };
-        return $http.get(requestGetPortalAccessPermissionUrl, config)
-            .then(function (response) {
-                if (typeof response.data !== "boolean") {
-                    console.error('Error: portal access permission is not a boolean value', response);
-                }
-                return response.data
-            })
-            .catch(function (response) {
-                console.error('Error while checking portal access permission', status, response);
-            });
+        return $http.get(requestGetPortalAccessPermissionUrl, config);
     };
 
     function getPortalsAccessPermission(portals) {
@@ -268,14 +259,18 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         var portal = url.substring(url.lastIndexOf("/") + 1);
         if (getSessionId()) {
             permissionService.getPortalAccessPermission(portal).then(function (response) {
-                if (!response) {
+                if (!response.data) {
                     displayAlertAndRedirectToFirstAccessiblePortalIfExist(portal);
                 } else {
                     $location.path(url);
                 }
             })
+            .catch(function (error, status) {
+                $scope.closeSession();
+                console.error('Error while checking portal access permission', status, error);
+            });
         }  else {
-            $state.go('login');
+            $scope.closeSession();
         }
     };
 
@@ -314,7 +309,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 
         })
         .catch(function(error){
-            $state.go('login');
+            $scope.closeSession();
             console.error('Error while checking portals access permission',error)
         })
     };
@@ -328,6 +323,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
     $scope.closeSession = function () {
         $state.go('login');
         $scope.firstAccessiblePortal = '';
+        $rootScope.errorMessage = undefined;
         $scope.portalsAccessPermission = {};
         localStorage.removeItem('pa.session');
         $scope.stopRegularCheckSession();
@@ -372,7 +368,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 });
 
 // controller used in navigation.html :
-mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval, $rootScope) {
+mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval) {
     this.$onInit = function () {
         setDefaultSelectedLanguage(localStorage['proactiveLanguage']);
         var splitUrl = window.location.hash.split("/");
@@ -397,18 +393,13 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             .error(function (response) {
                 $scope.dashboardVersion = 'not available';
             });
-        $scope.notificationNavSpan = angular.element('#nav-span-notifications');
-        if ($scope.notificationNavSpan.length) {
-            $scope.newNotificationsLabel = angular.element('<div id="new-notifications-label" style="background:#d9534f;color:white;border-radius:10px;text-align:center;margin-left: 5px;padding: 0px 5px;"></div>');
-            $scope.notificationNavSpan.append($scope.newNotificationsLabel);
-            $scope.newNotificationsLabel.hide();
-            startRegularUpdateNotificationLabel();
-        }
+        $scope.nbNewNotifications = 0;
+        startRegularUpdateNotificationLabel();
     };
 
     $scope.changeFavicon = function(portal){
          var link = document.createElement('link');
-         oldLink = document.getElementById('favicon');
+         var oldLink = document.getElementById('favicon');
          link.id = 'favicon';
          link.rel = 'icon';
          link.href = "styles/patterns/"+ portal + ".png";
@@ -416,7 +407,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
           document.head.removeChild(oldLink);
          }
          document.head.appendChild(link);
-    }
+    };
 
     $scope.displayAbout = function () {
         var windowLocation = window.location;
@@ -464,12 +455,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     });
 
     $rootScope.$on('event:updatedNotificationsCount', function (event, data) {
-        if (data['count']) {
-            $scope.newNotificationsLabel.html(data['count']);
-            $scope.newNotificationsLabel.show();
-        } else {
-            $scope.newNotificationsLabel.hide();
-        }
+        $scope.nbNewNotifications = data['count'];
     });
 
     function updateNotificationsLabel(notifications) {
@@ -479,12 +465,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
                 nbNewNotifications++;
             }
         });
-        if (nbNewNotifications) {
-            $scope.newNotificationsLabel.html(nbNewNotifications);
-            $scope.newNotificationsLabel.show();
-        } else {
-            $scope.newNotificationsLabel.hide();
-        }
+        $scope.nbNewNotifications = nbNewNotifications;
     }
 
     //Set the locally stored language as default value for the language dropdown menu
