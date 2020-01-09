@@ -3,7 +3,15 @@
         <img src="styles/patterns/logo_350.png" class="login-logo-image"/>
 
         <div class="login-header-container">
-            <div class="login-header">ProActive Automation Dashboard <span class="login-font-normal">login</span></div>
+            <div class="login-header">
+                <div class="automation-dashboard-logo">
+                    <img src="styles/patterns/pps-dashboard.png" alt="Automation Dashboard logo"/>
+                </div>
+                <div style="width:80%;" class="m-b-md pull-right">
+                    <span style="font-size:23px;">Automation Dashboard</span>
+                    Workflow Automation, Catalog, Job Planner, Notification, etc.
+                </div>
+            </div>
 
             <div class="login-form-container">
 
@@ -30,7 +38,7 @@
             </div>
 
         </div>
-        <div class="alert alert-danger" ng-show="errorMessage">
+        <div class="alert alert-danger" ng-show="errorMessage" style="padding:0px;margin-bottom:0px;border: 1px solid red;">
             <strong>{{'Unable to login'|translate}}.</strong> {{errorMessage}}
         </div>
         <a ng-if="showLinkAccountCreation" href="https://www.activeeon.com/register/web-download" target="_blank">{{'Or create an account'|translate}}</a>

@@ -30,25 +30,21 @@
         "name": "Workflow Automation",
         "nameForUrl": "workflow-automation",
         "appFolder": "cloud-automation/app/",
-        "htmlFile": "wf_automation.html",
+        "htmlFile": "workflow-automation/wf_automation.html",
         "secondaryHtmlFiles": [
             "modals/submit_window_wf_automation.html",
             "modals/result_map_window_wf_automation.html"
         ],
-        "notAvailablePage": "page_not_available_wf_automation.html",
+        "notAvailablePage": "workflow-automation/page_not_available_wf_automation.html",
         "jsFiles": [
-            "scripts/wf-automation-rest.js"
+            "scripts/workflow-automation/wf-automation.js",
+            "scripts/workflow-automation/wfa-catalog-controller.js",
+            "scripts/workflow-automation/wfa-monitoring-controller.js",
+            "services/wfa-scheduler-service.js"
         ],
-        "angularModuleName": "wfa-rest",
+        "angularModuleName": "workflow-automation",
         "cssFile": "portal_custom_style.css",
-        "authenticate": true,
-        "initFunction": {
-            "functionName": "initWorkflowAutomation",
-            "services": [
-                "WFASchedulerService",
-                "WFACatalog"
-            ]
-        }
+        "authenticate": true
     },
     "analytics-portal": {
         "isAvailable": true,
@@ -270,13 +266,13 @@
         "name": "Cloud Automation",
         "nameForUrl": "cloud-automation",
         "appFolder": "cloud-automation/app/",
-        "htmlFile": "cloud_automation.html",
+        "htmlFile": "cloud-automation/cloud_automation.html",
         "secondaryHtmlFiles": [
             "modals/submit_window_cloud_automation.html",
             "modals/service_instance_info_modal.html",
             "modals/service_instance_history_modal.html"
         ],
-        "notAvailablePage": "page_not_available_cloud_automation.html",
+        "notAvailablePage": "cloud-automation/page_not_available_cloud_automation.html",
         "jsFiles": [
             "scripts/cloud-automation/cloud-automation-main-controller.js",
             "services/cloud-automation-service.js",
@@ -287,7 +283,7 @@
             "scripts/cloud-automation/monitoring-items-controller.js",
             "scripts/cloud-automation/services-catalog-controller.js"
         ],
-        "angularModuleName": "pca-rest",
+        "angularModuleName": "cloud-automation",
         "cssFile": "portal_custom_style.css",
         "authenticate": true,
         "images": [
