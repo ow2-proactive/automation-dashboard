@@ -212,7 +212,8 @@
             "gantt-chart/ganttEventTooltip.tmpl.html",
             "gantt-chart/calendar_list_modal.html",
             "gantt-chart/gantt_legend.html",
-            "calendar_list_with_checkbox.html"
+            "calendar_list_with_checkbox.html",
+            "gantt-chart/modals/gantt_select_range_modal.html"
         ],
         "notAvailablePage": "page_not_available_template.html",
         "jsFiles": [
