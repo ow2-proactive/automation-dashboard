@@ -392,7 +392,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: '<%= inspinia.dist %>',
-                    src: ['*.html', 'views/{,*/}*.html'],
+                    src: ['*.html', 'views/{,*/}*.html', '!index.html', '!views/common/navigation.html'],
                     dest: '<%= inspinia.dist %>'
                 }]
             }
