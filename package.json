@@ -48,7 +48,7 @@
     "grunt-contrib-watch": "^0.6.1",
     "grunt-eslint": "^20.2.0",
     "grunt-filerev": "^2.0.0",
-    "grunt-jsbeautifier": "^0.2.13",
+    "grunt-jsbeautifier": "^0.1.10",
     "grunt-json-merge": "^0.2.2",
     "grunt-replace": "^1.0.1",
     "grunt-usemin": "^2.4.0",
