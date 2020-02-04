@@ -362,10 +362,9 @@ module.exports = function (grunt) {
         jsbeautifier: {
             files: [
                 '<%= inspinia.app %>/scripts/config.js',
-                '<%= inspinia.app %>/views/common/navigation.html',
                 '<%= inspinia.app %>/scripts/app.js',
-                '<%= inspinia.app %>/index.html',
-                '<%= inspinia.app %>/<%= inspinia.conf %>/{,*/}*.*'
+                '<%= inspinia.app %>/<%= inspinia.conf %>/{,*/}*.*',
+                '!<%= inspinia.app %>/{,*/}{,*/}*.html'
             ],
             options: {
             }
@@ -392,7 +391,7 @@ module.exports = function (grunt) {
                 files: [{
                     expand: true,
                     cwd: '<%= inspinia.dist %>',
-                    src: ['*.html', 'views/{,*/}*.html', '!index.html', '!views/common/navigation.html'],
+                    src: ['*.html', 'views/{,*/}*.html'],
                     dest: '<%= inspinia.dist %>'
                 }]
             }

@@ -6,6 +6,7 @@
  * Initial there are written stat for all view in theme.
  *
  */
+
 function config($stateProvider, $urlRouterProvider) {
 
     $stateProvider
