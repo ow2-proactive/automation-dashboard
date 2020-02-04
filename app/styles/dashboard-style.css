@@ -372,3 +372,9 @@
 #new-cred-key.ng-invalid:focus {
     border-color: #ed5565 !important;
 }
+
+.description {
+    text-align: justify;
+    white-space: pre-wrap;
+    font-family: inherit;
+}
