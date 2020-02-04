@@ -6,6 +6,7 @@
  * Initial there are written stat for all view in theme.
  *
  */
+
 function config($stateProvider, $urlRouterProvider) {
 
     $stateProvider
@@ -55,10 +56,7 @@ angular
     .module('inspinia')
     .run(function($rootScope, $state, $http, $location) {
         $rootScope.$on('$locationChangeStart', function(event) {
-            if (!localStorage['pcaServiceUrl'] || !localStorage['schedulerRestUrl'] ||
-                !localStorage['notificationServiceUrl'] || !localStorage['catalogServiceUrl'] ||
-                !localStorage['appCatalogWorkflowsUrl'] || !localStorage['appCatalogBucketsUrl'] ||
-                !localStorage['configViews'] || !localStorage['rmRestUrl']) {
+            if (!localStorage['pcaServiceUrl'] || !localStorage['schedulerRestUrl'] || !localStorage['notificationServiceUrl'] || !localStorage['catalogServiceUrl'] || !localStorage['appCatalogWorkflowsUrl'] || !localStorage['appCatalogBucketsUrl'] || !localStorage['configViews'] || !localStorage['rmRestUrl'] || !localStorage['restUrl']) {
                 getProperties($http, $location);
             }
             var myDataPromise = isSessionValide($http, getSessionId(), $location);
