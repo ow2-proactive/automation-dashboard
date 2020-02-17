@@ -189,8 +189,7 @@
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "execution_planning.html",
         "secondaryHtmlFiles": [
-            "calendar_list_with_checkbox.html",
-            "cron-gen.html"
+            "calendar_list_with_checkbox.html"
         ],
         "notAvailablePage": "page_not_available_template.html",
         "jsFiles": [
