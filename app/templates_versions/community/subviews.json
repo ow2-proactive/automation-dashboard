@@ -144,6 +144,9 @@
         "nameForUrl": "job-planner-calendar-def",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "execution_calendars.html",
+        "secondaryHtmlFiles": [
+            "cron-gen.html"
+        ],
         "jsFiles": [
             "scripts/services/catalog-service.js",
             "scripts/services/scheduler-service.js",
@@ -298,12 +301,17 @@
         "appFolder": "notification-portal/app/",
         "htmlFile": "notification-portal.html",
         "secondaryHtmlFiles": [
-            "templates/notification.html"
+            "templates/notification.html",
+            "templates/basic-subscription.html",
+            "templates/multi-subscription.html",
+            "templates/job-subscription-form.html"
         ],
         "notAvailablePage": "page_not_available.html",
         "jsFiles": [
             "scripts/notification-portal.js",
-            "scripts/services/notification-service-api.js"
+            "scripts/notification-subscriptions.js",
+            "scripts/services/notification-service-api.js",
+            "scripts/services/catalog-service.js"
         ],
         "angularModuleName": "notification-service",
         "cssFile": "notifportal_custom_style.css",
