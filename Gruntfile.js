@@ -77,6 +77,21 @@ module.exports = function (grunt) {
                     });
                 }
             }
+            if (subviewsDefinition[key].resources){
+                for (var resourceFileKey in subviewsDefinition[key].resources) {
+                    var path = subviewsDefinition[key].appFolder + '/' + subviewsDefinition[key].resources[resourceFileKey];
+                    var exists = grunt.file.exists(path);
+                    if (!exists) {
+                        grunt.fail.warn('File ' + path + ' doesn\'t exist.');
+                    }
+                    out.push({
+                        expand: true,
+                        cwd: subviewsDefinition[key].appFolder + '/',
+                        src: subviewsDefinition[key].resources[resourceFileKey],
+                        dest: '<%= inspinia.dist %>/resources/' + subviewsDefinition[key].nameForUrl
+                    });
+                }
+            }
         }
         return out;
     }
@@ -212,7 +227,8 @@ module.exports = function (grunt) {
                             'styles/patterns/img/objects-icons/{,*/}*.*',
                             'img/{,*/}*.*',
                             'resources/{,*/}*.properties',
-                            'resources/{,*/}*.json'
+                            'resources/{,*/}*.json',
+                            'resources/*.json',
                         ]
                     },
                     {
