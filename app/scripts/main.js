@@ -524,6 +524,12 @@ mainModule.controller('logoutController', function ($scope, $state) {
     };
 });
 
+mainModule.controller('footerController', function ($scope) {
+    $scope.year = new Date().getFullYear();
+});
+
+
+
 mainModule.directive('ngRightClick', function ($parse) {
     return {
         restrict: 'A',
