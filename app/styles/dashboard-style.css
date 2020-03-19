@@ -186,6 +186,14 @@
     margin-bottom: 3px;
 }
 
+.gantt-execution-event-pending-part {
+    border-right: none;
+}
+
+.gantt-execution-event-executing-part {
+    border-left: none;
+}
+
 .gantt-date-change-button {
     height: 80%;
     padding: 7px;
