@@ -436,10 +436,10 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     }
 
     function queryNotificationService() {
-        var eventsUrlPrefix = JSON.parse(localStorage['notificationServiceUrl']) + 'notifications';
+        var eventsUrlPrefix = JSON.parse(localStorage['notificationServiceUrl']) + 'notifications/unreadCount';
         $http.get(eventsUrlPrefix, {headers: {'sessionID': getSessionId()}})
             .success(function (response) {
-                updateNotificationsLabel(response);
+                $scope.nbNewNotifications=response;
             })
             .error(function (response) {
                 console.error('Error while querying notification service: ', response);
@@ -457,16 +457,6 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     $rootScope.$on('event:updatedNotificationsCount', function (event, data) {
         $scope.nbNewNotifications = data['count'];
     });
-
-    function updateNotificationsLabel(notifications) {
-        var nbNewNotifications = 0;
-        angular.forEach(notifications, function (notification) {
-            if (!notification.hasRead) {
-                nbNewNotifications++;
-            }
-        });
-        $scope.nbNewNotifications = nbNewNotifications;
-    }
 
     //Set the locally stored language as default value for the language dropdown menu
     function setDefaultSelectedLanguage(language) {
@@ -533,6 +523,12 @@ mainModule.controller('logoutController', function ($scope, $state) {
         $scope.closeSession();
     };
 });
+
+mainModule.controller('footerController', function ($scope) {
+    $scope.year = new Date().getFullYear();
+});
+
+
 
 mainModule.directive('ngRightClick', function ($parse) {
     return {
