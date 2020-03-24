@@ -380,6 +380,8 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             $scope.changeFavicon('analytics-portal');
         } else if(jobPlannerChildren.indexOf(portal) !== -1){
             $scope.changeFavicon('job-planner-portal');
+        } else if(splitUrl[splitUrl.length-1] === "workflow-automation"){
+            $scope.changeFavicon("automation_dashboard_30");
         } else {
             $scope.changeFavicon(splitUrl[splitUrl.length-1]);
         }
