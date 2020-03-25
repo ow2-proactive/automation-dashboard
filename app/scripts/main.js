@@ -441,7 +441,9 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         var eventsUrlPrefix = JSON.parse(localStorage['notificationServiceUrl']) + 'notifications/unreadCount';
         $http.get(eventsUrlPrefix, {headers: {'sessionID': getSessionId()}})
             .success(function (response) {
-                $scope.nbNewNotifications=response;
+                if(Number.isInteger(response)){
+                    $scope.nbNewNotifications=response;
+                }
             })
             .error(function (response) {
                 console.error('Error while querying notification service: ', response);
