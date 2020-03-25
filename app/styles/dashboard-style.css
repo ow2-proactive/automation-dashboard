@@ -391,10 +391,6 @@
     width: 100%;
 }
 
-.ui-select-multiple input.ui-select-search {
-    width: auto !important;
-}
-
 .ui-select-multiple.ui-select-bootstrap .ui-select-match-item {
     background-color: #1ab39342;
     color: inherit;
