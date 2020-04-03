@@ -380,6 +380,8 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             $scope.changeFavicon('analytics-portal');
         } else if(jobPlannerChildren.indexOf(portal) !== -1){
             $scope.changeFavicon('job-planner-portal');
+        } else if(splitUrl[splitUrl.length-1] === "workflow-automation"){
+            $scope.changeFavicon("automation_dashboard_30");
         } else {
             $scope.changeFavicon(splitUrl[splitUrl.length-1]);
         }
@@ -439,7 +441,9 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         var eventsUrlPrefix = JSON.parse(localStorage['notificationServiceUrl']) + 'notifications/unreadCount';
         $http.get(eventsUrlPrefix, {headers: {'sessionID': getSessionId()}})
             .success(function (response) {
-                $scope.nbNewNotifications=response;
+                if(Number.isInteger(response)){
+                    $scope.nbNewNotifications=response;
+                }
             })
             .error(function (response) {
                 console.error('Error while querying notification service: ', response);
