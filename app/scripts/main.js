@@ -364,6 +364,14 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
             angular.element('#context-menu').css('left', (clickEvent['clientX'] - contextMenuWidth) + 'px')
         }
 
+    };
+
+    /**
+     * Lose focus (blur) on the given element. Useful to lose :focus styling after pressing a button
+     * @param elementSelector jQuery light selector expression
+     */
+    $scope.loseFocusForElement = function(elementSelector){
+        angular.element(elementSelector)[0].blur();
     }
 });
 
