@@ -27,27 +27,40 @@
                        target="/scheduler/">
                         <img src="styles/patterns/scheduler_30.png"
                              style="height:25px;padding-left: 4px;padding-right: 4px;">
-                        <div class="pa-shortcut" style="max-width: 300px;">{{ 'Scheduling &amp; Orchestration' |
-                            translate}}
-                        </div>
+                        <div class="pa-shortcut" style="max-width: 300px;">{{ 'Scheduling &amp; Orchestration' | translate}}</div>
                     </a>
                 </div>
             </li>
             <li>
                 <div class="btn-group pa-shortcuts">
-                    <a class="btn btn-small btn-default pa-shortcuts" href="/rm/" style="color:#333;border-color: #ccc;padding:5px"
-                       target="/rm/">
+                    <a class="btn btn-small btn-default pa-shortcuts" href="/rm/"
+                       style="color:#333;border-color: #ccc;padding:5px" target="/rm/">
                         <img src="styles/patterns/rm_30.png" style="height:25px;padding-left: 4px;padding-right: 4px;">
                         <div class="pa-shortcut" style="max-width: 300px;">{{ 'Resource Manager' | translate}}</div>
                     </a>
                 </div>
             </li>
             <li style="height: 38px; margin: 6px 5px; border-right: 1px solid #777;border-left:  1px solid #f2f2f2"></li>
+
+            <li class="m-r-xs">
+                <div class="btn-group logout-btn pa-shortcuts" ng-controller="navBarController">
+                    <a id="notifications-shortcut" class="btn btn-small btn-default logout-btn pa-shortcuts container-flexbox" ui-sref="portal.subview12"
+                       ng-click="loseFocusForElement('#notifications-shortcut')" style="color: #E86D1F;border-color:#ccc;">
+                        <i class="fa fa-bell" style="font-size: 20px;" aria-hidden="true"></i>
+                        <div ng-show="nbNewNotifications" class="badge icon-badge">
+                            <i class="fa fa-circle" aria-hidden="true"></i>
+                        </div>
+                    </a>
+                </div>
+            </li>
+
             <li style="padding-bottom: 6px;padding-right: 25px">
                 <div class="btn-group logout-btn pa-shortcuts" ng-controller="logoutController">
                     <a class="btn btn-small btn-default logout-btn pa-shortcuts" ng-click="logout()"
-                       style="color:#333;border-color:#ccc;padding:6px;"><b> {{main.userName}}</b> <img
-                            src="styles/patterns/logout_30.png" style="height:25px;  padding-left: 5px;"></a>
+                       style="color:#333;border-color:#ccc;padding:6px;">
+                        <b> {{main.userName}}</b>
+                        <img src="styles/patterns/logout_30.png" style="height:25px;  padding-left: 5px;">
+                    </a>
                 </div>
             </li>
         </ul>
