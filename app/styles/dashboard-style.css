@@ -540,3 +540,29 @@
 .show {
     opacity: 1 !important;
 }
+
+.icon-badge {
+    background-color: rgb(237, 85, 101) !important;
+    position: absolute !important;
+    top: -4px !important;
+    right: -4px !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+}
+
+.container-flex {
+    display: -moz-flex;
+    display: -ms-inline-flexbox;
+    display: -webkit-inline-flex;
+    display: inline-flex;
+    align-items: center;
+}
+
+.container-flexbox {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+}
