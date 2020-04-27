@@ -1,0 +1,36 @@
+<div class="inmodal" ng-class="file-browser-modal">
+
+    <div class="modal-header">
+        <button type="button" class="close close-modal-btn" ng-click="cancel()">×</button>
+        <h4>{{locationDescription}} Files</h4>
+    </div>
+
+    <div id="files-body" class="modal-body">
+        <div>
+            <button id="refresh-file-btn" title="Refresh" class="btn btn-white fa fa-repeat" style="background-color:Transparent" ng-click="refreshFiles()"></button>
+            <button id="new-folder-btn" title="New folder" class="btn btn-white fa fa-plus" style="background-color:Transparent" ng-click="createFolder()"></button>
+            <input type="file" id="selected-upload-file"  onchange="angular.element(this).scope().fileSelected(this.files)" class="hidden" />
+            <button id="upload-file-btn" title="Upload" class="btn btn-white fa fa-upload" style="background-color:Transparent" ng-click="clickUpload()"></button>
+            <button id="delete-file-btn" title="Delete" class="btn btn-white fa fa-trash" style="background-color:Transparent" ng-click="deleteFile()"></button>
+        </div>
+        <br>
+        <div id="current-path">
+            <button type="button" class="btn current-sub-path" value="" ng-click="enterFilesSubdir($event)"> {{locationDescription}} </button>
+            <button ng-repeat="subPath in currentPath.split('/') track by $index" ng-if="subPath" type="button" class="btn current-sub-path" value="{{currentPath.split('/').slice(0, $index+1).join('/')}}/" ng-click="enterFilesSubdir($event)"> {{(subPath.length > 30) ? subPath.substring(0, 30) + " ..." : subPath}} </button>
+        </div>
+        <br>
+        <div id="files-container" style="overflow-x: hidden; overflow-y: scroll; height: 270px;">
+            <ul id="files-ul">
+                <li ng-repeat="dir in directories" class="file-browser-dir" value="{{currentPath}}{{dir}}/" ng-click="switchSelected($event)" ng-dblclick="enterFilesSubdir($event)"> <i class="fa fa-folder-o"> </i> {{dir}} </li>
+                <li ng-repeat="file in files" class="file-browser-file" value="{{currentPath}}{{file}}" ng-click="switchSelected($event)"> <i class="fa fa-file-o"> </i> {{file}} </li>
+            </ul>
+        </div>
+        <br>
+        <label id="file-browser-error-message" style="color:red;"></label>
+    </div>
+
+    <div class="modal-footer">
+        <button class="btn btn-white file-browser-select-btn" ng-click="selectFile()" type="button"> Select </button>
+        <button class="btn btn-white close-modal-btn" type="button" ng-click="cancel()"> Close </button>
+    </div>
+</div>
