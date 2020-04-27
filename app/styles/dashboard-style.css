@@ -391,6 +391,19 @@
     z-index: 2060 !important;
 }
 
+.file-browser-modal.modal {
+    z-index: 2060 !important;
+}
+
+ul, #files-ul {
+    list-style-type: none;
+    padding-left: 5px;
+}
+
+.selected {
+    color: orange !important;
+}
+
 #add-3rd-party-cred-table td {
     padding-left: 10px;
     padding-right: 10px;
