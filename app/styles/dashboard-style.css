@@ -400,6 +400,14 @@ ul, #files-ul {
     padding-left: 5px;
 }
 
+.sub-path-btn {
+    margin-right: 3px;
+}
+
+#sub-path-home-btn {
+    margin-right: 0px;
+}
+
 .selected {
     color: orange !important;
 }
