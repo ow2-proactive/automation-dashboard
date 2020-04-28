@@ -14,9 +14,9 @@
             <button id="delete-file-btn" title="Delete" class="btn btn-white fa fa-trash" style="background-color:Transparent" ng-click="deleteFile()"></button>
         </div>
         <br>
-        <div id="current-path">
-            <button type="button" class="btn current-sub-path" value="" ng-click="enterFilesSubdir($event)"> {{locationDescription}} </button>
-            <button ng-repeat="subPath in currentPath.split('/') track by $index" ng-if="subPath" type="button" class="btn current-sub-path" value="{{currentPath.split('/').slice(0, $index+1).join('/')}}/" ng-click="enterFilesSubdir($event)"> {{(subPath.length > 30) ? subPath.substring(0, 30) + " ..." : subPath}} </button>
+        <div>
+            <button id="sub-path-home-btn" type="button" class="btn" value="" ng-click="enterFilesSubdir($event)"> {{locationDescription}} </button>
+            <button ng-repeat="subPath in currentPath.split('/') track by $index" ng-if="subPath" type="button" class="btn sub-path-btn" value="{{currentPath.split('/').slice(0, $index+1).join('/')}}/" ng-click="enterFilesSubdir($event)"> {{(subPath.length > 30) ? subPath.substring(0, 30) + " ..." : subPath}} </button>
         </div>
         <br>
         <div id="files-container" style="overflow-x: hidden; overflow-y: scroll; height: 270px;">
