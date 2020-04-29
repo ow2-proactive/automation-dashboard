@@ -1,7 +1,8 @@
-angular.module('workflow-variables').controller('FileBrowserModalCtrl', function($scope, $http, $uibModalInstance, dataspace, variable) {
+angular.module('workflow-variables').controller('FileBrowserModalCtrl', function($scope, $http, $uibModalInstance, $q, dataspace, variable) {
     var dataspaceRestUrl = JSON.parse(localStorage.restUrl) + "/data/" + dataspace + "/";
     var restRequestHeader = { headers: {'sessionid': getSessionId() }};
     var uploadRequest = undefined;
+    var canceller = $q.defer();
     $scope.currentPath = "";
     $scope.locationDescription = dataspace.toUpperCase() + " DataSpace";
 
@@ -74,7 +75,8 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                     method: "PUT",
                     data: selectedFile,
                     processData: false,
-                    headers: { "sessionid": getSessionId() }
+                    headers: { "sessionid": getSessionId() },
+                    timeout: canceller.promise
                 })
                 .success(function (data){
                     $scope.refreshFiles();
@@ -82,7 +84,11 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                     uploadRequest = undefined;
                 })
                 .error(function (xhr) {
-                    alert("Failed to upload the file " + selectedFile.name + ": "+ xhr.errorMessage);
+                    var errorMessage = "";
+                    if(xhr) {
+                        errorMessage = ": "+ xhr.errorMessage;
+                    }
+                    alert("Failed to upload the file " + selectedFile.name + errorMessage);
                     $scope.switchToNothingUploadingState();
                     uploadRequest = undefined;
                 });
@@ -108,7 +114,11 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                     $scope.refreshFiles();
                 })
                 .error(function (xhr) {
-                    alert("Failed to create the new folder " + pathname + ": "+ xhr.errorMessage);
+                    var errorMessage = "";
+                    if(xhr) {
+                        errorMessage = ": "+ xhr.errorMessage;
+                    }
+                    alert("Failed to create the new folder " + pathname + errorMessage);
                 });
             }
         });
@@ -152,7 +162,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
         if(uploadRequest) {
-            uploadRequest.abort();
+            canceller.resolve();
         }
     }
 
