@@ -96,7 +96,9 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     }
 
     $scope.createFolder = function() {
-        $("#files-ul").prepend('<li class="new-folder-li"> <i class="far fa-folder"> </i> <input class="new-folder" value="untitled-folder"/> </li>');
+        $("#files-ul").prepend('<li class="new-folder-li"> <i class="fa fa-folder-o"> </i> <input class="new-folder" value="untitled-folder"> </li>');
+        $('.new-folder').focus();
+        $('.new-folder').select();
         $(".new-folder").keyup(function(event) {
             if ($(this).is(":focus") && event.key == "Enter") {
                 var pathname = $scope.currentPath + $(this).val();
@@ -165,7 +167,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
             canceller.resolve();
         }
     }
-
+    // enable input inside the modal
+    $(document).off('focusin.modal');
     $scope.refreshFiles();
-
 });
