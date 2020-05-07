@@ -23,7 +23,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                 $scope.files = data.fileListing.sort();
                 $scope.directories = data.directoryListing.sort();
                 if(uploadRequest) {
-                    $scope.toggleUploading();
+                    $scope.isUploading = !$scope.isUploading;
                 }
             });
     }
@@ -88,7 +88,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
         var selectedFile = files[0];
         if (selectedFile) {
             var pathname = $scope.currentPath + selectedFile.name;
-            $scope.toggleUploading();
+            $scope.isUploading = !$scope.isUploading;
             uploadRequest = $http({
                     url: dataspaceRestUrl + encodeURIComponent(pathname),
                     method: "PUT",
@@ -99,7 +99,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                 })
                 .success(function (data){
                     $scope.refreshFiles();
-                    $scope.toggleUploading();
+                    $scope.isUploading = !$scope.isUploading;
                     uploadRequest = undefined;
                 })
                 .error(function (xhr) {
@@ -108,7 +108,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                         errorMessage = ": "+ xhr.errorMessage;
                     }
                     alert("Failed to upload the file " + selectedFile.name + errorMessage);
-                    $scope.toggleUploading();
+                    $scope.isUploading = !$scope.isUploading;
                     uploadRequest = undefined;
                 });
         }
@@ -176,10 +176,6 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                        });
             }
         });
-    }
-
-    $scope.toggleUploading = function() {
-        $scope.isUploading = !$scope.isUploading;
     }
 
     $scope.cancel = function () {
