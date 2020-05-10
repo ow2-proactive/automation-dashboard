@@ -305,6 +305,7 @@
             "templates/notification.html",
             "templates/basic-subscription.html",
             "templates/multi-subscription.html",
+            "templates/notification-filters-form.html",
             "templates/job-subscription-form.html",
             "templates/settings.html"
         ],
