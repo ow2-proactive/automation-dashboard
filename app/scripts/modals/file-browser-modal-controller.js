@@ -107,7 +107,11 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                     if(xhr) {
                         errorMessage = ": "+ xhr.errorMessage;
                     }
-                    alert("Failed to upload the file " + selectedFile.name + errorMessage);
+                    SweetAlert.swal({
+                       title: "Oops!!!",
+                       text: "Failed to upload the file " + selectedFile.name + errorMessage,
+                       type: 'error'
+                    });
                     $scope.isUploading = !$scope.isUploading;
                     uploadRequest = undefined;
                 });
@@ -137,7 +141,11 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                     if(xhr) {
                         errorMessage = ": "+ xhr.errorMessage;
                     }
-                    alert("Failed to create the new folder " + pathname + errorMessage);
+                    SweetAlert.swal({
+                       title: "Oops!!!",
+                       text: "Failed to create the new folder " + pathname + errorMessage,
+                       type: 'error'
+                    });
                 });
             }
         });
@@ -153,7 +161,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
             confirmMessage = "Are you sure you want to permanently delete the file " + selectedFilePath + " ?";
         }
         SweetAlert.swal({
-            title: "Are you sure?",
+            title: "Deleted!",
             text: confirmMessage,
             type: "warning",
             showCancelButton: true,
@@ -170,6 +178,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                        })
                        .error(function (xhr, status, error) {
                            SweetAlert.swal({
+                               title: "Oops!!!",
                                text: '"Failed to delete the file " + selectedFilePath + ": "+ xhr.statusText.',
                                type: 'error'
                            });
