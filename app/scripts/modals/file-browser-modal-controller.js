@@ -108,7 +108,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                         errorMessage = ": "+ xhr.errorMessage;
                     }
                     SweetAlert.swal({
-                       title: "Upload",
+                       title: "Oops!!!",
                        text: "Failed to upload the file " + selectedFile.name + errorMessage,
                        type: 'error'
                     });
@@ -142,7 +142,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                         errorMessage = ": "+ xhr.errorMessage;
                     }
                     SweetAlert.swal({
-                       title: "Create New Folder",
+                       title: "Oops!!!",
                        text: "Failed to create the new folder " + pathname + errorMessage,
                        type: 'error'
                     });
@@ -178,7 +178,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                        })
                        .error(function (xhr, status, error) {
                            SweetAlert.swal({
-                               title: "Deleted!",
+                               title: "Oops!!!",
                                text: '"Failed to delete the file " + selectedFilePath + ": "+ xhr.statusText.',
                                type: 'error'
                            });
