@@ -1,11 +1,11 @@
-angular.module('workflow-variables').controller('FileBrowserModalCtrl', function($scope, $http, $uibModalInstance, $q, dataspace, variable) {
+angular.module('workflow-variables').controller('FileBrowserModalCtrl', function($scope, $http, $uibModalInstance, $q, dataspace, variable, SweetAlert) {
     var dataspaceRestUrl = JSON.parse(localStorage.restUrl) + "/data/" + dataspace + "/";
     var restRequestHeader = { headers: {'sessionid': getSessionId() }};
     var uploadRequest = undefined;
     var canceller = $q.defer();
     $scope.currentPath = "";
     $scope.locationDescription = dataspace.toUpperCase() + " DataSpace";
-
+    $scope.isUploading = false;
     $scope.enterFilesSubdir = function (event) {
         $scope.currentPath = event.target.getAttribute('value');
         $scope.refreshFiles();
@@ -23,30 +23,49 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                 $scope.files = data.fileListing.sort();
                 $scope.directories = data.directoryListing.sort();
                 if(uploadRequest) {
-                    $scope.switchToUploadingState();
+                    $scope.isUploading = !$scope.isUploading;
                 }
             });
     }
 
     $scope.switchSelected = function(event) {
         var targetElementClass = event.target.classList;
-        if (targetElementClass.contains('selected')) {
+        if (targetElementClass.contains('active')) {
             // deselect
-            targetElementClass.remove("selected");
+            targetElementClass.remove("active");
         } else {
             // mark the previous selected item as non-selected, as only one item could be selected at once.
-            var selectedElement=$("ul#files-ul > li.selected");
+            var selectedElement=$("#files-tbody  td.active");
+            var selectedElementIcon;
             if (selectedElement) {
-                selectedElement.removeClass("selected");
+                selectedElementIcon = $("#files-tbody  td.active i");
+                // Lighten the icon
+                if(selectedElementIcon.hasClass("fa-file")){
+                    selectedElementIcon.removeClass("fa-file");
+                    selectedElementIcon.addClass("fa-file-o");
+                } else {
+                    selectedElementIcon.removeClass("fa-folder");
+                    selectedElementIcon.addClass("fa-folder-o");
+                }
+                selectedElement.removeClass("active");
             }
             // highlight currently selected item
-            targetElementClass.add("selected");
+            targetElementClass.add("active");
+            // Darken the icon
+            selectedElementIcon = $("#files-tbody  td.active i");
+            if(selectedElementIcon.hasClass("fa-file-o")){
+                selectedElementIcon.removeClass("fa-file-o");
+                selectedElementIcon.addClass("fa-file");
+            } else {
+                selectedElementIcon.removeClass("fa-folder-o");
+                selectedElementIcon.addClass("fa-folder");
+            }
             $("#file-browser-error-message").text("");
         }
     }
 
     $scope.selectFile = function() {
-        var selectedElement=$("ul#files-ul > li.selected");
+        var selectedElement=$("#files-container td.active");
         if (selectedElement.length == 0) {
             $("#file-browser-error-message").text("Cannot find any file selected: please select a regular file !");
             return;
@@ -69,7 +88,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
         var selectedFile = files[0];
         if (selectedFile) {
             var pathname = $scope.currentPath + selectedFile.name;
-            $scope.switchToUploadingState();
+            $scope.isUploading = !$scope.isUploading;
             uploadRequest = $http({
                     url: dataspaceRestUrl + encodeURIComponent(pathname),
                     method: "PUT",
@@ -80,7 +99,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                 })
                 .success(function (data){
                     $scope.refreshFiles();
-                    $scope.switchToNothingUploadingState();
+                    $scope.isUploading = !$scope.isUploading;
                     uploadRequest = undefined;
                 })
                 .error(function (xhr) {
@@ -89,14 +108,14 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                         errorMessage = ": "+ xhr.errorMessage;
                     }
                     alert("Failed to upload the file " + selectedFile.name + errorMessage);
-                    $scope.switchToNothingUploadingState();
+                    $scope.isUploading = !$scope.isUploading;
                     uploadRequest = undefined;
                 });
         }
     }
 
     $scope.createFolder = function() {
-        $("#files-ul").prepend('<li class="new-folder-li"> <i class="far fa-folder"> </i> <input class="new-folder" value="untitled-folder"/> </li>');
+        $("#files-tbody").prepend('<tr class="new-folder-li"><td> <i class="fa fa-folder-o"> </i> <input class="new-folder" value="untitled-folder"/> </td></tr>');
         $(".new-folder").keyup(function(event) {
             if ($(this).is(":focus") && event.key == "Enter") {
                 var pathname = $scope.currentPath + $(this).val();
@@ -125,11 +144,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     }
 
     $scope.deleteFile = function() {
-        var selectedElement=$("ul#files-ul > li.selected");
-        if (selectedElement.length == 0) {
-            alert("No file chosen to be deleted.");
-            return;
-        }
+        var selectedElement=$("#files-tbody  td.active");
         var selectedFilePath = selectedElement.attr('value');
         var confirmMessage;
         if(selectedElement.hasClass("file-browser-dir")) {
@@ -137,26 +152,30 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
         } else {
             confirmMessage = "Are you sure you want to permanently delete the file " + selectedFilePath + " ?";
         }
-        if (confirm(confirmMessage)) {
-            var url = dataspaceRestUrl + encodeURIComponent(selectedFilePath);
-            $http.delete(url, restRequestHeader)
-                .success(function (){
-                    $scope.refreshFiles();
-                })
-                .error(function (xhr, status, error) {
-                    alert("Failed to delete the file " + selectedFilePath + ": "+ xhr.statusText);
-                });
-        }
-    }
-
-    $scope.switchToUploadingState = function() {
-        $("#upload-file-btn").removeClass('fa-upload').addClass('fa-spinner fa-pulse');
-        $("#upload-file-btn").attr("disabled", true);
-    }
-
-    $scope.switchToNothingUploadingState = function() {
-        $("#upload-file-btn").removeClass('fa-spinner fa-pulse').addClass('fa-upload');
-        $("#upload-file-btn").attr("disabled", false);
+        SweetAlert.swal({
+            title: "Are you sure?",
+            text: confirmMessage,
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: "Yes, delete it!",
+            closeOnConfirm: false
+        }, function (isConfirm) {
+            if (isConfirm) {
+               var url = dataspaceRestUrl + encodeURIComponent(selectedFilePath);
+               $http.delete(url, restRequestHeader)
+                       .success(function (){
+                           $scope.refreshFiles();
+                           SweetAlert.swal("Deleted!", "Your " + selectedFilePath + " file has been deleted.", "success");
+                       })
+                       .error(function (xhr, status, error) {
+                           SweetAlert.swal({
+                               text: '"Failed to delete the file " + selectedFilePath + ": "+ xhr.statusText.',
+                               type: 'error'
+                           });
+                       });
+            }
+        });
     }
 
     $scope.cancel = function () {
