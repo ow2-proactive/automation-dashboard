@@ -120,6 +120,12 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
 
     $scope.createFolder = function() {
         $("#files-tbody").prepend('<tr class="new-folder-li"><td> <i class="fa fa-folder-o"> </i> <input class="new-folder" value="untitled-folder"/> </td></tr>');
+        // workaround to focus the cursor at the end of the input
+        var input = $(".new-folder");
+        var value = input.val();
+        input.focus().val("").blur().focus().val(value);
+
+        // Create the new folder in server side
         $(".new-folder").keyup(function(event) {
             if ($(this).is(":focus") && event.key == "Enter") {
                 var pathname = $scope.currentPath + $(this).val();
