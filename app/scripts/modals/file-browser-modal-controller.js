@@ -88,6 +88,14 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
         var selectedFile = files[0];
         if (selectedFile) {
             var pathname = $scope.currentPath + selectedFile.name;
+            if (selectedFile.name.includes(':')) {
+                SweetAlert.swal({
+                   title: "Oops!!!",
+                   text: "Failed to upload the file '" + selectedFile.name + "': it should not contain colon.",
+                   type: 'error'
+                });
+                return;
+            }
             $scope.isUploading = !$scope.isUploading;
             uploadRequest = $http({
                     url: dataspaceRestUrl + encodeURIComponent(pathname),
@@ -123,12 +131,20 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
         // workaround to focus the cursor at the end of the input
         var input = $(".new-folder");
         var value = input.val();
-        input.focus().val("").blur().focus().val(value);
+        input.focus().val("").blur().focus().val(value).select();
 
         // Create the new folder in server side
         $(".new-folder").keyup(function(event) {
             if ($(this).is(":focus") && event.key == "Enter") {
                 var pathname = $scope.currentPath + $(this).val();
+                if (pathname.includes(':')) {
+                    SweetAlert.swal({
+                       title: "Oops!!!",
+                       text: "Failed to create the new folder '" + pathname + "': it should not contain colon.",
+                       type: 'error'
+                    });
+                    return;
+                }
                 $http({
                     url: dataspaceRestUrl + encodeURIComponent(pathname),
                     method: "POST",
