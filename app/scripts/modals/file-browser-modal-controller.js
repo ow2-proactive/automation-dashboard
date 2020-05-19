@@ -20,12 +20,54 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
         $http.get(url + "?comp=list",
             restRequestHeader)
             .success(function (data){
-                $scope.files = data.fileListing.sort();
-                $scope.directories = data.directoryListing.sort();
+                $scope.files = $scope.getFilesMetadata(data.fileListing.sort());
+                $scope.directories = $scope.getFilesMetadata(data.directoryListing.sort());
                 if(uploadRequest) {
                     $scope.isUploading = !$scope.isUploading;
                 }
             });
+    }
+
+    $scope.getFilesMetadata = function(fileNames) {
+        var filesMetadata = [];
+        fileNames.forEach(function(filename, index) {
+            var filePath = $scope.currentPath + filename;
+            $http({
+                url: dataspaceRestUrl + encodeURIComponent(filePath),
+                method: "HEAD",
+                headers: { "sessionid": localStorage['pa.session'] },
+                async: false
+            })
+            .success(function (data, status, headers, config){
+                filesMetadata[index] = {
+                    name: filename,
+                    type: headers('x-proactive-ds-type'),
+                    modified: $scope.toDateInClientFormat(headers('Last-Modified'))
+                };
+                if(filesMetadata[index].type == 'FILE') {
+                    filesMetadata[index].type = headers('Content-Type');
+                    filesMetadata[index].size = $scope.toReadableFileSize(headers('Content-Length'));
+                }
+            });
+        });
+        return filesMetadata;
+    }
+
+    $scope.toReadableFileSize = function(size) {
+        if (typeof bytes !== 'number') {
+            size = parseInt(size);
+        }
+        var units = [' B', ' KB', ' MB', ' GB', ' TB']
+        var unitIndex = 0;
+        while(size >= 1024 && unitIndex < units.length - 1) {
+            size /= 1024 ;
+            unitIndex++;
+        }
+        return size.toFixed(1) + units[unitIndex];
+    },
+
+    $scope.toDateInClientFormat = function(serverDate) {
+        return new Date(serverDate).toLocaleString(undefined, { hour12: false });
     }
 
     $scope.switchSelected = function(event) {
