@@ -33,7 +33,8 @@
         "htmlFile": "workflow-automation/wf_automation.html",
         "secondaryHtmlFiles": [
             "modals/submit_window_wf_automation.html",
-            "modals/result_map_window_wf_automation.html"
+            "modals/result_map_window_wf_automation.html",
+            "modals/job_output_window_wf_automation.html"
         ],
         "notAvailablePage": "workflow-automation/page_not_available_wf_automation.html",
         "jsFiles": [
