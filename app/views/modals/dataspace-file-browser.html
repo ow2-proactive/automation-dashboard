@@ -33,7 +33,7 @@
             <li class="breadcrumb-item"  ng-repeat="subPath in currentPath.split('/') track by $index" ng-if="subPath"><a href="javascript:void(0)" value="{{currentPath.split('/').slice(0, $index+1).join('/')}}/" ng-click="enterFilesSubdir($event)">{{(subPath.length > 30) ? subPath.substring(0, 30) + " ..." : subPath}}</a></li>
         </ol>
         <br>
-        <div id="files-container" slim-scroll style="height: 270px; overflow-wrap: break-word;">
+        <div id="files-container" slim-scroll box-height="40vh" style="overflow-wrap: break-word;">
             <table class="table table-hover" style="background-color: white; width: 100%; table-layout:fixed;">
                 <thead>
                     <th width="35%">Name</th>
@@ -42,13 +42,13 @@
                     <th width="30%">Modified</th>
                 </thead>
                 <tbody id="files-tbody">
-                    <tr ng-repeat="dir in directories">
+                    <tr ng-repeat="dir in directories track by $index">
                         <td  class="file-browser-dir" value="{{currentPath}}{{dir.name}}/" ng-click="switchSelected($event)" ng-dblclick="enterFilesSubdir($event)"> <i class="fa fa-folder-o"> </i> {{dir.name}} </td>
                         <td> </td>
                         <td> Folder </td>
                         <td> {{dir.modified}} </td>
                     </tr>
-                    <tr ng-repeat="file in files">
+                    <tr ng-repeat="file in files track by $index">
                         <td  class="file-browser-file" value="{{currentPath}}{{file.name}}" ng-click="switchSelected($event)"> <i class="fa fa-file-o"> </i> {{file.name}} </td>
                         <td> {{file.size}} </td>
                         <td> {{file.type}} </td>
