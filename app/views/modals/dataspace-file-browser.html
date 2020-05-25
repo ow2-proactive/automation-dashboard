@@ -27,29 +27,29 @@
         <span class="font-bold m-r-xs">
                 {{'Location'|translate}} :
         </span>
-        <span><a href="javascript:void(0)" id="sub-path-home-btn" value="" ng-click="enterFilesSubdir($event)">/</a></span>
+        <span><a href="javascript:void(0)" id="sub-path-home-btn" value="" ng-click="enterDir($event)">/</a></span>
 
         <ol class="breadcrumb" style="background-color: transparent; border:none;display: inline-flex;">
-            <li class="breadcrumb-item"  ng-repeat="subPath in currentPath.split('/') track by $index" ng-if="subPath"><a href="javascript:void(0)" value="{{currentPath.split('/').slice(0, $index+1).join('/')}}/" ng-click="enterFilesSubdir($event)">{{(subPath.length > 30) ? subPath.substring(0, 30) + " ..." : subPath}}</a></li>
+            <li class="breadcrumb-item"  ng-repeat="subPath in currentPath.split('/') track by $index" ng-if="subPath"><a href="javascript:void(0)" value="{{currentPath.split('/').slice(0, $index+1).join('/')}}/" ng-click="enterDir($event)">{{(subPath.length > 30) ? subPath.substring(0, 30) + " ..." : subPath}}</a></li>
         </ol>
         <br>
         <div id="files-container" slim-scroll box-height="40vh" style="overflow-wrap: break-word;">
             <table class="table table-hover" style="background-color: white; width: 100%; table-layout:fixed;">
                 <thead>
-                    <th width="35%">Name</th>
-                    <th width="15%">Size</th>
-                    <th width="20%">Type</th>
-                    <th width="30%">Modified</th>
+                    <th>Name</th>
+                    <th width="80em">Size</th>
+                    <th width="120em">Type</th>
+                    <th width="140em">Modified</th>
                 </thead>
                 <tbody id="files-tbody">
-                    <tr ng-repeat="dir in directories track by $index">
-                        <td  class="file-browser-dir" value="{{currentPath}}{{dir.name}}/" ng-click="switchSelected($event)" ng-dblclick="enterFilesSubdir($event)"> <i class="fa fa-folder-o"> </i> {{dir.name}} </td>
+                    <tr class="file-browser-dir-tr" ng-repeat="dir in directories track by $index" ng-click="switchSelected($event)" ng-dblclick="enterFilesSubdir($event)">
+                        <td  class="file-browser-dir" value="{{currentPath}}{{dir.name}}/"> <i class="fa fa-folder-o"> </i> {{dir.name}} </td>
                         <td> </td>
                         <td> Folder </td>
                         <td> {{dir.modified}} </td>
                     </tr>
-                    <tr ng-repeat="file in files track by $index">
-                        <td  class="file-browser-file" value="{{currentPath}}{{file.name}}" ng-click="switchSelected($event)"> <i class="fa fa-file-o"> </i> {{file.name}} </td>
+                    <tr class="file-browser-file-tr" ng-repeat="file in files track by $index" ng-click="switchSelected($event)" >
+                        <td  class="file-browser-file" value="{{currentPath}}{{file.name}}"> <i class="fa fa-file-o"> </i> {{file.name}} </td>
                         <td> {{file.size}} </td>
                         <td> {{file.type}} </td>
                         <td> {{file.modified}} </td>
