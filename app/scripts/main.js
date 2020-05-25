@@ -17,6 +17,7 @@ function getProperties($http, $location) {
             var rmRestUrl = angular.toJson(response.confServer.rmRestUrl, true);
             var notificationServiceUrl = angular.toJson(response.confServer.notificationServiceUrl, true);
             var catalogServiceUrl = angular.toJson(response.confServer.catalogServiceUrl, true);
+            var wfAutomationQueryPeriod = angular.toJson(response.wfAutomationQueryPeriod, true);
             var cloudAutomationQueryPeriod = angular.toJson(response.cloudAutomationQueryPeriod, true);
             var wfAutomationLast24hHistoryPeriod = angular.toJson(response.wfAutomationLast24hHistoryPeriod, true);
             var cloudWatchPortalQueryPeriod = angular.toJson(response.cloudWatchPortalQueryPeriod, true);
@@ -44,6 +45,7 @@ function getProperties($http, $location) {
             localStorage['genericCatalogPortalQueryPeriod'] = genericCatalogPortalQueryPeriod;
             localStorage['notificationPortalQueryPeriod'] = notificationPortalQueryPeriod;
             localStorage['cloudAutomationQueryPeriod'] = cloudAutomationQueryPeriod;
+            localStorage['wfAutomationQueryPeriod'] = wfAutomationQueryPeriod;
             localStorage['cloudWatchPortalQueryPeriod'] = cloudWatchPortalQueryPeriod;
             localStorage['wfAutomationLast24hHistoryPeriod'] = wfAutomationLast24hHistoryPeriod;
             localStorage['jobAnalyticsPortalRefreshRate'] = jobAnalyticsPortalRefreshRate;
