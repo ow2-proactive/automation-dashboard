@@ -6,9 +6,19 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     $scope.currentPath = "";
     $scope.locationDescription = dataspace.toUpperCase() + " DataSpace";
     $scope.isUploading = false;
-    $scope.enterFilesSubdir = function (event) {
+
+    $scope.enterDir = function (event) {
         $scope.currentPath = event.target.getAttribute('value');
         $scope.refreshFiles();
+    }
+
+    $scope.enterFilesSubdir = function (event) {
+        var clickedRow = $(event.target.parentElement)
+        var clickedDir = clickedRow.children(".file-browser-dir");
+        if( clickedDir ){
+            $scope.currentPath = clickedDir.attr('value');
+            $scope.refreshFiles();
+        }
     }
 
     $scope.refreshFiles = function() {
@@ -71,30 +81,9 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     }
 
     $scope.switchSelected = function(event) {
-        var targetElementClass = event.target.classList;
-        if (targetElementClass.contains('active')) {
-            // deselect
-            targetElementClass.remove("active");
-        } else {
-            // mark the previous selected item as non-selected, as only one item could be selected at once.
-            var selectedElement=$("#files-tbody  td.active");
-            var selectedElementIcon;
-            if (selectedElement) {
-                selectedElementIcon = $("#files-tbody  td.active i");
-                // Lighten the icon
-                if(selectedElementIcon.hasClass("fa-file")){
-                    selectedElementIcon.removeClass("fa-file");
-                    selectedElementIcon.addClass("fa-file-o");
-                } else {
-                    selectedElementIcon.removeClass("fa-folder");
-                    selectedElementIcon.addClass("fa-folder-o");
-                }
-                selectedElement.removeClass("active");
-            }
-            // highlight currently selected item
-            targetElementClass.add("active");
-            // Darken the icon
-            selectedElementIcon = $("#files-tbody  td.active i");
+        var targetRow = $(event.target.parentElement)
+        function darkenIcon() {
+            var selectedElementIcon = $("#files-tbody  tr.active i");
             if(selectedElementIcon.hasClass("fa-file-o")){
                 selectedElementIcon.removeClass("fa-file-o");
                 selectedElementIcon.addClass("fa-file");
@@ -102,17 +91,42 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                 selectedElementIcon.removeClass("fa-folder-o");
                 selectedElementIcon.addClass("fa-folder");
             }
+        }
+        function lightenIcon() {
+            var selectedElementIcon = $("#files-tbody  tr.active i");
+            if(selectedElementIcon.hasClass("fa-file")){
+                selectedElementIcon.removeClass("fa-file");
+                selectedElementIcon.addClass("fa-file-o");
+            } else {
+                selectedElementIcon.removeClass("fa-folder");
+                selectedElementIcon.addClass("fa-folder-o");
+            }
+        }
+        if (targetRow.hasClass('active')) {
+            // deselect
+            lightenIcon();
+            targetRow.removeClass("active");
+        } else {
+            // mark the previous selected item as non-selected, as only one item could be selected at once.
+            var selectedElement=$("#files-tbody  tr.active");
+            if (selectedElement && selectedElement.length != 0) {
+                lightenIcon();
+                selectedElement.removeClass("active");
+            }
+            // highlight currently selected item
+            targetRow.addClass("active");
+            darkenIcon();
             $("#file-browser-error-message").text("");
         }
     }
 
     $scope.selectFile = function() {
-        var selectedElement=$("#files-container td.active");
+        var selectedElement=$("#files-container tr.active");
         if (selectedElement.length == 0) {
             $("#file-browser-error-message").text("Cannot find any file selected: please select a regular file !");
             return;
         }
-        var selectedFile = selectedElement.filter(".file-browser-file");
+        var selectedFile = selectedElement.children(".file-browser-file");
         if (selectedFile.length == 0) {
             $("#file-browser-error-message").text("Directory is disallowed as the variable value: please select a regular file !");
         } else {
@@ -216,7 +230,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     }
 
     $scope.deleteFile = function() {
-        var selectedElement=$("#files-tbody  td.active");
+        var selectedElement=$("#files-tbody  tr.active").children().first();
         var selectedFilePath = selectedElement.attr('value');
         var confirmMessage;
         if(selectedElement.hasClass("file-browser-dir")) {
