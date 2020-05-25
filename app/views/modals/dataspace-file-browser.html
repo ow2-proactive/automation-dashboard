@@ -36,10 +36,10 @@
         <div id="files-container" slim-scroll box-height="40vh" style="overflow-wrap: break-word;">
             <table class="table table-hover" style="background-color: white; width: 100%; table-layout:fixed;">
                 <thead>
-                    <th width="35%">Name</th>
-                    <th width="15%">Size</th>
-                    <th width="20%">Type</th>
-                    <th width="30%">Modified</th>
+                    <th>Name</th>
+                    <th width="80em">Size</th>
+                    <th width="120em">Type</th>
+                    <th width="140em">Modified</th>
                 </thead>
                 <tbody id="files-tbody">
                     <tr class="file-browser-dir-tr" ng-repeat="dir in directories track by $index" ng-click="switchSelected($event)" ng-dblclick="enterFilesSubdir($event)">
