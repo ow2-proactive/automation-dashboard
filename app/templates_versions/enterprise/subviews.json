@@ -242,7 +242,8 @@
             "modals/rule_edition.html",
             "modals/rule_submission.html",
             "modals/rule_instance_info_modal.html",
-            "modals/rule_instance_history_modal.html"
+            "modals/rule_instance_history_modal.html",
+            "modals/rule_error_history_modal.html"
         ],
         "notAvailablePage": "page_not_available_cloud_watch.html",
         "jsFiles": [
@@ -259,6 +260,7 @@
             "scripts/modals/activate-rule-modal.js",
             "scripts/modals/rule-instance-info-modal.js",
             "scripts/modals/rule-instance-history-modal.js",
+            "scripts/modals/rule-error-history-modal.js",
             "scripts/cloud-watch-rules-fired-jobs.js"
         ],
         "angularModuleName": "cloud-watch",
