@@ -33,7 +33,8 @@
         "htmlFile": "workflow-automation/wf_automation.html",
         "secondaryHtmlFiles": [
             "modals/submit_window_wf_automation.html",
-            "modals/result_map_window_wf_automation.html"
+            "modals/result_map_window_wf_automation.html",
+            "modals/job_output_window_wf_automation.html"
         ],
         "notAvailablePage": "workflow-automation/page_not_available_wf_automation.html",
         "jsFiles": [
@@ -242,7 +243,8 @@
             "modals/rule_edition.html",
             "modals/rule_submission.html",
             "modals/rule_instance_info_modal.html",
-            "modals/rule_instance_history_modal.html"
+            "modals/rule_instance_history_modal.html",
+            "modals/rule_error_history_modal.html"
         ],
         "notAvailablePage": "page_not_available_cloud_watch.html",
         "jsFiles": [
@@ -259,6 +261,7 @@
             "scripts/modals/activate-rule-modal.js",
             "scripts/modals/rule-instance-info-modal.js",
             "scripts/modals/rule-instance-history-modal.js",
+            "scripts/modals/rule-error-history-modal.js",
             "scripts/cloud-watch-rules-fired-jobs.js"
         ],
         "angularModuleName": "cloud-watch",
