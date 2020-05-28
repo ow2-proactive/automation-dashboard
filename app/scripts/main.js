@@ -17,6 +17,7 @@ function getProperties($http, $location) {
             var rmRestUrl = angular.toJson(response.confServer.rmRestUrl, true);
             var notificationServiceUrl = angular.toJson(response.confServer.notificationServiceUrl, true);
             var catalogServiceUrl = angular.toJson(response.confServer.catalogServiceUrl, true);
+            var wfAutomationQueryPeriod = angular.toJson(response.wfAutomationQueryPeriod, true);
             var cloudAutomationQueryPeriod = angular.toJson(response.cloudAutomationQueryPeriod, true);
             var wfAutomationLast24hHistoryPeriod = angular.toJson(response.wfAutomationLast24hHistoryPeriod, true);
             var cloudWatchPortalQueryPeriod = angular.toJson(response.cloudWatchPortalQueryPeriod, true);
@@ -44,6 +45,7 @@ function getProperties($http, $location) {
             localStorage['genericCatalogPortalQueryPeriod'] = genericCatalogPortalQueryPeriod;
             localStorage['notificationPortalQueryPeriod'] = notificationPortalQueryPeriod;
             localStorage['cloudAutomationQueryPeriod'] = cloudAutomationQueryPeriod;
+            localStorage['wfAutomationQueryPeriod'] = wfAutomationQueryPeriod;
             localStorage['cloudWatchPortalQueryPeriod'] = cloudWatchPortalQueryPeriod;
             localStorage['wfAutomationLast24hHistoryPeriod'] = wfAutomationLast24hHistoryPeriod;
             localStorage['jobAnalyticsPortalRefreshRate'] = jobAnalyticsPortalRefreshRate;
@@ -364,6 +366,14 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
             angular.element('#context-menu').css('left', (clickEvent['clientX'] - contextMenuWidth) + 'px')
         }
 
+    };
+
+    /**
+     * Lose focus (blur) on the given element. Useful to lose :focus styling after pressing a button
+     * @param elementSelector jQuery light selector expression
+     */
+    $scope.loseFocusForElement = function(elementSelector){
+        angular.element(elementSelector)[0].blur();
     }
 });
 
@@ -380,6 +390,8 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             $scope.changeFavicon('analytics-portal');
         } else if(jobPlannerChildren.indexOf(portal) !== -1){
             $scope.changeFavicon('job-planner-portal');
+        } else if(splitUrl[splitUrl.length-1] === "workflow-automation"){
+            $scope.changeFavicon("automation_dashboard_30");
         } else {
             $scope.changeFavicon(splitUrl[splitUrl.length-1]);
         }
@@ -436,10 +448,12 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     }
 
     function queryNotificationService() {
-        var eventsUrlPrefix = JSON.parse(localStorage['notificationServiceUrl']) + 'notifications';
+        var eventsUrlPrefix = JSON.parse(localStorage['notificationServiceUrl']) + 'notifications/unreadCount';
         $http.get(eventsUrlPrefix, {headers: {'sessionID': getSessionId()}})
             .success(function (response) {
-                updateNotificationsLabel(response);
+                if(Number.isInteger(response)){
+                    $scope.nbNewNotifications=response;
+                }
             })
             .error(function (response) {
                 console.error('Error while querying notification service: ', response);
@@ -457,16 +471,6 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     $rootScope.$on('event:updatedNotificationsCount', function (event, data) {
         $scope.nbNewNotifications = data['count'];
     });
-
-    function updateNotificationsLabel(notifications) {
-        var nbNewNotifications = 0;
-        angular.forEach(notifications, function (notification) {
-            if (!notification.hasRead) {
-                nbNewNotifications++;
-            }
-        });
-        $scope.nbNewNotifications = nbNewNotifications;
-    }
 
     //Set the locally stored language as default value for the language dropdown menu
     function setDefaultSelectedLanguage(language) {
@@ -533,6 +537,12 @@ mainModule.controller('logoutController', function ($scope, $state) {
         $scope.closeSession();
     };
 });
+
+mainModule.controller('footerController', function ($scope) {
+    $scope.year = new Date().getFullYear();
+});
+
+
 
 mainModule.directive('ngRightClick', function ($parse) {
     return {

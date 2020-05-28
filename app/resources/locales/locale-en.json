@@ -34,5 +34,13 @@
   "Password": "Password",
   "Connect": "Connect",
   "Unable to login": "Unable to login",
-  "Or create an account": "Or create an account"
+  "Or create an account": "Or create an account",
+  "Refresh files": "Refresh files",
+  "New folder": "New folder",
+  "Upload a file": "Upload a file",
+  "Delete the selected file or folder": "Delete the selected file or folder",
+  "Select": "Select",
+  "Location": "Location",
+  "Click to open in scheduler portal": "Click to open in scheduler portal",
+  "All rights reserved":"All rights reserved"
 }

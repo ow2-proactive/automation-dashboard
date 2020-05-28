@@ -34,5 +34,13 @@
   "Password": "Senha",
   "Connect": "Conectar",
   "Unable to login": "Incapaz de entrar",
-  "Or create an account": "Ou criar uma conta"
+  "Or create an account": "Ou criar uma conta",
+  "Refresh files": "Atualizar arquivos",
+  "New folder": "Nova pasta",
+  "Upload a file": "Carregar um arquivo",
+  "Delete the selected file or folder": "Excluir o arquivo ou pasta selecionado",
+  "Select": "Selecione",
+  "Location": "Localização",
+  "Click to open in scheduler portal": "Clique para abrir no portal do scheduler",
+  "All rights reserved":"Todos os direitos reservados"
 }

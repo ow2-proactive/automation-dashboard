@@ -1,4 +1,4 @@
-.btn.nohover  {
+.btn.nohover {
     pointer-events: none;
 }
 
@@ -6,8 +6,8 @@
     pointer-events: none;
 }
 
-.panel-default{
-    cursor:pointer;
+.panel-default {
+    cursor: pointer;
 }
 
 .panel-body {
@@ -15,20 +15,20 @@
 }
 
 .panel-selected {
-  border-color: #353535;
+    border-color: #353535;
 }
 
 .panel-selected > .panel-footer {
-  color: #353535;
-  background-color: #bababa;
-  border-color: #353535;
+    color: #353535;
+    background-color: #bababa;
+    border-color: #353535;
 }
 
-.clickable-element{
-    cursor:pointer;
+.clickable-element {
+    cursor: pointer;
 }
 
-.object-box-footer{
+.object-box-footer {
     height: 4.7em;
     word-wrap: break-word;
     display: -webkit-box;
@@ -54,8 +54,8 @@
     display: block;
     max-width: 100%;
     max-height: 100%;
-    margin-left : auto;
-    margin-right : auto;
+    margin-left: auto;
+    margin-right: auto;
 }
 
 .object-box:hover > .panel-body {
@@ -63,17 +63,17 @@
 }
 
 .object-box > .panel-body {
-    padding : 12px;
+    padding: 12px;
 }
 
 .modal-title {
-  margin-top: 5px;
-  font-weight: 600;
-  font-size: 14px;
+    margin-top: 5px;
+    font-weight: 600;
+    font-size: 14px;
 }
 
 .ibox-heading {
-    background-color : unset !important;
+    background-color: unset !important;
 }
 
 .moment-picker {
@@ -85,46 +85,47 @@
 }
 
 .context-menu {
-  position: fixed;
-  top: 0px;
-  left: 0px;
-  z-index: 10;
-  padding: 12px 0;
-  width: 240px;
-  background-color: #fff;
-  border: solid 1px #dfdfdf;
-  box-shadow: 1px 1px 2px #cfcfcf;
+    position: fixed;
+    top: 0px;
+    left: 0px;
+    z-index: 10;
+    padding: 12px 0;
+    width: 240px;
+    background-color: #fff;
+    border: solid 1px #dfdfdf;
+    box-shadow: 1px 1px 2px #cfcfcf;
 
 }
 
 .context-menu--active {
-  display: block;
+    display: block;
 }
 
 .context-menu__items {
-  list-style: none;
-  margin: 0;
-  padding: 0;
+    list-style: none;
+    margin: 0;
+    padding: 0;
 }
 
 .context-menu__item {
-  display: block;
-  margin-bottom: 4px;
+    display: block;
+    margin-bottom: 4px;
 }
 
 .context-menu__link {
-  display: block;
-  padding: 4px 12px;
-  color: #0066aa;
-  text-decoration: none;
-  cursor: pointer;
+    display: block;
+    padding: 4px 12px;
+    color: #0066aa;
+    text-decoration: none;
+    cursor: pointer;
 }
 
 .context-menu__items li:hover {
-  background-color: #DEF;
+    background-color: #DEF;
 }
 
 .footer {
+    position: fixed !important;
     z-index: 25;
 }
 
@@ -134,7 +135,7 @@
     white-space: nowrap;
 }
 
-.disabled-fa-button, button[disabled="disabled"]{
+.disabled-fa-button, button[disabled="disabled"] {
     color: darkgray;
     cursor: not-allowed !important;
 }
@@ -142,6 +143,7 @@
 .waiting, .waiting * {
     cursor: wait !important;
 }
+
 .chart-toolbtn {
     position: absolute;
     top: 0px;
@@ -186,6 +188,14 @@
     margin-bottom: 3px;
 }
 
+.gantt-execution-event-pending-part {
+    border-right: none;
+}
+
+.gantt-execution-event-executing-part {
+    border-left: none;
+}
+
 .gantt-date-change-button {
     height: 80%;
     padding: 7px;
@@ -193,73 +203,89 @@
     border: 1px solid #e7eaec;
     background: none;
 }
-.gantt-date-change-button:active , .gantt-date-change-button:focus , .gantt-date-change-button:hover {
-    background : #e6e6e6
+
+.gantt-date-change-button:active, .gantt-date-change-button:focus, .gantt-date-change-button:hover {
+    background: #e6e6e6
 }
+
 .gantt-scales-btn-group {
     margin: 0px 10px;
     display: flex;
 }
+
 .gantt-side {
-    min-width : 150px;
-    width : 300px;
+    min-width: 150px;
+    width: 300px;
 }
+
 .gantt-scales-btn-group label {
     font-size: 12px;
     height: 80%;
 }
+
 #gantt-legend-panel {
     position: absolute;
-    top : 60px;
+    top: 60px;
     left: 60px;
     z-index: 2002;
     display: grid;
-    cursor : move;
+    cursor: move;
     width: 520px;
 }
+
 #gantt-legend-panel .legend-color {
     width: 60px;
-    height:20px;
+    height: 20px;
     margin: 5px;
     border-radius: 2px;
 }
+
 #gantt-legend-panel .legend-title {
     margin-top: 7px;
     font-weight: 600;
 }
+
 #legend-wrapper {
     display: grid;
 }
+
 #legend-group-task-container {
     display: inline-flex;
     margin: 5px;
 }
+
 #legend-group-task-main {
     width: 60px;
     height: 10px;
     background: rgb(99, 136, 205);
 }
+
 #legend-group-task-before {
     margin-right: -10px;
 }
+
 #legend-group-task-after {
     margin-left: -10px;
 }
+
 #legend-group-task-before, #legend-group-task-after {
     margin-top: 10px;
     border-left: 5px solid transparent;
     border-right: 5px solid transparent;
     border-top: 10px solid rgb(99, 136, 205);
 }
+
 #gantt-action-buttons-panel {
     margin-left: auto;
     display: inline-flex;
 }
+
 #gantt-action-buttons-panel button {
     width: 140px;
     height: 30px;
     margin: 20px 5px 10px 5px;
 }
+
 #refresh-gantt-button {
     margin-left: 10px;
     background-color: #d9534f;
@@ -267,6 +293,7 @@
     border-radius: 3px;
     border: none;
 }
+
 #gantt-last-refresh-date {
     color: #d9534f;
     font-weight: bold;
@@ -275,12 +302,12 @@
 }
 
 .gantt-task-info-content {
-    color:rgba(70,101,158);
+    color: rgba(70, 101, 158);
     font-weight: 600;
 }
 
 .gantt-current-date-line {
-    border:2px dotted #d9534f;
+    border: 2px dotted #d9534f;
     z-index: 1;
 }
 
@@ -288,18 +315,18 @@
     margin: 7px 2px;
 }
 
-@media (max-width: 1199px){
+@media (max-width: 1199px) {
     .pa-shortcut {
         width: 0px !important;
         padding: 0px;
     }
 
-    .pa-shortcuts:not(.logout-btn){
+    .pa-shortcuts:not(.logout-btn) {
         width: 45px !important;
     }
 }
 
-@media (max-width: 768px){
+@media (max-width: 768px) {
     .second-row-bar {
         display: none;
     }
@@ -364,9 +391,33 @@
     z-index: 2060 !important;
 }
 
+.file-browser-modal.modal {
+    z-index: 2060 !important;
+    overflow-y: auto !important;
+}
+
+#files-body .breadcrumb>li a{
+    color: #337ab7;
+}
+
+#files-tbody {
+    cursor: pointer;
+}
+.sub-path-btn {
+    margin-right: 3px;
+}
+
+#sub-path-home-btn {
+    margin-right: 0px;
+}
+
+.selected {
+    color: orange !important;
+}
+
 #add-3rd-party-cred-table td {
-    padding-left:10px;
-    padding-right:10px;
+    padding-left: 10px;
+    padding-right: 10px;
 }
 
 #new-cred-key.ng-invalid:focus {
@@ -377,4 +428,195 @@
     text-align: justify;
     white-space: pre-wrap;
     font-family: inherit;
+}
+
+.ui-select-container {
+    width: 100%;
+}
+
+.ui-select-multiple.ui-select-bootstrap .ui-select-match-item {
+    background-color: #1ab39342;
+    color: inherit;
+}
+
+.ui-select-multiple.ui-select-bootstrap .ui-select-match .close {
+    line-height: 0.9;
+}
+
+.inline-flex {
+    display: -webkit-inline-flex;
+    display: inline-flex;
+}
+
+.blank-icon {
+    width: 19px;
+}
+
+/* iCheck plugin Square skin, green
+----------------------------------- */
+.icheckbox_square-green,
+.iradio_square-green {
+    display: inline-block;
+    *display: inline;
+    vertical-align: middle;
+    margin: 0;
+    padding: 0;
+    width: 22px;
+    height: 22px;
+    background: url(patterns/green.png) no-repeat;
+    border: none;
+    cursor: pointer;
+}
+
+.icheckbox_square-green {
+    background-position: 0 0;
+}
+
+.icheckbox_square-green.hover {
+    background-position: -24px 0;
+}
+
+.icheckbox_square-green.checked {
+    background-position: -48px 0;
+}
+
+.icheckbox_square-green.disabled {
+    background-position: -72px 0;
+    cursor: default;
+}
+
+.icheckbox_square-green.checked.disabled {
+    background-position: -96px 0;
+}
+
+.iradio_square-green {
+    background-position: -120px 0;
+}
+
+.iradio_square-green.hover {
+    background-position: -144px 0;
+}
+
+.iradio_square-green.checked {
+    background-position: -168px 0;
+}
+
+.iradio_square-green.disabled {
+    background-position: -192px 0;
+    cursor: default;
+}
+
+.iradio_square-green.checked.disabled {
+    background-position: -216px 0;
+}
+
+/* HiDPI support */
+@media (-o-min-device-pixel-ratio: 5/4), (-webkit-min-device-pixel-ratio: 1.25), (min-resolution: 120dpi) {
+    .icheckbox_square-green,
+    .iradio_square-green {
+        background-image: url(patterns/green@2x.png);
+        -webkit-background-size: 240px 24px;
+        background-size: 240px 24px;
+    }
+}
+
+#backtop {
+    opacity: 0;
+    transition: all .3s ease-out;
+    position: fixed;
+    z-index: 9999;
+    bottom: 50px;
+    right: 30px;
+}
+
+#backtop button {
+    outline: none;
+    border: 0;
+    padding: 6px 12px;
+    background: #1ab394;
+    color: #FFF;
+    -webkit-border-radius: 4px;
+    -moz-border-radius: 4px;
+    border-radius: 4px;
+    border: none;
+    text-shadow: 0 -1px 0 rgba(0, 0, 0, 0.4);
+    -webkit-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+    -moz-box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2);
+    box-shadow: inset 0 1px 0 rgba(255, 255, 255, 0.4), 0 1px 1px rgba(0, 0, 0, 0.2)
+}
+
+
+#backtop button:hover, #backtop button:focus {
+    background: #18a689
+}
+
+#backtop button:active {
+    -webkit-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+    -moz-box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+    box-shadow: inset 0 1px 4px rgba(0, 0, 0, 0.6);
+    background: #18a689
+}
+
+#backtop button:hover {
+    cursor: pointer;
+}
+
+.show {
+    opacity: 1 !important;
+}
+
+.icon-badge {
+    background-color: rgb(237, 85, 101) !important;
+    position: absolute !important;
+    top: -4px !important;
+    right: -4px !important;
+    padding-left: 5px !important;
+    padding-right: 5px !important;
+}
+
+.container-flex {
+    display: -moz-flex;
+    display: -ms-inline-flexbox;
+    display: -webkit-inline-flex;
+    display: inline-flex;
+    align-items: center;
+}
+
+.container-flexbox {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+    align-items: center;
+}
+
+.w-100 {
+    width: 100%;
+}
+
+.ibox-content > .sk-spinner {
+    display: none;
+}
+.ibox-content.sk-loading {
+    position: relative;
+}
+.ibox-content.sk-loading:after {
+    content: '';
+    background-color: rgba(255, 255, 255, 0.7);
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    width: 100%;
+    height: 100%;
+}
+.ibox-content.sk-loading > .sk-spinner {
+    display: block;
+    position: absolute;
+    top: 40%;
+    left: 0;
+    right: 0;
+    z-index: 2000;
 }

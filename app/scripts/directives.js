@@ -9,8 +9,8 @@
  */
 function pageTitle($rootScope, $timeout) {
     return {
-        link: function(scope, element) {
-            var listener = function(event, toState, toParams, fromState, fromParams) {
+        link: function (scope, element) {
+            var listener = function (event, toState, toParams, fromState, fromParams) {
                 // Default title - load on Dashboard 1
                 var title = 'ProActive Automation Dashboard';
                 // Create your own title pattern
@@ -18,7 +18,7 @@ function pageTitle($rootScope, $timeout) {
                     title += ' | ' + toState.data.pageTitle;
                 }
 
-                $timeout(function() {
+                $timeout(function () {
                     element.text(title);
                 });
             };
@@ -33,9 +33,9 @@ function pageTitle($rootScope, $timeout) {
 function sideNavigation($timeout) {
     return {
         restrict: 'A',
-        link: function(scope, element) {
+        link: function (scope, element) {
             // Call the metsiMenu plugin and plug it to sidebar navigation
-            $timeout(function(){
+            $timeout(function () {
                 element.metisMenu();
             });
         }
@@ -83,7 +83,7 @@ function minimalizaSidebar($timeout) {
         template: '<a class="navbar-minimalize minimalize-styl-2 btn btn-primary" style="color: #002d66" href="" ng-click="minimalize()" ><i class="fa fa-bars" style="color: #002d66"></i></a>',
         controller: function ($scope, $element) {
             $scope.minimalize = function () {
-                $("body").toggleClass("mini-navbar");
+                $('body').toggleClass('mini-navbar');
                 if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
                     // Hide menu in order to smoothly turn on when maximize menu
                     $('#side-menu').hide();
@@ -92,7 +92,7 @@ function minimalizaSidebar($timeout) {
                         function () {
                             $('#side-menu').fadeIn(400);
                         }, 200);
-                } else if ($('body').hasClass('fixed-sidebar')){
+                } else if ($('body').hasClass('fixed-sidebar')) {
                     $('#side-menu').hide();
                     setTimeout(
                         function () {
@@ -142,7 +142,7 @@ function iboxToolsFullScreen($timeout) {
                 $('body').toggleClass('fullscreen-ibox-mode');
                 button.toggleClass('fa-expand').toggleClass('fa-compress');
                 ibox.toggleClass('fullscreen');
-                setTimeout(function() {
+                setTimeout(function () {
                     $(window).trigger('resize');
                 }, 100);
             }
@@ -151,16 +151,53 @@ function iboxToolsFullScreen($timeout) {
 }
 
 /**
+ * icheck - Directive for custom checkbox icheck
+ */
+function icheck($timeout) {
+    return {
+        restrict: 'A',
+        require: 'ngModel',
+        link: function ($scope, element, $attrs, ngModel) {
+            return $timeout(function () {
+                var value;
+                value = $attrs['value'];
+
+                $scope.$watch($attrs['ngModel'], function (newValue) {
+                    $(element).iCheck('update');
+                })
+
+                return $(element).iCheck({
+                    checkboxClass: 'icheckbox_square-green',
+                    radioClass: 'iradio_square-green'
+
+                }).on('ifChanged', function (event) {
+                    if ($(element).attr('type') === 'checkbox' && $attrs['ngModel']) {
+                        $scope.$apply(function () {
+                            return ngModel.$setViewValue(event.target.checked);
+                        });
+                    }
+                    if ($(element).attr('type') === 'radio' && $attrs['ngModel']) {
+                        return $scope.$apply(function () {
+                            return ngModel.$setViewValue(value);
+                        });
+                    }
+                });
+            });
+        }
+    };
+}
+
+/**
  * slimScroll - Directive for slimScroll with custom height
  */
-function slimScroll($timeout){
+function slimScroll($timeout) {
     return {
         restrict: 'A',
         scope: {
             boxHeight: '@'
         },
-        link: function(scope, element) {
-            $timeout(function(){
+        link: function (scope, element) {
+            $timeout(function () {
                 element.slimscroll({
                     height: scope.boxHeight,
                     railOpacity: 0.9
@@ -171,15 +208,92 @@ function slimScroll($timeout){
     };
 }
 
+
+/**
+ * backToTop - from https://github.com/padsbanger/angular-backtop
+ * with slight modifications to remove themes
+ */
+function backToTop() {
+    return {
+        restrict: 'E',
+        transclude: true,
+        replace: true,
+        template: '<div id="backtop"><button><div ng-transclude></div></button></div>',
+        scope: {
+            text: "@buttonText",
+            speed: "@scrollSpeed"
+        },
+        link: function(scope, element) {
+
+            scope.text = scope.text || 'Scroll top';
+            scope.speed = parseInt(scope.speed, 10) || 300;
+
+            var speed = Math.round(scope.speed / 100);
+            var onscroll = function() {
+                if (window.pageYOffset > 0) {
+                    if(!element.showing){
+                        element.addClass('show');
+                        element.showing = true;
+                    }
+                } else {
+                    element.removeClass('show');
+                    element.showing = false;
+                }
+            };
+
+            scope.currentYPosition = function() {
+                if (document.documentElement && document.documentElement.scrollTop)
+                    return document.documentElement.scrollTop;
+                if (document.body.scrollTop)
+                    return document.body.scrollTop;
+                return 0;
+            };
+
+            element.showing = false;
+            element.on('click', function() {
+                window.removeEventListener("scroll", onscroll);
+
+                element.removeClass('show');
+                element.showing = false;
+
+                var startY = scope.currentYPosition();
+
+                var step = Math.round(startY / 25);
+                var leapY = startY < 100 ? 0 : startY - step;
+
+                var scrollInterval = setInterval(function(){
+                    window.scrollTo(0, leapY)
+                    if(!leapY){
+                        clearInterval(scrollInterval);
+                        window.addEventListener("scroll", onscroll)
+                    }
+
+                    leapY -= step;
+
+                    if(leapY < 0) leapY = 0;
+                }, speed)
+            });
+
+            window.addEventListener("scroll", onscroll);
+            scope.$on("$destroy", function(){
+                window.removeEventListener("scroll", onscroll)
+            })
+        }
+    };
+
+}
+
 /**
  *
  * Pass all functions into module
  */
 angular
     .module('inspinia')
+    .directive('iboxTools', iboxTools)
+    .directive('iboxToolsFullScreen', iboxToolsFullScreen)
+    .directive('icheck', icheck)
+    .directive('minimalizaSidebar', minimalizaSidebar)
     .directive('pageTitle', pageTitle)
     .directive('sideNavigation', sideNavigation)
-    .directive('iboxTools', iboxTools)
-    .directive('minimalizaSidebar', minimalizaSidebar)
-    .directive('iboxToolsFullScreen', iboxToolsFullScreen)
-    .directive('slimScroll', slimScroll);
+    .directive('slimScroll', slimScroll)
+    .directive('backTop', backToTop);

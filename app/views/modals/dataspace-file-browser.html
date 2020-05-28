@@ -1,0 +1,68 @@
+<div class="inmodal" ng-class="file-browser-modal">
+
+    <div class="modal-header">
+        <button type="button" class="close close-modal-btn" ng-click="cancel()">×</button>
+        <h4>{{locationDescription}} File Browser</h4>
+        <h5>Browse, Upload files in {{locationDescription}}, Select one file as the variable value</h5>
+    </div>
+
+    <div id="files-body" class="modal-body">
+        <div>
+            <button id="refresh-file-btn" title="{{'Refresh files'|translate}}" class="btn btn-white" ng-click="refreshFiles()">
+                <i class="fa fa-repeat"></i>
+            </button>
+            <button id="new-folder-btn" title="{{'New folder'|translate}}" class="btn btn-white"  ng-click="createFolder()">
+                <i class="fa fa fa-plus"></i>
+            </button>
+            <input type="file" id="selected-upload-file"  onchange="angular.element(this).scope().fileSelected(this.files)" class="hidden" />
+            <button id="upload-file-btn" title="{{'Upload a file'|translate}}" class="btn btn-white" ng-click="clickUpload()" ng-disabled="isUploading">
+                <i class="fa" ng-class="{'fa-upload':!isUploading, 'fa-spinner fa-pulse':isUploading}"></i>
+            </button>
+            <button id="delete-file-btn" title="{{'Delete the selected file or folder'|translate}}" class="btn btn-white" ng-click="deleteFile()">
+                <i class="fa fa-trash"></i>
+            </button>
+        </div>
+        <br>
+
+        <span class="font-bold m-r-xs">
+                {{'Location'|translate}} :
+        </span>
+        <span><a href="javascript:void(0)" id="sub-path-home-btn" value="" ng-click="enterDir($event)">/</a></span>
+
+        <ol class="breadcrumb" style="background-color: transparent; border:none;display: inline-flex;">
+            <li class="breadcrumb-item"  ng-repeat="subPath in currentPath.split('/') track by $index" ng-if="subPath"><a href="javascript:void(0)" value="{{currentPath.split('/').slice(0, $index+1).join('/')}}/" ng-click="enterDir($event)">{{(subPath.length > 30) ? subPath.substring(0, 30) + " ..." : subPath}}</a></li>
+        </ol>
+        <br>
+        <div id="files-container" slim-scroll box-height="40vh" style="overflow-wrap: break-word;">
+            <table class="table table-hover" style="background-color: white; width: 100%; table-layout:fixed;">
+                <thead>
+                    <th>Name</th>
+                    <th width="80em">Size</th>
+                    <th width="120em">Type</th>
+                    <th width="160em">Modified</th>
+                </thead>
+                <tbody id="files-tbody">
+                    <tr class="file-browser-dir-tr" ng-repeat="dir in directories track by $index" ng-click="switchSelected($event)" ng-dblclick="enterFilesSubdir($event)">
+                        <td  class="file-browser-dir" value="{{currentPath}}{{dir.name}}/"> <i class="fa fa-folder-o"> </i> {{dir.name}} </td>
+                        <td> </td>
+                        <td> Folder </td>
+                        <td> {{dir.modified}} </td>
+                    </tr>
+                    <tr class="file-browser-file-tr" ng-repeat="file in files track by $index" ng-click="switchSelected($event)" >
+                        <td  class="file-browser-file" value="{{currentPath}}{{file.name}}"> <i class="fa fa-file-o"> </i> {{file.name}} </td>
+                        <td> {{file.size}} </td>
+                        <td> {{file.type}} </td>
+                        <td> {{file.modified}} </td>
+                    </tr>
+                </tbody>
+            </table>
+        </div>
+        <br>
+        <label id="file-browser-error-message" style="color:red;"></label>
+    </div>
+
+    <div class="modal-footer">
+        <button ng-if="variable" class="btn btn-white file-browser-select-btn" ng-click="selectFile()" type="button"> {{'Select'|translate}} </button>
+        <button class="btn btn-white close-modal-btn" type="button" ng-click="cancel()"> {{'Cancel'|translate}} </button>
+    </div>
+</div>
