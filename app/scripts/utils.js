@@ -6,9 +6,20 @@ function UtilsFactory($window) {
             win.focus();
         }
     }
+    function updateCursor(isWaiting) {
+        var body = angular.element(document).find('body');
+        if (isWaiting) {
+            body.addClass('waiting');
+        } else {
+            body.removeClass('waiting');
+        }
+    };
 
     return {
-        openJobInSchedulerPortal : openJobInSchedulerPortal
+        openJobInSchedulerPortal : openJobInSchedulerPortal,
+        updateCursor : function(isWaiting){
+            return updateCursor(isWaiting);
+        }
     };
 }
 
