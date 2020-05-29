@@ -7,7 +7,8 @@
         "htmlFile": "generic_catalog.html",
         "secondaryHtmlFiles": [
             "modals/catalog_object_edition.html",
-            "modals/submit_workflow.html"
+            "modals/submit_workflow.html",
+            "modals/workflow_visualization.html"
         ],
         "notAvailablePage": "page_not_available.html",
         "jsFiles": [
