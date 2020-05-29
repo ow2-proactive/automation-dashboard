@@ -39,7 +39,7 @@
                     <th>Name</th>
                     <th width="80em">Size</th>
                     <th width="120em">Type</th>
-                    <th width="140em">Modified</th>
+                    <th width="160em">Modified</th>
                 </thead>
                 <tbody id="files-tbody">
                     <tr class="file-browser-dir-tr" ng-repeat="dir in directories track by $index" ng-click="switchSelected($event)" ng-dblclick="enterFilesSubdir($event)">
@@ -62,7 +62,7 @@
     </div>
 
     <div class="modal-footer">
-        <button class="btn btn-white file-browser-select-btn" ng-click="selectFile()" type="button"> {{'Select'|translate}} </button>
+        <button ng-if="variable" class="btn btn-white file-browser-select-btn" ng-click="selectFile()" type="button"> {{'Select'|translate}} </button>
         <button class="btn btn-white close-modal-btn" type="button" ng-click="cancel()"> {{'Cancel'|translate}} </button>
     </div>
 </div>

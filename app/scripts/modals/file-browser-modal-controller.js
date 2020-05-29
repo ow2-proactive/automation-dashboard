@@ -5,6 +5,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     var canceller = $q.defer();
     $scope.currentPath = "";
     $scope.locationDescription = dataspace.toUpperCase() + " DataSpace";
+    $scope.variable = variable;
     $scope.isUploading = false;
 
     $scope.enterDir = function (event) {
