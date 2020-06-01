@@ -3,7 +3,12 @@
     <div class="modal-header">
         <button type="button" class="close close-modal-btn" ng-click="cancel()">×</button>
         <h4>{{locationDescription}} File Browser</h4>
-        <h5>Browse, Upload files in {{locationDescription}}, Select one file as the variable value</h5>
+        <h5>
+            Browse, Upload files in {{locationDescription}} <span ng-if="variable">, Select one file as the variable value </span>
+            <br/>
+            <br/>
+            {{spaceDescription}}
+        </h5>
     </div>
 
     <div id="files-body" class="modal-body">
@@ -33,7 +38,7 @@
             <li class="breadcrumb-item"  ng-repeat="subPath in currentPath.split('/') track by $index" ng-if="subPath"><a href="javascript:void(0)" value="{{currentPath.split('/').slice(0, $index+1).join('/')}}/" ng-click="enterDir($event)">{{(subPath.length > 30) ? subPath.substring(0, 30) + " ..." : subPath}}</a></li>
         </ol>
         <br>
-        <div id="files-container" slim-scroll box-height="40vh" style="overflow-wrap: break-word;">
+        <div id="files-container" slim-scroll box-height="48vh" style="overflow-wrap: break-word;">
             <table class="table table-hover" style="background-color: white; width: 100%; table-layout:fixed;">
                 <thead>
                     <th>Name</th>
@@ -63,6 +68,7 @@
 
     <div class="modal-footer">
         <button ng-if="variable" class="btn btn-white file-browser-select-btn" ng-click="selectFile()" type="button"> {{'Select'|translate}} </button>
-        <button class="btn btn-white close-modal-btn" type="button" ng-click="cancel()"> {{'Cancel'|translate}} </button>
+        <button ng-if="variable" class="btn btn-white close-modal-btn" type="button" ng-click="cancel()"> {{'Cancel'|translate}} </button>
+        <button ng-if="!variable" class="btn btn-white close-modal-btn" type="button" ng-click="cancel()"> {{'Close'|translate}} </button>
     </div>
 </div>
