@@ -5,6 +5,16 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     var canceller = $q.defer();
     $scope.currentPath = "";
     $scope.locationDescription = dataspace.toUpperCase() + " DataSpace";
+    switch(dataspace.toUpperCase()){
+        case "GLOBAL":
+            $scope.spaceDescription="Global DataSpace is a Directory where anyone can read/write files."
+            break;
+        case "USER":
+            $scope.spaceDescription="User DataSpace is a Directory where only the User can read/write files."
+            break;
+        default:
+            $scope.spaceDescription="";
+    }
     $scope.variable = variable;
     $scope.isUploading = false;
 
