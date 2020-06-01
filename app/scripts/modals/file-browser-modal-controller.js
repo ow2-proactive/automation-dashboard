@@ -7,7 +7,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     $scope.locationDescription = dataspace.toUpperCase() + " DataSpace";
     switch(dataspace.toUpperCase()){
         case "GLOBAL":
-            $scope.spaceDescription="Global DataSpace is a storage on the server host where anyone can read/write files."
+            $scope.spaceDescription="Global DataSpace is a shared storage on the server host where anyone can read/write files."
             break;
         case "USER":
             $scope.spaceDescription="User DataSpace is a personal user data storage."
