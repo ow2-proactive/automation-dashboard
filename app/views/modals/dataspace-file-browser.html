@@ -23,6 +23,9 @@
             <button id="upload-file-btn" title="{{'Upload a file'|translate}}" class="btn btn-white" ng-click="clickUpload()" ng-disabled="isUploading">
                 <i class="fa" ng-class="{'fa-upload':!isUploading, 'fa-spinner fa-pulse':isUploading}"></i>
             </button>
+            <button id="download-file-btn" title="{{'Download the selected file or folder'|translate}}" class="btn btn-white" ng-click="downloadFile()">
+                <i class="fa fa-download"></i>
+            </button>
             <button id="delete-file-btn" title="{{'Delete the selected file or folder'|translate}}" class="btn btn-white" ng-click="deleteFile()">
                 <i class="fa fa-trash"></i>
             </button>
