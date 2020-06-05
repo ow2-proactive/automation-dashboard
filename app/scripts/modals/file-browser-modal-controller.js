@@ -253,12 +253,29 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
         var selectedFilePath = selectedElement.attr('value');
         var filename = selectedFilePath.match(/([^\/]*)\/*$/)[1];
         if (selectedElement.hasClass("file-browser-dir")) {
-            filename += ".zip";
+            var confirmMessage = 'You are about to download the folder "' + filename + '" as a zip archive "' + filename + '.zip", proceed ?'
+            SweetAlert.swal({
+                title: "Downloaded!",
+                text: confirmMessage,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, download it!",
+                closeOnConfirm: false
+            }, function (isConfirm) {
+                console.log("confirm", isConfirm);
+                if (isConfirm) {
+                    $scope.downloadFileRequest(selectedFilePath, filename + ".zip", "zip");
+                }
+            });
+        } else {
+            $scope.downloadFileRequest(selectedFilePath, filename, "identity");
         }
-        // when the element to download is a folder, use zip encoding; if it's a file, use identity encoding to avoid decompress
-        var encoding = selectedElement.hasClass("file-browser-dir") ? "zip" : "identity";
-        var url = dataspaceRestUrl + encodeURIComponent(selectedFilePath) + "?encoding=" + encoding;
+    }
 
+    $scope.downloadFileRequest = function(filePath, fileName, fileEncoding) {
+        console.log("downloadFileRequest %s,%s,%s ", filePath, fileName, fileEncoding)
+        var url = dataspaceRestUrl + encodeURIComponent(filePath) + "?encoding=" + fileEncoding;
         var xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);
         xhr.setRequestHeader("sessionid", localStorage['pa.session']);
@@ -268,18 +285,18 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                 var blob = new Blob([this.response]);
                 var a = document.createElement('a');
                 a.href = window.URL.createObjectURL(blob);
-                a.download = filename;
+                a.download = fileName;
                 a.click();
             } else {
                 SweetAlert.swal({
                    title: "Oops!!!",
-                   text: "Failed to download the file " + selectedFilePath + ": "+ xhr.statusText,
+                   text: "Failed to download the file " + filePath + ": "+ xhr.statusText,
                    type: 'error'
                 });
             }
         };
         xhr.send();
-    },
+    }
 
     $scope.deleteFile = function() {
         var selectedElement=$("#files-tbody  tr.active").children().first();
