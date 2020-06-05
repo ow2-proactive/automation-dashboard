@@ -240,6 +240,47 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
         });
     }
 
+    $scope.downloadFile = function() {
+        var selectedElement=$("#files-tbody  tr.active").children().first();
+        if (selectedElement.length == 0) {
+            SweetAlert.swal({
+               title: "Oops!!!",
+               text: "No file chosen to be downloaded.",
+               type: 'error'
+            });
+            return;
+        }
+        var selectedFilePath = selectedElement.attr('value');
+        var filename = selectedFilePath.match(/([^\/]*)\/*$/)[1];
+        if (selectedElement.hasClass("file-browser-dir")) {
+            filename += ".zip";
+        }
+        // when the element to download is a folder, use zip encoding; if it's a file, use identity encoding to avoid decompress
+        var encoding = selectedElement.hasClass("file-browser-dir") ? "zip" : "identity";
+        var url = dataspaceRestUrl + encodeURIComponent(selectedFilePath) + "?encoding=" + encoding;
+
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.setRequestHeader("sessionid", localStorage['pa.session']);
+        xhr.responseType = 'arraybuffer';
+        xhr.onload = function (e) {
+            if (xhr.status == 200) {
+                var blob = new Blob([this.response]);
+                var a = document.createElement('a');
+                a.href = window.URL.createObjectURL(blob);
+                a.download = filename;
+                a.click();
+            } else {
+                SweetAlert.swal({
+                   title: "Oops!!!",
+                   text: "Failed to download the file " + selectedFilePath + ": "+ xhr.statusText,
+                   type: 'error'
+                });
+            }
+        };
+        xhr.send();
+    },
+
     $scope.deleteFile = function() {
         var selectedElement=$("#files-tbody  tr.active").children().first();
         var selectedFilePath = selectedElement.attr('value');
