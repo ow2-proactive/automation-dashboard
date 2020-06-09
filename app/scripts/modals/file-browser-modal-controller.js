@@ -5,6 +5,16 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     var canceller = $q.defer();
     $scope.currentPath = "";
     $scope.locationDescription = dataspace.toUpperCase() + " DataSpace";
+    switch(dataspace.toUpperCase()){
+        case "GLOBAL":
+            $scope.spaceDescription="Global DataSpace is a shared storage on the server host where anyone can read/write files."
+            break;
+        case "USER":
+            $scope.spaceDescription="User DataSpace is a personal user data storage."
+            break;
+        default:
+            $scope.spaceDescription="";
+    }
     $scope.variable = variable;
     $scope.isUploading = false;
 
@@ -228,6 +238,64 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                 });
             }
         });
+    }
+
+    $scope.downloadFile = function() {
+        var selectedElement=$("#files-tbody  tr.active").children().first();
+        if (selectedElement.length == 0) {
+            SweetAlert.swal({
+               title: "Oops!!!",
+               text: "No file chosen to be downloaded.",
+               type: 'error'
+            });
+            return;
+        }
+        var selectedFilePath = selectedElement.attr('value');
+        var filename = selectedFilePath.match(/([^\/]*)\/*$/)[1];
+        if (selectedElement.hasClass("file-browser-dir")) {
+            var confirmMessage = 'You are about to download the folder "' + filename + '" as a zip archive "' + filename + '.zip", proceed ?'
+            SweetAlert.swal({
+                title: "Downloaded!",
+                text: confirmMessage,
+                type: "warning",
+                showCancelButton: true,
+                confirmButtonColor: "#DD6B55",
+                confirmButtonText: "Yes, download it!",
+                closeOnConfirm: false
+            }, function (isConfirm) {
+                console.log("confirm", isConfirm);
+                if (isConfirm) {
+                    $scope.downloadFileRequest(selectedFilePath, filename + ".zip", "zip");
+                }
+            });
+        } else {
+            $scope.downloadFileRequest(selectedFilePath, filename, "identity");
+        }
+    }
+
+    $scope.downloadFileRequest = function(filePath, fileName, fileEncoding) {
+        console.log("downloadFileRequest %s,%s,%s ", filePath, fileName, fileEncoding)
+        var url = dataspaceRestUrl + encodeURIComponent(filePath) + "?encoding=" + fileEncoding;
+        var xhr = new XMLHttpRequest();
+        xhr.open('GET', url, true);
+        xhr.setRequestHeader("sessionid", localStorage['pa.session']);
+        xhr.responseType = 'arraybuffer';
+        xhr.onload = function (e) {
+            if (xhr.status == 200) {
+                var blob = new Blob([this.response]);
+                var a = document.createElement('a');
+                a.href = window.URL.createObjectURL(blob);
+                a.download = fileName;
+                a.click();
+            } else {
+                SweetAlert.swal({
+                   title: "Oops!!!",
+                   text: "Failed to download the file " + filePath + ": "+ xhr.statusText,
+                   type: 'error'
+                });
+            }
+        };
+        xhr.send();
     }
 
     $scope.deleteFile = function() {
