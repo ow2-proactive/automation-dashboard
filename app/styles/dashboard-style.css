@@ -396,6 +396,21 @@
     overflow-y: auto !important;
 }
 
+.workflow-visualization-modal .modal-dialog {
+     width: 80%;
+ }
+ .workflow-visualization-modal #workflow-visualization-view {
+     width: 95%;
+     height: 70vh;
+     display: block;
+     margin: 10px auto;
+     overflow: auto;
+     position: initial !important;
+     border: solid 1px #ddd;
+     border-radius: 3px;
+     padding: 10px;
+ }
+
 #files-body .breadcrumb>li a{
     color: #337ab7;
 }
