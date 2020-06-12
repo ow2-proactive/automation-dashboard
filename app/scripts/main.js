@@ -290,7 +290,9 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         var portals = Object.keys($scope.automationDashboardPortals);
         permissionService.getPortalsAccessPermission(portals).then(function (response) {
             if (Array.isArray(response.data) && response.data.length) {
-                $scope.firstAccessiblePortal = response.data[0];
+                //Choose the workflow-automation portal as default portal if it exists, otherwise we choose the first portal in the list
+                var doHaveAccessToWA = response.data.indexOf('workflow-automation');
+                $scope.firstAccessiblePortal = doHaveAccessToWA !== -1 ? response.data[doHaveAccessToWA] : response.data[0];
                 response.data.forEach(function (authorizedPortal) {
                     $scope.portalsAccessPermission[authorizedPortal] = true;
                 });
