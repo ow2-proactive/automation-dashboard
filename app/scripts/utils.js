@@ -21,7 +21,9 @@ function UtilsFactory($window) {
     // check whether the variable needs a special UI (i.e., it's not simply showing its value with an inputbox)
     // For example, if the variable is the type 'pa:boolean', 'pa:list', or 'pa:datetime' etc, the function return true
     function isSpecialUIModel(variable) {
-        return specialUIModel.findIndex(function(targetModel){return variable.model.toLowerCase().indexOf(targetModel) != -1;}) != -1;
+        return -1 !== specialUIModel.findIndex(function (targetModel) {
+            return variable.model.toLowerCase().indexOf(targetModel) !== -1;
+        });
     };
 
     return {
