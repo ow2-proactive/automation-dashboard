@@ -7,8 +7,7 @@
         "htmlFile": "generic_catalog.html",
         "secondaryHtmlFiles": [
             "modals/catalog_object_edition.html",
-            "modals/submit_workflow.html",
-            "modals/workflow_visualization.html"
+            "modals/submit_workflow.html"
         ],
         "notAvailablePage": "page_not_available.html",
         "jsFiles": [
@@ -17,9 +16,7 @@
             "scripts/factory/scheduler-service.js",
             "scripts/factory/cloud-automation-service.js",
             "scripts/submitWorkflowModalGCP.js",
-            "scripts/editObjectModalGCP.js",
-            "scripts/workflowVisualizationModalGCP.js",
-            "scripts/workflowVisualizationController.js"
+            "scripts/editObjectModalGCP.js"
         ],
         "angularModuleName": "gcp-rest",
         "cssFile": "gcportal_custom_style.css",
@@ -33,7 +30,8 @@
         "htmlFile": "workflow-automation/wf_automation.html",
         "secondaryHtmlFiles": [
             "modals/submit_window_wf_automation.html",
-            "modals/result_map_window_wf_automation.html"
+            "modals/result_map_window_wf_automation.html",
+            "modals/job_output_window_wf_automation.html"
         ],
         "notAvailablePage": "workflow-automation/page_not_available_wf_automation.html",
         "jsFiles": [
@@ -242,7 +240,8 @@
             "modals/rule_edition.html",
             "modals/rule_submission.html",
             "modals/rule_instance_info_modal.html",
-            "modals/rule_instance_history_modal.html"
+            "modals/rule_instance_history_modal.html",
+            "modals/rule_error_history_modal.html"
         ],
         "notAvailablePage": "page_not_available_cloud_watch.html",
         "jsFiles": [
@@ -259,6 +258,7 @@
             "scripts/modals/activate-rule-modal.js",
             "scripts/modals/rule-instance-info-modal.js",
             "scripts/modals/rule-instance-history-modal.js",
+            "scripts/modals/rule-error-history-modal.js",
             "scripts/cloud-watch-rules-fired-jobs.js"
         ],
         "angularModuleName": "cloud-watch",
@@ -304,6 +304,7 @@
             "templates/notification.html",
             "templates/basic-subscription.html",
             "templates/multi-subscription.html",
+            "templates/notification-filters-form.html",
             "templates/job-subscription-form.html",
             "templates/settings.html"
         ],

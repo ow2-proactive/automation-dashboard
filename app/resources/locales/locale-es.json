@@ -35,5 +35,13 @@
   "Connect": "Conectarse",
   "Unable to login": "Imposible iniciar sesión",
   "Or create an account": "O crear una cuenta",
+  "Refresh files": "Actualizar archivos",
+  "New folder": "Nueva carpeta",
+  "Upload a file": "Cargar un archivo",
+  "Download the selected file or folder": "Descargar el archivo o carpeta seleccionado",
+  "Delete the selected file or folder": "Eliminar el archivo o carpeta seleccionado",
+  "Select": "Seleccione",
+  "Location": "Ubicación",
+  "Click to open in scheduler portal": "Haga clic para abrir en el portal del Scheduler",
   "All rights reserved":"Todos los derechos reservados"
 }
