@@ -1,5 +1,5 @@
 function UtilsFactory($window) {
-    var specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:optional_global_file', 'pa:optional_user_file', 'pa:credential'];
+    var specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:credential'];
 
     function openJobInSchedulerPortal(jobId) {
         if (jobId) {
