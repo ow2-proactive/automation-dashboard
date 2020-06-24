@@ -29,7 +29,7 @@ function UtilsFactory($window) {
     // When the variable value is null or undefined, convert it to the empty string
     function parseEmptyVariablesValue(variables) {
         angular.forEach(variables, function(variable){
-            if(!variable.value) {
+            if(variable.value == null) {
                 variable.value = "";
             }
         });
