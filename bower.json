@@ -40,7 +40,7 @@
     "icheck": "^1.0.2",
     "jquery-slimscroll": "^1.3.8",
     "angular-css": "^1.0.8",
-    "angular-cron-gen": "^0.0.26",
+    "angular-cron-gen": "^1.0.1",
     "angular-moment-picker": "moment-picker#^0.10.2",
     "angular-bootstrap-calendar": "^1.0.0",
     "angular-ui-codemirror": "^0.3.0",
