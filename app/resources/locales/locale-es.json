@@ -44,5 +44,10 @@
   "Select": "Seleccione",
   "Location": "Ubicación",
   "Click to open in scheduler portal": "Haga clic para abrir en el portal del Scheduler",
+  "Manage third-party credentials": "Administrar credenciales de terceros",
+  "Browse Global Space files, Upload, and Select one file": "Examinar archivos de Espacio Global, Cargar y Seleccionar un archivo",
+  "Browse User Space files, Upload, and Select one file": "Examinar archivos de Espacio de Usuario, Cargar y Seleccionar un archivo",
+  "Browse, Upload Global Space files, and Select one folder": "Examinar, Cargar archivos de Espacio Global y Seleccionar una carpeta",
+  "Browse, Upload User Space files, and Select one folder": "Examinar, Cargar archivos de Espacio de Usuario y Seleccionar una carpeta",
   "All rights reserved":"Todos los derechos reservados"
 }

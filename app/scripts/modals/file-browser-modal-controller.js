@@ -1,4 +1,4 @@
-angular.module('workflow-variables').controller('FileBrowserModalCtrl', function($scope, $http, $uibModalInstance, $q, dataspace, variable, SweetAlert) {
+angular.module('workflow-variables').controller('FileBrowserModalCtrl', function($scope, $http, $uibModalInstance, $q, dataspace, variable, selectFolder, SweetAlert) {
     var dataspaceRestUrl = JSON.parse(localStorage.restUrl) + "/data/" + dataspace + "/";
     var restRequestHeader = { headers: {'sessionid': getSessionId() }};
     var uploadRequest = undefined;
@@ -16,6 +16,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
             $scope.spaceDescription="";
     }
     $scope.variable = variable;
+    $scope.selectFolder = selectFolder;
     $scope.isUploading = false;
 
     $scope.enterDir = function (event) {
@@ -134,15 +135,32 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     $scope.selectFile = function() {
         var selectedElement=$("#files-container tr.active");
         if (selectedElement.length == 0) {
-            $("#file-browser-error-message").text("Cannot find any file selected: please select a regular file !");
+            if (selectFolder) {
+                $("#file-browser-error-message").text("Cannot find any folder selected: please select a folder !");
+            } else {
+                $("#file-browser-error-message").text("Cannot find any file selected: please select a regular file !");
+            }
             return;
         }
-        var selectedFile = selectedElement.children(".file-browser-file");
+        var selectedFile;
+        var selectErrorMessage = "";
+        if (selectFolder) {
+            selectedFile = selectedElement.children(".file-browser-dir");
+            selectErrorMessage = "The regular file is disallowed to be the variable value: please select a directory !";
+        } else {
+            selectedFile = selectedElement.children(".file-browser-file");
+            selectErrorMessage = "The directory is disallowed to be the variable value: please select a regular file !";
+        }
         if (selectedFile.length == 0) {
-            $("#file-browser-error-message").text("Directory is disallowed as the variable value: please select a regular file !");
+            $("#file-browser-error-message").text(selectErrorMessage);
         } else {
             // update the variable value to the selected file path
-            variable.value = selectedFile.attr('value');
+            var selectedFilePath = selectedFile.attr('value');
+            // remove the trailing '/' in the path.
+            if(selectedFilePath.endsWith('/')) {
+                selectedFilePath = selectedFilePath.slice(0, -1);
+            }
+            variable.value = selectedFilePath;
             $scope.cancel();
         }
     }
