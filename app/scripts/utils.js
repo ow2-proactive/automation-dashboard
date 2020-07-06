@@ -1,5 +1,5 @@
-function UtilsFactory($window) {
-    var specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:credential'];
+function UtilsFactory($window, $uibModal) {
+    var specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder', 'pa:user_folder', 'pa:credential'];
 
     function openJobInSchedulerPortal(jobId) {
         if (jobId) {
@@ -68,10 +68,32 @@ function UtilsFactory($window) {
         });
         return variables;
     }
+    // open a pop-up to manage (browse, upload, delete) the global or user data space files
+    function openFileBrowser(variable, dataspace, selectFolder) {
+         $uibModal.open({
+             templateUrl: 'views/modals/dataspace-file-browser.html',
+             controller: 'FileBrowserModalCtrl',
+             windowClass: 'fadeIn file-browser-modal',
+             size: 'lg',
+             resolve: {
+                 dataspace: function() {
+                     return dataspace;
+                 },
+                 variable: function() {
+                     return variable;
+                 },
+                 selectFolder: function() {
+                     return selectFolder;
+                 }
+             }
+         });
+    }
+
     return {
         openJobInSchedulerPortal : openJobInSchedulerPortal,
         isSpecialUIModel: isSpecialUIModel,
         parseEmptyVariablesValue: parseEmptyVariablesValue,
+        openFileBrowser: openFileBrowser,
         updateCursor : function(isWaiting){
             return updateCursor(isWaiting);
         },
