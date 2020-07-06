@@ -35,14 +35,47 @@ function UtilsFactory($window) {
         });
         return variables;
     }
+    function extractVariableValue(variable, model) {
+            // for data binding, we need to transform boolean to 'false'/'true' (instead of numbers or strings with upper case)
+            if (model && model.toLowerCase().indexOf('pa:boolean') !== -1) {
+                if (variable.value.toLowerCase() === 'true' || variable.value === 1) {
+                    return 'true';
+                } else if (variable.value.toLowerCase() === 'false' || variable.value === 0) {
+                    return 'false';
+                }
+            } else {
+                return variable.value;
+            }
+        }
 
+    function extractVariables(modifiedWorkflow) {
+        var variables = {};
+        // we set model before values to know the model when setting values (1 & 0 can be int or bool, we need to know which one)
+        angular.forEach(modifiedWorkflow.object_key_values, function (item) {
+            if (item.label === 'variable_model') {
+                variables[item.key] = {};
+                variables[item.key].model = item.value;
+            }
+        });
+        angular.forEach(modifiedWorkflow.object_key_values, function (item) {
+            if (item.label === 'variable') {
+                if (!variables[item.key]) {
+                    variables[item.key] = {};
+                }
+                variables[item.key].value = extractVariableValue(item, variables[item.key].model);
+                variables[item.key].name = item.name;
+            }
+        });
+        return variables;
+    }
     return {
         openJobInSchedulerPortal : openJobInSchedulerPortal,
         isSpecialUIModel: isSpecialUIModel,
         parseEmptyVariablesValue: parseEmptyVariablesValue,
         updateCursor : function(isWaiting){
             return updateCursor(isWaiting);
-        }
+        },
+        extractVariables: extractVariables
     };
 }
 
