@@ -16,6 +16,7 @@
   "Notifications": "Notificações",
   "Help": "Ajuda",
   "ProActive Documentations": "Documentações ProActive",
+  "Tutorials": "Tutoriais",
   "About": "Sobre",
   "Settings": "Paramêtros",
   "Language": "Língua",
@@ -43,5 +44,10 @@
   "Select": "Selecione",
   "Location": "Localização",
   "Click to open in scheduler portal": "Clique para abrir no portal do scheduler",
+  "Manage third-party credentials": "Gerenciar credenciais de terceiros",
+  "Browse Global Space files, Upload, and Select one file": "Procurar arquivos de Espaço Global, Carregue e Selecione um arquivo",
+  "Browse User Space files, Upload, and Select one file": "Procurar arquivos de Espaço do Usuário, Carregue e Selecione um arquivo",
+  "Browse, Upload Global Space files, and Select one folder": "Procurar, Carregue arquivos de Espaço Global e Selecione uma pasta",
+  "Browse, Upload User Space files, and Select one folder": "Procurar, Carregue arquivos de Espaço do Usuário e Selecione uma pasta",
   "All rights reserved":"Todos os direitos reservados"
 }
