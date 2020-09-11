@@ -1,4 +1,4 @@
-function UtilsFactory($window, $uibModal) {
+function UtilsFactory($window, $uibModal, $filter) {
     var specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder', 'pa:user_folder', 'pa:credential'];
 
     function openJobInSchedulerPortal(jobId) {
@@ -89,11 +89,68 @@ function UtilsFactory($window, $uibModal) {
          });
     }
 
+    /*
+        This function takes single string values or string arrays to build a message with translated text and/or non translated text
+
+        - If both are provided, it will concat one after the other: translated1 + nonTranslated1 + translated2 + nonTranslated2 and so on.
+          When an array is at the end, the remaining elements of the other will be concatenated at the end.
+        - If only one of them is provided it will simply concat the whole array, translated or not depending on the one provided
+    */
+    function translate(argsToTranslate, argsToNotTranslate) {
+        var translatedStr="";
+        var parseArgsToNotTranslate = true;
+        var hasArgsToNotTranslate = argsToNotTranslate !== undefined;
+
+        if (argsToTranslate !== undefined) {
+
+            // If its a single string we transform to array
+            if(!Array.isArray(argsToTranslate)) {
+                argsToTranslate = [argsToTranslate];
+            }
+
+            if (argsToTranslate.length > 0) {
+                for (i=0; i<argsToTranslate.length; i++) {
+                    translatedStr = translatedStr.concat(" ").concat($filter('translate')(argsToTranslate[i]));
+                    if (parseArgsToNotTranslate && hasArgsToNotTranslate) {
+                        // If its a single string we transform to array
+                        if(!Array.isArray(argsToNotTranslate)) {
+                            argsToNotTranslate = [argsToNotTranslate];
+                        }
+
+                        if (argsToNotTranslate.length === 1) {
+                                // concat the unique element and set flag to false
+                                translatedStr = translatedStr.concat(" ").concat(argsToNotTranslate[i]);
+                                parseArgsToNotTranslate = false;
+                            } else {
+                                if (argsToTranslate.length === 1) {
+                                    // There is only one element to translate, we concat the rest of non translated elements
+                                     for (j=0; j<argsToTranslate.length; j++) {
+                                            translatedStr = translatedStr.concat(" ").concat(argsToNotTranslate[j]);
+                                     }
+                                     // Exit the loop
+                                     break;
+                                }
+
+                                if (argsToNotTranslate[i+1] === undefined) {
+                                    // Its the last non translated element to concat, set flag to false
+                                    parseArgsToNotTranslate = false;
+                                }
+
+                                translatedStr = translatedStr.concat(" ").concat(argsToNotTranslate[i]);
+                            }
+                        }
+                    }
+                }
+            }
+        return translatedStr.trim();
+    }
+
     return {
         openJobInSchedulerPortal : openJobInSchedulerPortal,
         isSpecialUIModel: isSpecialUIModel,
         parseEmptyVariablesValue: parseEmptyVariablesValue,
         openFileBrowser: openFileBrowser,
+        translate: translate,
         updateCursor : function(isWaiting){
             return updateCursor(isWaiting);
         },
