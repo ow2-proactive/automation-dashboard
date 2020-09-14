@@ -110,21 +110,20 @@ function UtilsFactory($window, $uibModal, $filter) {
                 stringsToNotTranslate = [stringsToNotTranslate];
             }
 
-            for (i=0; i<stringsToTranslate.length; i++) {
+            for (var i=0; i<stringsToTranslate.length; i++) {
 
                 translatedStr = translatedStr.concat(" ").concat($filter('translate')(stringsToTranslate[i]));
 
-                if (i === stringsToTranslate.length - 1 && stringsToNotTranslate[i] !== undefined) {
-                    // There is no more strings to translate, we concat all not to be translated strings if present
-                    stringsToNotTranslate.slice(i).forEach(function (stringToNotTranslate){
-                        translatedStr = translatedStr.concat(" ").concat(stringToNotTranslate);
-                    })
-                    break;
-                }
-
                 if (stringsToNotTranslate[i] !== undefined) {
-                        translatedStr = translatedStr.concat(" ").concat(stringsToNotTranslate[i]);
+                    translatedStr = translatedStr.concat(" ").concat(stringsToNotTranslate[i]);
                 }
+            }
+
+            if (stringsToNotTranslate[i] !== undefined) {
+                // There is no more strings to translate, we concat all not to be translated strings if present
+                stringsToNotTranslate.slice(i).forEach(function (stringToNotTranslate){
+                    translatedStr = translatedStr.concat(" ").concat(stringToNotTranslate);
+                });
             }
         }
         return translatedStr.trim();
