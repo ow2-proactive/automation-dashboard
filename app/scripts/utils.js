@@ -89,59 +89,44 @@ function UtilsFactory($window, $uibModal, $filter) {
          });
     }
 
-    /*
+    /**
         This function takes single string values or string arrays to build a message with translated text and/or non translated text
 
         - If both are provided, it will concat one after the other: translated1 + nonTranslated1 + translated2 + nonTranslated2 and so on.
           When an array is fully parsed, the remaining elements of the other array will be concatenated at the end.
         - If only one of them is provided it will simply concat the whole array, translated or not depending on the one provided
     */
-    function translate(argsToTranslate, argsToNotTranslate) {
-        var translatedStr="";
-        var parseArgsToNotTranslate = true;
-        var hasArgsToNotTranslate = argsToNotTranslate !== undefined;
+    function translate(stringsToTranslate, stringsToNotTranslate) {
 
-        if (argsToTranslate !== undefined) {
+        var translatedStr="";
+
+        if (stringsToTranslate !== undefined || stringsToNotTranslate !== undefined) {
 
             // If its a single string we transform to array
-            if(!Array.isArray(argsToTranslate)) {
-                argsToTranslate = [argsToTranslate];
+            if(!Array.isArray(stringsToTranslate)) {
+                stringsToTranslate = [stringsToTranslate];
+            }
+            if(!Array.isArray(stringsToNotTranslate)) {
+                stringsToNotTranslate = [stringsToNotTranslate];
             }
 
-            if (argsToTranslate.length > 0) {
-                for (i=0; i<argsToTranslate.length; i++) {
-                    translatedStr = translatedStr.concat(" ").concat($filter('translate')(argsToTranslate[i]));
-                    if (parseArgsToNotTranslate && hasArgsToNotTranslate) {
-                        // If its a single string we transform to array
-                        if(!Array.isArray(argsToNotTranslate)) {
-                            argsToNotTranslate = [argsToNotTranslate];
-                        }
+            for (i=0; i<stringsToTranslate.length; i++) {
 
-                        if (argsToNotTranslate.length === 1) {
-                                // concat the unique element and set flag to false
-                                translatedStr = translatedStr.concat(" ").concat(argsToNotTranslate[i]);
-                                parseArgsToNotTranslate = false;
-                            } else {
-                                if (argsToTranslate.length === 1) {
-                                    // There is only one element to translate, we concat the rest of non translated elements
-                                     for (j=0; j<argsToTranslate.length; j++) {
-                                            translatedStr = translatedStr.concat(" ").concat(argsToNotTranslate[j]);
-                                     }
-                                     // Exit the loop
-                                     break;
-                                }
+                translatedStr = translatedStr.concat(" ").concat($filter('translate')(stringsToTranslate[i]));
 
-                                if (argsToNotTranslate[i+1] === undefined) {
-                                    // Its the last non translated element to concat, set flag to false
-                                    parseArgsToNotTranslate = false;
-                                }
+                if (i === stringsToTranslate.length - 1 && stringsToNotTranslate[i] !== undefined) {
+                    // There is no more strings to translate, we concat all not to be translated strings if present
+                    stringsToNotTranslate.slice(i).forEach(function (stringToNotTranslate){
+                        translatedStr = translatedStr.concat(" ").concat(stringToNotTranslate);
+                    })
+                    break;
+                }
 
-                                translatedStr = translatedStr.concat(" ").concat(argsToNotTranslate[i]);
-                            }
-                        }
-                    }
+                if (stringsToNotTranslate[i] !== undefined) {
+                        translatedStr = translatedStr.concat(" ").concat(stringsToNotTranslate[i]);
                 }
             }
+        }
         return translatedStr.trim();
     }
 
