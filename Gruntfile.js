@@ -229,6 +229,7 @@ module.exports = function (grunt) {
                             'resources/{,*/}*.properties',
                             'resources/{,*/}*.json',
                             'resources/*.json',
+                            'resources/fonts/*'
                         ]
                     },
                     {
