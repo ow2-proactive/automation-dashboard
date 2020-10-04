@@ -1,4 +1,4 @@
-angular.module('workflow-variables').controller('FileBrowserModalCtrl', function($scope, $http, $uibModalInstance, $q, dataspace, variable, selectFolder, SweetAlert) {
+angular.module('workflow-variables').controller('FileBrowserModalCtrl', function($scope, $http, $uibModalInstance, $q, dataspace, variable, selectFolder, SweetAlert, UtilsFactory) {
     var dataspaceRestUrl = JSON.parse(localStorage.restUrl) + "/data/" + dataspace + "/";
     var restRequestHeader = { headers: {'sessionid': getSessionId() }};
     var uploadRequest = undefined;
@@ -174,11 +174,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
         if (selectedFile) {
             var pathname = $scope.currentPath + selectedFile.name;
             if (selectedFile.name.includes(':')) {
-                SweetAlert.swal({
-                   title: "Oops!!!",
-                   text: "Failed to upload the file '" + selectedFile.name + "': it should not contain colon.",
-                   type: 'error'
-                });
+                UtilsFactory.displayTranslatedErrorMessage('Oops!!!', ['Failed to upload the file ', selectedFile.name, ':', 'it should not contain colon.']);
                 return;
             }
             $scope.isUploading = !$scope.isUploading;
@@ -200,11 +196,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                     if(xhr) {
                         errorMessage = ": "+ xhr.errorMessage;
                     }
-                    SweetAlert.swal({
-                       title: "Oops!!!",
-                       text: "Failed to upload the file " + selectedFile.name + errorMessage,
-                       type: 'error'
-                    });
+                    UtilsFactory.displayTranslatedErrorMessage('Oops!!!', ['Failed to upload the file' ,selectedFile.name + errorMessage]);
                     $scope.isUploading = !$scope.isUploading;
                     uploadRequest = undefined;
                 });
@@ -223,11 +215,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
             if ($(this).is(":focus") && event.key == "Enter") {
                 var pathname = $scope.currentPath + $(this).val();
                 if (pathname.includes(':')) {
-                    SweetAlert.swal({
-                       title: "Oops!!!",
-                       text: "Failed to create the new folder '" + pathname + "': it should not contain colon.",
-                       type: 'error'
-                    });
+                    displayGenericTitleErrorMessage(['Failed to create the new folder', pathname, ':', 'it should not contain colon.']);
                     return;
                 }
                 $http({
@@ -248,37 +236,31 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                     if(xhr) {
                         errorMessage = ": "+ xhr.errorMessage;
                     }
-                    SweetAlert.swal({
-                       title: "Oops!!!",
-                       text: "Failed to create the new folder " + pathname + errorMessage,
-                       type: 'error'
-                    });
+                    displayGenericTitleErrorMessage('Failed to create the new folder');
                 });
             }
         });
     }
 
     $scope.downloadFile = function() {
+    console.log('in donwload FIle')
         var selectedElement=$("#files-tbody  tr.active").children().first();
         if (selectedElement.length == 0) {
-            SweetAlert.swal({
-               title: "Oops!!!",
-               text: "No file chosen to be downloaded.",
-               type: 'error'
-            });
+            displayGenericTitleErrorMessage('No file chosen to be downloaded.');
             return;
         }
         var selectedFilePath = selectedElement.attr('value');
         var filename = selectedFilePath.match(/([^\/]*)\/*$/)[1];
         if (selectedElement.hasClass("file-browser-dir")) {
-            var confirmMessage = 'You are about to download the folder "' + filename + '" as a zip archive "' + filename + '.zip", proceed ?'
+            var confirmMessage = UtilsFactory.translate(['You are about to download the folder', '"' + filename + '"', 'as a zip archive', '"' + filename + '.zip"', 'proceed?'])
             SweetAlert.swal({
-                title: "Downloaded!",
+                title: UtilsFactory.translate("Downloaded!"),
                 text: confirmMessage,
                 type: "warning",
                 showCancelButton: true,
                 confirmButtonColor: "#DD6B55",
-                confirmButtonText: "Yes, download it!",
+                confirmButtonText: UtilsFactory.translate("Yes, download it!"),
+                cancelButtonText: UtilsFactory.translate("Cancel"),
                 closeOnConfirm: false
             }, function (isConfirm) {
                 console.log("confirm", isConfirm);
@@ -306,11 +288,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                 a.download = fileName;
                 a.click();
             } else {
-                SweetAlert.swal({
-                   title: "Oops!!!",
-                   text: "Failed to download the file " + filePath + ": "+ xhr.statusText,
-                   type: 'error'
-                });
+                displayGenericTitleErrorMessage(['Failed to download the file', filePath + ':' + xhr.statusText]);
             }
         };
         xhr.send();
@@ -320,18 +298,21 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
         var selectedElement=$("#files-tbody  tr.active").children().first();
         var selectedFilePath = selectedElement.attr('value');
         var confirmMessage;
+        var confirmButtonText;
         if(selectedElement.hasClass("file-browser-dir")) {
-            confirmMessage = "Are you sure you want to permanently delete the folder " + selectedFilePath + " and all the files in it ?";
+            confirmMessage = ["Are you sure you want to permanently delete the folder", selectedFilePath, "and all the files in it ?"];
+            confirmButtonText = "Yes, delete folder!";
         } else {
-            confirmMessage = "Are you sure you want to permanently delete the file " + selectedFilePath + " ?";
+            confirmMessage = ["Are you sure you want to permanently delete the file", selectedFilePath, "?"];
+            confirmButtonText = "Yes, delete file!";
         }
         SweetAlert.swal({
-            title: "Deleted!",
+            title: UtilsFactory.translate("Deleted!"),
             text: confirmMessage,
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
-            confirmButtonText: "Yes, delete it!",
+            confirmButtonText: confirmButtonText,
             closeOnConfirm: false
         }, function (isConfirm) {
             if (isConfirm) {
@@ -339,14 +320,10 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                $http.delete(url, restRequestHeader)
                        .success(function (){
                            $scope.refreshFiles();
-                           SweetAlert.swal("Deleted!", "Your " + selectedFilePath + " file has been deleted.", "success");
+                           UtilsFactory.displayTranslatedSuccessMessage("Deleted!",["Your", selectedFilePath, "file has been deleted."])
                        })
                        .error(function (xhr, status, error) {
-                           SweetAlert.swal({
-                               title: "Oops!!!",
-                               text: '"Failed to delete the file " + selectedFilePath + ": "+ xhr.statusText.',
-                               type: 'error'
-                           });
+                           displayGenericTitleErrorMessage(['Failed to delete the file', selectedFilePath + ":" + xhr.statusText])
                        });
             }
         });
@@ -359,6 +336,9 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
         }
     }
 
-    $scope.refreshFiles();
+    function displayGenericTitleErrorMessage(message) {
+        UtilsFactory.displayTranslatedErrorMessage('Oops!!!', message);
+    }
 
+    $scope.refreshFiles();
 });
