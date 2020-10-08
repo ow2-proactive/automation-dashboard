@@ -250,7 +250,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
             return;
         }
         var selectedFilePath = selectedElement.attr('value');
-        var filename = selectedFilePath.match(/([^\/]*)\/*$/)[1];
+        var filename = selectedFilePath.match('([^\/]*)\/*$')[1];
         if (selectedElement.hasClass("file-browser-dir")) {
             var confirmMessage = UtilsFactory.translate(['You are about to download the folder', '"' + filename + '"', 'as a zip archive', '"' + filename + '.zip"', 'proceed?'])
             SweetAlert.swal({
