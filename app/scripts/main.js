@@ -9,7 +9,7 @@ function getSessionId() {
 }
 
 // ---------- Utilities -----------
-function getProperties($http, $location) {
+function getProperties($http, $location, UtilsFactory) {
     return $http.get('resources/config.json')
         .success(function (response) {
             var pcaServiceUrl = angular.toJson(response.confServer.pcaServiceUrl, true);
@@ -242,11 +242,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
     }
 
     function displayAlertAndRedirectToFirstAccessiblePortalIfExist(portal) {
-        SweetAlert.swal({
-            title: 'Access not authorized',
-            text: 'Cannot connect to  ' + portal + '. The access is not authorized',
-            type: 'warning'
-        });
+        UtilsFactory.displayTranslatedMessage('warning', 'Access not authorized', ['Cannot connect to', portal+'.', 'The access is not authorized']);
         if(!$scope.firstAccessiblePortal){
             $rootScope.errorMessage = 'The user ' + localStorage['pa.login'] + ' is not allowed to access to the Automation Dashboard Portal';
             $state.go('login');
