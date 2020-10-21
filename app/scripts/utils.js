@@ -1,4 +1,4 @@
-function UtilsFactory($window, $uibModal, $filter) {
+function UtilsFactory($window, $uibModal, $filter, SweetAlert) {
     var specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder', 'pa:user_folder', 'pa:credential'];
 
     function openJobInSchedulerPortal(jobId) {
@@ -90,43 +90,57 @@ function UtilsFactory($window, $uibModal, $filter) {
     }
 
     /**
-        This function takes single string values or string arrays to build a message with translated text and/or non translated text
-
-        - If both are provided, it will concat one after the other: translated1 + nonTranslated1 + translated2 + nonTranslated2 and so on.
-          When an array is fully parsed, the remaining elements of the other array will be concatenated at the end.
-        - If only one of them is provided it will simply concat the whole array, translated or not depending on the one provided
+        This function translates string and concat them one after the other.
+        If a string hasn't got translations, it will be concatenated as written.
     */
-    function translate(stringsToTranslate, stringsToNotTranslate) {
-
-        var translatedStr="";
-
-        if (stringsToTranslate !== undefined || stringsToNotTranslate !== undefined) {
-
-            // If its a single string we transform to array
-            if(!Array.isArray(stringsToTranslate)) {
+    function translate(stringsToTranslate) {
+        var translatedStr = "";
+        if (stringsToTranslate !== undefined) {
+            if (!Array.isArray(stringsToTranslate)) {
                 stringsToTranslate = [stringsToTranslate];
             }
-            if(!Array.isArray(stringsToNotTranslate)) {
-                stringsToNotTranslate = [stringsToNotTranslate];
-            }
 
-            for (var i=0; i<stringsToTranslate.length; i++) {
-
-                translatedStr = translatedStr.concat(" ").concat($filter('translate')(stringsToTranslate[i]));
-
-                if (stringsToNotTranslate[i] !== undefined) {
-                    translatedStr = translatedStr.concat(" ").concat(stringsToNotTranslate[i]);
-                }
-            }
-
-            if (stringsToNotTranslate[i] !== undefined) {
-                // There is no more strings to translate, we concat all not to be translated strings if present
-                stringsToNotTranslate.slice(i).forEach(function (stringToNotTranslate){
-                    translatedStr = translatedStr.concat(" ").concat(stringToNotTranslate);
-                });
+            for (i=0;i<stringsToTranslate.length;i++) {
+                translatedStr = translatedStr.concat(" ").concat($filter('translate')(stringsToTranslate[i].replaceAll('\n','<br>')));
             }
         }
         return translatedStr.trim();
+    }
+
+    function displayTranslatedMessage (type, titleToTranslate, messageToTranslate) {
+         var swalContent = {html: true};
+
+         if (titleToTranslate !== undefined) {
+            if (!Array.isArray(titleToTranslate)) {
+                titleToTranslate = [titleToTranslate];
+            }
+            swalContent.title = translate(titleToTranslate);
+         }
+
+         if (messageToTranslate !== undefined ) {
+            if (!Array.isArray(messageToTranslate)) {
+                messageToTranslate = [messageToTranslate];
+            }
+            swalContent.text = translate(messageToTranslate);
+         }
+
+         if (type === 'error' || type === 'warning' || type === 'success' || type === 'info') {
+            swalContent.type = type;
+         } else if (type === undefined) {
+            console.log('No type has been defined for the displayed message')
+         } else {
+            console.log(type + ' is not a valid message type to be displayed')
+         }
+
+         SweetAlert.swal(swalContent);
+    }
+
+    function displayTranslatedErrorMessage(title, message) {
+        displayTranslatedMessage('error', title, message);
+    }
+
+    function displayTranslatedSuccessMessage(title, message) {
+        displayTranslatedMessage('success', title, message);
     }
 
     return {
@@ -135,6 +149,9 @@ function UtilsFactory($window, $uibModal, $filter) {
         parseEmptyVariablesValue: parseEmptyVariablesValue,
         openFileBrowser: openFileBrowser,
         translate: translate,
+        displayTranslatedMessage: displayTranslatedMessage,
+        displayTranslatedErrorMessage: displayTranslatedErrorMessage,
+        displayTranslatedSuccessMessage: displayTranslatedSuccessMessage,
         updateCursor : function(isWaiting){
             return updateCursor(isWaiting);
         },
