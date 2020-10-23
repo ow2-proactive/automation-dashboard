@@ -22,6 +22,9 @@ function UtilsFactory($window, $uibModal, $filter, SweetAlert) {
     // For example, if the variable is the type 'pa:boolean', 'pa:list', or 'pa:datetime' etc, the function return true
     function isSpecialUIModel(variable) {
         return -1 !== specialUIModel.findIndex(function (targetModel) {
+            if(variable.resolvedModel){
+                return variable.resolvedModel.toLowerCase().indexOf(targetModel) !== -1;
+            }
             return variable.model.toLowerCase().indexOf(targetModel) !== -1;
         });
     };
