@@ -23,9 +23,9 @@ function UtilsFactory($window, $uibModal, $filter, SweetAlert) {
     function isSpecialUIModel(variable) {
         return -1 !== specialUIModel.findIndex(function (targetModel) {
             if(variable.resolvedModel){
-                return variable.resolvedModel.toLowerCase().indexOf(targetModel) !== -1;
+                return variable.resolvedModel.toLowerCase().indexOf(targetModel) == 0;
             }
-            return variable.model.toLowerCase().indexOf(targetModel) !== -1;
+            return variable.model.toLowerCase().indexOf(targetModel) == 0;
         });
     };
 
