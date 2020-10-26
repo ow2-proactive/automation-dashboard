@@ -101,7 +101,7 @@ function UtilsFactory($window, $uibModal, $filter, SweetAlert) {
             }
 
             for (i=0;i<stringsToTranslate.length;i++) {
-                translatedStr = translatedStr.concat(" ").concat($filter('translate')(stringsToTranslate[i].replaceAll('\n','<br>')));
+                translatedStr = translatedStr.concat(" ").concat($filter('translate')(stringsToTranslate[i].replace(/\n/gm,'<br>')));
             }
         }
         return translatedStr.trim();
