@@ -23,9 +23,9 @@ function UtilsFactory($window, $uibModal, $filter, SweetAlert) {
     function isSpecialUIModel(variable) {
         return -1 !== specialUIModel.findIndex(function (targetModel) {
             if(variable.resolvedModel){
-                return variable.resolvedModel.toLowerCase().indexOf(targetModel) !== -1;
+                return variable.resolvedModel.toLowerCase().indexOf(targetModel) == 0;
             }
-            return variable.model.toLowerCase().indexOf(targetModel) !== -1;
+            return variable.model.toLowerCase().indexOf(targetModel) == 0;
         });
     };
 
@@ -40,10 +40,10 @@ function UtilsFactory($window, $uibModal, $filter, SweetAlert) {
     }
     function extractVariableValue(variable, model) {
             // for data binding, we need to transform boolean to 'false'/'true' (instead of numbers or strings with upper case)
-            if (model && model.toLowerCase().indexOf('pa:boolean') !== -1) {
-                if (variable.value.toLowerCase() === 'true' || variable.value === 1) {
+            if (model && model.toLowerCase().indexOf('pa:boolean') == 0) {
+                if (variable.value.toLowerCase() === 'true' || variable.value == 1) {
                     return 'true';
-                } else if (variable.value.toLowerCase() === 'false' || variable.value === 0) {
+                } else if (variable.value.toLowerCase() === 'false' || variable.value == 0) {
                     return 'false';
                 }
             } else {
@@ -104,7 +104,7 @@ function UtilsFactory($window, $uibModal, $filter, SweetAlert) {
             }
 
             for (i=0;i<stringsToTranslate.length;i++) {
-                translatedStr = translatedStr.concat(" ").concat($filter('translate')(stringsToTranslate[i].replaceAll('\n','<br>')));
+                translatedStr = translatedStr.concat(" ").concat($filter('translate')(stringsToTranslate[i].replace(/\n/gm,'<br>')));
             }
         }
         return translatedStr.trim();
