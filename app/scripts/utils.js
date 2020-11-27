@@ -40,10 +40,10 @@ function UtilsFactory($window, $uibModal, $filter, SweetAlert) {
     }
     function extractVariableValue(variable, model) {
             // for data binding, we need to transform boolean to 'false'/'true' (instead of numbers or strings with upper case)
-            if (model && model.toLowerCase().indexOf('pa:boolean') !== -1) {
-                if (variable.value.toLowerCase() === 'true' || variable.value === 1) {
+            if (model && model.toLowerCase().indexOf('pa:boolean') == 0) {
+                if (variable.value.toLowerCase() === 'true' || variable.value == 1) {
                     return 'true';
-                } else if (variable.value.toLowerCase() === 'false' || variable.value === 0) {
+                } else if (variable.value.toLowerCase() === 'false' || variable.value == 0) {
                     return 'false';
                 }
             } else {
