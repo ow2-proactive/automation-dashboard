@@ -31,7 +31,8 @@
         "secondaryHtmlFiles": [
             "modals/submit_window_wf_automation.html",
             "modals/result_map_window_wf_automation.html",
-            "modals/job_output_window_wf_automation.html"
+            "modals/job_output_window_wf_automation.html",
+            "modals/tasks_modal.html"
         ],
         "notAvailablePage": "workflow-automation/page_not_available_wf_automation.html",
         "jsFiles": [
