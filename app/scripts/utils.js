@@ -25,7 +25,7 @@ function UtilsFactory($window, $uibModal, $filter, SweetAlert) {
             if(variable.resolvedModel){
                 return variable.resolvedModel.toLowerCase().indexOf(targetModel) == 0;
             }
-            return variable.model.toLowerCase().indexOf(targetModel) == 0;
+            return variable.resolvedModel.toLowerCase().indexOf(targetModel) == 0;
         });
     };
 
