@@ -179,7 +179,7 @@ mainModule.config(function ($translateProvider, $translatePartialLoaderProvider)
 
 // --------------- Controllers -----------------
 
-mainModule.controller('mainController', function ($window, $http, $scope, $rootScope, $state, $location, $interval, $translate, permissionService, SweetAlert) {
+mainModule.controller('mainController', function ($window, $http, $scope, $rootScope, $state, $location, $interval, $translate, permissionService, SweetAlert, UtilsFactory) {
 
     this.$onInit = function () {
         $scope.main.userName = localStorage['pa.login'];
@@ -383,7 +383,6 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         var portal = splitUrl[splitUrl.length-1];
         var jobAnalyticsChildren = ['job-analytics', 'job-gantt', 'node-gantt'];
         var jobPlannerChildren = ['job-planner-calendar-def', 'job-planner-calendar-def-workflows', 'job-planner-execution-planning', 'job-planner-gantt-chart'];
-
         if(jobAnalyticsChildren.indexOf(portal) !== -1){
             $scope.changeFavicon('analytics-portal');
         } else if(jobPlannerChildren.indexOf(portal) !== -1){
@@ -414,7 +413,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
          link.rel = 'icon';
          link.href = "styles/patterns/"+ portal + ".png";
          if (oldLink) {
-          document.head.removeChild(oldLink);
+            document.head.removeChild(oldLink);
          }
          document.head.appendChild(link);
     };

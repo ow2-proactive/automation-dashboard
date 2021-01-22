@@ -231,8 +231,8 @@
     },
     "cloudWatch": {
         "isAvailable": true,
-        "name": "Cloud Watch",
-        "nameForUrl": "cloud-watch",
+        "name": "Event Orchestration",
+        "nameForUrl": "event-orchestration",
         "appFolder": "cloud-watch-portal/app/",
         "htmlFile": "cloud_watch.html",
         "secondaryHtmlFiles": [
@@ -266,8 +266,8 @@
     },
     "cloudAutomation": {
         "isAvailable": false,
-        "name": "Cloud Automation",
-        "nameForUrl": "cloud-automation",
+        "name": "Service Automation",
+        "nameForUrl": "service-automation",
         "appFolder": "cloud-automation/app/",
         "htmlFile": "cloud-automation/cloud_automation.html",
         "secondaryHtmlFiles": [
