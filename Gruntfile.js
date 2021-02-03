@@ -342,13 +342,13 @@ module.exports = function (grunt) {
                                             result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'catalog-portal\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
                                                 + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/catalog-portal.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
                                                 subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
-                                        } else if(subviewsDefinition[key].name === "Cloud Watch"){
-                                            result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'cloud-watch\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
-                                                + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/cloud-watch.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
+                                        } else if(subviewsDefinition[key].name === "Event Orchestration"){
+                                            result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'event-orchestration\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
+                                                + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/event-orchestration.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
                                                 subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
-                                        } else if(subviewsDefinition[key].name === "Cloud Automation"){
-                                            result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'cloud-automation\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
-                                                + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/cloud-automation.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
+                                        } else if(subviewsDefinition[key].name === "Service Automation"){
+                                            result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'service-automation\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
+                                                + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/service-automation.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
                                                 subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                         } else if(subviewsDefinition[key].name === "Notifications"){
                                             result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'notification-portal\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
