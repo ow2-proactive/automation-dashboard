@@ -147,9 +147,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
     }
 
    function openEndpoint(url) {
-        const parsedUrl = new URL(url);
+        var parsedUrl = new URL(url);
 
-        //TODO Move the const 'cloud-automation-service/services/' to automation-dashboard project
         if (parsedUrl.pathname.includes('cloud-automation-service/services/')) {
             //override the hostname of the target url (with the hostname of the current window)
             parsedUrl.hostname = window.location.hostname;
@@ -171,7 +170,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
      * @returns {string}
      */
     function getEndpointUrl(endpoint) {
-        if(endpoint.proxyfied === true){
+        if(endpoint.proxyfied){
             return endpoint.proxyfiedUrl;
         } else{
             return endpoint.url;
