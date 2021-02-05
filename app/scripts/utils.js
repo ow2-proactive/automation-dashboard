@@ -170,11 +170,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
      * @returns {string}
      */
     function getEndpointUrl(endpoint) {
-        if(endpoint.proxyfied){
-            return endpoint.proxyfiedUrl;
-        } else{
-            return endpoint.url;
-        }
+        return endpoint.proxyfied ? endpoint.proxyfiedUrl : endpoint.url;
     };
 
     return {
