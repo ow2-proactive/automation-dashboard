@@ -1,4 +1,22 @@
 {
+    "automationPortal": {
+        "isAvailable": true,
+        "name": "The Next Portal",
+        "nameForUrl": "automation-portal",
+        "appFolder": "cloud-automation/app/",
+        "htmlFile": "automation-portal/automation_portal.html",
+        "secondaryHtmlFiles": [
+            "automation-portal/templates/catalog-view.html"
+        ],
+        "notAvailablePage": "workflow-automation/page_not_available_wf_automation.html",
+        "jsFiles": [
+            "scripts/automation-portal/automation-portal.js",
+            "services/automation-portal-scheduler-service.js"
+        ],
+        "angularModuleName": "automation-portal",
+        "cssFile": "automation_portal_custom_style.css",
+        "authenticate": true
+    },
     "genericCatalog": {
         "isAvailable": true,
         "name": "Catalog",
