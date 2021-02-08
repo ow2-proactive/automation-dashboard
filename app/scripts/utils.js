@@ -1,4 +1,4 @@
-function UtilsFactory($window, $uibModal, $filter, SweetAlert) {
+function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
     var specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder', 'pa:user_folder', 'pa:credential'];
 
     function openJobInSchedulerPortal(jobId) {
@@ -146,6 +146,33 @@ function UtilsFactory($window, $uibModal, $filter, SweetAlert) {
         displayTranslatedMessage('success', title, message);
     }
 
+   function openEndpoint(url) {
+        var parsedUrl = new URL(url);
+
+        if (parsedUrl.pathname.includes('cloud-automation-service/services/')) {
+            //override the hostname of the target url (with the hostname of the current window)
+            parsedUrl.hostname = window.location.hostname;
+
+            //add a cookie with a domain set to the same hostname (i.e., the hostname of the current window)
+            $cookies.put("sessionid", getSessionId(), {
+                domain: parsedUrl.hostname,
+                path: '/'
+            });
+        }
+
+        //open the targeted url
+        $window.open(parsedUrl.href, url);
+    };
+
+    /**
+     * Get the url or proxified url for a given endpoint
+     * @param endpoint
+     * @returns {string}
+     */
+    function getEndpointUrl(endpoint) {
+        return endpoint.proxyfied ? endpoint.proxyfiedUrl : endpoint.url;
+    };
+
     return {
         openJobInSchedulerPortal : openJobInSchedulerPortal,
         isSpecialUIModel: isSpecialUIModel,
@@ -158,7 +185,9 @@ function UtilsFactory($window, $uibModal, $filter, SweetAlert) {
         updateCursor : function(isWaiting){
             return updateCursor(isWaiting);
         },
-        extractVariables: extractVariables
+        extractVariables: extractVariables,
+        openEndpoint : openEndpoint,
+        getEndpointUrl: getEndpointUrl
     };
 }
 
