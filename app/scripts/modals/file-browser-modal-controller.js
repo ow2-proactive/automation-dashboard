@@ -18,9 +18,14 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     $scope.variable = variable;
     $scope.selectFolder = selectFolder;
     $scope.isUploading = false;
+    $scope.showHidden = false;
 
     $scope.enterDir = function (event) {
         $scope.currentPath = event.target.getAttribute('value');
+        $scope.refreshFiles();
+    }
+
+    $scope.showHiddenChange = function () {
         $scope.refreshFiles();
     }
 
@@ -64,6 +69,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                 filesMetadata[index] = {
                     name: filename,
                     type: headers('x-proactive-ds-type'),
+                    rights: headers('x-proactive-ds-permissions'),
                     modified: $scope.toDateInClientFormat(headers('Last-Modified'))
                 };
                 if(filesMetadata[index].type == 'FILE') {
