@@ -18,6 +18,7 @@ function getProperties($http, $location, UtilsFactory) {
             var notificationServiceUrl = angular.toJson(response.confServer.notificationServiceUrl, true);
             var catalogServiceUrl = angular.toJson(response.confServer.catalogServiceUrl, true);
             var wfAutomationQueryPeriod = angular.toJson(response.wfAutomationQueryPeriod, true);
+            var workflowExecutionQueryPeriod = angular.toJson(response.workflowExecutionQueryPeriod, true);
             var cloudAutomationQueryPeriod = angular.toJson(response.cloudAutomationQueryPeriod, true);
             var wfAutomationLast24hHistoryPeriod = angular.toJson(response.wfAutomationLast24hHistoryPeriod, true);
             var cloudWatchPortalQueryPeriod = angular.toJson(response.cloudWatchPortalQueryPeriod, true);
@@ -46,6 +47,7 @@ function getProperties($http, $location, UtilsFactory) {
             localStorage['notificationPortalQueryPeriod'] = notificationPortalQueryPeriod;
             localStorage['cloudAutomationQueryPeriod'] = cloudAutomationQueryPeriod;
             localStorage['wfAutomationQueryPeriod'] = wfAutomationQueryPeriod;
+            localStorage['workflowExecutionQueryPeriod'] = workflowExecutionQueryPeriod;
             localStorage['cloudWatchPortalQueryPeriod'] = cloudWatchPortalQueryPeriod;
             localStorage['wfAutomationLast24hHistoryPeriod'] = wfAutomationLast24hHistoryPeriod;
             localStorage['jobAnalyticsPortalRefreshRate'] = jobAnalyticsPortalRefreshRate;
@@ -287,7 +289,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         permissionService.getPortalsAccessPermission(portals).then(function (response) {
             if (Array.isArray(response.data) && response.data.length) {
                 //Choose the workflow-automation portal as default portal if it exists, otherwise we choose the first portal in the list
-                var doHaveAccessToWA = response.data.indexOf('workflow-automation');
+                var doHaveAccessToWA = response.data.indexOf('workflow-execution');
                 $scope.firstAccessiblePortal = doHaveAccessToWA !== -1 ? response.data[doHaveAccessToWA] : response.data[0];
                 response.data.forEach(function (authorizedPortal) {
                     $scope.portalsAccessPermission[authorizedPortal] = true;
@@ -387,7 +389,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             $scope.changeFavicon('analytics-portal');
         } else if(jobPlannerChildren.indexOf(portal) !== -1){
             $scope.changeFavicon('job-planner-portal');
-        } else if(splitUrl[splitUrl.length-1] === "workflow-automation"){
+        } else if(splitUrl[splitUrl.length-1] === "workflow-automation" || splitUrl[splitUrl.length-1] ==="workflow-execution"){
             $scope.changeFavicon("automation_dashboard_30");
         } else {
             $scope.changeFavicon(splitUrl[splitUrl.length-1]);
