@@ -1,4 +1,22 @@
 {
+    "workflowExecution": {
+        "isAvailable": true,
+        "name": "Workflow Execution",
+        "nameForUrl": "workflow-execution",
+        "appFolder": "cloud-automation/app/",
+        "htmlFile": "workflow-execution/workflow_execution.html",
+        "secondaryHtmlFiles": [
+            "workflow-execution/templates/catalog-view.html"
+        ],
+        "notAvailablePage": "workflow-automation/page_not_available_wf_automation.html",
+        "jsFiles": [
+            "scripts/workflow-execution/workflow-execution.js",
+            "services/workflow-execution-scheduler-service.js"
+        ],
+        "angularModuleName": "workflow-execution",
+        "cssFile": "workflow_execution_custom_style.css",
+        "authenticate": true
+    },
     "genericCatalog": {
         "isAvailable": true,
         "name": "Catalog",
@@ -31,8 +49,7 @@
         "secondaryHtmlFiles": [
             "modals/submit_window_wf_automation.html",
             "modals/result_map_window_wf_automation.html",
-            "modals/job_output_window_wf_automation.html",
-            "modals/tasks_modal.html"
+            "modals/job_output_window_wf_automation.html"
         ],
         "notAvailablePage": "workflow-automation/page_not_available_wf_automation.html",
         "jsFiles": [
