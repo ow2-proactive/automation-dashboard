@@ -1,20 +1,20 @@
 {
-    "automationPortal": {
+    "workflowExecution": {
         "isAvailable": true,
-        "name": "The Next Portal",
-        "nameForUrl": "automation-portal",
+        "name": "Workflow Execution",
+        "nameForUrl": "workflow-execution",
         "appFolder": "cloud-automation/app/",
-        "htmlFile": "automation-portal/automation_portal.html",
+        "htmlFile": "workflow-execution/workflow_execution.html",
         "secondaryHtmlFiles": [
-            "automation-portal/templates/catalog-view.html"
+            "workflow-execution/templates/catalog-view.html"
         ],
         "notAvailablePage": "workflow-automation/page_not_available_wf_automation.html",
         "jsFiles": [
-            "scripts/automation-portal/automation-portal.js",
-            "services/automation-portal-scheduler-service.js"
+            "scripts/workflow-execution/workflow-execution.js",
+            "services/workflow-execution-scheduler-service.js"
         ],
-        "angularModuleName": "automation-portal",
-        "cssFile": "automation_portal_custom_style.css",
+        "angularModuleName": "workflow-execution",
+        "cssFile": "workflow_execution_custom_style.css",
         "authenticate": true
     },
     "genericCatalog": {
