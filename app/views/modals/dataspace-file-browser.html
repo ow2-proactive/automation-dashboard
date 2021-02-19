@@ -30,7 +30,7 @@
                 <i class="fa fa-trash"></i>
             </button>
             <div class="pull-right" id="pull-right-hidden-files-checkbox">
-                <label class="checkbox-inline"><input id="show-hidden-files" type="checkbox" ng-model="showHidden" ng-change="showHiddenChange()">Show Hidden</label>
+                <label class="checkbox-inline"><input id="show-hidden-files" type="checkbox" ng-model="showHiddenFiles" ng-change="showHiddenFilesChange()">Show Hidden</label>
             </div>
         </div>
         <br>
@@ -48,20 +48,20 @@
             <table class="table table-hover" style="background-color: white; width: 100%; table-layout:fixed;">
                 <thead>
                     <th>Name</th>
-                    <th width="80em">Rights</th>
-                    <th width="80em">Size</th>
-                    <th width="120em">Type</th>
-                    <th width="160em">Modified</th>
+                    <th width="80em">{{'Rights'|translate}}</th>
+                    <th width="80em">{{'Size'|translate}}</th>
+                    <th width="120em">{{'Type'|translate}}</th>
+                    <th width="160em">{{'Modified'|translate}}</th>
                 </thead>
                 <tbody id="files-tbody">
-                    <tr class="file-browser-dir-tr" ng-repeat="dir in directories track by $index" ng-if="dir.name.indexOf('.') != 0 || showHidden === true" ng-click="switchSelected($event)" ng-dblclick="enterFilesSubdir($event)">
+                    <tr class="file-browser-dir-tr" ng-repeat="dir in directories track by $index" ng-if="dir.name.indexOf('.') != 0 || showHiddenFiles === true" ng-click="switchSelected($event)" ng-dblclick="enterFilesSubdir($event)">
                         <td  class="file-browser-dir" value="{{currentPath}}{{dir.name}}/"> <i class="fa fa-folder-o"> </i> {{dir.name}} </td>
                         <td> {{dir.rights}} </td>
                         <td> </td>
                         <td> Folder </td>
                         <td> {{dir.modified}} </td>
                     </tr>
-                    <tr class="file-browser-file-tr" ng-repeat="file in files track by $index" ng-if="file.name.indexOf('.') != 0 || showHidden === true" ng-click="switchSelected($event)" >
+                    <tr class="file-browser-file-tr" ng-repeat="file in files track by $index" ng-if="file.name.indexOf('.') != 0 || showHiddenFiles === true" ng-click="switchSelected($event)" >
                         <td  class="file-browser-file" value="{{currentPath}}{{file.name}}"> <i class="fa fa-file-o"> </i> {{file.name}} </td>
                         <td> {{file.rights}} </td>
                         <td> {{file.size}} </td>

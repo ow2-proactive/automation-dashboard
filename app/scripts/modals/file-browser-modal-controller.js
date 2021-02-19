@@ -18,14 +18,14 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     $scope.variable = variable;
     $scope.selectFolder = selectFolder;
     $scope.isUploading = false;
-    $scope.showHidden = false;
+    $scope.showHiddenFiles = false;
 
     $scope.enterDir = function (event) {
         $scope.currentPath = event.target.getAttribute('value');
         $scope.refreshFiles();
     }
 
-    $scope.showHiddenChange = function () {
+    $scope.showHiddenFilesChange = function () {
         $scope.refreshFiles();
     }
 
@@ -61,9 +61,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                     errorMessage = ": "+ xhr
                 }
                 displayGenericTitleErrorMessage(['Failed to access the path', pathname + errorMessage]);
-                if(previousPath) {
-                    $scope.currentPath = previousPath
-                }
+                $scope.currentPath = previousPath ? previousPath : $scope.currentPath
             });
     }
 
