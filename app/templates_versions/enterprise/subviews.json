@@ -12,7 +12,7 @@
         "jsFiles": [
             "scripts/workflow-execution/workflow-execution.js",
             "services/workflow-execution-scheduler-service.js",
-            "services/workflow-execution-catalog-service-controller.js"
+            "scripts/workflow-execution/workflow-execution-catalog-controller.js"
         ],
         "angularModuleName": "workflow-execution",
         "cssFile": "workflow_execution_custom_style.css",
