@@ -52,7 +52,7 @@
                     <th width="80em">{{'Rights'|translate}}</th>
                     <th width="80em">{{'Size'|translate}}</th>
                     <th width="120em">{{'Type'|translate}}</th>
-                    <th width="160em">{{'Modified'|translate}}</th>
+                    <th width="160em">{{'Last Modified'|translate}}</th>
                 </thead>
                 <tbody id="files-tbody">
                     <tr class="file-browser-dir-tr" ng-repeat="dir in directories track by $index" ng-if="dir.name.indexOf('.') != 0 || showHiddenFiles === true" ng-click="switchSelected($event)" ng-dblclick="enterFilesSubdir($event)">
