@@ -323,7 +323,9 @@
             "templates/multi-subscription.html",
             "templates/notification-filters-form.html",
             "templates/job-subscription-form.html",
-            "templates/settings.html"
+            "templates/settings.html",
+            "templates/channel-form.html",
+            "templates/channel-management.html"
         ],
         "resources": [
             "resources/events-data.json"
@@ -333,7 +335,9 @@
             "scripts/notification-portal.js",
             "scripts/notification-subscriptions.js",
             "scripts/services/notification-service-api.js",
-            "scripts/services/catalog-service.js"
+            "scripts/services/catalog-service.js",
+            "scripts/services/scheduler-service.js",
+            "scripts/services/channel-service.js"
         ],
         "angularModuleName": "notification-service",
         "cssFile": "notifportal_custom_style.css",
