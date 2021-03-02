@@ -4,13 +4,14 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     var uploadRequest = undefined;
     var canceller = $q.defer();
     $scope.currentPath = "";
-    $scope.locationDescription = dataspace.toUpperCase() + " DataSpace";
+    $scope.locationDescription = UtilsFactory.translate(dataspace.toUpperCase() + " DataSpace");
+    $scope.title = UtilsFactory.translate(dataspace.toUpperCase() + " DataSpace File Browser");
     switch(dataspace.toUpperCase()){
         case "GLOBAL":
-            $scope.spaceDescription="Global DataSpace is a shared storage on the server host where anyone can read/write files."
+            $scope.spaceDescription=UtilsFactory.translate("Global DataSpace is a shared storage on the server host where anyone can read/write files.")
             break;
         case "USER":
-            $scope.spaceDescription="User DataSpace is a personal user data storage."
+            $scope.spaceDescription=UtilsFactory.translate("User DataSpace is a personal user data storage.")
             break;
         default:
             $scope.spaceDescription="";

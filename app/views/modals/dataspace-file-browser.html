@@ -2,9 +2,9 @@
 
     <div class="modal-header">
         <button type="button" class="close close-modal-btn" ng-click="cancel()">×</button>
-        <h4>{{locationDescription}} File Browser</h4>
+        <h4>{{title}}</h4>
         <h5>
-            Browse, Upload/Download files in {{locationDescription}} <span ng-if="variable">, Select one <span ng-if="selectFolder"> folder </span> <span ng-if="!selectFolder"> file </span> as the variable value </span>
+            {{'Browse, Upload/Download files in'|translate}} {{locationDescription}} <span ng-if="variable">, {{'Select one'|translate}} <span ng-if="selectFolder"> {{'folder'|translate}} </span> <span ng-if="!selectFolder"> {{'file'|translate}} </span> {{'as the variable value'|translate}} </span>
             <br/>
             <br/>
             {{spaceDescription}}
