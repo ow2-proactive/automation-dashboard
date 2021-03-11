@@ -78,6 +78,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
              controller: 'FileBrowserModalCtrl',
              windowClass: 'fadeIn file-browser-modal',
              size: 'lg',
+             keyboard: false,
+             backdrop: 'static',
              resolve: {
                  dataspace: function() {
                      return dataspace;
