@@ -1,4 +1,4 @@
-function UtilsFactory($window, $uibModal, $filter, SweetAlert) {
+function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
     var specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder', 'pa:user_folder', 'pa:credential'];
 
     function openJobInSchedulerPortal(jobId) {
@@ -22,7 +22,10 @@ function UtilsFactory($window, $uibModal, $filter, SweetAlert) {
     // For example, if the variable is the type 'pa:boolean', 'pa:list', or 'pa:datetime' etc, the function return true
     function isSpecialUIModel(variable) {
         return -1 !== specialUIModel.findIndex(function (targetModel) {
-            return variable.model.toLowerCase().indexOf(targetModel) !== -1;
+            if(variable.resolvedModel){
+                return variable.resolvedModel.toLowerCase().indexOf(targetModel) == 0;
+            }
+            return variable.resolvedModel.toLowerCase().indexOf(targetModel) == 0;
         });
     };
 
@@ -37,10 +40,10 @@ function UtilsFactory($window, $uibModal, $filter, SweetAlert) {
     }
     function extractVariableValue(variable, model) {
             // for data binding, we need to transform boolean to 'false'/'true' (instead of numbers or strings with upper case)
-            if (model && model.toLowerCase().indexOf('pa:boolean') !== -1) {
-                if (variable.value.toLowerCase() === 'true' || variable.value === 1) {
+            if (model && model.toLowerCase().indexOf('pa:boolean') == 0) {
+                if (variable.value.toLowerCase() === 'true' || variable.value == 1) {
                     return 'true';
-                } else if (variable.value.toLowerCase() === 'false' || variable.value === 0) {
+                } else if (variable.value.toLowerCase() === 'false' || variable.value == 0) {
                     return 'false';
                 }
             } else {
@@ -75,6 +78,8 @@ function UtilsFactory($window, $uibModal, $filter, SweetAlert) {
              controller: 'FileBrowserModalCtrl',
              windowClass: 'fadeIn file-browser-modal',
              size: 'lg',
+             keyboard: false,
+             backdrop: 'static',
              resolve: {
                  dataspace: function() {
                      return dataspace;
@@ -101,7 +106,7 @@ function UtilsFactory($window, $uibModal, $filter, SweetAlert) {
             }
 
             for (i=0;i<stringsToTranslate.length;i++) {
-                translatedStr = translatedStr.concat(" ").concat($filter('translate')(stringsToTranslate[i].replaceAll('\n','<br>')));
+                translatedStr = translatedStr.concat(" ").concat($filter('translate')(stringsToTranslate[i].replace(/\n/gm,'<br>')));
             }
         }
         return translatedStr.trim();
@@ -143,6 +148,33 @@ function UtilsFactory($window, $uibModal, $filter, SweetAlert) {
         displayTranslatedMessage('success', title, message);
     }
 
+   function openEndpoint(url) {
+        var parsedUrl = new URL(url);
+
+        if (parsedUrl.pathname.includes('cloud-automation-service/services/')) {
+            //override the hostname of the target url (with the hostname of the current window)
+            parsedUrl.hostname = window.location.hostname;
+
+            //add a cookie with a domain set to the same hostname (i.e., the hostname of the current window)
+            $cookies.put("sessionid", getSessionId(), {
+                domain: parsedUrl.hostname,
+                path: '/'
+            });
+        }
+
+        //open the targeted url
+        $window.open(parsedUrl.href, url);
+    };
+
+    /**
+     * Get the url or proxified url for a given endpoint
+     * @param endpoint
+     * @returns {string}
+     */
+    function getEndpointUrl(endpoint) {
+        return endpoint.proxyfied ? endpoint.proxyfiedUrl : endpoint.url;
+    };
+
     return {
         openJobInSchedulerPortal : openJobInSchedulerPortal,
         isSpecialUIModel: isSpecialUIModel,
@@ -155,7 +187,9 @@ function UtilsFactory($window, $uibModal, $filter, SweetAlert) {
         updateCursor : function(isWaiting){
             return updateCursor(isWaiting);
         },
-        extractVariables: extractVariables
+        extractVariables: extractVariables,
+        openEndpoint : openEndpoint,
+        getEndpointUrl: getEndpointUrl
     };
 }
 

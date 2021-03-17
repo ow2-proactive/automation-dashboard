@@ -8,9 +8,10 @@ function VarService($http, $window) {
         if (!origin.endsWith('/')) {
             origin += '/'
         }
-        urlToFetch = urlToFetch.replace('${PA_CATALOG_REST_URL}', origin + 'catalog');
-        urlToFetch = urlToFetch.replace('${PA_SCHEDULER_REST_URL}', origin + 'rest');
-
+        // Replace ${PA_CATALOG_REST_URL} OR $PA_CATALOG_REST_URL by origin + 'catalog'
+        urlToFetch = urlToFetch.replace(/(\$\{PA_CATALOG_REST_URL\}|\$PA_CATALOG_REST_URL)/g, origin + 'catalog');
+        // Replace ${PA_SCHEDULER_REST_URL} OR $PA_SCHEDULER_REST_URL by origin + 'catalog'
+        urlToFetch = urlToFetch.replace(/(\$\{PA_SCHEDULER_REST_URL\}|\$PA_SCHEDULER_REST_URL)/g, origin + 'rest');
         return getStringByUrl(urlToFetch);
     };
 
@@ -21,13 +22,13 @@ function VarService($http, $window) {
                 return variable.model && variable.model.toLowerCase().indexOf('pa:model_from_url') !== -1;
             }).map(function (variable) {
                 // replace models with response
-                variable.model = replaceModelWithFetched(variable.model);
+                variable.resolvedModel = replaceModelWithFetched(variable.model);
             })
         } else {
             for (var prop in variables) {
                 var variable = variables[prop]
                 if (variable.model && variable.model.toLowerCase().indexOf('pa:model_from_url') !== -1) {
-                    variable.model = replaceModelWithFetched(variable.model);
+                    variable.resolvedModel = replaceModelWithFetched(variable.model);
                 }
             }
         }

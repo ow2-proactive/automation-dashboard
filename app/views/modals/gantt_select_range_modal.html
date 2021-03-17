@@ -1,0 +1,46 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <h4 class="modal-title">
+            {{ 'Visualization Range'|translate}}
+        </h4>
+    </div>
+
+    <div class="modal-body" style="background-color:transparent; padding-bottom: 0px;">
+        <div style="text-align: center;">
+            <label class="control-label"><i class="fa fa-calendar"></i> <i class="fa fa-arrows-h"></i>
+                <i class="fa fa-calendar"></i> </label>
+        </div>
+        <div class="row">
+            <div class="col-lg-6">
+                <div class="form-group text-center">
+                    <div class="form-group">
+                        <input type="text" class="form-control"
+                               ng-model="visualRange.from"
+                               moment-picker="visualRange.from"
+                               locale="{{ locale }}"
+                               today="true"
+                               ng-model-options="{ updateOn: 'blur' }"
+                               start-week="1"
+                               placeholder="{{'From'|translate}}">
+                    </div>
+                </div>
+            </div>
+            <div class="col-lg-6">
+                <div class="form-group text-center">
+                    <div class="form-group">
+                        <input type="text" class="form-control" ng-model="visualRange.to" moment-picker="visualRange.to"
+                               ng-model-options="{ updateOn: 'blur' }"
+                               min-date="visualRange.from"
+                               locale="{{ locale }}"
+                               today="true"
+                               start-week="1" placeholder="{{'To'|translate}}">
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="modal-footer">
+            <button type="button" class="btn btn-white" ng-click="cancel()">{{ 'Cancel'|translate }}</button>
+            <button type="button" class="btn btn-white" ng-click="display()" ng-disabled="!visualRange.from || !visualRange.to ">{{ 'Display'|translate }}</button>
+        </div>
+    </div>
+</div>

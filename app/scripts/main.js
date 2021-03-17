@@ -18,6 +18,7 @@ function getProperties($http, $location, UtilsFactory) {
             var notificationServiceUrl = angular.toJson(response.confServer.notificationServiceUrl, true);
             var catalogServiceUrl = angular.toJson(response.confServer.catalogServiceUrl, true);
             var wfAutomationQueryPeriod = angular.toJson(response.wfAutomationQueryPeriod, true);
+            var workflowExecutionQueryPeriod = angular.toJson(response.workflowExecutionQueryPeriod, true);
             var cloudAutomationQueryPeriod = angular.toJson(response.cloudAutomationQueryPeriod, true);
             var wfAutomationLast24hHistoryPeriod = angular.toJson(response.wfAutomationLast24hHistoryPeriod, true);
             var cloudWatchPortalQueryPeriod = angular.toJson(response.cloudWatchPortalQueryPeriod, true);
@@ -25,7 +26,7 @@ function getProperties($http, $location, UtilsFactory) {
             var notificationPortalQueryPeriod = angular.toJson(response.notificationPortalQueryPeriod, true);
             var genericCatalogPortalQueryPeriod = angular.toJson(response.genericCatalogPortalQueryPeriod, true);
             var jobPlannerQueryPeriod = angular.toJson(response.jobPlannerQueryPeriod, true);
-            var appCatalogBucketsUrl = angular.toJson(response.confServer.catalogServiceUrl + '/buckets', true);
+            var appCatalogBucketsUrl = angular.toJson(response.confServer.catalogServiceUrl + 'buckets', true);
             var appCatalogWorkflowsUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/catalog/buckets/' + response.view[0].catalog.bucketName + '/resources');
             var jobPlannerServiceUrl = angular.toJson(response.confServer.jobPlannerServiceUrl, true);
             var cloudWatchServiceUrl = angular.toJson(response.confServer.cloudWatchServiceUrl, true);
@@ -46,6 +47,7 @@ function getProperties($http, $location, UtilsFactory) {
             localStorage['notificationPortalQueryPeriod'] = notificationPortalQueryPeriod;
             localStorage['cloudAutomationQueryPeriod'] = cloudAutomationQueryPeriod;
             localStorage['wfAutomationQueryPeriod'] = wfAutomationQueryPeriod;
+            localStorage['workflowExecutionQueryPeriod'] = workflowExecutionQueryPeriod;
             localStorage['cloudWatchPortalQueryPeriod'] = cloudWatchPortalQueryPeriod;
             localStorage['wfAutomationLast24hHistoryPeriod'] = wfAutomationLast24hHistoryPeriod;
             localStorage['jobAnalyticsPortalRefreshRate'] = jobAnalyticsPortalRefreshRate;
@@ -179,7 +181,7 @@ mainModule.config(function ($translateProvider, $translatePartialLoaderProvider)
 
 // --------------- Controllers -----------------
 
-mainModule.controller('mainController', function ($window, $http, $scope, $rootScope, $state, $location, $interval, $translate, permissionService, SweetAlert) {
+mainModule.controller('mainController', function ($window, $http, $scope, $rootScope, $state, $location, $interval, $translate, permissionService, SweetAlert, UtilsFactory) {
 
     this.$onInit = function () {
         $scope.main.userName = localStorage['pa.login'];
@@ -287,7 +289,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         permissionService.getPortalsAccessPermission(portals).then(function (response) {
             if (Array.isArray(response.data) && response.data.length) {
                 //Choose the workflow-automation portal as default portal if it exists, otherwise we choose the first portal in the list
-                var doHaveAccessToWA = response.data.indexOf('workflow-automation');
+                var doHaveAccessToWA = response.data.indexOf('workflow-execution');
                 $scope.firstAccessiblePortal = doHaveAccessToWA !== -1 ? response.data[doHaveAccessToWA] : response.data[0];
                 response.data.forEach(function (authorizedPortal) {
                     $scope.portalsAccessPermission[authorizedPortal] = true;
@@ -383,12 +385,11 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         var portal = splitUrl[splitUrl.length-1];
         var jobAnalyticsChildren = ['job-analytics', 'job-gantt', 'node-gantt'];
         var jobPlannerChildren = ['job-planner-calendar-def', 'job-planner-calendar-def-workflows', 'job-planner-execution-planning', 'job-planner-gantt-chart'];
-
         if(jobAnalyticsChildren.indexOf(portal) !== -1){
             $scope.changeFavicon('analytics-portal');
         } else if(jobPlannerChildren.indexOf(portal) !== -1){
             $scope.changeFavicon('job-planner-portal');
-        } else if(splitUrl[splitUrl.length-1] === "workflow-automation"){
+        } else if(splitUrl[splitUrl.length-1] === "workflow-automation" || splitUrl[splitUrl.length-1] ==="workflow-execution"){
             $scope.changeFavicon("automation_dashboard_30");
         } else {
             $scope.changeFavicon(splitUrl[splitUrl.length-1]);
@@ -414,7 +415,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
          link.rel = 'icon';
          link.href = "styles/patterns/"+ portal + ".png";
          if (oldLink) {
-          document.head.removeChild(oldLink);
+            document.head.removeChild(oldLink);
          }
          document.head.appendChild(link);
     };

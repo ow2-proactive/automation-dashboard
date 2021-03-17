@@ -2,9 +2,9 @@
 
     <div class="modal-header">
         <button type="button" class="close close-modal-btn" ng-click="cancel()">×</button>
-        <h4>{{locationDescription}} File Browser</h4>
+        <h4>{{title}}</h4>
         <h5>
-            Browse, Upload/Download files in {{locationDescription}} <span ng-if="variable">, Select one <span ng-if="selectFolder"> folder </span> <span ng-if="!selectFolder"> file </span> as the variable value </span>
+            {{'Browse, Upload/Download files in'|translate}} {{locationDescription}} <span ng-if="variable">, {{'Select one'|translate}} <span ng-if="selectFolder"> {{'folder'|translate}} </span> <span ng-if="!selectFolder"> {{'file'|translate}} </span> {{'as the variable value'|translate}} </span>
             <br/>
             <br/>
             {{spaceDescription}}
@@ -29,11 +29,15 @@
             <button id="delete-file-btn" title="{{'Delete the selected file or folder'|translate}}" class="btn btn-white" ng-click="deleteFile()">
                 <i class="fa fa-trash"></i>
             </button>
+            <div class="pull-right" id="pull-right-hidden-files-checkbox">
+                <label class="checkbox-inline"><input id="show-hidden-files" type="checkbox" ng-model="showHiddenFiles" ng-change="showHiddenFilesChange()">{{'Show
+                    Hidden'|translate}}</label>
+            </div>
         </div>
         <br>
 
         <span class="font-bold m-r-xs">
-                {{'Location'|translate}} :
+            {{'Location'|translate}}:
         </span>
         <span><a href="javascript:void(0)" id="sub-path-home-btn" value="" ng-click="enterDir($event)">/</a></span>
 
@@ -45,19 +49,22 @@
             <table class="table table-hover" style="background-color: white; width: 100%; table-layout:fixed;">
                 <thead>
                     <th>Name</th>
-                    <th width="80em">Size</th>
-                    <th width="120em">Type</th>
-                    <th width="160em">Modified</th>
+                    <th width="80em">{{'Rights'|translate}}</th>
+                    <th width="80em">{{'Size'|translate}}</th>
+                    <th width="120em">{{'Type'|translate}}</th>
+                    <th width="160em">{{'Last Modified'|translate}}</th>
                 </thead>
                 <tbody id="files-tbody">
-                    <tr class="file-browser-dir-tr" ng-repeat="dir in directories track by $index" ng-click="switchSelected($event)" ng-dblclick="enterFilesSubdir($event)">
+                    <tr class="file-browser-dir-tr" ng-repeat="dir in directories track by $index" ng-if="dir.name.indexOf('.') != 0 || showHiddenFiles === true" ng-click="switchSelected($event)" ng-dblclick="enterFilesSubdir($event)">
                         <td  class="file-browser-dir" value="{{currentPath}}{{dir.name}}/"> <i class="fa fa-folder-o"> </i> {{dir.name}} </td>
+                        <td> {{dir.rights}} </td>
                         <td> </td>
                         <td> Folder </td>
                         <td> {{dir.modified}} </td>
                     </tr>
-                    <tr class="file-browser-file-tr" ng-repeat="file in files track by $index" ng-click="switchSelected($event)" >
+                    <tr class="file-browser-file-tr" ng-repeat="file in files track by $index" ng-if="file.name.indexOf('.') != 0 || showHiddenFiles === true" ng-click="switchSelected($event)" >
                         <td  class="file-browser-file" value="{{currentPath}}{{file.name}}"> <i class="fa fa-file-o"> </i> {{file.name}} </td>
+                        <td> {{file.rights}} </td>
                         <td> {{file.size}} </td>
                         <td> {{file.type}} </td>
                         <td> {{file.modified}} </td>
