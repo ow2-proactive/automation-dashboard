@@ -29,7 +29,8 @@
         "htmlFile": "generic_catalog.html",
         "secondaryHtmlFiles": [
             "modals/catalog_object_edition.html",
-            "modals/submit_workflow.html"
+            "modals/submit_workflow.html",
+            "modals/catalog-object-kind-content_type-project_name-edition.html"
         ],
         "notAvailablePage": "page_not_available.html",
         "jsFiles": [
@@ -38,7 +39,8 @@
             "scripts/factory/scheduler-service.js",
             "scripts/factory/cloud-automation-service.js",
             "scripts/submitWorkflowModalGCP.js",
-            "scripts/editObjectModalGCP.js"
+            "scripts/editObjectModalGCP.js",
+            "scripts/EditKindContentTypeProjectName.js"
         ],
         "angularModuleName": "gcp-rest",
         "cssFile": "gcportal_custom_style.css",
