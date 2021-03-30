@@ -48,28 +48,6 @@
         "cssFile": "gcportal_custom_style.css",
         "authenticate": true
     },
-    "workflowAutomation": {
-        "isAvailable": true,
-        "name": "Workflow Automation",
-        "nameForUrl": "workflow-automation",
-        "appFolder": "cloud-automation/app/",
-        "htmlFile": "workflow-automation/wf_automation.html",
-        "secondaryHtmlFiles": [
-            "modals/submit_window_wf_automation.html",
-            "modals/result_map_window_wf_automation.html",
-            "modals/job_output_window_wf_automation.html"
-        ],
-        "notAvailablePage": "workflow-automation/page_not_available_wf_automation.html",
-        "jsFiles": [
-            "scripts/workflow-automation/wf-automation.js",
-            "scripts/workflow-automation/wfa-catalog-controller.js",
-            "scripts/workflow-automation/wfa-monitoring-controller.js",
-            "services/wfa-scheduler-service.js"
-        ],
-        "angularModuleName": "workflow-automation",
-        "cssFile": "portal_custom_style.css",
-        "authenticate": true
-    },
     "analytics-portal": {
         "isAvailable": true,
         "isSubMenuTitle": true,
