@@ -149,6 +149,10 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
     }
 
    function openEndpoint(url) {
+       // Add default protocol if it is not provided (when launching locally)
+       if (!url.match(/^[a-zA-Z]+:\/\//)) {
+           url = window.location.protocol + '//' + url;
+       }
         var parsedUrl = new URL(url);
 
         if (parsedUrl.pathname.includes('cloud-automation-service/services/')) {
