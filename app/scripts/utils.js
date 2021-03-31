@@ -168,7 +168,18 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
 
         //open the targeted url
         $window.open(parsedUrl.href, url);
-    };
+    }
+
+    function getByKey (propertyLabel, propertyName, collection) {
+        var len = collection.length;
+        var value = '';
+        for (var i = 0; i < len; i++) {
+            if ((collection[i].label === propertyLabel) && (collection[i].key === propertyName)) {
+                value = collection[i].value;
+            }
+        }
+        return value;
+    }
 
     /**
      * Get the url or proxified url for a given endpoint
@@ -177,7 +188,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
      */
     function getEndpointUrl(endpoint) {
         return endpoint.proxyfied ? endpoint.proxyfiedUrl : endpoint.url;
-    };
+    }
 
     return {
         openJobInSchedulerPortal : openJobInSchedulerPortal,
@@ -193,7 +204,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
         },
         extractVariables: extractVariables,
         openEndpoint : openEndpoint,
-        getEndpointUrl: getEndpointUrl
+        getEndpointUrl: getEndpointUrl,
+        getByKey:getByKey
     };
 }
 
