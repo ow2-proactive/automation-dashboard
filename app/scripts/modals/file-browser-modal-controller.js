@@ -4,13 +4,14 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     var uploadRequest = undefined;
     var canceller = $q.defer();
     $scope.currentPath = "";
-    $scope.locationDescription = dataspace.toUpperCase() + " DataSpace";
+    $scope.locationDescription = UtilsFactory.translate(dataspace.toUpperCase() + " DataSpace");
+    $scope.title = UtilsFactory.translate(dataspace.toUpperCase() + " DataSpace File Browser");
     switch(dataspace.toUpperCase()){
         case "GLOBAL":
-            $scope.spaceDescription="Global DataSpace is a shared storage on the server host where anyone can read/write files."
+            $scope.spaceDescription=UtilsFactory.translate("Global DataSpace is a shared storage on the server host where anyone can read/write files.")
             break;
         case "USER":
-            $scope.spaceDescription="User DataSpace is a personal user data storage."
+            $scope.spaceDescription=UtilsFactory.translate("User DataSpace is a personal user data storage.")
             break;
         default:
             $scope.spaceDescription="";
@@ -18,9 +19,14 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     $scope.variable = variable;
     $scope.selectFolder = selectFolder;
     $scope.isUploading = false;
+    $scope.showHiddenFiles = false;
 
     $scope.enterDir = function (event) {
         $scope.currentPath = event.target.getAttribute('value');
+        $scope.refreshFiles();
+    }
+
+    $scope.showHiddenFilesChange = function () {
         $scope.refreshFiles();
     }
 
@@ -28,12 +34,14 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
         var clickedRow = $(event.target.parentElement)
         var clickedDir = clickedRow.children(".file-browser-dir");
         if( clickedDir ){
+            previousPath = $scope.currentPath
             $scope.currentPath = clickedDir.attr('value');
-            $scope.refreshFiles();
+            $scope.refreshFiles(previousPath);
         }
     }
 
-    $scope.refreshFiles = function() {
+    // refresh to show the files in the $scope.currentPath, in case of failed, change the value of $scope.currentPath back to previousPath
+    $scope.refreshFiles = function(previousPath) {
         var pathname = $scope.currentPath;
         if(pathname.length == 0) {
             pathname = "%2E"; // root path "." need to be encoded as "%2E"
@@ -47,6 +55,14 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                 if(uploadRequest) {
                     $scope.isUploading = !$scope.isUploading;
                 }
+            })
+            .error(function (xhr) {
+                var errorMessage = "";
+                if(xhr) {
+                    errorMessage = ": "+ xhr
+                }
+                displayGenericTitleErrorMessage(['Failed to access the path', pathname + errorMessage]);
+                $scope.currentPath = previousPath ? previousPath : $scope.currentPath
             });
     }
 
@@ -64,6 +80,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                 filesMetadata[index] = {
                     name: filename,
                     type: headers('x-proactive-ds-type'),
+                    rights: headers('x-proactive-ds-permissions'),
                     modified: $scope.toDateInClientFormat(headers('Last-Modified'))
                 };
                 if(filesMetadata[index].type == 'FILE') {
@@ -194,9 +211,9 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                 .error(function (xhr) {
                     var errorMessage = "";
                     if(xhr) {
-                        errorMessage = ": "+ xhr.errorMessage;
+                        errorMessage = ": "+ xhr;
                     }
-                    UtilsFactory.displayTranslatedErrorMessage('Oops!!!', ['Failed to upload the file' ,selectedFile.name + errorMessage]);
+                    displayGenericTitleErrorMessage(['Failed to upload the file', selectedFile.name + errorMessage])
                     $scope.isUploading = !$scope.isUploading;
                     uploadRequest = undefined;
                 });
@@ -234,9 +251,9 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                 .error(function (xhr) {
                     var errorMessage = "";
                     if(xhr) {
-                        errorMessage = ": "+ xhr.errorMessage;
+                        errorMessage = ": "+ xhr;
                     }
-                    displayGenericTitleErrorMessage('Failed to create the new folder');
+                    displayGenericTitleErrorMessage('Failed to create the new folder', errorMessage);
                 });
             }
         });
@@ -322,8 +339,12 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                            $scope.refreshFiles();
                            UtilsFactory.displayTranslatedSuccessMessage("Deleted!",["Your", selectedFilePath, "file has been deleted."])
                        })
-                       .error(function (xhr, status, error) {
-                           displayGenericTitleErrorMessage(['Failed to delete the file', selectedFilePath + ":" + xhr.statusText])
+                       .error(function (xhr) {
+                           var errorMessage = "";
+                           if(xhr) {
+                               errorMessage = ": "+ xhr;
+                           }
+                           displayGenericTitleErrorMessage(['Failed to delete the file', selectedFilePath + errorMessage])
                        });
             }
         });

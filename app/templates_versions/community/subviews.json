@@ -6,12 +6,18 @@
         "appFolder": "cloud-automation/app/",
         "htmlFile": "workflow-execution/workflow_execution.html",
         "secondaryHtmlFiles": [
-            "workflow-execution/templates/catalog-view.html"
+            "modals/result_map_window_wf_automation.html",
+            "modals/job_output_window_wf_automation.html",
+            "workflow-execution/templates/catalog-view.html",
+            "workflow-execution/templates/workflow-variables.html"
         ],
         "notAvailablePage": "workflow-automation/page_not_available_wf_automation.html",
         "jsFiles": [
             "scripts/workflow-execution/workflow-execution.js",
-            "services/workflow-execution-scheduler-service.js"
+            "services/workflow-execution-scheduler-service.js",
+            "services/workflow-execution-catalog-service.js",
+            "scripts/workflow-execution/workflow-execution-catalog-controller.js",
+            "scripts/workflow-execution/workflow-execution-variables-controller.js"
         ],
         "angularModuleName": "workflow-execution",
         "cssFile": "workflow_execution_custom_style.css",
@@ -25,7 +31,8 @@
         "htmlFile": "generic_catalog.html",
         "secondaryHtmlFiles": [
             "modals/catalog_object_edition.html",
-            "modals/submit_workflow.html"
+            "modals/submit_workflow.html",
+            "modals/catalog-object-kind-content_type-project_name-edition.html"
         ],
         "notAvailablePage": "page_not_available.html",
         "jsFiles": [
@@ -34,32 +41,11 @@
             "scripts/factory/scheduler-service.js",
             "scripts/factory/cloud-automation-service.js",
             "scripts/submitWorkflowModalGCP.js",
-            "scripts/editObjectModalGCP.js"
+            "scripts/editObjectModalGCP.js",
+            "scripts/EditKindContentTypeProjectName.js"
         ],
         "angularModuleName": "gcp-rest",
         "cssFile": "gcportal_custom_style.css",
-        "authenticate": true
-    },
-    "workflowAutomation": {
-        "isAvailable": true,
-        "name": "Workflow Automation",
-        "nameForUrl": "workflow-automation",
-        "appFolder": "cloud-automation/app/",
-        "htmlFile": "workflow-automation/wf_automation.html",
-        "secondaryHtmlFiles": [
-            "modals/submit_window_wf_automation.html",
-            "modals/result_map_window_wf_automation.html",
-            "modals/job_output_window_wf_automation.html"
-        ],
-        "notAvailablePage": "workflow-automation/page_not_available_wf_automation.html",
-        "jsFiles": [
-            "scripts/workflow-automation/wf-automation.js",
-            "scripts/workflow-automation/wfa-catalog-controller.js",
-            "scripts/workflow-automation/wfa-monitoring-controller.js",
-            "services/wfa-scheduler-service.js"
-        ],
-        "angularModuleName": "workflow-automation",
-        "cssFile": "portal_custom_style.css",
         "authenticate": true
     },
     "analytics-portal": {
@@ -322,7 +308,9 @@
             "templates/multi-subscription.html",
             "templates/notification-filters-form.html",
             "templates/job-subscription-form.html",
-            "templates/settings.html"
+            "templates/settings.html",
+            "templates/channel-form.html",
+            "templates/channel-management.html"
         ],
         "resources": [
             "resources/events-data.json"
@@ -332,7 +320,9 @@
             "scripts/notification-portal.js",
             "scripts/notification-subscriptions.js",
             "scripts/services/notification-service-api.js",
-            "scripts/services/catalog-service.js"
+            "scripts/services/catalog-service.js",
+            "scripts/services/scheduler-service.js",
+            "scripts/services/channel-service.js"
         ],
         "angularModuleName": "notification-service",
         "cssFile": "notifportal_custom_style.css",
