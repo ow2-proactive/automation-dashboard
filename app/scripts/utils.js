@@ -1,4 +1,4 @@
-function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
+function UtilsFactory($window, $uibModal, $filter, $cookies, $http, toastr, SweetAlert) {
     var specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder', 'pa:user_folder', 'pa:credential'];
 
     function openJobInSchedulerPortal(jobId) {
@@ -71,6 +71,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
         });
         return variables;
     }
+
     // open a pop-up to manage (browse, upload, delete) the global or user data space files
     function openFileBrowser(variable, dataspace, selectFolder) {
          $uibModal.open({
@@ -92,6 +93,46 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
                  }
              }
          });
+    }
+
+    function uploadDataspaceFile(url, selectedFile, successCallback, errorCallback) {
+        toastrConfig = {allowHtml:true, closeButton: false, autoDismiss: false, tapToDismiss: false, progressBar: false, timeOut: 0, extendedTimeOut: 0, onHidden: function(){}}; //progressBar: false, timeOut: 1000000
+        var uploadToast = toastr.info("Uploading the file " + selectedFile.name + " ... \n<progress-bar class='upload-progress-bar'></progress-bar>", toastrConfig);
+
+        console.log(JSON.parse(localStorage.schedulerPortalUrl))
+        return $http({
+                url: url, //dataspaceRestUrl + encodeURIComponent(pathname),
+                method: "PUT",
+                data: selectedFile,
+                processData: false,
+                uploadEventHandlers: {
+                    progress: function (e) {
+                        if (e.lengthComputable) {
+                            uploadProgress = (1 - e.loaded / e.total) * 100;
+                            console.log(uploadProgress)
+                            if(uploadProgress > 0) {
+                                uploadToast.el.find('.upload-progress-bar').css('width', uploadProgress + '%');
+                            }
+                        }
+                    }
+                },
+                headers: { "sessionid": getSessionId() }
+            })
+            .success(function (data){
+                successCallback();
+                uploadToast.el.find('.toast-message').text("Your file " + selectedFile.name + " has been uploaded.");
+                // toastr.clear([uploadToast]);
+                // toastr.info("Your file " + selectedFile.name + " has been uploaded.", {closeButton: true})
+            })
+            .error(function (xhr) {
+                errorCallback();
+                // toastr.clear([uploadToast]);
+                var errorMessage = "";
+                if(xhr) {
+                    errorMessage = ": "+ xhr;
+                }
+                displayGenericTitleErrorMessage(['Failed to upload the file', selectedFile.name + errorMessage])
+            });
     }
 
     /**
@@ -180,6 +221,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
         isSpecialUIModel: isSpecialUIModel,
         parseEmptyVariablesValue: parseEmptyVariablesValue,
         openFileBrowser: openFileBrowser,
+        uploadDataspaceFile: uploadDataspaceFile,
         translate: translate,
         displayTranslatedMessage: displayTranslatedMessage,
         displayTranslatedErrorMessage: displayTranslatedErrorMessage,

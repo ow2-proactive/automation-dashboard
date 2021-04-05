@@ -1,8 +1,7 @@
-angular.module('workflow-variables').controller('FileBrowserModalCtrl', function($scope, $http, $uibModalInstance, $q, toastr, dataspace, variable, selectFolder, SweetAlert, UtilsFactory) {
+angular.module('workflow-variables').controller('FileBrowserModalCtrl', function($scope, $http, $uibModalInstance, $q, dataspace, variable, selectFolder, SweetAlert, UtilsFactory) {
     var dataspaceRestUrl = JSON.parse(localStorage.restUrl) + "/data/" + dataspace + "/";
     var restRequestHeader = { headers: {'sessionid': getSessionId() }};
     var uploadRequest = undefined;
-//    var canceller = $q.defer();
     $scope.currentPath = "";
     $scope.locationDescription = UtilsFactory.translate(dataspace.toUpperCase() + " DataSpace");
     $scope.title = UtilsFactory.translate(dataspace.toUpperCase() + " DataSpace File Browser");
@@ -194,44 +193,18 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                 UtilsFactory.displayTranslatedErrorMessage('Oops!!!', ['Failed to upload the file ', selectedFile.name, ':', 'it should not contain colon.']);
                 return;
             }
-            $scope.isUploading = !$scope.isUploading;
+            $scope.isUploading = true;
 
-            toastrConfig = {closeButton: false, progressBar: false, tapToDismiss: false, timeOut: 1000000, allowHtml:true}; //timeOut: 1000000
-            var toast = toastr.info("Uploading the file " + selectedFile.name + " ...\n<progress-bar class='my-progress-bar'></progress-bar>", toastrConfig);
-
-            uploadRequest = $http({
-                    url: dataspaceRestUrl + encodeURIComponent(pathname),
-                    method: "PUT",
-                    data: selectedFile,
-                    processData: false,
-                    uploadEventHandlers: {
-                        progress: function (e) {
-                            if (e.lengthComputable) {
-                                uploadProgress = (1 - e.loaded / e.total) * 100;
-                                toast.el.find('.my-progress-bar').css('width', uploadProgress + '%');
-                            }
-                        }
-                    },
-                    headers: { "sessionid": getSessionId() } //,
-//                    timeout: canceller.promise
-                })
-                .success(function (data){
+            //TODO
+            uploadRequest = UtilsFactory.uploadDataspaceFile(dataspaceRestUrl + encodeURIComponent(pathname), selectedFile,
+                function (data){
                     $scope.refreshFiles();
-                    $scope.isUploading = !$scope.isUploading;
+                    $scope.isUploading = false;
                     uploadRequest = undefined;
-                    toastr.refreshTimer(toast, 1000);
-                    toastr.info("Your file " + selectedFile.name + " has been uploaded.", {closeButton: true, progressBar: false})
-//                    UtilsFactory.displayTranslatedSuccessMessage("Uploaded!",["Your", selectedFile.name, "file has been uploaded."])
+                }, function (xhr) {
+                    $scope.isUploading = false;
+                    uploadRequest = undefined;
                 })
-                .error(function (xhr) {
-                    var errorMessage = "";
-                    if(xhr) {
-                        errorMessage = ": "+ xhr;
-                    }
-                    displayGenericTitleErrorMessage(['Failed to upload the file', selectedFile.name + errorMessage])
-                    $scope.isUploading = !$scope.isUploading;
-                    uploadRequest = undefined;
-                });
         }
     }
 
@@ -367,9 +340,6 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
 
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
-//        if(uploadRequest) {
-//            canceller.resolve();
-//        }
     }
 
     function displayGenericTitleErrorMessage(message) {
