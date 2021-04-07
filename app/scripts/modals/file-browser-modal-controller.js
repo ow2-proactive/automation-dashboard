@@ -1,7 +1,6 @@
 angular.module('workflow-variables').controller('FileBrowserModalCtrl', function($scope, $http, $uibModalInstance, $q, dataspace, variable, selectFolder, SweetAlert, UtilsFactory) {
     var dataspaceRestUrl = JSON.parse(localStorage.restUrl) + "/data/" + dataspace + "/";
     var restRequestHeader = { headers: {'sessionid': getSessionId() }};
-    var uploadRequest = undefined;
     $scope.currentPath = "";
     $scope.locationDescription = UtilsFactory.translate(dataspace.toUpperCase() + " DataSpace");
     $scope.title = UtilsFactory.translate(dataspace.toUpperCase() + " DataSpace File Browser");
@@ -17,7 +16,6 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     }
     $scope.variable = variable;
     $scope.selectFolder = selectFolder;
-    $scope.isUploading = false;
     $scope.showHiddenFiles = false;
 
     $scope.enterDir = function (event) {
@@ -51,9 +49,6 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
             .success(function (data){
                 $scope.files = $scope.getFilesMetadata(data.fileListing.sort());
                 $scope.directories = $scope.getFilesMetadata(data.directoryListing.sort());
-                if(uploadRequest) {
-                    $scope.isUploading = !$scope.isUploading;
-                }
             })
             .error(function (xhr) {
                 var errorMessage = "";
@@ -193,18 +188,11 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                 UtilsFactory.displayTranslatedErrorMessage('Oops!!!', ['Failed to upload the file ', selectedFile.name, ':', 'it should not contain colon.']);
                 return;
             }
-            $scope.isUploading = true;
-
-            //TODO
-            uploadRequest = UtilsFactory.uploadDataspaceFile(dataspaceRestUrl + encodeURIComponent(pathname), selectedFile,
+            var uploadURL = dataspaceRestUrl + encodeURIComponent(pathname);
+            UtilsFactory.uploadDataspaceFile(uploadURL, selectedFile,
                 function (data){
                     $scope.refreshFiles();
-                    $scope.isUploading = false;
-                    uploadRequest = undefined;
-                }, function (xhr) {
-                    $scope.isUploading = false;
-                    uploadRequest = undefined;
-                })
+                }, function () {});
         }
     }
 

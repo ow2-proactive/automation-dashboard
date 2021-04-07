@@ -20,8 +20,8 @@
                 <i class="fa fa fa-plus"></i>
             </button>
             <input type="file" id="selected-upload-file"  onchange="angular.element(this).scope().fileSelected(this.files)" class="hidden" />
-            <button id="upload-file-btn" title="{{'Upload a file'|translate}}" class="btn btn-white" ng-click="clickUpload()" ng-disabled="isUploading">
-                <i class="fa" ng-class="{'fa-upload':!isUploading, 'fa-spinner fa-pulse':isUploading}"></i>
+            <button id="upload-file-btn" title="{{'Upload a file'|translate}}" class="btn btn-white" ng-click="clickUpload()">
+                <i class="fa fa-upload"></i>
             </button>
             <button id="download-file-btn" title="{{'Download the selected file or folder'|translate}}" class="btn btn-white" ng-click="downloadFile()">
                 <i class="fa fa-download"></i>

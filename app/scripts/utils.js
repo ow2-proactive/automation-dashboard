@@ -96,12 +96,11 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, toastr, Swee
     }
 
     function uploadDataspaceFile(url, selectedFile, successCallback, errorCallback) {
-        toastrConfig = {allowHtml:true, closeButton: false, autoDismiss: false, tapToDismiss: false, progressBar: false, timeOut: 0, extendedTimeOut: 0, onHidden: function(){}}; //progressBar: false, timeOut: 1000000
+        toastrConfig = {allowHtml:true, closeButton: true, autoDismiss: false, tapToDismiss: false, progressBar: false, timeOut: 0, extendedTimeOut: 0};
         var uploadToast = toastr.info("Uploading the file " + selectedFile.name + " ... \n<progress-bar class='upload-progress-bar'></progress-bar>", toastrConfig);
 
-        console.log(JSON.parse(localStorage.schedulerPortalUrl))
         return $http({
-                url: url, //dataspaceRestUrl + encodeURIComponent(pathname),
+                url: url,
                 method: "PUT",
                 data: selectedFile,
                 processData: false,
@@ -109,10 +108,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, toastr, Swee
                     progress: function (e) {
                         if (e.lengthComputable) {
                             uploadProgress = (1 - e.loaded / e.total) * 100;
-                            console.log(uploadProgress)
-                            if(uploadProgress > 0) {
-                                uploadToast.el.find('.upload-progress-bar').css('width', uploadProgress + '%');
-                            }
+                            uploadToast.el.find('.upload-progress-bar').css('width', uploadProgress + '%');
                         }
                     }
                 },
@@ -120,18 +116,17 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, toastr, Swee
             })
             .success(function (data){
                 successCallback();
-                uploadToast.el.find('.toast-message').text("Your file " + selectedFile.name + " has been uploaded.");
-                // toastr.clear([uploadToast]);
-                // toastr.info("Your file " + selectedFile.name + " has been uploaded.", {closeButton: true})
+                uploadToast.el.find('.toast-info').css('background-color', '#51A351');
+                uploadToast.el.find('.toast-message').text("Your file " + selectedFile.name + " has been successfully uploaded.");
             })
             .error(function (xhr) {
                 errorCallback();
-                // toastr.clear([uploadToast]);
                 var errorMessage = "";
                 if(xhr) {
                     errorMessage = ": "+ xhr;
                 }
-                displayGenericTitleErrorMessage(['Failed to upload the file', selectedFile.name + errorMessage])
+                uploadToast.el.find('.toast-info').css('background-color', '#BD362F');
+                uploadToast.el.find('.toast-message').text('Failed to upload the file ' + selectedFile.name + errorMessage)
             });
     }
 
