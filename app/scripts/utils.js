@@ -185,6 +185,10 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, toastr, Swee
     }
 
    function openEndpoint(url) {
+       // Add default protocol if it is not provided (when launching locally)
+       if (!url.match(/^[a-zA-Z]+:\/\//)) {
+           url = window.location.protocol + '//' + url;
+       }
         var parsedUrl = new URL(url);
 
         if (parsedUrl.pathname.includes('cloud-automation-service/services/')) {
@@ -200,7 +204,18 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, toastr, Swee
 
         //open the targeted url
         $window.open(parsedUrl.href, url);
-    };
+    }
+
+    function getByKey (propertyLabel, propertyName, collection) {
+        var len = collection.length;
+        var value = '';
+        for (var i = 0; i < len; i++) {
+            if ((collection[i].label === propertyLabel) && (collection[i].key === propertyName)) {
+                value = collection[i].value;
+            }
+        }
+        return value;
+    }
 
     /**
      * Get the url or proxified url for a given endpoint
@@ -209,7 +224,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, toastr, Swee
      */
     function getEndpointUrl(endpoint) {
         return endpoint.proxyfied ? endpoint.proxyfiedUrl : endpoint.url;
-    };
+    }
 
     return {
         openJobInSchedulerPortal : openJobInSchedulerPortal,
@@ -226,7 +241,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, toastr, Swee
         },
         extractVariables: extractVariables,
         openEndpoint : openEndpoint,
-        getEndpointUrl: getEndpointUrl
+        getEndpointUrl: getEndpointUrl,
+        getByKey:getByKey
     };
 }
 
