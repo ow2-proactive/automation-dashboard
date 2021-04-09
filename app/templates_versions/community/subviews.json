@@ -11,7 +11,7 @@
             "workflow-execution/templates/catalog-view.html",
             "workflow-execution/templates/workflow-variables.html"
         ],
-        "notAvailablePage": "workflow-automation/page_not_available_wf_automation.html",
+        "notAvailablePage": "workflow-execution/page_not_available_wf_execution.html",
         "jsFiles": [
             "scripts/workflow-execution/workflow-execution.js",
             "services/workflow-execution-scheduler-service.js",
