@@ -97,37 +97,39 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, toastr, Swee
 
     function uploadDataspaceFile(url, selectedFile, successCallback, errorCallback) {
         toastrConfig = {allowHtml:true, closeButton: true, autoDismiss: false, tapToDismiss: false, progressBar: false, timeOut: 0, extendedTimeOut: 0};
-        var uploadToast = toastr.info("Uploading the file " + selectedFile.name + " ... \n<progress-bar class='upload-progress-bar'></progress-bar>", toastrConfig);
+        var uploadToast = toastr.info("Uploading the file " + selectedFile.name + "\n<progress-bar class='upload-progress-bar'></progress-bar>", toastrConfig);
 
-        return $http({
-                url: url,
-                method: "PUT",
-                data: selectedFile,
-                processData: false,
-                uploadEventHandlers: {
-                    progress: function (e) {
-                        if (e.lengthComputable) {
-                            uploadProgress = (1 - e.loaded / e.total) * 100;
-                            uploadToast.el.find('.upload-progress-bar').css('width', uploadProgress + '%');
-                        }
+        $http({
+            url: url,
+            method: "PUT",
+            data: selectedFile,
+            processData: false,
+            uploadEventHandlers: {
+                progress: function (e) {
+                    if (e.lengthComputable) {
+                        uploadProgress = (1 - e.loaded / e.total) * 100;
+                        uploadToast.el.find('.upload-progress-bar').css('width', uploadProgress + '%');
                     }
-                },
-                headers: { "sessionid": getSessionId() }
-            })
-            .success(function (data){
-                successCallback();
-                uploadToast.el.find('.toast-info').css('background-color', '#51A351');
-                uploadToast.el.find('.toast-message').text("Your file " + selectedFile.name + " has been successfully uploaded.");
-            })
-            .error(function (xhr) {
-                errorCallback();
-                var errorMessage = "";
-                if(xhr) {
-                    errorMessage = ": "+ xhr;
                 }
-                uploadToast.el.find('.toast-info').css('background-color', '#BD362F');
-                uploadToast.el.find('.toast-message').text('Failed to upload the file ' + selectedFile.name + errorMessage)
-            });
+            },
+            headers: { "sessionid": getSessionId() }
+        })
+        .success(function (data){
+            successCallback();
+            uploadToast.el.children().removeClass('toast-info')
+            uploadToast.el.children().addClass('toast-success')
+            uploadToast.el.find('.toast-message').text("Your file " + selectedFile.name + " has been successfully uploaded.");
+        })
+        .error(function (xhr) {
+            errorCallback();
+            var errorMessage = "";
+            if(xhr) {
+                errorMessage = ": "+ xhr;
+            }
+            uploadToast.el.children().removeClass('toast-info')
+            uploadToast.el.children().addClass('toast-error')
+            uploadToast.el.find('.toast-message').text('Failed to upload the file ' + selectedFile.name + errorMessage)
+        });
     }
 
     /**
