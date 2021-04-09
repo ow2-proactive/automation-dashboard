@@ -236,7 +236,6 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     }
 
     $scope.downloadFile = function() {
-    console.log('in donwload FIle')
         var selectedElement=$("#files-tbody  tr.active").children().first();
         if (selectedElement.length == 0) {
             displayGenericTitleErrorMessage('No file chosen to be downloaded.');
@@ -267,7 +266,6 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     }
 
     $scope.downloadFileRequest = function(filePath, fileName, fileEncoding) {
-        console.log("downloadFileRequest %s,%s,%s ", filePath, fileName, fileEncoding)
         var url = dataspaceRestUrl + encodeURIComponent(filePath) + "?encoding=" + fileEncoding;
         var xhr = new XMLHttpRequest();
         xhr.open('GET', url, true);
