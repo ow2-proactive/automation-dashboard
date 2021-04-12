@@ -96,7 +96,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, toastr, Swee
     }
 
     function uploadDataspaceFile(url, selectedFile, successCallback, errorCallback) {
-        toastrConfig = {allowHtml:true, closeButton: true, autoDismiss: false, tapToDismiss: false, progressBar: false, timeOut: 0, extendedTimeOut: 0};
+        var toastrConfig = {allowHtml:true, closeButton: true, autoDismiss: false, tapToDismiss: false, progressBar: false, timeOut: 0, extendedTimeOut: 0};
         var uploadToast = toastr.info("Uploading the file " + selectedFile.name + "\n<progress-bar class='upload-progress-bar'></progress-bar>", toastrConfig);
 
         $http({
