@@ -1,4 +1,4 @@
-function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
+function UtilsFactory($window, $uibModal, $filter, $cookies, $http, toastr, SweetAlert) {
     var specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder', 'pa:user_folder', 'pa:credential'];
 
     function openJobInSchedulerPortal(jobId) {
@@ -71,6 +71,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
         });
         return variables;
     }
+
     // open a pop-up to manage (browse, upload, delete) the global or user data space files
     function openFileBrowser(variable, dataspace, selectFolder) {
          $uibModal.open({
@@ -92,6 +93,43 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
                  }
              }
          });
+    }
+
+    function uploadDataspaceFile(url, selectedFile, successCallback, errorCallback) {
+        var toastrConfig = {allowHtml:true, closeButton: true, autoDismiss: false, tapToDismiss: false, progressBar: false, timeOut: 0, extendedTimeOut: 0};
+        var uploadToast = toastr.info("Uploading the file " + selectedFile.name + "\n<progress-bar class='upload-progress-bar'></progress-bar>", toastrConfig);
+
+        $http({
+            url: url,
+            method: "PUT",
+            data: selectedFile,
+            processData: false,
+            uploadEventHandlers: {
+                progress: function (e) {
+                    if (e.lengthComputable) {
+                        uploadProgress = (1 - e.loaded / e.total) * 100;
+                        uploadToast.el.find('.upload-progress-bar').css('width', uploadProgress + '%');
+                    }
+                }
+            },
+            headers: { "sessionid": getSessionId() }
+        })
+        .success(function (data){
+            successCallback();
+            uploadToast.el.children().removeClass('toast-info')
+            uploadToast.el.children().addClass('toast-success')
+            uploadToast.el.find('.toast-message').text("Your file " + selectedFile.name + " has been successfully uploaded.");
+        })
+        .error(function (xhr) {
+            errorCallback();
+            var errorMessage = "";
+            if(xhr) {
+                errorMessage = ": "+ xhr;
+            }
+            uploadToast.el.children().removeClass('toast-info')
+            uploadToast.el.children().addClass('toast-error')
+            uploadToast.el.find('.toast-message').text('Failed to upload the file ' + selectedFile.name + errorMessage)
+        });
     }
 
     /**
@@ -195,6 +233,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
         isSpecialUIModel: isSpecialUIModel,
         parseEmptyVariablesValue: parseEmptyVariablesValue,
         openFileBrowser: openFileBrowser,
+        uploadDataspaceFile: uploadDataspaceFile,
         translate: translate,
         displayTranslatedMessage: displayTranslatedMessage,
         displayTranslatedErrorMessage: displayTranslatedErrorMessage,
