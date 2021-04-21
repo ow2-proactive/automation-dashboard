@@ -655,3 +655,31 @@
     right: auto!important;
     left: 0!important;
 }
+
+md-virtual-repeat-container {
+    height: 100%;
+    overflow-x: hidden;
+    overflow-y: scroll;
+    position: absolute;
+    width: 100%;
+}
+
+md-virtual-repeat-container:-webkit-scrollbar {
+    width: 0 !important;
+}
+
+.has-success .input-group-addon {
+    color: #18a689;
+    background-color: #ffffff;
+    border-color: #18a689;
+}
+
+@media (min-width: 992px) {
+    .modal-xl {
+        width: calc(100vw - 220px);
+    }
+
+    .modal-xxl {
+        width: 100%;
+    }
+}
