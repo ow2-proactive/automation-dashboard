@@ -266,23 +266,23 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     }
 
     $scope.downloadFileRequest = function(filePath, fileName, fileEncoding) {
-        var url = dataspaceRestUrl + encodeURIComponent(filePath) + "?encoding=" + fileEncoding;
-        var xhr = new XMLHttpRequest();
-        xhr.open('GET', url, true);
-        xhr.setRequestHeader("sessionid", localStorage['pa.session']);
-        xhr.responseType = 'arraybuffer';
-        xhr.onload = function (e) {
-            if (xhr.status == 200) {
-                var blob = new Blob([this.response]);
-                var a = document.createElement('a');
-                a.href = window.URL.createObjectURL(blob);
-                a.download = fileName;
-                a.click();
-            } else {
-                displayGenericTitleErrorMessage(['Failed to download the file', filePath + ':' + xhr.statusText]);
+        $http({
+            url: JSON.parse(localStorage.restUrl) + "/common/token",
+            method: "POST",
+            headers: {
+                'sessionid': getSessionId()
             }
-        };
-        xhr.send();
+        })
+        .success(function (data){
+            window.location.href = dataspaceRestUrl + encodeURIComponent(filePath) + "?encoding=" + fileEncoding + "&token=" + data;
+        })
+        .error(function (xhr) {
+            var errorMessage = "";
+            if(xhr) {
+                errorMessage = ": "+ xhr;
+            }
+            displayGenericTitleErrorMessage('Failed to be authenticated for downloading the file ' + fileName, errorMessage);
+        });
     }
 
     $scope.deleteFile = function() {
