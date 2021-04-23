@@ -288,7 +288,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         var portals = Object.keys($scope.automationDashboardPortals);
         permissionService.getPortalsAccessPermission(portals).then(function (response) {
             if (Array.isArray(response.data) && response.data.length) {
-                //Choose the workflow-automation portal as default portal if it exists, otherwise we choose the first portal in the list
+                //Choose the workflow-execution portal as default portal if it exists, otherwise we choose the first portal in the list
                 var doHaveAccessToWA = response.data.indexOf('workflow-execution');
                 $scope.firstAccessiblePortal = doHaveAccessToWA !== -1 ? response.data[doHaveAccessToWA] : response.data[0];
                 response.data.forEach(function (authorizedPortal) {
@@ -389,7 +389,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             $scope.changeFavicon('analytics-portal');
         } else if(jobPlannerChildren.indexOf(portal) !== -1){
             $scope.changeFavicon('job-planner-portal');
-        } else if(splitUrl[splitUrl.length-1] === "workflow-automation" || splitUrl[splitUrl.length-1] ==="workflow-execution"){
+        } else if(splitUrl[splitUrl.length-1] ==="workflow-execution"){
             $scope.changeFavicon("automation_dashboard_30");
         } else {
             $scope.changeFavicon(splitUrl[splitUrl.length-1]);
