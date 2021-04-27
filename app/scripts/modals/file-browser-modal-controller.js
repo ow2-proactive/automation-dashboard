@@ -267,14 +267,15 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
 
     $scope.downloadFileRequest = function(filePath, fileName, fileEncoding) {
         $http({
-            url: JSON.parse(localStorage.restUrl) + "/common/token",
+            url: JSON.parse(localStorage.restUrl) + "/common/tokens?numberTokens=1",
             method: "POST",
             headers: {
                 'sessionid': getSessionId()
             }
         })
         .success(function (data){
-            window.location.href = dataspaceRestUrl + encodeURIComponent(filePath) + "?encoding=" + fileEncoding + "&token=" + data;
+            console.log(data)
+            window.location.href = dataspaceRestUrl + encodeURIComponent(filePath) + "?encoding=" + fileEncoding + "&token=" + data[0];
         })
         .error(function (xhr) {
             var errorMessage = "";
