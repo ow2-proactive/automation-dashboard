@@ -220,18 +220,18 @@ function backToTop() {
         replace: true,
         template: '<div id="backtop"><button><div ng-transclude></div></button></div>',
         scope: {
-            text: "@buttonText",
-            speed: "@scrollSpeed"
+            text: '@buttonText',
+            speed: '@scrollSpeed'
         },
-        link: function(scope, element) {
+        link: function (scope, element) {
 
             scope.text = scope.text || 'Scroll top';
             scope.speed = parseInt(scope.speed, 10) || 300;
 
             var speed = Math.round(scope.speed / 100);
-            var onscroll = function() {
+            var onscroll = function () {
                 if (window.pageYOffset > 0) {
-                    if(!element.showing){
+                    if (!element.showing) {
                         element.addClass('show');
                         element.showing = true;
                     }
@@ -241,17 +241,19 @@ function backToTop() {
                 }
             };
 
-            scope.currentYPosition = function() {
-                if (document.documentElement && document.documentElement.scrollTop)
+            scope.currentYPosition = function () {
+                if (document.documentElement && document.documentElement.scrollTop) {
                     return document.documentElement.scrollTop;
-                if (document.body.scrollTop)
+                }
+                if (document.body.scrollTop) {
                     return document.body.scrollTop;
+                }
                 return 0;
             };
 
             element.showing = false;
-            element.on('click', function() {
-                window.removeEventListener("scroll", onscroll);
+            element.on('click', function () {
+                window.removeEventListener('scroll', onscroll);
 
                 element.removeClass('show');
                 element.showing = false;
@@ -261,26 +263,79 @@ function backToTop() {
                 var step = Math.round(startY / 25);
                 var leapY = startY < 100 ? 0 : startY - step;
 
-                var scrollInterval = setInterval(function(){
+                var scrollInterval = setInterval(function () {
                     window.scrollTo(0, leapY)
-                    if(!leapY){
+                    if (!leapY) {
                         clearInterval(scrollInterval);
-                        window.addEventListener("scroll", onscroll)
+                        window.addEventListener('scroll', onscroll)
                     }
 
                     leapY -= step;
 
-                    if(leapY < 0) leapY = 0;
+                    if (leapY < 0) leapY = 0;
                 }, speed)
             });
 
-            window.addEventListener("scroll", onscroll);
-            scope.$on("$destroy", function(){
-                window.removeEventListener("scroll", onscroll)
+            window.addEventListener('scroll', onscroll);
+            scope.$on('$destroy', function () {
+                window.removeEventListener('scroll', onscroll)
             })
         }
     };
 
+}
+
+/**
+ * CAUTION : Use only on dropdown-toggle elements where the dropdown menu is : 1) loaded from a template and 2) append-dropdown-to-body is used on the parent uib-dropdown element
+ * Directive to display and position a uib-dropdown menu when appended-to-body while using a template
+ * It is a workaround to a non-fixed issue in UI-Bootstrap library since 2015 (see https://github.com/angular-ui/bootstrap/issues/4240)
+ * The implementation of this directive is mainly code snipets adapted from UI-Bootstrap library. It uses a home-made fix by Activeeon and not the suggested fixes in the issue top above.
+ */
+function showDropdownFromTemplate($timeout, $uibPosition) {
+    return {
+        restrict: 'A',
+        scope: {},
+        link: link
+    };
+
+    function link(scope, element) {
+        element.bind('click', onClick);
+    }
+
+    function onClick(e) {
+        // Wait for the dropdown element to be loaded from its template and added to the DOM
+        $timeout(function () {
+            var element = angular.element(e.currentTarget);
+            var ul = angular.element('.dropdown-menu.custom-dropdown')
+            var pos = $uibPosition.positionElements(element, ul, 'bottom-left', true),
+                css,
+                rightalign,
+                scrollbarPadding,
+                scrollbarWidth = 0;
+
+            css = {
+                top: pos.top + 'px',
+                display: 'block'
+            };
+
+            rightalign = ul.hasClass('dropdown-menu-right');
+            if (!rightalign) {
+                css.left = pos.left + 'px';
+                css.right = 'auto';
+            } else {
+                css.left = 'auto';
+                scrollbarPadding = $uibPosition.scrollbarPadding(angular.element('body'));
+
+                if (scrollbarPadding.heightOverflow && scrollbarPadding.scrollbarWidth) {
+                    scrollbarWidth = scrollbarPadding.scrollbarWidth;
+                }
+
+                css.right = window.innerWidth - scrollbarWidth -
+                    (pos.left + element.prop('offsetWidth')) + 'px';
+            }
+            ul.css(css)
+        }, 10)
+    }
 }
 
 /**
@@ -296,4 +351,5 @@ angular
     .directive('pageTitle', pageTitle)
     .directive('sideNavigation', sideNavigation)
     .directive('slimScroll', slimScroll)
-    .directive('backTop', backToTop);
+    .directive('backTop', backToTop)
+    .directive('showDropdownFromTemplate', showDropdownFromTemplate);
