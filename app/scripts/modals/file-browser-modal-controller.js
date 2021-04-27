@@ -274,7 +274,6 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
             }
         })
         .success(function (data){
-            console.log(data)
             window.location.href = dataspaceRestUrl + encodeURIComponent(filePath) + "?encoding=" + fileEncoding + "&token=" + data[0];
         })
         .error(function (xhr) {
