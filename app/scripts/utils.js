@@ -107,7 +107,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, toastr, Swee
             uploadEventHandlers: {
                 progress: function (e) {
                     if (e.lengthComputable) {
-                        uploadProgress = (1 - e.loaded / e.total) * 100;
+                        uploadProgress = (e.loaded / e.total) * 100;
                         uploadToast.el.find('.upload-progress-bar').css('width', uploadProgress + '%');
                     }
                 }
@@ -116,9 +116,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, toastr, Swee
         })
         .success(function (data){
             successCallback();
-            uploadToast.el.children().removeClass('toast-info')
-            uploadToast.el.children().addClass('toast-success')
-            uploadToast.el.find('.toast-message').text("Your file " + selectedFile.name + " has been successfully uploaded.");
+            uploadToast.el.remove();
+            toastr.success("Your file " + selectedFile.name + " has been successfully uploaded.", {timeOut: 0, extendedTimeOut: 0});
         })
         .error(function (xhr) {
             errorCallback();
@@ -126,9 +125,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, toastr, Swee
             if(xhr) {
                 errorMessage = ": "+ xhr;
             }
-            uploadToast.el.children().removeClass('toast-info')
-            uploadToast.el.children().addClass('toast-error')
-            uploadToast.el.find('.toast-message').text('Failed to upload the file ' + selectedFile.name + errorMessage)
+            uploadToast.el.remove();
+            toastr.error('Failed to upload the file ' + selectedFile.name + errorMessage, {timeOut: 0, extendedTimeOut: 0})
         });
     }
 
