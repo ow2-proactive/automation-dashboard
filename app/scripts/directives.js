@@ -291,7 +291,7 @@ function backToTop() {
  * It is a workaround to a non-fixed issue in UI-Bootstrap library since 2015 (see https://github.com/angular-ui/bootstrap/issues/4240)
  * The implementation of this directive is mainly code snipets adapted from UI-Bootstrap library. It uses a home-made fix by Activeeon and not the suggested fixes in the issue top above.
  */
-function showDropdownFromTemplate($timeout, $uibPosition) {
+function showDropdownFromTemplate($document, $timeout, $uibPosition) {
     return {
         restrict: 'A',
         scope: {},
@@ -304,9 +304,11 @@ function showDropdownFromTemplate($timeout, $uibPosition) {
 
     function waitForElement(selector, callback) {
         if (angular.element(selector).length) {
+            angular.element('body').css('cursor','');
             callback();
         } else {
             $timeout(function() {
+                angular.element('body').css('cursor','wait');
                 waitForElement(selector, callback);
             }, 100);
         }
