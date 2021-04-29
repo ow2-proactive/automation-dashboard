@@ -304,11 +304,11 @@ function showDropdownFromTemplate($document, $timeout, $uibPosition) {
 
     function waitForElement(selector, callback) {
         if (angular.element(selector).length) {
-            angular.element('body').css('cursor','');
+            angular.element('body').css('cursor', '');
             callback();
         } else {
-            $timeout(function() {
-                angular.element('body').css('cursor','wait');
+            $timeout(function () {
+                angular.element('body').css('cursor', 'wait');
                 waitForElement(selector, callback);
             }, 100);
         }
@@ -316,14 +316,14 @@ function showDropdownFromTemplate($document, $timeout, $uibPosition) {
 
     function onClick(e) {
         // Wait for the dropdown element to be loaded from its template and added to the DOM
-        waitForElement('body.uib-dropdown-open',function () {
+        waitForElement('body.uib-dropdown-open', function () {
             var element = angular.element(e.currentTarget);
-            if(!jQuery(element).siblings('ul.dropdown-menu').length){
-                waitForElement('.dropdown-menu.custom-dropdown',function () {
+            if (!jQuery(element).siblings('ul.dropdown-menu').length) {
+                waitForElement('.dropdown-menu.custom-dropdown', function () {
                     var ul = angular.element('.dropdown-menu.custom-dropdown')
                     var pos = $uibPosition.positionElements(element, ul, 'bottom-left', true),
                         css,
-                        rightalign,
+                        rightAlign,
                         scrollbarPadding,
                         scrollbarWidth = 0;
 
@@ -332,8 +332,8 @@ function showDropdownFromTemplate($document, $timeout, $uibPosition) {
                         display: 'block'
                     };
 
-                    rightalign = ul.hasClass('dropdown-menu-right');
-                    if (!rightalign) {
+                    rightAlign = ul.hasClass('dropdown-menu-right');
+                    if (!rightAlign) {
                         css.left = pos.left + 'px';
                         css.right = 'auto';
                     } else {
@@ -344,8 +344,7 @@ function showDropdownFromTemplate($document, $timeout, $uibPosition) {
                             scrollbarWidth = scrollbarPadding.scrollbarWidth;
                         }
 
-                        css.right = window.innerWidth - scrollbarWidth -
-                            (pos.left + element.prop('offsetWidth')) + 'px';
+                        css.right = window.innerWidth - scrollbarWidth - (pos.left + element.prop('offsetWidth')) + 'px';
                     }
                     ul.css(css)
                 })
