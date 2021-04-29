@@ -12,7 +12,7 @@
   "jobAnalyticsServiceUrl": "/job-analytics/"
 },
 "view": [{
-  "viewname": "Workflow Automation",
+  "viewname": "Workflow Execution",
   "kpis": [{
     "name": "Running Jobs",
     "url": "http://pws/jobs/running/count"

@@ -1,4 +1,4 @@
-function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
+function UtilsFactory($window, $uibModal, $filter, $cookies, $http, toastr, SweetAlert) {
     var specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder', 'pa:user_folder', 'pa:credential'];
 
     function openJobInSchedulerPortal(jobId) {
@@ -71,6 +71,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
         });
         return variables;
     }
+
     // open a pop-up to manage (browse, upload, delete) the global or user data space files
     function openFileBrowser(variable, dataspace, selectFolder) {
          $uibModal.open({
@@ -92,6 +93,41 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
                  }
              }
          });
+    }
+
+    function uploadDataspaceFile(url, selectedFile, successCallback, errorCallback) {
+        var toastrConfig = {allowHtml:true, closeButton: true, autoDismiss: false, tapToDismiss: false, progressBar: false, timeOut: 0, extendedTimeOut: 0};
+        var uploadToast = toastr.info("Uploading the file " + selectedFile.name + "\n<progress-bar class='upload-progress-bar'></progress-bar>", toastrConfig);
+
+        $http({
+            url: url,
+            method: "PUT",
+            data: selectedFile,
+            processData: false,
+            uploadEventHandlers: {
+                progress: function (e) {
+                    if (e.lengthComputable) {
+                        uploadProgress = (e.loaded / e.total) * 100;
+                        uploadToast.el.find('.upload-progress-bar').css('width', uploadProgress + '%');
+                    }
+                }
+            },
+            headers: { "sessionid": getSessionId() }
+        })
+        .success(function (data){
+            successCallback();
+            uploadToast.el.remove();
+            toastr.success("Your file " + selectedFile.name + " has been successfully uploaded.", {timeOut: 0, extendedTimeOut: 0});
+        })
+        .error(function (xhr) {
+            errorCallback();
+            var errorMessage = "";
+            if(xhr) {
+                errorMessage = ": "+ xhr;
+            }
+            uploadToast.el.remove();
+            toastr.error('Failed to upload the file ' + selectedFile.name + errorMessage, {timeOut: 0, extendedTimeOut: 0})
+        });
     }
 
     /**
@@ -149,6 +185,10 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
     }
 
    function openEndpoint(url) {
+       // Add default protocol if it is not provided (when launching locally)
+       if (!url.match(/^[a-zA-Z]+:\/\//)) {
+           url = window.location.protocol + '//' + url;
+       }
         var parsedUrl = new URL(url);
 
         if (parsedUrl.pathname.includes('cloud-automation-service/services/')) {
@@ -164,7 +204,18 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
 
         //open the targeted url
         $window.open(parsedUrl.href, url);
-    };
+    }
+
+    function getByKey (propertyLabel, propertyName, collection) {
+        var len = collection.length;
+        var value = '';
+        for (var i = 0; i < len; i++) {
+            if ((collection[i].label === propertyLabel) && (collection[i].key === propertyName)) {
+                value = collection[i].value;
+            }
+        }
+        return value;
+    }
 
     /**
      * Get the url or proxified url for a given endpoint
@@ -173,13 +224,14 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
      */
     function getEndpointUrl(endpoint) {
         return endpoint.proxyfied ? endpoint.proxyfiedUrl : endpoint.url;
-    };
+    }
 
     return {
         openJobInSchedulerPortal : openJobInSchedulerPortal,
         isSpecialUIModel: isSpecialUIModel,
         parseEmptyVariablesValue: parseEmptyVariablesValue,
         openFileBrowser: openFileBrowser,
+        uploadDataspaceFile: uploadDataspaceFile,
         translate: translate,
         displayTranslatedMessage: displayTranslatedMessage,
         displayTranslatedErrorMessage: displayTranslatedErrorMessage,
@@ -189,7 +241,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, SweetAlert) {
         },
         extractVariables: extractVariables,
         openEndpoint : openEndpoint,
-        getEndpointUrl: getEndpointUrl
+        getEndpointUrl: getEndpointUrl,
+        getByKey:getByKey
     };
 }
 
