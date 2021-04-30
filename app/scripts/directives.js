@@ -304,11 +304,9 @@ function showDropdownFromTemplate($document, $timeout, $uibPosition) {
 
     function waitForElement(selector, callback) {
         if (angular.element(selector).length) {
-            angular.element('body').css('cursor', '');
             callback();
         } else {
             $timeout(function () {
-                angular.element('body').css('cursor', 'wait');
                 waitForElement(selector, callback);
             }, 100);
         }

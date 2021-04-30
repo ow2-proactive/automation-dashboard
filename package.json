@@ -9,6 +9,7 @@
     "angular-toastr": "^2.1.1",
     "angular-ui-grid": "^4.8.0",
     "angular-ui-tree": "^2.22.6",
+    "angular-vs-repeat": "^2.0.14",
     "canvg": "^1.5.3",
     "chart.js": "^2.8.0",
     "codemirror": "4.8.X",
