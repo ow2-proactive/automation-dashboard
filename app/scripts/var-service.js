@@ -10,15 +10,8 @@ function VarService($http, $window) {
         }
         // Replace ${PA_CATALOG_REST_URL} OR $PA_CATALOG_REST_URL by origin + 'catalog'
         urlToFetch = urlToFetch.replace(/(\$\{PA_CATALOG_REST_URL\}|\$PA_CATALOG_REST_URL)/g, origin + 'catalog');
-
         // Replace ${PA_SCHEDULER_REST_URL} OR $PA_SCHEDULER_REST_URL by origin + 'catalog'
         urlToFetch = urlToFetch.replace(/(\$\{PA_SCHEDULER_REST_URL\}|\$PA_SCHEDULER_REST_URL)/g, origin + 'rest');
-
-        // Replace ${PA_SCHEDULER_REST_PUBLIC_URL} OR $PA_SCHEDULER_REST_PUBLIC_URL by origin + 'rest'
-        urlToFetch = urlToFetch.replace(/(\$\{PA_SCHEDULER_REST_PUBLIC_URL\}|\$PA_SCHEDULER_REST_PUBLIC_URL)/g, origin + 'rest');
-
-        // Replace ${PA_CATALOG_REST_PUBLIC_URL} OR $PA_CATALOG_REST_PUBLIC_URL by origin + 'catalog'
-        urlToFetch = urlToFetch.replace(/(\$\{PA_CATALOG_REST_PUBLIC_URL\}|\$PA_CATALOG_REST_PUBLIC_URL)/g, origin + 'catalog');
         return getStringByUrl(urlToFetch);
     };
 
