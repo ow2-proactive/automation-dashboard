@@ -14,7 +14,8 @@
             "workflow-execution/templates/job-results-dropdown.html",
             "workflow-execution/templates/job-service-dropdown.html",
             "workflow-execution/templates/job-signals-dropdown.html",
-            "workflow-execution/templates/workflow-variables.html"
+            "workflow-execution/templates/workflow-variables.html",
+            "workflow-execution/templates/wizard.html"
         ],
         "notAvailablePage": "workflow-execution/page_not_available_wf_execution.html",
         "jsFiles": [
