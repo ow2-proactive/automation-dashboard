@@ -29,9 +29,32 @@
             <button id="delete-file-btn" title="{{'Delete the selected file or folder'|translate}}" class="btn btn-white" ng-click="deleteFile()">
                 <i class="fa fa-trash"></i>
             </button>
-            <div class="pull-right" id="pull-right-hidden-files-checkbox">
-                <label class="checkbox-inline"><input id="show-hidden-files" type="checkbox" ng-model="showHiddenFiles" ng-change="showHiddenFilesChange()">{{'Show
+            <div class="pull-right" style="display:inline">
+                <div uib-dropdown class="uploading-files-dropdown" ng-if="$root.uploadingFiles && $root.uploadingFiles.length > 0" >
+                    <button type="button" class="btn btn-primary" uib-dropdown-toggle><i class="fa fa-upload"></i>Uploading {{$root.uploadingFiles.length}} files ...</button>
+                    <ul uib-dropdown-menu role="menu" class="pull-right" style="width: 500px;">
+                        <li ng-repeat="upload in $root.uploadingFiles" class="uploading-file-item {{upload.id}}">
+                            <div>
+                                {{upload.filename}}
+                                <div class="pull-right" style="display:inline">
+                                    <label class="upload-progress">{{upload.size}}</label>
+                                    <i class="fa fa-upload"></i>
+                                    <label class="upload-speed">0 bps</label>
+                                    <i class="fa fa-clock-o"></i>
+                                    <label class="upload-remaining-time"></label>
+                                    <button class="btn btn-white cancel-upload-btn" ng-click="cancelFileUpload(upload.id)" title="{{'Cancel the file uploading'|translate}}" style="border:none;background:transparent;">
+                                        <i class="fa fa-times-circle" style="color:red"></i>
+                                    </button>
+                                </div>
+                            </div>
+                            <div class="progress progress-mini" style="width: 100%">
+                                <div class="progress-bar" style="width: 0%"></div>
+                            </div>
+                        </li>
+                    </ul>
+                    <label class="checkbox-inline"><input id="show-hidden-files" type="checkbox" ng-model="showHiddenFiles" ng-change="showHiddenFilesChange()">{{'Show
                     Hidden'|translate}}</label>
+                </div>
             </div>
         </div>
         <br>
