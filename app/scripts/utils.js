@@ -1,4 +1,4 @@
-function UtilsFactory($window, $uibModal, $filter, $cookies, $http, toastr, SweetAlert) {
+function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, $q, toastr, SweetAlert) {
     var specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder', 'pa:user_folder', 'pa:credential'];
 
     function openJobInSchedulerPortal(jobId) {
@@ -78,7 +78,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, toastr, Swee
              templateUrl: 'views/modals/dataspace-file-browser.html',
              controller: 'FileBrowserModalCtrl',
              windowClass: 'fadeIn file-browser-modal',
-             size: 'lg',
+             size: 'xl',
              keyboard: false,
              backdrop: 'static',
              resolve: {
@@ -96,19 +96,49 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, toastr, Swee
     }
 
     function uploadDataspaceFile(url, selectedFile, successCallback, errorCallback) {
-        var toastrConfig = {allowHtml:true, closeButton: true, autoDismiss: false, tapToDismiss: false, progressBar: false, timeOut: 0, extendedTimeOut: 0};
-        var uploadToast = toastr.info("Uploading the file " + selectedFile.name + "\n<progress-bar class='upload-progress-bar'></progress-bar>", toastrConfig);
+        if($rootScope.uploadingFiles === void 0) {
+            $rootScope.uploadingFiles = [];
+        }
+        if($rootScope.uploadingCancelers === void 0) {
+            $rootScope.uploadingCancelers = new Map();
+        }
 
+        var uploadId = Math.random().toString(36).substr(2, 9);
+        $rootScope.uploadingFiles.push({id: uploadId, filename: selectedFile.name, size: toReadableFileSize(selectedFile.size), uploaded: 0, remainingSeconds: 0})
+
+        var uploadRequestCanceler = $q.defer();
+        $rootScope.uploadingCancelers.set(uploadId, uploadRequestCanceler);
+
+        var timeStarted = moment();
         $http({
             url: url,
             method: "PUT",
             data: selectedFile,
             processData: false,
+            timeout: uploadRequestCanceler.promise,
             uploadEventHandlers: {
                 progress: function (e) {
                     if (e.lengthComputable) {
                         uploadProgress = (e.loaded / e.total) * 100;
-                        uploadToast.el.find('.upload-progress-bar').css('width', uploadProgress + '%');
+                        $('.' + uploadId + ' .progress-bar').css('width', uploadProgress + '%');
+                        $('.' + uploadId + ' .upload-progress').html(toReadableFileSize(e.loaded)+"/"+toReadableFileSize(e.total));
+
+                        var timeElapsed = moment().diff(timeStarted);
+                        var uploadSpeed = e.loaded / (timeElapsed/1000); // Upload speed in bytes per second
+                        $('.' + uploadId + ' .upload-speed').html(toReadableNetworkSpeed(uploadSpeed * 8)); // Upload speed in bps, Kbps, or Mbps
+
+                        var remainingSeconds = Math.floor((e.total - e.loaded) / uploadSpeed);  // estimated remaining seconds for uploading
+                        $('.' + uploadId + ' .upload-remaining-time').html(timeToHHMMSS(remainingSeconds) + " left");
+
+                        var totalRemainSeconds = 0;
+                        for(var i = 0; i < $rootScope.uploadingFiles.length; i++){
+                            if ($rootScope.uploadingFiles[i].id === uploadId) {
+                                $rootScope.uploadingFiles[i].uploaded = e.loaded;
+                                $rootScope.uploadingFiles[i].remainingSeconds = remainingSeconds;
+                            }
+                            totalRemainSeconds += $rootScope.uploadingFiles[i].remainingSeconds;
+                        }
+                        $rootScope.totalRemainTime = totalRemainSeconds * 1000;
                     }
                 }
             },
@@ -116,8 +146,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, toastr, Swee
         })
         .success(function (data){
             successCallback();
-            uploadToast.el.remove();
-            toastr.success("Your file " + selectedFile.name + " has been successfully uploaded.", {timeOut: 0, extendedTimeOut: 0});
+            toastr.success("Your file " + selectedFile.name + " has been successfully uploaded.", {timeOut: 5000, extendedTimeOut: 0});
+            $rootScope.uploadingFiles = $rootScope.uploadingFiles.filter(function(x) {return x.id !== uploadId;});
         })
         .error(function (xhr) {
             errorCallback();
@@ -125,9 +155,39 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, toastr, Swee
             if(xhr) {
                 errorMessage = ": "+ xhr;
             }
-            uploadToast.el.remove();
             toastr.error('Failed to upload the file ' + selectedFile.name + errorMessage, {timeOut: 0, extendedTimeOut: 0})
+            $rootScope.uploadingFiles = $rootScope.uploadingFiles.filter(function(x) {return x.id !== uploadId;});
         });
+    }
+
+    // convert a duration (number of seconds) to a human readable format (HH:MM:SS)
+    function timeToHHMMSS(totalSeconds) {
+        return totalSeconds ? moment.duration(totalSeconds * 1000).format('D[d]H[h]m[m]s[s]') : '';
+    }
+
+    function toReadableNetworkSpeed(uploadSpeedBps) {
+        var uploadSpeedKbps = uploadSpeedBps/1024;
+        var readableUploadSpeed;
+        if (uploadSpeedKbps < 1) {
+            return uploadSpeedBps.toFixed(2) + " b/s";
+        } else if (uploadSpeedKbps < 1024) {
+            return uploadSpeedKbps.toFixed(2) + " Kb/s"
+        } else {
+            return (uploadSpeedKbps/1024).toFixed(2) + " Mb/s";
+        }
+    }
+
+    function toReadableFileSize(size) {
+        if (typeof bytes !== 'number') {
+            size = parseInt(size);
+        }
+        var units = [' B', ' KB', ' MB', ' GB', ' TB']
+        var unitIndex = 0;
+        while(size >= 1024 && unitIndex < units.length - 1) {
+            size /= 1024 ;
+            unitIndex++;
+        }
+        return size.toFixed(1) + units[unitIndex];
     }
 
     /**
@@ -232,6 +292,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, toastr, Swee
         parseEmptyVariablesValue: parseEmptyVariablesValue,
         openFileBrowser: openFileBrowser,
         uploadDataspaceFile: uploadDataspaceFile,
+        toReadableFileSize: toReadableFileSize,
         translate: translate,
         displayTranslatedMessage: displayTranslatedMessage,
         displayTranslatedErrorMessage: displayTranslatedErrorMessage,
