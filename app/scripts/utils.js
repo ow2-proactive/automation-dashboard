@@ -109,7 +109,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         var uploadRequestCanceler = $q.defer();
         $rootScope.uploadingCancelers.set(uploadId, uploadRequestCanceler);
 
-        var timeStarted = new Date();
+        var timeStarted = moment();
         $http({
             url: url,
             method: "PUT",
@@ -123,7 +123,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                         $('.' + uploadId + ' .progress-bar').css('width', uploadProgress + '%');
                         $('.' + uploadId + ' .upload-progress').html(toReadableFileSize(e.loaded)+"/"+toReadableFileSize(e.total));
 
-                        var timeElapsed = (new Date()) - timeStarted;
+                        var timeElapsed = moment().diff(timeStarted);
                         var uploadSpeed = e.loaded / (timeElapsed/1000); // Upload speed in bytes per second
                         $('.' + uploadId + ' .upload-speed').html(toReadableNetworkSpeed(uploadSpeed * 8)); // Upload speed in bps, Kbps, or Mbps
 
@@ -138,7 +138,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                             }
                             totalRemainSeconds += $rootScope.uploadingFiles[i].remainingSeconds;
                         }
-                        $rootScope.totalRemainTime = timeToHHMMSS(totalRemainSeconds);
+                        $rootScope.totalRemainTime = totalRemainSeconds * 1000;
                     }
                 }
             },
@@ -162,21 +162,19 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
 
     // convert a duration (number of seconds) to a human readable format (HH:MM:SS)
     function timeToHHMMSS(totalSeconds) {
-        var hours   = Math.floor(totalSeconds / 3600);
-        var minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
-        var seconds = totalSeconds - (hours * 3600) - (minutes * 60);
-
-        if (hours   < 10) {hours   = "0"+hours;}
-        if (minutes < 10) {minutes = "0"+minutes;}
-        if (seconds < 10) {seconds = "0"+seconds;}
-        return hours + ':' + minutes + ':' + seconds;
+        return totalSeconds ? moment.duration(totalSeconds * 1000).format('D[d]H[h]m[m]s[s]') : '';
     }
 
     function toReadableNetworkSpeed(uploadSpeedBps) {
         var uploadSpeedKbps = uploadSpeedBps/1024;
-        var readableUploadSpeed = (uploadSpeedKbps > 1) ? uploadSpeedKbps.toFixed(2) + " Kb/s" : uploadSpeedBps.toFixed(2) + " b/s";
-        readableUploadSpeed = (uploadSpeedKbps > 1024) ?  (uploadSpeedKbps/1024).toFixed(2) + " Mb/s" : readableUploadSpeed;
-        return readableUploadSpeed;
+        var readableUploadSpeed;
+        if (uploadSpeedKbps < 1) {
+            return uploadSpeedBps.toFixed(2) + " b/s";
+        } else if (uploadSpeedKbps < 1024) {
+            return uploadSpeedKbps.toFixed(2) + " Kb/s"
+        } else {
+            return (uploadSpeedKbps/1024).toFixed(2) + " Mb/s";
+        }
     }
 
     function toReadableFileSize(size) {
