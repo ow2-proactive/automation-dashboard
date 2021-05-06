@@ -78,7 +78,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
              templateUrl: 'views/modals/dataspace-file-browser.html',
              controller: 'FileBrowserModalCtrl',
              windowClass: 'fadeIn file-browser-modal',
-             size: 'lg',
+             size: 'xl',
              keyboard: false,
              backdrop: 'static',
              resolve: {
@@ -146,7 +146,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         })
         .success(function (data){
             successCallback();
-            toastr.success("Your file " + selectedFile.name + " has been successfully uploaded.", {timeOut: 0, extendedTimeOut: 0});
+            toastr.success("Your file " + selectedFile.name + " has been successfully uploaded.", {timeOut: 5000, extendedTimeOut: 0});
             $rootScope.uploadingFiles = $rootScope.uploadingFiles.filter(function(x) {return x.id !== uploadId;});
         })
         .error(function (xhr) {
