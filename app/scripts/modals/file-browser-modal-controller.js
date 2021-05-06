@@ -1,4 +1,4 @@
-angular.module('workflow-variables').controller('FileBrowserModalCtrl', function($scope, $http, $uibModalInstance, $q, dataspace, variable, selectFolder, SweetAlert, UtilsFactory) {
+angular.module('workflow-variables').controller('FileBrowserModalCtrl', function($scope, $rootScope, $http, $uibModalInstance, $q, dataspace, variable, selectFolder, SweetAlert, UtilsFactory) {
     var dataspaceRestUrl = JSON.parse(localStorage.restUrl) + "/data/" + dataspace + "/";
     var restRequestHeader = { headers: {'sessionid': getSessionId() }};
     $scope.currentPath = "";
@@ -79,25 +79,12 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                 };
                 if(filesMetadata[index].type == 'FILE') {
                     filesMetadata[index].type = headers('Content-Type');
-                    filesMetadata[index].size = $scope.toReadableFileSize(headers('Content-Length'));
+                    filesMetadata[index].size = UtilsFactory.toReadableFileSize(headers('Content-Length'));
                 }
             });
         });
         return filesMetadata;
     }
-
-    $scope.toReadableFileSize = function(size) {
-        if (typeof bytes !== 'number') {
-            size = parseInt(size);
-        }
-        var units = [' B', ' KB', ' MB', ' GB', ' TB']
-        var unitIndex = 0;
-        while(size >= 1024 && unitIndex < units.length - 1) {
-            size /= 1024 ;
-            unitIndex++;
-        }
-        return size.toFixed(1) + units[unitIndex];
-    },
 
     $scope.toDateInClientFormat = function(serverDate) {
         return new Date(serverDate).toLocaleString(undefined, { hour12: false });
@@ -326,6 +313,13 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
 
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
+    }
+
+    $rootScope.cancelFileUpload = function(uploadId) {
+        var canceler = $rootScope.uploadingCancelers.get(uploadId)
+        if (canceler) {
+            canceler.resolve()
+        }
     }
 
     function displayGenericTitleErrorMessage(message) {
