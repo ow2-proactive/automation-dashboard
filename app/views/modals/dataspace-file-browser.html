@@ -31,7 +31,7 @@
             </button>
             <div class="pull-right" style="display:inline">
                 <div uib-dropdown class="uploading-files-dropdown" ng-if="$root.uploadingFiles && $root.uploadingFiles.length > 0" style="display:inline">
-                    <button type="button" class="btn btn-primary" uib-dropdown-toggle><i class="fa fa-upload"></i>Uploading {{$root.uploadingFiles.length}} files ...</button>
+                    <button type="button" class="btn btn-primary" uib-dropdown-toggle><i class="fa fa-upload"></i>Uploading {{$root.uploadingFiles.length}} files   <i class="fa fa-clock-o"></i>{{($root.totalRemainTime) ? $root.totalRemainTime : "--:--:--"}} left</button>
                     <ul uib-dropdown-menu role="menu" class="pull-right" style="width: 500px;">
                         <li ng-repeat="upload in $root.uploadingFiles" class="uploading-file-item {{upload.id}}">
                             <div style="display:inline">

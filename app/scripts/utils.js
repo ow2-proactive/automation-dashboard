@@ -104,7 +104,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         }
 
         var uploadId = Math.random().toString(36).substr(2, 9);
-        $rootScope.uploadingFiles.push({id: uploadId, filename: selectedFile.name, size: toReadableFileSize(selectedFile.size)})
+        $rootScope.uploadingFiles.push({id: uploadId, filename: selectedFile.name, size: toReadableFileSize(selectedFile.size), uploaded: 0, remainingSeconds: 0})
 
         var uploadRequestCanceler = $q.defer();
         $rootScope.uploadingCancelers.set(uploadId, uploadRequestCanceler);
@@ -124,14 +124,21 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                         $('.' + uploadId + ' .upload-progress').html(toReadableFileSize(e.loaded)+"/"+toReadableFileSize(e.total));
 
                         var timeElapsed = (new Date()) - timeStarted;
-                        var uploadSpeed = e.loaded / (timeElapsed/1000); // Upload speed in second
-                        var uploadSpeedKbps = uploadSpeed/1024;
-                        var readableUploadSpeed = (uploadSpeedKbps > 1) ? uploadSpeedKbps.toFixed(2) + " Kbps" : uploadSpeed.toFixed(2) + " bps"
-                        readableUploadSpeed = (uploadSpeedKbps > 1024) ?  (uploadSpeedKbps/1024).toFixed(2) + " Mbps" : readableUploadSpeed
-                        $('.' + uploadId + ' .upload-speed').html(readableUploadSpeed);
+                        var uploadSpeed = e.loaded / (timeElapsed/1000); // Upload speed in bytes per second
+                        $('.' + uploadId + ' .upload-speed').html(toReadableNetworkSpeed(uploadSpeed * 8)); // Upload speed in bps, Kbps, or Mbps
 
-                        var remainingSeconds = (e.total - e.loaded) / uploadSpeed  // estimated remaining seconds for uploading
-                        $('.' + uploadId + ' .upload-remaining-time').html(new Date(remainingSeconds * 1000).toISOString().substr(11, 8)+" left");
+                        var remainingSeconds = Math.floor((e.total - e.loaded) / uploadSpeed);  // estimated remaining seconds for uploading
+                        $('.' + uploadId + ' .upload-remaining-time').html(timeToHHMMSS(remainingSeconds) + " left");
+
+                        var totalRemainSeconds = 0;
+                        for(var i = 0; i < $rootScope.uploadingFiles.length; i++){
+                            if ($rootScope.uploadingFiles[i].id === uploadId) {
+                                $rootScope.uploadingFiles[i].uploaded = e.loaded;
+                                $rootScope.uploadingFiles[i].remainingSeconds = remainingSeconds;
+                            }
+                            totalRemainSeconds += $rootScope.uploadingFiles[i].remainingSeconds;
+                        }
+                        $rootScope.totalRemainTime = timeToHHMMSS(totalRemainSeconds);
                     }
                 }
             },
@@ -151,6 +158,25 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             toastr.error('Failed to upload the file ' + selectedFile.name + errorMessage, {timeOut: 0, extendedTimeOut: 0})
             $rootScope.uploadingFiles = $rootScope.uploadingFiles.filter(function(x) {return x.id !== uploadId;});
         });
+    }
+
+    // convert a duration (number of seconds) to a human readable format (HH:MM:SS)
+    function timeToHHMMSS(totalSeconds) {
+        var hours   = Math.floor(totalSeconds / 3600);
+        var minutes = Math.floor((totalSeconds - (hours * 3600)) / 60);
+        var seconds = totalSeconds - (hours * 3600) - (minutes * 60);
+
+        if (hours   < 10) {hours   = "0"+hours;}
+        if (minutes < 10) {minutes = "0"+minutes;}
+        if (seconds < 10) {seconds = "0"+seconds;}
+        return hours + ':' + minutes + ':' + seconds;
+    }
+
+    function toReadableNetworkSpeed(uploadSpeedBps) {
+        var uploadSpeedKbps = uploadSpeedBps/1024;
+        var readableUploadSpeed = (uploadSpeedKbps > 1) ? uploadSpeedKbps.toFixed(2) + " Kb/s" : uploadSpeedBps.toFixed(2) + " b/s";
+        readableUploadSpeed = (uploadSpeedKbps > 1024) ?  (uploadSpeedKbps/1024).toFixed(2) + " Mb/s" : readableUploadSpeed;
+        return readableUploadSpeed;
     }
 
     function toReadableFileSize(size) {
