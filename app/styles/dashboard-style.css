@@ -679,6 +679,12 @@ md-virtual-repeat-container:-webkit-scrollbar {
     border-color: #18a689;
 }
 
+.has-error .input-group-addon {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #a94442;
+}
+
 @media (min-width: 992px) {
     .modal-xl {
         width: calc(100vw - 220px);
