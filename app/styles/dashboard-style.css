@@ -679,6 +679,34 @@ md-virtual-repeat-container:-webkit-scrollbar {
     border-color: #18a689;
 }
 
+.btn-primary.active, .btn-primary.active:focus, .btn-primary.active:hover, .btn-primary:active, .btn-primary:active:focus, .btn-primary:active:hover, .btn-primary:focus, .btn-primary:hover, .open .dropdown-toggle.btn-primary {
+    background-color: #18a689;
+    border-color: #18a689;
+    color: #FFF;
+}
+
+.progress-btn.active .progress-bgd {
+    opacity: 1;
+    animation: progress-anim 10s ease 0s;
+}
+
+.progress-btn .progress-bgd {
+    width: 0%;
+    height: 100%;
+    position: absolute;
+    z-index: 5;
+    background: #18a689;
+    border-radius: 3px;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.progress-btn > .btn {
+    z-index: 10;
+    background-color: #1ab394cc!important;
+    border-color: #1ab394cc!important;;
+}
+
 @media (min-width: 992px) {
     .modal-xl {
         width: calc(100vw - 220px);
