@@ -701,7 +701,7 @@ md-virtual-repeat-container:-webkit-scrollbar {
     transition: all 0.3s ease;
 }
 
-.progress-btn .btn {
+.progress-btn > .btn {
     z-index: 10;
     background-color: #1ab394cc!important;
     border-color: #1ab394cc!important;;
