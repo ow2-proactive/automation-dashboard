@@ -30,13 +30,14 @@
                 <i class="fa fa-trash"></i>
             </button>
             <div class="pull-right container-flex">
-                <div uib-dropdown class="uploading-files-dropdown container-flex m-r-sm" ng-if="$root.uploadingFiles && $root.uploadingFiles.length">
+                <div uib-dropdown class="uploading-files-dropdown container-flex m-r-sm progress-btn active" ng-if="$root.uploadingFiles && $root.uploadingFiles.length">
                     <button type="button" class="btn btn-primary" uib-dropdown-toggle>
                         <i class="fa fa-upload"></i>
                         <span class="m-r-sm">{{'Uploading'|translate}} {{$root.uploadingFiles.length}} {{'files'|translate}}</span>
                         <i class="fa fa-clock-o"></i>
-                        <span>{{($root.totalRemainTime) ? ($root.totalRemainTime | durationFormat) : "--:--:--"}} {{'left'|translate}}</span>
+                        <span>{{($root.totalRemainTime) ? ($root.totalRemainTime | durationFormat) : "--:--"}} {{'left'|translate}}</span>
                     </button>
+                    <div class="progress-bgd" ng-style="{'width':$root.totalProgress+'%'}"></div>
                     <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu role="menu" template-url="views/modals/uploading-files-dropdown.html"></ul>
                 </div>
                 <label class="checkbox-inline"><input id="show-hidden-files" type="checkbox" ng-model="showHiddenFiles" ng-change="showHiddenFilesChange()">{{'Show Hidden'|translate}}</label>
