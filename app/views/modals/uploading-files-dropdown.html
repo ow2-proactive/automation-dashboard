@@ -1,6 +1,14 @@
 <ul uib-dropdown-menu role="menu" class="dropdown-menu dropdown-menu-right custom-dropdown pull-right" style="min-width: 500px">
     <li ng-repeat="upload in $root.uploadingFiles" class="uploading-file-item {{upload.id}} p-sm">
         <div class="container-flex w-100">
+            <span ng-if="upload.isGlobalFile" class="fa-stack fa-xs m-r-smdd" aria-hidden="true" style="padding-right: 50px">
+                <i class="fa fa-folder fa-stack-2x"></i>
+                <i class="fa fa-globe fa-stack-1x fa-inverse dataspace-icon"></i>
+            </span>
+            <span ng-if="!upload.isGlobalFile" class="fa-stack fa-xs m-r-smdd" aria-hidden="true" style="padding-right: 50px">
+                <i class="fa fa-folder fa-stack-2x"></i>
+                <i class="fa fa-user fa-stack-1x fa-inverse dataspace-icon"></i>
+            </span>
             <span class="w-100 m-r-xl font-bold">{{upload.filename}}</span>
             <div class="pull-right container-flex">
                 <span class="upload-progress m-r-sm" style="white-space: nowrap;">{{upload.size}}</span>
