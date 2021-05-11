@@ -4,6 +4,7 @@
   "All rights reserved": "All rights reserved",
   "and": "and",
   "and all the files in it ?": "and all the files in it?",
+  "Are you sure you want to cancel uploading": "Are you sure you want to cancel uploading",
   "Are you sure you want to permanently delete the file": "Are you sure you want to permanently delete the file",
   "Are you sure you want to permanently delete the folder": "Are you sure you want to permanently delete the folder",
   "as a zip archive": "as a zip archive",
@@ -73,6 +74,7 @@
   "Select one": "Select one",
   "Settings": "Settings",
   "Show Hidden": "Show Hidden",
+  "Show the hidden files and folders which start with a dot character": "Show the hidden files and folders which start with a dot character",
   "Size": "Size",
   "The access is not authorized": "The access is not authorized",
   "Tutorials": "Tutorials",
@@ -91,6 +93,7 @@
   "Yes, delete file!": "Yes, delete file!",
   "Yes, delete folder!": "Yes, delete folder!",
   "Yes, download it!": "Yes, download it!",
+  "Yes, stop uploading!": "Yes, stop uploading!",
   "You are about to download the folder": "You are about to download the folder",
   "Your": "Your"
 }
