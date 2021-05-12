@@ -80,7 +80,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             controller: 'FileBrowserModalCtrl',
             windowClass: 'fadeIn file-browser-modal',
             size: 'xl',
-            keyboard: false,
+            keyboard: true,
             backdrop: 'static',
             resolve: {
                 dataspace: function () {
@@ -96,7 +96,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         });
     }
 
-    function uploadDataspaceFile(url, selectedFile, successCallback, errorCallback) {
+    function uploadDataspaceFile(url, selectedFile, isGlobalFile, successCallback, errorCallback) {
         if ($rootScope.uploadingFiles === void 0) {
             $rootScope.uploadingFiles = [];
         }
@@ -109,12 +109,13 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             id: uploadId,
             filename: selectedFile.name,
             size: toReadableFileSize(selectedFile.size),
+            isGlobalFile: isGlobalFile,
             uploaded: 0,
             remainingSeconds: 0
         })
 
         var uploadRequestCanceler = $q.defer();
-        $rootScope.uploadingCancelers.set(uploadId, uploadRequestCanceler);
+        $rootScope.uploadingCancelers.set(uploadId, {filename: selectedFile.name, canceler: uploadRequestCanceler});
 
         var timeStarted = moment();
         $http({
@@ -137,20 +138,19 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                         var remainingSeconds = Math.floor((e.total - e.loaded) / uploadSpeed);  // estimated remaining seconds for uploading
                         $('.' + uploadId + ' .upload-remaining-time').html(timeToHHMMSS(remainingSeconds) + ' left');
 
-                        var totalRemainSeconds = 0;
+                        var maxRemainSeconds = 0;
                         var totalUploaded = 0
                         var totalSize = 0;
                         for (var i = 0; i < $rootScope.uploadingFiles.length; i++) {
                             if ($rootScope.uploadingFiles[i].id === uploadId) {
                                 $rootScope.uploadingFiles[i].uploaded = e.loaded;
-                                $rootScope.uploadingFiles[i].size = e.total;
                                 $rootScope.uploadingFiles[i].remainingSeconds = remainingSeconds;
                             }
-                            totalRemainSeconds += $rootScope.uploadingFiles[i].remainingSeconds;
+                            maxRemainSeconds = Math.max(maxRemainSeconds, $rootScope.uploadingFiles[i].remainingSeconds);
                             totalUploaded += $rootScope.uploadingFiles[i].uploaded;
                             totalSize += $rootScope.uploadingFiles[i].size
                         }
-                        $rootScope.totalRemainTime = totalRemainSeconds * 1000;
+                        $rootScope.totalRemainTime = maxRemainSeconds * 1000;
                         $rootScope.totalProgress = (totalUploaded / totalSize) * 100;
                     }
                 }
@@ -160,26 +160,33 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             .success(function (data) {
                 successCallback();
                 toastr.success('Your file ' + selectedFile.name + ' has been successfully uploaded.', {
+                    closeButton: true,
                     timeOut: 5000,
                     extendedTimeOut: 0
                 });
                 $rootScope.uploadingFiles = $rootScope.uploadingFiles.filter(function (x) {
                     return x.id !== uploadId;
                 });
+                $rootScope.uploadingCancelers.delete(uploadId);
             })
-            .error(function (xhr) {
+            .error(function (xhr, status, headers, config) {
                 errorCallback();
-                var errorMessage = '';
-                if (xhr) {
-                    errorMessage = ': ' + xhr;
+                // No need to show error message for cancelled request (status 499)
+                if (config.timeout.status !== 499) {
+                    var errorMessage = '';
+                    if (xhr) {
+                        errorMessage = ': ' + xhr;
+                    }
+                    toastr.error('Failed to upload the file ' + selectedFile.name + errorMessage, {
+                        closeButton: true,
+                        timeOut: 0,
+                        extendedTimeOut: 0
+                    })
                 }
-                toastr.error('Failed to upload the file ' + selectedFile.name + errorMessage, {
-                    timeOut: 0,
-                    extendedTimeOut: 0
-                })
                 $rootScope.uploadingFiles = $rootScope.uploadingFiles.filter(function (x) {
                     return x.id !== uploadId;
                 });
+                $rootScope.uploadingCancelers.delete(uploadId);
             });
     }
 
