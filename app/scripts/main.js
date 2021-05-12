@@ -327,6 +327,8 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         $scope.firstAccessiblePortal = '';
         $rootScope.errorMessage = undefined;
         $scope.portalsAccessPermission = {};
+
+        // cancel the in-progress uploading dataspace files
         $rootScope.uploadingCancelers.forEach(function (upload, uploadId){
             if (upload && upload.canceler) {
                 upload.canceler.promise.status = 499; // Set 499 status to flag cancelled http requests
@@ -335,6 +337,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         })
         $rootScope.uploadingCancelers.clear();
         $rootScope.uploadingFiles.length = 0;
+
         localStorage.removeItem('pa.session');
         $scope.stopRegularCheckSession();
         $rootScope.$broadcast('event:StopRefreshing');
