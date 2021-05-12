@@ -7,12 +7,15 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     switch(dataspace.toUpperCase()){
         case "GLOBAL":
             $scope.spaceDescription=UtilsFactory.translate("Global DataSpace is a shared storage on the server host where anyone can read/write files.")
+            $scope.isGlobalFile = true
             break;
         case "USER":
             $scope.spaceDescription=UtilsFactory.translate("User DataSpace is a personal user data storage.")
+            $scope.isGlobalFile = false
             break;
         default:
             $scope.spaceDescription="";
+            $scope.isGlobalFile = false
     }
     $scope.variable = variable;
     $scope.selectFolder = selectFolder;
@@ -176,7 +179,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                 return;
             }
             var uploadURL = dataspaceRestUrl + encodeURIComponent(pathname);
-            UtilsFactory.uploadDataspaceFile(uploadURL, selectedFile,
+            UtilsFactory.uploadDataspaceFile(uploadURL, selectedFile, $scope.isGlobalFile,
                 function (data){
                     $scope.refreshFiles();
                 }, function () {});
@@ -316,10 +319,28 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     }
 
     $rootScope.cancelFileUpload = function(uploadId) {
-        var canceler = $rootScope.uploadingCancelers.get(uploadId)
-        if (canceler) {
-            canceler.resolve()
+        var upload = $rootScope.uploadingCancelers.get(uploadId);
+        if (!upload) {
+            return;
         }
+        var confirmMessage = UtilsFactory.translate(['Are you sure you want to cancel uploading', upload.filename, '?']);
+        SweetAlert.swal({
+            title: UtilsFactory.translate("Uploading!"),
+            text: confirmMessage,
+            type: "warning",
+            showCancelButton: true,
+            confirmButtonColor: "#DD6B55",
+            confirmButtonText: UtilsFactory.translate("Yes, stop uploading!"),
+            cancelButtonText: UtilsFactory.translate("Cancel"),
+            closeOnConfirm: true
+        }, function (isConfirm) {
+            if (isConfirm) {
+                if (upload.canceler) {
+                    upload.canceler.promise.status = 499; // Set 499 status to flag cancelled http requests
+                    upload.canceler.resolve();
+                }
+            }
+        });
     }
 
     function displayGenericTitleErrorMessage(message) {

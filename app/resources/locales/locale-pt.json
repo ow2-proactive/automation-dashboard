@@ -4,6 +4,7 @@
   "All rights reserved": "Todos os direitos reservados",
   "and": "e",
   "and all the files in it ?": "e todos os arquivos?",
+  "Are you sure you want to cancel uploading": "Tem certeza de que deseja cancelar o upload",
   "Are you sure you want to permanently delete the file": "Tem certeza de que deseja excluir permanentemente o arquivo?",
   "Are you sure you want to permanently delete the folder": "Tem certeza de que deseja excluir permanentemente a pasta e todos os arquivos?",
   "as a zip archive": "como um arquivo zip",
@@ -73,6 +74,7 @@
   "Select one": "Selecione um",
   "Settings": "Paramêtros",
   "Show Hidden": "Mostrar Oculto",
+  "Show the hidden files and folders": "Mostra os arquivos e pastas ocultos",
   "Size": "Tamanho",
   "The access is not authorized": "acesso não é permitido",
   "Tutorials": "Tutoriais",
@@ -91,6 +93,7 @@
   "Yes, delete file!": "Sim, exclua o arquivo!",
   "Yes, delete folder!": "Sim, exclua a pasta!",
   "Yes, download it!": "Sim, baixe a pasta",
+  "Yes, stop uploading!": "Sim, pare de enviar!",
   "You are about to download the folder": "Você está prestes a baixar a pasta",
   "Your": "Seu"
 }
