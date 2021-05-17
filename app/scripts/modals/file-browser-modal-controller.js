@@ -289,11 +289,11 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
         }
         SweetAlert.swal({
             title: UtilsFactory.translate("Deleted!"),
-            text: confirmMessage,
+            text: UtilsFactory.translate(confirmMessage),
             type: "warning",
             showCancelButton: true,
             confirmButtonColor: "#DD6B55",
-            confirmButtonText: confirmButtonText,
+            confirmButtonText: UtilsFactory.translate(confirmButtonText),
             closeOnConfirm: false
         }, function (isConfirm) {
             if (isConfirm) {

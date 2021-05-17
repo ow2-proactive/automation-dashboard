@@ -1,11 +1,11 @@
 <ul uib-dropdown-menu role="menu" class="dropdown-menu dropdown-menu-right custom-dropdown pull-right" style="min-width: 500px">
     <li ng-repeat="upload in $root.uploadingFiles" class="uploading-file-item {{upload.id}} p-sm">
         <div class="container-flex w-100">
-            <span ng-if="upload.isGlobalFile" class="fa-stack fa-xs m-r-xs p-w-sm" aria-hidden="true">
+            <span ng-if="upload.isGlobalFile" class="fa-stack fa-xs m-r-xs p-w-sm" title="{{'GLOBAL DataSpace file'|translate}}" aria-hidden="true">
                 <i class="fa fa-folder fa-stack-2x"></i>
                 <i class="fa fa-globe fa-stack-1x fa-inverse"></i>
             </span>
-            <span ng-if="!upload.isGlobalFile" class="fa-stack fa-xs m-r-xs p-w-sm" aria-hidden="true">
+            <span ng-if="!upload.isGlobalFile" class="fa-stack fa-xs m-r-xs p-w-sm" title="{{'USER DataSpace file'|translate}}" aria-hidden="true">
                 <i class="fa fa-folder fa-stack-2x"></i>
                 <i class="fa fa-user fa-stack-1x fa-inverse"></i>
             </span>
