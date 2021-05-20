@@ -662,7 +662,7 @@
 }
 
 md-virtual-repeat-container {
-    height: 100%;
+    height: 100%!important;
     overflow-x: hidden;
     overflow-y: scroll;
     position: absolute;
@@ -737,4 +737,8 @@ md-virtual-repeat-container:-webkit-scrollbar {
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
+}
+
+.img-bw {
+    filter: grayscale(100%);
 }
