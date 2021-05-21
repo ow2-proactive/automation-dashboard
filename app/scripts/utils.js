@@ -279,20 +279,23 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             url = window.location.protocol + '//' + url;
         }
         var parsedUrl = new URL(url);
+        // Open the endpoint in the browser only if the protocol is http or https
+        if (parsedUrl.protocol.startsWith('http')){
 
-        if (parsedUrl.pathname.includes('cloud-automation-service/services/')) {
-            //override the hostname of the target url (with the hostname of the current window)
-            parsedUrl.hostname = window.location.hostname;
+            if (parsedUrl.pathname.includes('cloud-automation-service/services/')) {
+                //override the hostname of the target url (with the hostname of the current window)
+                parsedUrl.hostname = window.location.hostname;
 
-            //add a cookie with a domain set to the same hostname (i.e., the hostname of the current window)
-            $cookies.put('sessionid', getSessionId(), {
-                domain: parsedUrl.hostname,
-                path: '/'
-            });
+                //add a cookie with a domain set to the same hostname (i.e., the hostname of the current window)
+                $cookies.put('sessionid', getSessionId(), {
+                    domain: parsedUrl.hostname,
+                    path: '/'
+                });
+            }
+
+            //open the targeted url
+            $window.open(parsedUrl.href, url);
         }
-
-        //open the targeted url
-        $window.open(parsedUrl.href, url);
     }
 
     function getByKey(propertyLabel, propertyName, collection) {
