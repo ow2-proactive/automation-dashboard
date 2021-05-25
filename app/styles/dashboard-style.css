@@ -661,6 +661,10 @@
     left: 0 !important;
 }
 
+.dropdown-menu>.disabled>a, .dropdown-menu>.disabled>a:focus, .dropdown-menu>.disabled>a:hover {
+    color: #bbbbbb;
+}
+
 md-virtual-repeat-container {
     height: 100%!important;
     overflow-x: hidden;
