@@ -18,7 +18,7 @@
                     </a>
                 </div>
             </li>
-            <li class="m-r-xs">
+            <li class="m-r-xs" ng-if="portalsAccessPermission['studio']">
                 <div class="btn-group pa-shortcuts">
                     <a class="btn btn-small btn-default pa-shortcuts" href="/studio/" style="color:#333;border-color: #ccc;padding:5px"
                        target="/studio/">
@@ -28,7 +28,7 @@
                     </a>
                 </div>
             </li>
-            <li class="m-r-xs">
+            <li class="m-r-xs" ng-if="portalsAccessPermission['scheduler']">
                 <div class="btn-group pa-shortcuts">
                     <a class="btn btn-small btn-default pa-shortcuts" href="/scheduler/" style="color:#333;border-color: #ccc;padding:5px"
                        target="/scheduler/">
@@ -38,7 +38,7 @@
                     </a>
                 </div>
             </li>
-            <li>
+            <li ng-if="portalsAccessPermission['rm']">
                 <div class="btn-group pa-shortcuts">
                     <a class="btn btn-small btn-default pa-shortcuts" href="/rm/"
                        style="color:#333;border-color: #ccc;padding:5px" target="/rm/">
