@@ -285,7 +285,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                 $scope.portalsAccessPermission[item.url.substring(1)] = false;
             }
         });
-        var portals = Object.keys($scope.automationDashboardPortals);
+        var portals = Object.keys($scope.automationDashboardPortals).concat(['studio', 'rm', 'scheduler']);
         permissionService.getPortalsAccessPermission(portals).then(function (response) {
             if (Array.isArray(response.data) && response.data.length) {
                 //Choose the workflow-execution portal as default portal if it exists, otherwise we choose the first portal in the list
