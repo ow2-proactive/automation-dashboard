@@ -15,7 +15,7 @@
     "codemirror": "5.58.2",
     "css-element-queries": "^1.0.2",
     "file-saver": "^2.0.2",
-    "grunt-cli": "^1.4.3",
+    "grunt": "^0.4.5",
     "html2canvas": "^1.0.0-rc.5",
     "jsplumb": "^2.3.2",
     "moment": "^2.22.2",
