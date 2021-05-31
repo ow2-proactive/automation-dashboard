@@ -12,7 +12,7 @@
     "angular-vs-repeat": "^2.0.14",
     "canvg": "^1.5.3",
     "chart.js": "^2.8.0",
-    "codemirror": "5.58.2",
+    "codemirror": "4.8.X",
     "css-element-queries": "^1.0.2",
     "file-saver": "^2.0.2",
     "grunt": "^0.4.5",
