@@ -1,0 +1,32 @@
+<ul uib-dropdown-menu role="menu" class="dropdown-menu dropdown-menu-right custom-dropdown pull-right" style="min-width: 500px">
+    <li ng-repeat="upload in $root.uploadingFiles" class="uploading-file-item {{upload.id}} p-sm">
+        <div class="container-flex w-100">
+            <span ng-if="upload.isGlobalFile" class="fa-stack fa-xs m-r-xs p-w-sm" title="{{'GLOBAL DataSpace file'|translate}}" aria-hidden="true">
+                <i class="fa fa-folder fa-stack-2x"></i>
+                <i class="fa fa-globe fa-stack-1x fa-inverse"></i>
+            </span>
+            <span ng-if="!upload.isGlobalFile" class="fa-stack fa-xs m-r-xs p-w-sm" title="{{'USER DataSpace file'|translate}}" aria-hidden="true">
+                <i class="fa fa-folder fa-stack-2x"></i>
+                <i class="fa fa-user fa-stack-1x fa-inverse"></i>
+            </span>
+            <span class="w-100 m-r-xl font-bold">{{upload.filename}}</span>
+            <div class="pull-right container-flex">
+                <span class="upload-progress m-r-sm" style="white-space: nowrap;">{{upload.size}}</span>
+                <div class="container-flex m-r-sm">
+                    <i class="fa fa-upload m-r-xs"></i>
+                    <span class="upload-speed" style="white-space: nowrap;"> 0 bps</span>
+                </div>
+                <div class="container-flex m-r-sm">
+                    <i class="fa fa-clock-o m-r-xs"></i>
+                    <span class="upload-remaining-time" style="white-space: nowrap;"></span>
+                </div>
+                <button class="btn btn-link cancel-upload-btn no-borders no-padding" ng-click="cancelFileUpload(upload.id)" title="{{'Cancel upload'|translate}}">
+                    <i class="fa fa-times-circle text-danger"></i>
+                </button>
+            </div>
+        </div>
+        <div class="progress progress-mini w-100">
+            <div class="progress-bar" style="width: 0%"></div>
+        </div>
+    </li>
+</ul>

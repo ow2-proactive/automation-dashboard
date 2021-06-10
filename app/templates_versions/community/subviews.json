@@ -20,8 +20,9 @@
         "notAvailablePage": "workflow-execution/page_not_available_wf_execution.html",
         "jsFiles": [
             "scripts/workflow-execution/workflow-execution.js",
-            "services/workflow-execution-scheduler-service.js",
             "services/workflow-execution-catalog-service.js",
+            "services/workflow-execution-scheduler-service.js",
+            "services/workflow-execution-utility-factory.js",
             "scripts/workflow-execution/job-output-controller.js",
             "scripts/workflow-execution/workflow-execution-catalog-controller.js",
             "scripts/workflow-execution/workflow-execution-variables-controller.js"
