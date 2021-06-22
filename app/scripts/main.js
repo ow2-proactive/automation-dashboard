@@ -181,7 +181,7 @@ mainModule.config(function ($translateProvider, $translatePartialLoaderProvider)
 
 // --------------- Controllers -----------------
 
-mainModule.controller('mainController', function ($window, $http, $scope, $rootScope, $state, $location, $interval, $translate, permissionService, SweetAlert, UtilsFactory) {
+mainModule.controller('mainController', function ($window, $http, $scope, $rootScope, $state, $location, $interval, $translate, $uibModalStack, permissionService, SweetAlert, UtilsFactory) {
 
     this.$onInit = function () {
         $scope.main.userName = localStorage['pa.login'];
@@ -229,6 +229,9 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
     function checkSession() {
         var sessionId = getSessionId();
         if (!sessionId) {
+            // Close all open Bootstrap modals
+            $uibModalStack.dismissAll();
+            $('.modal-backdrop').hide()
             $scope.closeSession();
         } else {
             $http.get(JSON.parse(localStorage['schedulerRestUrl']) + 'isconnected/', {headers: {'sessionID': sessionId}})
