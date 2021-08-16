@@ -6,7 +6,7 @@
         "appFolder": "cloud-automation/app/",
         "htmlFile": "workflow-execution/workflow_execution.html",
         "secondaryHtmlFiles": [
-            "modals/result_map_window_wf_automation.html",
+            "modals/result_map_modal.html",
             "modals/job_output_modal.html",
             "workflow-execution/templates/catalog-view.html",
             "workflow-execution/templates/job-actions-dropdown.html",
@@ -14,13 +14,15 @@
             "workflow-execution/templates/job-results-dropdown.html",
             "workflow-execution/templates/job-service-dropdown.html",
             "workflow-execution/templates/job-signals-dropdown.html",
-            "workflow-execution/templates/workflow-variables.html"
+            "workflow-execution/templates/workflow-variables.html",
+            "workflow-execution/templates/wizard.html"
         ],
         "notAvailablePage": "workflow-execution/page_not_available_wf_execution.html",
         "jsFiles": [
             "scripts/workflow-execution/workflow-execution.js",
-            "services/workflow-execution-scheduler-service.js",
             "services/workflow-execution-catalog-service.js",
+            "services/workflow-execution-scheduler-service.js",
+            "services/workflow-execution-utility-factory.js",
             "scripts/workflow-execution/job-output-controller.js",
             "scripts/workflow-execution/workflow-execution-catalog-controller.js",
             "scripts/workflow-execution/workflow-execution-variables-controller.js"

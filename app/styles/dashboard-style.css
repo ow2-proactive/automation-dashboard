@@ -661,8 +661,12 @@
     left: 0 !important;
 }
 
+.dropdown-menu>.disabled>a, .dropdown-menu>.disabled>a:focus, .dropdown-menu>.disabled>a:hover {
+    color: #bbbbbb;
+}
+
 md-virtual-repeat-container {
-    height: 100%;
+    height: 100%!important;
     overflow-x: hidden;
     overflow-y: scroll;
     position: absolute;
@@ -677,6 +681,40 @@ md-virtual-repeat-container:-webkit-scrollbar {
     color: #18a689;
     background-color: #ffffff;
     border-color: #18a689;
+}
+
+.has-error .input-group-addon {
+    color: #a94442;
+    background-color: #f2dede;
+    border-color: #a94442;
+}
+
+.btn-primary.active, .btn-primary.active:focus, .btn-primary.active:hover, .btn-primary:active, .btn-primary:active:focus, .btn-primary:active:hover, .btn-primary:focus, .btn-primary:hover, .open .dropdown-toggle.btn-primary {
+    background-color: #18a689;
+    border-color: #18a689;
+    color: #FFF;
+}
+
+.progress-btn.active .progress-bgd {
+    opacity: 1;
+    animation: progress-anim 10s ease 0s;
+}
+
+.progress-btn .progress-bgd {
+    width: 0%;
+    height: 100%;
+    position: absolute;
+    z-index: 5;
+    background: #18a689;
+    border-radius: 3px;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.progress-btn > .btn {
+    z-index: 10;
+    background-color: #1ab394cc!important;
+    border-color: #1ab394cc!important;;
 }
 
 @media (min-width: 992px) {
@@ -703,4 +741,8 @@ md-virtual-repeat-container:-webkit-scrollbar {
     display: -ms-flexbox;
     display: -webkit-flex;
     display: flex;
+}
+
+.img-bw {
+    filter: grayscale(100%);
 }

@@ -181,7 +181,7 @@ mainModule.config(function ($translateProvider, $translatePartialLoaderProvider)
 
 // --------------- Controllers -----------------
 
-mainModule.controller('mainController', function ($window, $http, $scope, $rootScope, $state, $location, $interval, $translate, permissionService, SweetAlert, UtilsFactory) {
+mainModule.controller('mainController', function ($window, $http, $scope, $rootScope, $state, $location, $interval, $translate, $uibModalStack, permissionService, SweetAlert, UtilsFactory) {
 
     this.$onInit = function () {
         $scope.main.userName = localStorage['pa.login'];
@@ -229,6 +229,9 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
     function checkSession() {
         var sessionId = getSessionId();
         if (!sessionId) {
+            // Close all open Bootstrap modals
+            $uibModalStack.dismissAll();
+            $('.modal-backdrop').hide()
             $scope.closeSession();
         } else {
             $http.get(JSON.parse(localStorage['schedulerRestUrl']) + 'isconnected/', {headers: {'sessionID': sessionId}})
@@ -285,7 +288,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                 $scope.portalsAccessPermission[item.url.substring(1)] = false;
             }
         });
-        var portals = Object.keys($scope.automationDashboardPortals);
+        var portals = Object.keys($scope.automationDashboardPortals).concat(['studio', 'rm', 'scheduler']);
         permissionService.getPortalsAccessPermission(portals).then(function (response) {
             if (Array.isArray(response.data) && response.data.length) {
                 //Choose the workflow-execution portal as default portal if it exists, otherwise we choose the first portal in the list
@@ -327,6 +330,19 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         $scope.firstAccessiblePortal = '';
         $rootScope.errorMessage = undefined;
         $scope.portalsAccessPermission = {};
+
+        // cancel the in-progress uploading dataspace files
+        if ($rootScope.uploadingCancelers){
+            $rootScope.uploadingCancelers.forEach(function (upload, uploadId){
+                if (upload && upload.canceler) {
+                    upload.canceler.promise.status = 499; // Set 499 status to flag cancelled http requests
+                    upload.canceler.resolve()
+                }
+            })
+            $rootScope.uploadingCancelers.clear();
+            $rootScope.uploadingFiles.length = 0;
+        }
+
         localStorage.removeItem('pa.session');
         $scope.stopRegularCheckSession();
         $rootScope.$broadcast('event:StopRefreshing');

@@ -291,7 +291,7 @@ function backToTop() {
  * It is a workaround to a non-fixed issue in UI-Bootstrap library since 2015 (see https://github.com/angular-ui/bootstrap/issues/4240)
  * The implementation of this directive is mainly code snipets adapted from UI-Bootstrap library. It uses a home-made fix by Activeeon and not the suggested fixes in the issue top above.
  */
-function showDropdownFromTemplate($timeout, $uibPosition) {
+function showDropdownFromTemplate($document, $timeout, $uibPosition) {
     return {
         restrict: 'A',
         scope: {},
@@ -302,39 +302,52 @@ function showDropdownFromTemplate($timeout, $uibPosition) {
         element.bind('click', onClick);
     }
 
+    function waitForElement(selector, callback) {
+        if (angular.element(selector).length) {
+            callback();
+        } else {
+            $timeout(function () {
+                waitForElement(selector, callback);
+            }, 100);
+        }
+    }
+
     function onClick(e) {
         // Wait for the dropdown element to be loaded from its template and added to the DOM
-        $timeout(function () {
+        waitForElement('body.uib-dropdown-open', function () {
             var element = angular.element(e.currentTarget);
-            var ul = angular.element('.dropdown-menu.custom-dropdown')
-            var pos = $uibPosition.positionElements(element, ul, 'bottom-left', true),
-                css,
-                rightalign,
-                scrollbarPadding,
-                scrollbarWidth = 0;
+            if (!jQuery(element).siblings('ul.dropdown-menu').length) {
+                waitForElement('.dropdown-menu.custom-dropdown', function () {
+                    var ul = angular.element('.dropdown-menu.custom-dropdown')
+                    var pos = $uibPosition.positionElements(element, ul, 'bottom-left', true),
+                        css,
+                        rightAlign,
+                        scrollbarPadding,
+                        scrollbarWidth = 0;
 
-            css = {
-                top: pos.top + 'px',
-                display: 'block'
-            };
+                    css = {
+                        top: pos.top + 'px',
+                        display: 'block'
+                    };
 
-            rightalign = ul.hasClass('dropdown-menu-right');
-            if (!rightalign) {
-                css.left = pos.left + 'px';
-                css.right = 'auto';
-            } else {
-                css.left = 'auto';
-                scrollbarPadding = $uibPosition.scrollbarPadding(angular.element('body'));
+                    rightAlign = ul.hasClass('dropdown-menu-right');
+                    if (!rightAlign) {
+                        css.left = pos.left + 'px';
+                        css.right = 'auto';
+                    } else {
+                        css.left = 'auto';
+                        scrollbarPadding = $uibPosition.scrollbarPadding(angular.element('body'));
 
-                if (scrollbarPadding.heightOverflow && scrollbarPadding.scrollbarWidth) {
-                    scrollbarWidth = scrollbarPadding.scrollbarWidth;
-                }
+                        if (scrollbarPadding.heightOverflow && scrollbarPadding.scrollbarWidth) {
+                            scrollbarWidth = scrollbarPadding.scrollbarWidth;
+                        }
 
-                css.right = window.innerWidth - scrollbarWidth -
-                    (pos.left + element.prop('offsetWidth')) + 'px';
+                        css.right = window.innerWidth - scrollbarWidth - (pos.left + element.prop('offsetWidth')) + 'px';
+                    }
+                    ul.css(css)
+                })
             }
-            ul.css(css)
-        }, 10)
+        });
     }
 }
 

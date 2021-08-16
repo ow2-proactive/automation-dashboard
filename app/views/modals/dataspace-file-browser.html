@@ -13,25 +13,38 @@
 
     <div id="files-body" class="modal-body">
         <div>
-            <button id="refresh-file-btn" title="{{'Refresh files'|translate}}" class="btn btn-white" ng-click="refreshFiles()">
+            <button id="refresh-file-btn" uib-tooltip="{{'Refresh files'|translate}}" class="btn btn-white" ng-click="refreshFiles()">
                 <i class="fa fa-repeat"></i>
             </button>
-            <button id="new-folder-btn" title="{{'New folder'|translate}}" class="btn btn-white"  ng-click="createFolder()">
+            <button id="new-folder-btn" uib-tooltip="{{'New folder'|translate}}" class="btn btn-white"  ng-click="createFolder()">
                 <i class="fa fa fa-plus"></i>
             </button>
             <input type="file" id="selected-upload-file"  onchange="angular.element(this).scope().fileSelected(this.files)" class="hidden" />
-            <button id="upload-file-btn" title="{{'Upload a file'|translate}}" class="btn btn-white" ng-click="clickUpload()">
+            <button id="upload-file-btn" uib-tooltip="{{'Upload a file'|translate}}" class="btn btn-white" ng-click="clickUpload()">
                 <i class="fa fa-upload"></i>
             </button>
-            <button id="download-file-btn" title="{{'Download the selected file or folder'|translate}}" class="btn btn-white" ng-click="downloadFile()">
+            <button id="download-file-btn" uib-tooltip="{{'Download the selected file or folder'|translate}}" class="btn btn-white" ng-click="downloadFile()">
                 <i class="fa fa-download"></i>
             </button>
-            <button id="delete-file-btn" title="{{'Delete the selected file or folder'|translate}}" class="btn btn-white" ng-click="deleteFile()">
+            <button id="delete-file-btn" uib-tooltip="{{'Delete the selected file or folder'|translate}}" class="btn btn-white" ng-click="deleteFile()">
                 <i class="fa fa-trash"></i>
             </button>
-            <div class="pull-right" id="pull-right-hidden-files-checkbox">
-                <label class="checkbox-inline"><input id="show-hidden-files" type="checkbox" ng-model="showHiddenFiles" ng-change="showHiddenFilesChange()">{{'Show
-                    Hidden'|translate}}</label>
+            <div class="pull-right container-flex">
+                <div uib-dropdown class="uploading-files-dropdown container-flex m-r-sm progress-btn active" ng-if="$root.uploadingFiles && $root.uploadingFiles.length">
+                    <button type="button" class="btn btn-primary container-flex w-300" uib-dropdown-toggle>
+                        <div class="text-left w-100 m-r-sm">
+                            <i class="fa fa-upload"></i>
+                            <span>{{'Uploading'|translate}} {{$root.uploadingFiles.length}} {{'files'|translate}}</span>
+                        </div>
+                        <div>
+                            <i class="fa fa-clock-o"></i>
+                            <span class="m-r-sm">{{($root.totalRemainTime) ? ($root.totalRemainTime | durationFormat) : "--:--"}} {{'left'|translate}}</span>
+                        </div>
+                    </button>
+                    <div class="progress-bgd" ng-style="{'width':$root.totalProgress+'%'}"></div>
+                    <ul class="dropdown-menu dropdown-menu-right" uib-dropdown-menu role="menu" template-url="views/modals/uploading-files-dropdown.html"></ul>
+                </div>
+                <label class="checkbox-inline" uib-tooltip="{{'Show the hidden files and folders'|translate}}"><input id="show-hidden-files" type="checkbox" ng-model="showHiddenFiles" ng-change="showHiddenFilesChange()">{{'Show Hidden'|translate}}</label>
             </div>
         </div>
         <br>
