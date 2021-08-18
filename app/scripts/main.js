@@ -421,10 +421,6 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             });
         $scope.nbNewNotifications = 0;
         startRegularUpdateNotificationLabel();
-        //collapse menu in or out
-        if(localStorage.getItem('collapseMenuPreference') && localStorage.getItem('collapseMenuPreference') === "in"){
-            $scope.collapseMenu();
-        }
     };
 
     $scope.collapseMenu = function(){
@@ -436,15 +432,12 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             $('.parentPortal > a > i').hide()
             $('.childPortal  a span').hide()
             $('.childPortal').removeClass('in')
-            // store collapse preference in local storage
-            localStorage.setItem('collapseMenuPreference', 'in');
         } else {
             $("#collapse-menu > a > i").removeClass('fa-caret-right')
             $("#collapse-menu > a > i").addClass('fa-caret-left')
             $('.metismenu > li  a span').show()
             $('.parentPortal  a span').show()
             $('.metismenu > li > a > i').show()
-            localStorage.setItem('collapseMenuPreference', 'out');
         }
     }
     $scope.changeFavicon = function(portal){
