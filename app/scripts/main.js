@@ -412,7 +412,6 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         }
 
         $scope.view = JSON.parse(localStorage['configViews']);
-        $scope.docLink = '/doc/';
         $http.get('resources/config.json')
             .success(function (response) {
                 $scope.dashboardVersion = response.proactiveDashboardVersion;
@@ -422,8 +421,32 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             });
         $scope.nbNewNotifications = 0;
         startRegularUpdateNotificationLabel();
+        //collapse menu in or out
+        if(localStorage.getItem('collapseMenuPreference') && localStorage.getItem('collapseMenuPreference') === "in"){
+            $scope.collapseMenu();
+        }
     };
 
+    $scope.collapseMenu = function(){
+        $('.pace-done').toggleClass('mini-navbar');
+        if($('.parentPortal > a >span:visible').length){
+            $("#collapse-menu > a > i").removeClass('fa-caret-left')
+            $("#collapse-menu > a > i").addClass('fa-caret-right')
+            $('.parentPortal  a span').hide()
+            $('.parentPortal > a > i').hide()
+            $('.childPortal  a span').hide()
+            $('.childPortal').removeClass('in')
+            // store collapse preference in local storage
+            localStorage.setItem('collapseMenuPreference', 'in');
+        } else {
+            $("#collapse-menu > a > i").removeClass('fa-caret-right')
+            $("#collapse-menu > a > i").addClass('fa-caret-left')
+            $('.metismenu > li  a span').show()
+            $('.parentPortal  a span').show()
+            $('.metismenu > li > a > i').show()
+            localStorage.setItem('collapseMenuPreference', 'out');
+        }
+    }
     $scope.changeFavicon = function(portal){
          var link = document.createElement('link');
          var oldLink = document.getElementById('favicon');
@@ -550,6 +573,20 @@ mainModule.controller('loginController', function ($scope, $state, permissionSer
 mainModule.controller('logoutController', function ($scope, $state) {
     $scope.logout = function () {
         $scope.closeSession();
+    };
+});
+
+mainModule.controller('navbarController', function ($scope, $state) {
+    $scope.docLink = '/doc/';
+    $scope.displayAbout = function () {
+        var windowLocation = window.location;
+        var protocol = windowLocation.protocol;
+        var host = windowLocation.host;
+        var result = protocol + '//' + host + '/rest';
+
+        $scope.restUrl = result;
+        $scope.year = new Date().getFullYear();
+        $('#about-modal').modal('show');
     };
 });
 

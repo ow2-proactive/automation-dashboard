@@ -1,52 +1,7 @@
 <div ng-controller="navBarController">
-    <nav class="navbar-default navbar-static-side" role="navigation">
+    <nav class="navbar-default navbar-static-side" role="navigation" style="z-index: 50">
         <div class="sidebar-collapse">
             <ul side-navigation class="nav metismenu" id="side-menu" style="background-color: #002d66;">
-
-                <li ui-sref-active="active" id="logo-navigation-item">
-                    <a href="http://activeeon.com/" target="_blank" style="padding: 0px 30px 0px 6px!important;">
-                        <img src="styles/patterns/AE-Logo.png" style="height: 40px;padding-right: 40px;" align="right">
-                    </a>
-                </li>
-
-                <li style="height: 45px;margin-bottom: 3px;background: #F3F3F4;padding-top: 15px;margin-top: -5px;" ui-sref-active="active">
-                    <div style="display: inline-flex">
-                        <div class="dropdown" id="help-dropdown">
-                            <a data-toggle="dropdown" href="javascript:void(0)" style="color: #676a6c;padding-left: 10px;font-size: 14px;background-color: transparent;">
-                                {{'Help'|translate}} <b class="caret"></b></a>
-                            <ul class="dropdown-menu">
-                                <li><a class="pointer" href="{{docLink}}" target="_blank"><i aria-hidden="true" class="fa fa-book"></i>
-                                        {{'ProActive Documentations'|translate}}</a></li>
-                                <li><a class="pointer" href id="about-button" ng-click="displayAbout()"><i aria-hidden="true" class="fa fa-question-circle"></i>
-                                        {{'About'|translate}}</a></li>
-                                <li><a class="pointer" href="https://try.activeeon.com/tutorials.html" target="_blank"><i aria-hidden="true" class="fa fa-mortar-board" style="margin-left: -2px;"></i>
-                                        {{'Tutorials'|translate}}</a></li>
-                            </ul>
-                        </div>
-                        <div class="dropdown">
-                            <a data-toggle="dropdown" href="javascript:void(0)" style="color: #676a6c;padding-left: 10px;font-size: 14px;background-color: transparent;" ng-click="selectedLanguage()">
-                                <span id="selected">Language</span><span class="caret"></span></a>
-                            <ul class="dropdown-menu" id="language-dropdown">
-                                <li><a id="en" class="pointer" ng-click="changeLanguage('en')" style="
-      padding: 3px 5px;
-  " tabindex="-1" target="_blank"><img alt="En" id="en-flag" src="styles/patterns/gb.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">English</a>
-                                </li>
-                                <li><a id="fr" class="pointer" ng-click="changeLanguage('fr')" style="
-      padding: 3px 5px;
-  " tabindex="-1" target="_blank"><img alt="Fr" id="fr-flag" src="styles/patterns/fr.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">Français</a>
-                                </li>
-                                <li><a id="pt" class="pointer" ng-click="changeLanguage('pt')" style="
-      padding: 3px 5px;
-  " tabindex="-1" target="_blank"><img alt="Pt" id="pt-flag" src="styles/patterns/br.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">Português</a>
-                                </li>
-                                <li><a id="es" class="pointer" ng-click="changeLanguage('es')" style="
-      padding: 3px 5px;
-  " tabindex="-1" target="_blank"><img alt="ES" id="es-flag" src="styles/patterns/es.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">Español</a>
-                                </li>
-                            </ul>
-                        </div>
-                    </div>
-                </li>
 
                 <!--!DO NOT EDIT! The following code related to subviews is automatically generated with grunt build. You can't modify it from here.
                 See 'replace' task in Gruntfile.js and subviews definition in enterpriseSubviews.json-->
@@ -65,11 +20,6 @@
                     <a ui-sref="portal.subview4" style="background-color: #002d66"><i class="fa fa-desktop"></i> <span class="nav-label">Notification portal</span> </a>
                 </li>
                 <!-- endSubviews-->
-
-                <!-- Documentation Link-->
-                <li style="position: fixed;bottom: 0px;left: 0px;width: 220px;height: 39px;">
-                    <a href="{{docLink}}" target="_blank" style="color: #002d66; background-color:rgba(255,255,255,0.5);padding: 11px 15px;"><i class="fa fa-book"></i> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-documentation">{{'Documentation'|translate}}</span> </a>
-                </li>
             </ul>
         </div>
     </nav>
