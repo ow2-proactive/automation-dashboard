@@ -316,17 +316,18 @@ module.exports = function (grunt) {
                             match: /<!-- beginSubviews-->[\s\S]*<!-- endSubviews-->/g,
                             replacement: function () {
                                 var result = '';
+                                result = '\n<li id="collapse-menu" style="margin-top:-4px;"> <a href="javascript:void(0)" ng-click ="collapseMenu()" style="background-color: #002d66;padding-right: 0px; "><i class="fa fa-caret-left pull-right" style="font-size: xx-large;margin-top:-10px;"></i></a></li>'
                                 var cnt = 0;
                                 for (var key in subviewsDefinition) {
                                     if (subviewsDefinition[key].isSubMenuTitle) {
                                         if(subviewsDefinition[key].name === 'Analytics'){
-                                            result += '\n<li id="'+subviewsDefinition[key].name+'" ui-sref-active="active" ng-show="showParentPortal(\''+subviewsDefinition[key].name+'\')">'
-                                                + '<a href=".menu-item-'+subviewsDefinition[key].nameForUrl+'" style="background-color: #002d66; padding-left:4px" data-toggle="collapse"><img src="styles/patterns/analytics-portal.png" style="height:20px;padding-right: 4px;">'
+                                            result += '\n<li id="'+subviewsDefinition[key].name+'" ui-sref-active="active" ng-show="showParentPortal(\''+subviewsDefinition[key].name+'\')" class="parentPortal">'
+                                                + '<a href=".menu-item-'+subviewsDefinition[key].nameForUrl+'" style="background-color: #002d66; " data-toggle="collapse"><img src="styles/patterns/analytics-portal.png" style="height:20px;padding-right: 4px;">'
                                                 +'<span class="nav-label" style="display:-webkit-inline-box; margin-left:3px" id="nav-span-'
                                                 + subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+subviewsDefinition[key].name+'\' | translate}}</span> <i class="fa fa-chevron-down" style="margin-right: 6px;"></i></a>';
                                         } else {
-                                            result += '\n<li id="'+subviewsDefinition[key].name+'" ui-sref-active="active" ng-show="showParentPortal(\''+subviewsDefinition[key].name+'\')">'
-                                                + '<a href=".menu-item-'+subviewsDefinition[key].nameForUrl+'" style="background-color: #002d66; padding-left:4px" data-toggle="collapse"><img src="styles/patterns/job-planner-portal.png" style="height:20px;padding-right: 4px;">'
+                                            result += '\n<li id="'+subviewsDefinition[key].name+'" ui-sref-active="active" ng-show="showParentPortal(\''+subviewsDefinition[key].name+'\')" class="parentPortal">'
+                                                + '<a href=".menu-item-'+subviewsDefinition[key].nameForUrl+'" style="background-color: #002d66; " data-toggle="collapse"><img src="styles/patterns/job-planner-portal.png" style="height:20px;padding-right: 4px;">'
                                                 +'<span class="nav-label" style="display:-webkit-inline-box; margin-left:3px" id="nav-span-'
                                                 + subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+subviewsDefinition[key].name+'\' | translate}}</span> <i class="fa fa-chevron-down" style="margin-right: 6px;"></i></a>';
                                         }
@@ -339,25 +340,25 @@ module.exports = function (grunt) {
                                     } else {
                                         cnt++;
                                         if(subviewsDefinition[key].name === "Catalog"){
-                                            result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'catalog-portal\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
-                                                + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/catalog-portal.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
+                                            result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'catalog-portal\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']" class="parentPortal">'
+                                                + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66; "><img src="styles/patterns/catalog-portal.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
                                                 subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                         } else if(subviewsDefinition[key].name === "Event Orchestration"){
-                                            result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'event-orchestration\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
-                                                + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/event-orchestration.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
+                                            result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'event-orchestration\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']" class="parentPortal">'
+                                                + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;"><img src="styles/patterns/event-orchestration.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
                                                 subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                         } else if(subviewsDefinition[key].name === "Service Automation"){
-                                            result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'service-automation\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
-                                                + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/service-automation.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
+                                            result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'service-automation\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']" class="parentPortal">'
+                                                + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;"><img src="styles/patterns/service-automation.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
                                                 subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                         } else if(subviewsDefinition[key].name === "Notifications"){
-                                            result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'notification-portal\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
-                                                + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/notification-portal.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
+                                            result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'notification-portal\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']" class="parentPortal">'
+                                                + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;"><img src="styles/patterns/notification-portal.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
                                                 subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}' +
                                                 '<div ng-show="nbNewNotifications" id="new-notifications-label" style="background:#d9534f;color:white;border-radius:10px;text-align:center;margin-left: 5px;padding: 0px 5px;">{{nbNewNotifications}}</div></span> </a>\n</li>';
                                         } else {
-                                            result += '\n<li ui-sref-active="active" ng-click="changeFavicon(\'automation_dashboard_30\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
-                                                + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66;padding-left:4px "><img src="styles/patterns/automation_dashboard_30.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
+                                            result += '\n<li ui-sref-active="active" ng-click="changeFavicon(\'automation_dashboard_30\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']" class="parentPortal">'
+                                                + '\n<a ui-sref="portal.subview' + cnt + '" style="background-color: #002d66; "><img src="styles/patterns/automation_dashboard_30.png" style="height:20px;padding-right: 4px;"> <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-'+
                                                 subviewsDefinition[key].name.toLowerCase().replace(' ', '-') +'">{{\''+ subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                         }
                                     }
