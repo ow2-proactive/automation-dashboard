@@ -1,5 +1,12 @@
 <div ng-controller="footerController">
     <div class="footer">
+        <!-- Documentation Link-->
+        <div class="pull-left">
+            <a href="/doc" target="_blank" style="color: #002d66; background-color:rgba(255,255,255,0.5);padding: 11px 15px;">
+                <i class="fa fa-book"></i>
+                <span class="nav-label" style="display:-webkit-inline-box;" id="nav-span-documentation">{{'Documentation'|translate}}</span>
+            </a>
+        </div>
         <div class="pull-right">
             <span>{{'Copyright'|translate}} &copy; 2007-{{year}}, Activeeon, {{'All rights reserved'|translate}}</span>
         </div>

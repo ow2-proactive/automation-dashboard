@@ -1,7 +1,8 @@
 <!-- Wrapper-->
 <div id="wrapper" style="background-color: #E86D1F" ng-click="hideContextualMenu()" ng-wheel="hideContextualMenu()">
 
-
+    <!-- Page wrapper -->
+    <div ng-include="'views/common/topnavbar.html'"></div>
     <!-- Navigation -->
     <div ng-include="'views/common/navigation.html'"></div>
 
@@ -9,8 +10,7 @@
     <!-- ng-class with current state name give you the ability to extended customization your view -->
     <div id="page-wrapper" class="gray-bg {{$state.current.name}}">
 
-        <!-- Page wrapper -->
-        <div ng-include="'views/common/topnavbar.html'"></div>
+
 
         <!-- Main view  -->
         <div ui-view></div>
