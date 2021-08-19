@@ -357,6 +357,13 @@
     display: block;
 }
 
+.mini-navbar .navbar-static-side {
+    width: 50px ! important;
+}
+
+.mini-navbar #page-wrapper {
+    margin: 0 0 0 50px ! important;
+}
 .dropdown-submenu > a:after {
     display: block;
     content: " ";
