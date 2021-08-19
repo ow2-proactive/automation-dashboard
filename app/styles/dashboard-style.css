@@ -123,9 +123,7 @@
 .context-menu__items li:hover {
     background-color: #DEF;
 }
-.parentPortal a {
-    padding: 14px 20px 14px 25px ! important;
-}
+
 .footer {
     position: fixed !important;
     z-index: 1000;
@@ -359,6 +357,13 @@
     display: block;
 }
 
+.mini-navbar .navbar-static-side {
+    width: 50px ! important;
+}
+
+.mini-navbar #page-wrapper {
+    margin: 0 0 0 50px ! important;
+}
 .dropdown-submenu > a:after {
     display: block;
     content: " ";

@@ -394,7 +394,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 });
 
 // controller used in navigation.html :
-mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval) {
+mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval, $timeout) {
     this.$onInit = function () {
         setDefaultSelectedLanguage(localStorage['proactiveLanguage']);
         var splitUrl = window.location.hash.split("/");
@@ -421,6 +421,14 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             });
         $scope.nbNewNotifications = 0;
         startRegularUpdateNotificationLabel();
+
+        $timeout( function(){
+            if(localStorage.getItem('collapsePreference') && localStorage.getItem('collapsePreference') === "in"){
+                $scope.collapseMenu()
+            }
+        }, 2000)
+
+
     };
 
     $scope.collapseMenu = function(){
@@ -432,12 +440,14 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             $('.parentPortal > a > i').hide()
             $('.childPortal  a span').hide()
             $('.childPortal').removeClass('in')
+            localStorage.setItem('collapsePreference', 'in')
         } else {
             $("#collapse-menu > a > i").removeClass('fa-caret-right')
             $("#collapse-menu > a > i").addClass('fa-caret-left')
             $('.metismenu > li  a span').show()
             $('.parentPortal  a span').show()
             $('.metismenu > li > a > i').show()
+            localStorage.setItem('collapsePreference', 'out')
         }
     }
     $scope.changeFavicon = function(portal){
