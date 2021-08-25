@@ -432,23 +432,16 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     };
 
     $scope.collapseMenu = function(){
-        $('.pace-done').toggleClass('mini-navbar');
-        if($('.parentPortal > a >span:visible').length){
+        if($('.catalog-portal > a >span').is(':visible')){
             $("#collapse-menu > a > i").removeClass('fa-caret-left')
             $("#collapse-menu > a > i").addClass('fa-caret-right')
-            $('.parentPortal  a span').hide()
-            $('.parentPortal > a > i').hide()
-            $('.childPortal  a span').hide()
-            $('.childPortal').removeClass('in')
             localStorage.setItem('collapsePreference', 'in')
         } else {
             $("#collapse-menu > a > i").removeClass('fa-caret-right')
             $("#collapse-menu > a > i").addClass('fa-caret-left')
-            $('.metismenu > li  a span').show()
-            $('.parentPortal  a span').show()
-            $('.metismenu > li > a > i').show()
             localStorage.setItem('collapsePreference', 'out')
         }
+        $('.pace-done').toggleClass('mini-navbar');
     }
     $scope.changeFavicon = function(portal){
          var link = document.createElement('link');
