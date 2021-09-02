@@ -433,12 +433,12 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
 
     $scope.collapseMenu = function(){
         if($('.catalog-portal > a >span').is(':visible')){
-            $("#collapse-menu > a > i").removeClass('fa-caret-left')
-            $("#collapse-menu > a > i").addClass('fa-caret-right')
+            $("#collapse-menu > a > i").removeClass('fa-angle-double-left')
+            $("#collapse-menu > a > i").addClass('fa-angle-double-right')
             localStorage.setItem('collapsePreference', 'in')
         } else {
-            $("#collapse-menu > a > i").removeClass('fa-caret-right')
-            $("#collapse-menu > a > i").addClass('fa-caret-left')
+            $("#collapse-menu > a > i").removeClass('fa-angle-double-right')
+            $("#collapse-menu > a > i").addClass('fa-angle-double-left')
             localStorage.setItem('collapsePreference', 'out')
         }
         $('.pace-done').toggleClass('mini-navbar');
