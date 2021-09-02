@@ -394,7 +394,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 });
 
 // controller used in navigation.html :
-mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval) {
+mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval, $timeout) {
     this.$onInit = function () {
         setDefaultSelectedLanguage(localStorage['proactiveLanguage']);
         var splitUrl = window.location.hash.split("/");
@@ -412,7 +412,6 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         }
 
         $scope.view = JSON.parse(localStorage['configViews']);
-        $scope.docLink = '/doc/';
         $http.get('resources/config.json')
             .success(function (response) {
                 $scope.dashboardVersion = response.proactiveDashboardVersion;
@@ -422,8 +421,28 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             });
         $scope.nbNewNotifications = 0;
         startRegularUpdateNotificationLabel();
+
+        $timeout( function(){
+            if(localStorage.getItem('collapsePreference') && localStorage.getItem('collapsePreference') === "in"){
+                $scope.collapseMenu()
+            }
+        }, 2000)
+
+
     };
 
+    $scope.collapseMenu = function(){
+        if($('.catalog-portal > a >span').is(':visible')){
+            $("#collapse-menu > a > i").removeClass('fa-angle-double-left')
+            $("#collapse-menu > a > i").addClass('fa-angle-double-right')
+            localStorage.setItem('collapsePreference', 'in')
+        } else {
+            $("#collapse-menu > a > i").removeClass('fa-angle-double-right')
+            $("#collapse-menu > a > i").addClass('fa-angle-double-left')
+            localStorage.setItem('collapsePreference', 'out')
+        }
+        $('.pace-done').toggleClass('mini-navbar');
+    }
     $scope.changeFavicon = function(portal){
          var link = document.createElement('link');
          var oldLink = document.getElementById('favicon');
@@ -550,6 +569,20 @@ mainModule.controller('loginController', function ($scope, $state, permissionSer
 mainModule.controller('logoutController', function ($scope, $state) {
     $scope.logout = function () {
         $scope.closeSession();
+    };
+});
+
+mainModule.controller('navbarController', function ($scope, $state) {
+    $scope.docLink = '/doc/';
+    $scope.displayAbout = function () {
+        var windowLocation = window.location;
+        var protocol = windowLocation.protocol;
+        var host = windowLocation.host;
+        var result = protocol + '//' + host + '/rest';
+
+        $scope.restUrl = result;
+        $scope.year = new Date().getFullYear();
+        $('#about-modal').modal('show');
     };
 });
 

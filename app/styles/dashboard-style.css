@@ -357,6 +357,22 @@
     display: block;
 }
 
+.mini-navbar .navbar-static-side {
+    width: 50px ! important;
+}
+
+.mini-navbar #page-wrapper {
+    margin: 0 0 0 50px ! important;
+}
+
+.nav .nav-second-level, .nav.metismenu>li.active>a, .nav.nav-second-level>li.active>a, .nav-second-level>li>a:hover, .nav.metismenu>li>a:hover {
+    background-color: #002D66 ! important
+}
+
+.mini-navbar li.active .nav-second-level {
+    left: 45px ! important
+}
+
 .dropdown-submenu > a:after {
     display: block;
     content: " ";
