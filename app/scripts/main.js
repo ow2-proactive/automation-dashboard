@@ -201,7 +201,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
     };
 
     $scope.showParentPortal = function(id){
-        return angular.element(document.getElementById(id)).next().hasClass('childPortal');
+        return angular.element(document.getElementById(id)).find('li').length;
     };
 
     $scope.changeLanguage = function (key) {

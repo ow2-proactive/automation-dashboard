@@ -320,7 +320,7 @@ module.exports = function (grunt) {
                                 var cnt = 0;
                                 for (var key in subviewsDefinition) {
                                     if (subviewsDefinition[key].isSubMenuTitle) {
-                                        result += '\n<li>'
+                                        result += '\n<li id="'+subviewsDefinition[key].name+'" ng-show="showParentPortal(\'' + subviewsDefinition[key].name + '\')">'
                                             + '<a style="background-color: #002d66; "><img ng-src="styles/patterns/' + subviewsDefinition[key].nameForUrl + '.png" style="height:20px;padding-right: 6px;">'
                                             +'<span class="nav-label">{{\''+subviewsDefinition[key].name+'\' | translate}}</span><span class="fa arrow"></span></span></a>';
                                             result = result + '<ul class="nav nav-second-level collapse">';
@@ -349,7 +349,7 @@ module.exports = function (grunt) {
                                                     result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'notification-portal\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
                                                         + '\n<a ui-sref="portal.subview' + cnt + '"><img src="styles/patterns/notification-portal.png" style="height:20px;padding-right: 4px;"> <span class="nav-label">{{\''+
                                                          subviewsDefinition[key].name+ '\' | translate}}' +
-                                                        '<div ng-show="nbNewNotifications" id="new-notifications-label" style="background:#d9534f;color:white;border-radius:10px;text-align:center;margin-left: 5px;padding: 0px 5px;">{{nbNewNotifications}}</div></span> </a>\n</li>';
+                                                        '<div ng-show="nbNewNotifications" id="new-notifications-label" style="background:#d9534f;color:white;border-radius:10px;text-align:center;margin-left: 5px;padding: 0px 5px;display:-webkit-inline-box;">{{nbNewNotifications}}</div></span> </a>\n</li>';
                                                 } else {
                                                     result += '\n<li ui-sref-active="active" ng-click="changeFavicon(\'automation_dashboard_30\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
                                                         + '\n<a ui-sref="portal.subview' + cnt + '"><img src="styles/patterns/automation_dashboard_30.png" style="height:20px;"> <span class="nav-label">{{\''+
