@@ -5,6 +5,7 @@
         "nameForUrl": "workflow-execution",
         "appFolder": "cloud-automation/app/",
         "htmlFile": "workflow-execution/workflow_execution.html",
+        "tooltip": "Submit Workflows to Create/Execute/Control Jobs & Services",
         "secondaryHtmlFiles": [
             "modals/result_map_modal.html",
             "modals/job_output_modal.html",
@@ -37,6 +38,7 @@
         "nameForUrl": "catalog-portal",
         "appFolder": "generic-catalog-portal/app/",
         "htmlFile": "generic_catalog.html",
+        "tooltip": "Browse and Search the Catalog",
         "secondaryHtmlFiles": [
             "modals/catalog_object_edition.html",
             "modals/catalog-object-kind-content_type-project_name-edition.html",
@@ -70,6 +72,7 @@
         "nameForUrl": "job-analytics",
         "appFolder": "job-analytics-portal/app/",
         "htmlFile": "job_analytics.html",
+        "tooltip": "View Graphs & Tables of Job Results",
         "secondaryHtmlFiles": [
             "templates/advanced_search_hints.html",
             "templates/ui_grid_filter_date.html",
@@ -104,6 +107,7 @@
         "nameForUrl": "job-gantt",
         "appFolder": "job-analytics-portal/app/",
         "htmlFile": "job-gantt/job_gantt.html",
+        "tooltip": "View Job Spanning Time & Dependencies",
         "secondaryHtmlFiles": [
             "job-gantt/job_gantt_tooltip.html",
             "job-gantt/job_gantt_legend.html"
@@ -125,6 +129,7 @@
         "nameForUrl": "node-gantt",
         "appFolder": "job-analytics-portal/app/",
         "htmlFile": "node-gantt/node_gantt.html",
+        "tooltip": "View Resources and Node Usage",
         "secondaryHtmlFiles": [
             "node-gantt/node_gantt_legend.html",
             "node-gantt/node_gantt_tooltip.html"
@@ -152,6 +157,7 @@
         "nameForUrl": "job-planner-calendar-def",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "execution_calendars.html",
+        "tooltip": "Define Calendars",
         "secondaryHtmlFiles": [
             "cron-gen.html"
         ],
@@ -173,6 +179,7 @@
         "nameForUrl": "job-planner-calendar-def-workflows",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "calendar-association/calendar_association.html",
+        "tooltip": "Associate Workflows to Calendar",
         "secondaryHtmlFiles": [
             "calendar-association/calendar_list.html"
         ],
@@ -196,6 +203,7 @@
         "nameForUrl": "job-planner-execution-planning",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "execution_planning.html",
+        "tooltip": "See Textual and Calendar-based Planning",
         "secondaryHtmlFiles": [
             "calendar_list_with_checkbox.html"
         ],
@@ -219,6 +227,7 @@
         "nameForUrl": "job-planner-gantt-chart",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "gantt-chart/gantt_view_main.html",
+        "tooltip": "See Graphical view of Past and Future Executions",
         "secondaryHtmlFiles": [
             "gantt-chart/ganttEventTooltip.tmpl.html",
             "gantt-chart/calendar_list_modal.html",
@@ -245,6 +254,7 @@
         "nameForUrl": "event-orchestration",
         "appFolder": "cloud-watch-portal/app/",
         "htmlFile": "cloud_watch.html",
+        "tooltip": "Event-Based Scheduling",
         "secondaryHtmlFiles": [
             "modals/rule_edition.html",
             "modals/rule_submission.html",
@@ -280,6 +290,7 @@
         "nameForUrl": "service-automation",
         "appFolder": "cloud-automation/app/",
         "htmlFile": "cloud-automation/cloud_automation.html",
+        "tooltip": "Launch and Manage On-Demand Services",
         "secondaryHtmlFiles": [
             "modals/submit_window_cloud_automation.html",
             "modals/service_instance_info_modal.html",
@@ -311,6 +322,7 @@
         "nameForUrl": "notification-portal",
         "appFolder": "notification-portal/app/",
         "htmlFile": "notification-portal.html",
+        "tooltip": "Configure and Receive Notifications",
         "secondaryHtmlFiles": [
             "templates/notification.html",
             "templates/basic-subscription.html",

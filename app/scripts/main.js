@@ -432,7 +432,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     };
 
     $scope.collapseMenu = function(){
-        if($('.catalog-portal > a >span').is(':visible')){
+        if($('#collapse-menu').next().find('span').is(':visible')){
             $("#collapse-menu > a > i").removeClass('fa-angle-double-left')
             $("#collapse-menu > a > i").addClass('fa-angle-double-right')
             localStorage.setItem('collapsePreference', 'in')
