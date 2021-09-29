@@ -70,7 +70,7 @@
         </ul>
     </nav>
 </div>
-<div class="row gray-bg border-bottom" ng-controller="navbarController">
+<div class="row gray-bg border-bottom" ng-controller="navBarController">
     <div class="second-row-bar pull-left" style="height: 30px;display: inline-flex;padding: 0 15px;">
         <div class="dropdown" id="help-dropdown">
             <a data-toggle="dropdown" href="javascript:void(0)" style="color: #676a6c;padding-left: 10px;font-size: 14px;background-color: transparent;">
@@ -109,4 +109,35 @@
     </div>
     <div class="second-row-bar pull-right" style="height: 30px">&nbsp;</div>
     <div style="height: 3px; background: #f47930; width:100%; display: table;"></div>
+    <div id="about-modal" class="modal fade" role="dialog">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <button aria-hidden="true" class="close" data-dismiss="modal" type="button">×</button>
+                    <h3>{{'ProActive Automation Dashboard'|translate}}</h3>
+                </div>
+                <div class="modal-body" style="height:100%">
+                    <div class="row">
+                        <div class="col-sm-3">
+                            <img src="styles/patterns/about_115.png" style="height:100%;display:block;">
+                        </div>
+                        <div class="col-sm-9">
+                            <p>{{'Version'|translate}}: <b> {{dashboardVersion}}</b></p>
+                            <p>{{'Copyright'|translate}} (C) 2007-{{year}}, Activeeon, {{'All rights reserved'|translate}}</p>
+                            <p>{{'Visit'|translate}} <a href="http://proactive.inria.fr/" target="_blank">http://proactive.inria.fr/</a>
+                                {{'and'|translate}} <a href="http://www.activeeon.com/" target="_blank">http://www.activeeon.com/</a></a>
+                            </p>
+                            <p>{{'Contact'|translate}}: +33 (0)9 88 777 660, contact@activeeon.com</p>
+                            <p>{{'REST server'|translate}}: <a id="restServer" ng-href="{{restUrl}}" target="_blank">{{restUrl}}</a>
+                            </p>
+                            <p>{{'REST version'|translate}}: <b>{{dashboardVersion}}</b></p>
+                            <p>{{'Proactive Dashboard version'|translate}}: <b>{{dashboardVersion}}</b></p>
+                        </div>
+                    </div>
+
+                </div>
+
+            </div>
+        </div>
+    </div>
 </div>
