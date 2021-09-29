@@ -572,20 +572,6 @@ mainModule.controller('logoutController', function ($scope, $state) {
     };
 });
 
-mainModule.controller('navbarController', function ($scope, $state) {
-    $scope.docLink = '/doc/';
-    $scope.displayAbout = function () {
-        var windowLocation = window.location;
-        var protocol = windowLocation.protocol;
-        var host = windowLocation.host;
-        var result = protocol + '//' + host + '/rest';
-
-        $scope.restUrl = result;
-        $scope.year = new Date().getFullYear();
-        $('#about-modal').modal('show');
-    };
-});
-
 mainModule.controller('footerController', function ($scope) {
     $scope.year = new Date().getFullYear();
 });
