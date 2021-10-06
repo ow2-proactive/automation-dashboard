@@ -318,6 +318,19 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         return endpoint.proxyfied ? endpoint.proxyfiedUrl : endpoint.url;
     }
 
+    /** Transforms list of variables format to key-value without model :
+    from : ["toto": {"value": 1, "model":"PA:INTEGER"}, ...]
+    to : ["toto":1] **/
+    function getVariablesInKeyValueFormat(variables) {
+        var result = {};
+        angular.forEach(variables, function(variable, key){
+            var name = key;
+            var value = variable.value;
+            result[name] = value;
+        });
+        return result;
+    };
+
     return {
         openJobInSchedulerPortal: openJobInSchedulerPortal,
         isSpecialUIModel: isSpecialUIModel,
@@ -335,7 +348,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         extractVariables: extractVariables,
         openEndpoint: openEndpoint,
         getEndpointUrl: getEndpointUrl,
-        getByKey: getByKey
+        getByKey: getByKey,
+        getVariablesInKeyValueFormat: getVariablesInKeyValueFormat
     };
 }
 
