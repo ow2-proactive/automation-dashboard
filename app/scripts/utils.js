@@ -38,6 +38,12 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         });
         return variables;
     }
+    // returns true when variables includes advanced variables and false otherwise
+    function isVariablesIncludeAdvancedVar(variables){
+        return variables.findIndex(function(variable){
+                  return  variable.advanced;
+                }) > -1;
+    }
 
     function extractVariableValue(variable, model) {
         // for data binding, we need to transform boolean to 'false'/'true' (instead of numbers or strings with upper case)
@@ -349,7 +355,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         openEndpoint: openEndpoint,
         getEndpointUrl: getEndpointUrl,
         getByKey: getByKey,
-        getVariablesInKeyValueFormat: getVariablesInKeyValueFormat
+        getVariablesInKeyValueFormat: getVariablesInKeyValueFormat,
+        isVariablesIncludeAdvancedVar: isVariablesIncludeAdvancedVar
     };
 }
 
