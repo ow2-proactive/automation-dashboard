@@ -38,6 +38,12 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         });
         return variables;
     }
+    // returns true when variables includes advanced variables and false otherwise
+    function isVariablesIncludeAdvancedVar(variables){
+        return variables.findIndex(function(variable){
+                  return  variable.advanced;
+                }) > -1;
+    }
 
     function extractVariableValue(variable, model) {
         // for data binding, we need to transform boolean to 'false'/'true' (instead of numbers or strings with upper case)
@@ -67,10 +73,10 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                     variables[item.key] = {};
                 }
                 variables[item.key].value = extractVariableValue(item, variables[item.key].model);
-                variables[item.key].name = item.name;
+                variables[item.key].name = item.key;
             }
         });
-        return variables;
+        return Object.values(variables);
     }
 
     // open a pop-up to manage (browse, upload, delete) the global or user data space files
@@ -323,8 +329,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     to : ["toto":1] **/
     function getVariablesInKeyValueFormat(variables) {
         var result = {};
-        angular.forEach(variables, function(variable, key){
-            var name = key;
+        angular.forEach(variables, function(variable){
+            var name = variable.name;
             var value = variable.value;
             result[name] = value;
         });
@@ -349,7 +355,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         openEndpoint: openEndpoint,
         getEndpointUrl: getEndpointUrl,
         getByKey: getByKey,
-        getVariablesInKeyValueFormat: getVariablesInKeyValueFormat
+        getVariablesInKeyValueFormat: getVariablesInKeyValueFormat,
+        isVariablesIncludeAdvancedVar: isVariablesIncludeAdvancedVar
     };
 }
 
