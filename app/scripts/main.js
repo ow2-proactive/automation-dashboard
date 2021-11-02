@@ -396,20 +396,22 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 // controller used in navigation.html :
 mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval, $timeout) {
     this.$onInit = function () {
-        setDefaultSelectedLanguage(localStorage['proactiveLanguage']);
-        var splitUrl = window.location.hash.split("/");
-        var portal = splitUrl[splitUrl.length-1];
         var jobAnalyticsChildren = ['job-analytics', 'job-gantt', 'node-gantt'];
         var jobPlannerChildren = ['job-planner-calendar-def', 'job-planner-calendar-def-workflows', 'job-planner-execution-planning', 'job-planner-gantt-chart'];
-        if(jobAnalyticsChildren.indexOf(portal) !== -1){
-            $scope.changeFavicon('analytics-portal');
-        } else if(jobPlannerChildren.indexOf(portal) !== -1){
-            $scope.changeFavicon('job-planner-portal');
-        } else if(splitUrl[splitUrl.length-1] ==="workflow-execution"){
-            $scope.changeFavicon("automation_dashboard_30");
-        } else {
-            $scope.changeFavicon(splitUrl[splitUrl.length-1]);
-        }
+        $timeout(function(){
+            var splitUrl = window.location.hash.split("/");
+            var portal = splitUrl[splitUrl.length-1];
+            setDefaultSelectedLanguage(localStorage['proactiveLanguage']);
+            if(jobAnalyticsChildren.indexOf(portal) !== -1){
+                $scope.changeFavicon('analytics-portal');
+            } else if(jobPlannerChildren.indexOf(portal) !== -1){
+                $scope.changeFavicon('job-planner-portal');
+            } else if(splitUrl[splitUrl.length-1] ==="workflow-execution"){
+                $scope.changeFavicon("automation_dashboard_30");
+            } else {
+                $scope.changeFavicon(splitUrl[splitUrl.length-1]);
+            }
+        }, 1000)
 
         $scope.view = JSON.parse(localStorage['configViews']);
         $http.get('resources/config.json')
