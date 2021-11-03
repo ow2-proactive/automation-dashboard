@@ -59,24 +59,15 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     }
 
     function extractVariables(modifiedWorkflow) {
-        var variables = {};
-        // we set model before values to know the model when setting values (1 & 0 can be int or bool, we need to know which one)
-        angular.forEach(modifiedWorkflow.object_key_values, function (item) {
-            if (item.label === 'variable_model') {
-                variables[item.key] = {};
-                variables[item.key].model = item.value;
-            }
-        });
-        angular.forEach(modifiedWorkflow.object_key_values, function (item) {
-            if (item.label === 'variable') {
-                if (!variables[item.key]) {
-                    variables[item.key] = {};
-                }
-                variables[item.key].value = extractVariableValue(item, variables[item.key].model);
-                variables[item.key].name = item.key;
-            }
-        });
-        return Object.values(variables);
+        var variables = [];
+        angular.forEach(modifiedWorkflow.variables_order, function(group, key){
+            angular.forEach(group, function(variable){
+                variable.value = extractVariableValue(variable, variable.model);
+                variable.group = key;
+                variables.push(variable);
+            })
+        })
+        return variables;
     }
 
     // open a pop-up to manage (browse, upload, delete) the global or user data space files
