@@ -11,7 +11,9 @@
             "modals/job_output_modal.html",
             "workflow-execution/templates/catalog-view.html",
             "workflow-execution/templates/job-actions-dropdown.html",
+            "workflow-execution/templates/job-details-view.html",
             "workflow-execution/templates/job-interfaces-dropdown.html",
+            "workflow-execution/templates/job-output-view.html",
             "workflow-execution/templates/job-results-dropdown.html",
             "workflow-execution/templates/job-service-dropdown.html",
             "workflow-execution/templates/job-signals-dropdown.html",
@@ -24,6 +26,7 @@
             "services/workflow-execution-catalog-service.js",
             "services/workflow-execution-scheduler-service.js",
             "services/workflow-execution-utility-factory.js",
+            "scripts/workflow-execution/job-information-controller.js",
             "scripts/workflow-execution/job-output-controller.js",
             "scripts/workflow-execution/workflow-execution-catalog-controller.js",
             "scripts/workflow-execution/workflow-execution-variables-controller.js"
