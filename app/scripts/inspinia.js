@@ -10,7 +10,9 @@ $(document).ready(function () {
 
     // Full height of sidebar
     function fix_height() {
-        var heightWithoutNavbar = $("body > #wrapper").height() - 61;
+        var headerFooterHeight = $('#page-header').height() + $('#page-footer').height()
+
+        var heightWithoutNavbar = $("body > #wrapper").height() - headerFooterHeight;
         $(".sidebard-panel").css("min-height", heightWithoutNavbar + "px");
 
         var navbarHeigh = $('nav.navbar-default').height();
@@ -21,7 +23,8 @@ $(document).ready(function () {
         }
 
         if(navbarHeigh < wrapperHeigh){
-            $('#page-wrapper').css("min-height", $(window).height()  + "px");
+            $('#page-wrapper').css("min-height", $(window).height() - headerFooterHeight + "px");
+            $('#page-wrapper').css("height", $(window).height() - headerFooterHeight + "px");
         }
 
         if ($('body').hasClass('fixed-nav')) {
@@ -51,7 +54,7 @@ $(document).ready(function () {
 
     setTimeout(function(){
         fix_height();
-    });
+    },100);
 
 });
 
