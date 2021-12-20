@@ -352,6 +352,42 @@ function showDropdownFromTemplate($document, $timeout, $uibPosition) {
 }
 
 /**
+ * Displays a tooltip that shows the whole text of a truncated element (by ellipsis or else)
+ * Requires using a "tooltip-enable=true" attribute and set by default to true.
+ * @returns {{link: link, restrict: string}}
+ */
+function ellipsisTooltip() {
+    return {
+        restrict: 'A',
+        link: function(scope, element, attrs) {
+            const el = element[0];
+            const ttDisableAttr = 'tooltipEnable';
+            const ttEventTrigger = 'mouseenter';
+
+            const ttShowEventBind = function (event, isTriggeredByItself) {
+                if (el.offsetHeight < el.scrollHeight) {
+                    attrs.$set(ttDisableAttr, 'true');
+                    if (!isTriggeredByItself) {
+                        element.triggerHandler(ttEventTrigger, [true]);
+                    }
+                    scope.$applyAsync(function() {
+                        attrs.$set(ttDisableAttr, 'false');
+                    });
+                }
+            };
+
+            if (angular.isObject(el)) {
+                attrs.$set(ttDisableAttr, 'false');
+                element.on(ttEventTrigger, ttShowEventBind);
+                element.on('$destroy', function () {
+                    element.off(ttEventTrigger, ttShowEventBind);
+                });
+            }
+        }
+    };
+}
+
+/**
  *
  * Pass all functions into module
  */
@@ -365,4 +401,5 @@ angular
     .directive('sideNavigation', sideNavigation)
     .directive('slimScroll', slimScroll)
     .directive('backTop', backToTop)
-    .directive('showDropdownFromTemplate', showDropdownFromTemplate);
+    .directive('showDropdownFromTemplate', showDropdownFromTemplate)
+    .directive('ellipsisTooltip', ellipsisTooltip);
