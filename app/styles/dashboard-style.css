@@ -417,7 +417,11 @@
     overflow-y: auto !important;
 }
 
-.catalog-selected-row{
+#catalog-description-table th, #catalog-description-table td {
+    vertical-align: top;
+}
+
+.catalog-selected-row {
 	color: black;
 	background-color: #4A90D9;
 }

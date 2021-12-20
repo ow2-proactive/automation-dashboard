@@ -1,30 +1,27 @@
 angular.module('workflow-variables').controller('CatalogObjectsModalCtrl', function($scope, $rootScope, $http, $uibModalInstance, variable, variableModel, SweetAlert, UtilsFactory) {
-    $scope.variable = variable;
-    $scope.variableModel = variableModel;
-
     var restRequestHeader = { headers: {'sessionid': getSessionId() }};
-    var matches = $scope.variableModel.match(/\((.*)\)/); //matches[1] contains the value between the parentheses
+    var matches = variableModel.match(/\((.*)\)/); //matches[1] contains the value between the parentheses
     if (matches && matches.length > 1) {
         var params = matches[1].split(',');
         var kindFilter = params[0];
         var filterContentType = params[1];
     }
-    $scope.kindLabel = (kindFilter) ? kindFilter : 'Object'; //TODO
     var kindFilterUrl = (kindFilter) ? 'kind=' + kindFilter : '';
     var contentFilterUrl = (filterContentType) ? 'contentType=' + filterContentType : '';
     var filterUrlParams = [kindFilterUrl, contentFilterUrl].join('&');
 
     $scope.updateBuckets = function() {
-        var getBucketsUrl = JSON.parse(localStorage.appCatalogBucketsUrl) + '/?' + filterUrlParams;
-        console.log("getBucketsUrl: ", getBucketsUrl);
-
+        $scope.clearData();
+        var getBucketsUrl = JSON.parse(localStorage.appCatalogBucketsUrl);
+        if (!$scope.showAllBuckets) {
+            getBucketsUrl += '/?' + filterUrlParams;
+        }
         $http.get(getBucketsUrl, restRequestHeader)
             .success(function (data){
-                console.log("buckets data: ", data);
                 $scope.buckets = data;
                 // to open the browser on the first bucket
-                if ($scope.buckets) {
-                    $scope.internalSelectBucket(0, $scope.buckets[0].name);
+                if ($scope.buckets && $scope.buckets.length > 0) {
+                    $scope.internalSelectBucket(0);
                 }
             })
             .error(function (xhr) {
@@ -32,76 +29,107 @@ angular.module('workflow-variables').controller('CatalogObjectsModalCtrl', funct
                 if(xhr) {
                     errorMessage = ": "+ xhr
                 }
-                $scope.displayGenericTitleErrorMessage(['Failed to access the catalog', url + errorMessage]);
+                $scope.displayGenericTitleErrorMessage(['Failed to access the catalog', getBucketsUrl + errorMessage]);
             });
-
-//        console.log("selected bucket: ", $scope.buckets, $('#catalog-get-buckets-table tr')[0])
-//        $scope.internalSelectBucket($('#catalog-get-buckets-table tr')[0]);
     }
 
-    $scope.internalSelectBucket = function (selectedIndex, currentBucket) {
-        console.log("internalSelectBucket", selectedIndex, currentBucket)
-        if (!currentBucket){
+    $scope.internalSelectBucket = function (selectedIndex) {
+        $scope.clearData();
+        $scope.selectedBucketIndex = selectedIndex;
+        if (!$scope.buckets || selectedIndex >= $scope.buckets.length){
             return;
         }
-        $scope.selectedBucketIndex = selectedIndex;
-//        $scope.highlightSelectedRow('#catalog-get-buckets-table', currentBucket);
 
-        var getCatalogObjectsUrl = JSON.parse(localStorage.appCatalogBucketsUrl) + "/"+ currentBucket + '/resources/?' + filterUrlParams;
+        var bucketName = $scope.buckets[$scope.selectedBucketIndex].name;
+        var getCatalogObjectsUrl = JSON.parse(localStorage.appCatalogBucketsUrl) + "/"+ bucketName + '/resources/?' + filterUrlParams;
         $http.get(getCatalogObjectsUrl, restRequestHeader)
             .success(function (data){
                 $scope.catalogObjects = data;
-                console.log("catalogObjects, ", $scope.catalogObjects);
-                if ($scope.catalogObjects) {
-                    $scope.internalSelectObject(0, $scope.catalogObjects[0].name); //$('#catalog-get-objects-table tr')[0]
+                // auto select the first catalog object in the bucket
+                if ($scope.catalogObjects && $scope.catalogObjects.length > 0) {
+                    $scope.internalSelectObject(0);
                 }
+            })
+            .error(function (xhr) {
+                var errorMessage = "";
+                if(xhr) {
+                    errorMessage = ": "+ xhr
+                }
+                $scope.displayGenericTitleErrorMessage(['Failed to access the catalog', getCatalogObjectsUrl + errorMessage]);
             });
     }
 
-    $scope.internalSelectObject = function (selectedIndex, currentCatalogObject) {
-        console.log("internalSelectObject", selectedIndex, currentCatalogObject);
+    $scope.internalSelectObject = function (selectedIndex) {
+        $scope.revisions = undefined;
+        $scope.revision = undefined;
         $scope.selectedCatalogObjectIndex = selectedIndex;
+        if (!$scope.buckets || $scope.selectedBucketIndex >= $scope.buckets.length || !$scope.buckets[$scope.selectedBucketIndex]){
+            return;
+        }
+        if (!$scope.catalogObjects || selectedIndex >= $scope.catalogObjects.length || !$scope.catalogObjects[selectedIndex]) {
+            return;
+        }
 
         var bucketName = $scope.buckets[$scope.selectedBucketIndex].name;
-//        this.highlightSelectedRow('#catalog-get-objects-table', currentObjectRow);
+        var objectName = $scope.catalogObjects[selectedIndex].name;
+        var getRevisionsUrl = JSON.parse(localStorage.appCatalogBucketsUrl) + "/" + bucketName + '/resources/' + encodeURIComponent(objectName) + '/revisions';
 
-        var getRevisionsUrl = '/catalog/buckets/' + bucketName + '/resources/' + encodeURIComponent(currentCatalogObject) + '/revisions';
         $http.get(getRevisionsUrl, restRequestHeader)
              .success(function (data){
                  $scope.revisions = data;
-                 console.log("revisions: ", $scope.revisions);
-
+                 // insert the latest revision at the beginning of the list
                  var latestRevision = JSON.parse(JSON.stringify($scope.revisions[0]));//Copy of the fist revision: the latest one
-//                 latestRevision.links[1].href = 'buckets/' + latestRevision.bucket_name + '/resources/' + latestRevision.name;
-                 latestRevision.href = 'buckets/' + latestRevision.bucket_name + '/resources/' + latestRevision.name;
+                 latestRevision.links[1].href = 'buckets/' + latestRevision.bucket_name + '/resources/' + latestRevision.name;
                  latestRevision.isLatest = true;
                  $scope.revisions.unshift(latestRevision);
-//                 var latestRevisionProjectName = latestRevision.project_name;
-//                 var RevisionList = _.template(catalogRevision);
-                 $scope.revision = latestRevision;
-//                 $scope.internalSelectRevision($('#catalog-get-revisions-table tr')[0])
-             });
+                 // auto select the latest revision
+                 if ($scope.revisions) {
+                    $scope.internalSelectRevision(0);
+                 }
+             })
+            .error(function (xhr) {
+                var errorMessage = "";
+                if(xhr) {
+                    errorMessage = ": "+ xhr
+                }
+                $scope.displayGenericTitleErrorMessage(['Failed to access the catalog', getRevisionsUrl + errorMessage]);
+            });
     }
 
-    $scope.internalSelectRevision = function (selectedIndex, currentRevision) {
-            console.log("internalSelectRevision", selectedIndex, currentRevision);
-            $scope.selectedRevisionIndex = selectedIndex;
-            $scope.revision = $scope.revisions[selectedIndex];
+    $scope.internalSelectRevision = function (selectedIndex) {
+        $scope.selectedRevisionIndex = selectedIndex;
+        if (!$scope.revisions || !$scope.revisions[selectedIndex]){
+            return;
+        }
+        $scope.revision = $scope.revisions[selectedIndex];
+    }
+
+    $scope.showAllChanged = function() {
+        $scope.updateBuckets();
+    }
+
+    $scope.clearData = function() {
+        $scope.catalogObjects = undefined;
+        $scope.revisions = undefined;
+        $scope.revision = undefined;
     }
 
     $scope.displayGenericTitleErrorMessage = function (message) {
        UtilsFactory.displayTranslatedErrorMessage('Oops!!!', message);
    }
 
-    $scope.getSelectedBucketName = function(){
-        return $scope.getSelectedRowId("#catalog-get-buckets-table .catalog-selected-row", "bucketname");
-    },
+    $scope.selectCatalogObjectVariable = function () {
+        if (!$scope.revision) {
+            UtilsFactory.displayTranslatedErrorMessage('Oops!!!', "Please select a catalog object first.");
+            return;
+        }
+        // format: buckets/[bucketName]/resources/[catalogObjectName]</revisions/[revisionCommitTime]>
+        var selectedObjectLink = $scope.revision.links[1].href;
+        // format: [bucketName]/[catalogObjectName]</[revisionCommitTime]>
+        var selectedObjectValue = selectedObjectLink.replace('buckets/', '').replace('resources/', '').replace('revisions/', '');
+        // update the variable value to the selected catalog object
+        variable.value = selectedObjectValue;
 
-    $scope.getSelectedRowId = function(tableSelector, dataName){
-        return ($(($(tableSelector))[0])).data(dataName);
-    }
-
-    $scope.selectCatalogObject = function () {
         $scope.cancel();
     }
 

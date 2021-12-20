@@ -6,14 +6,14 @@
 
     <div id="catalog-get-body" class="modal-body" style="height:100%">
         <div id="catalog-get-container">
-            <table>
+            <table style="width: 100%;">
                 <tr>
                     <td style="width: 250px;">
                         <fieldset>
                             <legend class="row">
                                 <div class="pull-left" style="font-weight: bold;padding-left: 15px;">Buckets</div>
                                 <div class="pull-right" id="get-show-all-checkbox">
-                                    <label class="checkbox-inline"><input type="checkbox">Show all</label>
+                                    <label class="checkbox-inline"><input type="checkbox" ng-model="showAllBuckets" ng-change="showAllChanged()">Show all</label>
                                 </div>
                             </legend>
                             <div style="height: 270px; overflow: auto;">
@@ -22,7 +22,7 @@
                                         id="bucket{{$index}}"
                                         class="clickable-element"
                                         ng-class="($index==selectedBucketIndex)?'catalog-selected-row':''"
-                                        ng-click="internalSelectBucket($index, bucket.name)">
+                                        ng-click="internalSelectBucket($index)">
                                         <td title="{{bucket.name}}">{{bucket.name}}</td>
                                     </tr>
                                 </table>
@@ -38,7 +38,7 @@
                                         id="catalogObject{{$index}}"
                                         class="clickable-element"
                                         ng-class="($index==selectedCatalogObjectIndex)?'catalog-selected-row':''"
-                                        ng-click="internalSelectObject($index, catalogObject.name)">
+                                        ng-click="internalSelectObject($index)">
                                         <td title="{{catalogObject.name}}">{{catalogObject.name}}</td>
                                         <td title="{{catalogObject.project_name}}">{{catalogObject.project_name}}</td>
                                     </tr>
@@ -55,7 +55,7 @@
                                         id="revision{{$index}}"
                                         class="clickable-element"
                                         ng-class="($index==selectedRevisionIndex)?'catalog-selected-row':''"
-                                        ng-click="internalSelectRevision($index, revision.name)">
+                                        ng-click="internalSelectRevision($index)">
                                         <td ng-if="revision.isLatest">Latest</td>
                                         <td ng-if="!revision.isLatest">{{revision.commit_time}}</td>
                                     </tr>
@@ -67,30 +67,28 @@
                         <fieldset>
                             <legend style="font-weight: bold;">Description</legend>
                             <div id="catalog-get-description-container" style="height: 270px; overflow: auto;">
-                                <div id="catalog-get-revision-description">
-                                    <table>
-                                        <tr style="width:50%;">
-                                            <th style="width:40%;">{{kindLabel}} name</th>
-                                            <td>{{revision.name}}</td>
-                                        </tr>
-                                        <tr ng-if="revision.project_name">
-                                            <th>Project name</th>
-                                            <td>{{prevision.project_name}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Commit message</th>
-                                            <td>{{prevision.commit_message}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Committed by</th>
-                                            <td>{{prevision.username}}</td>
-                                        </tr>
-                                        <tr>
-                                            <th>Direct URL</th>
-                                            <td><a href="{{revision.links[1].href}}">{{revision.links[1].href.substring(0,30)+"..."}}</a></td>
-                                        </tr>
-                                    </table>
-                                </div>
+                                <table id="catalog-description-table" style="width: 100%;">
+                                    <tr ng-if="revision" style="width:50%;">
+                                        <th style="width:40%;">Name</th>
+                                        <td>{{revision.name}}</td>
+                                    </tr>
+                                    <tr ng-if="revision.project_name">
+                                        <th>Project name</th>
+                                        <td>{{revision.project_name}}</td>
+                                    </tr>
+                                    <tr ng-if="revision">
+                                        <th>Commit message</th>
+                                        <td>{{revision.commit_message}}</td>
+                                    </tr>
+                                    <tr ng-if="revision">
+                                        <th>Committed by</th>
+                                        <td>{{revision.username}}</td>
+                                    </tr>
+                                    <tr ng-if="revision">
+                                        <th>Direct URL</th>
+                                        <td><a href="{{revision.links[0].href}}">{{revision.links[1].href}}</a></td>
+                                    </tr>
+                                </table>
                             </div>
                         </fieldset>
                     </td>
@@ -100,7 +98,7 @@
     </div>
 
     <div class="modal-footer">
-        <button id="catalog-get-select-button" class="btn btn-primary" ng-click="selectCatalogObject()">
+        <button id="catalog-get-select-button" class="btn btn-primary" ng-click="selectCatalogObjectVariable()" data-ng-disabled="!revision">
             Select
         </button>
         <button id="catalog-get-close-button" class="btn btn-white" ng-click="cancel()">
