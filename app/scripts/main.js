@@ -208,8 +208,11 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         $rootScope.lang = key;
         $translate.use(key);
         localStorage['proactiveLanguage'] = key;
-        location.reload()
     };
+
+    $scope.reloadPortal = function (){
+        location.reload()
+    }
 
     //Set the selected language as language dropdown value
     $scope.selectedLanguage = function () {

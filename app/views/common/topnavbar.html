@@ -87,19 +87,21 @@
                 <a data-toggle="dropdown" href="javascript:void(0)" style="color: #676a6c;padding-left: 10px;font-size: 14px;background-color: transparent;" ng-click="selectedLanguage()">
                     <span id="selected">Language</span><span class="caret"></span></a>
                 <ul class="dropdown-menu" id="language-dropdown">
-                    <li><a id="en" class="pointer" ng-click="changeLanguage('en')" style="
-      padding: 3px 5px;
-  " tabindex="-1" target="_blank"><img alt="En" id="en-flag" src="styles/patterns/gb.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">English</a>
+                    <li>
+                        <a id="en" class="pointer" ng-click="changeLanguage('en'); reloadPortal()" style="padding: 3px 5px;" tabindex="-1" target="_blank"><img alt="En" id="en-flag" src="styles/patterns/gb.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">English</a>
                     </li>
-                    <li><a id="fr" class="pointer" ng-click="changeLanguage('fr')" style="
+                    <li>
+                        <a id="fr" class="pointer" ng-click="changeLanguage('fr'); reloadPortal()" style="
       padding: 3px 5px;
   " tabindex="-1" target="_blank"><img alt="Fr" id="fr-flag" src="styles/patterns/fr.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">Français</a>
                     </li>
-                    <li><a id="pt" class="pointer" ng-click="changeLanguage('pt')" style="
+                    <li>
+                        <a id="pt" class="pointer" ng-click="changeLanguage('pt'); reloadPortal()" style="
       padding: 3px 5px;
   " tabindex="-1" target="_blank"><img alt="Pt" id="pt-flag" src="styles/patterns/br.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">Português</a>
                     </li>
-                    <li><a id="es" class="pointer" ng-click="changeLanguage('es')" style="
+                    <li>
+                        <a id="es" class="pointer" ng-click="changeLanguage('es'); reloadPortal()" style="
       padding: 3px 5px;
   " tabindex="-1" target="_blank"><img alt="ES" id="es-flag" src="styles/patterns/es.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">Español</a>
                     </li>
