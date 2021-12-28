@@ -412,6 +412,20 @@
     overflow-y: auto !important;
 }
 
+.catalog-objects-modal.modal {
+    z-index: 2060 !important;
+    overflow-y: auto !important;
+}
+
+#catalog-description-table th, #catalog-description-table td {
+    vertical-align: top;
+}
+
+.catalog-selected-row {
+	color: black;
+	background-color: #4A90D9;
+}
+
 .workflow-visualization-modal .modal-dialog {
     width: 80%;
 }
