@@ -1,5 +1,5 @@
 function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, $q, toastr, SweetAlert) {
-    var specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder', 'pa:user_folder', 'pa:credential'];
+    var specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder', 'pa:user_folder', 'pa:catalog_object', 'pa:credential'];
 
     function openJobInSchedulerPortal(jobId) {
         if (jobId) {
@@ -68,6 +68,26 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             })
         })
         return variables;
+    }
+
+    // open a pop-up to browse the catalog objects and select one
+    function openCatalogObjectModal(variable, variableModel) {
+        $uibModal.open({
+            templateUrl: 'views/modals/catalog_objects_modal.html',
+            controller: 'CatalogObjectsModalCtrl',
+            windowClass: 'fadeIn catalog-objects-modal',
+            size: 'xl',
+            keyboard: true,
+            backdrop: 'static',
+            resolve: {
+                variable: function () {
+                    return variable;
+                },
+                variableModel: function () {
+                    return variableModel;
+                }
+            }
+        });
     }
 
     // open a pop-up to manage (browse, upload, delete) the global or user data space files
@@ -332,6 +352,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         openJobInSchedulerPortal: openJobInSchedulerPortal,
         isSpecialUIModel: isSpecialUIModel,
         parseEmptyVariablesValue: parseEmptyVariablesValue,
+        openCatalogObjectModal: openCatalogObjectModal,
         openFileBrowser: openFileBrowser,
         uploadDataspaceFile: uploadDataspaceFile,
         toReadableFileSize: toReadableFileSize,

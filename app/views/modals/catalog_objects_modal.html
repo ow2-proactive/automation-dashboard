@@ -1,0 +1,108 @@
+<div class="inmodal" ng-class="catalog-objects-modal">
+    <div class="modal-header">
+        <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+        <h3 id="catalog-modal-title">{{'Select an Object from the Catalog'|translate}}</h3>
+    </div>
+
+    <div id="catalog-body" class="modal-body" style="height:100%">
+        <table style="width: 100%;">
+            <tr>
+                <td style="width: 250px;">
+                    <fieldset>
+                        <legend class="row">
+                            <div class="pull-left" style="font-weight: bold;padding-left: 15px;">{{'Buckets'|translate}}</div>
+                            <div class="pull-right" id="buckets-show-all-checkbox">
+                                <label class="checkbox-inline">
+                                    <input type="checkbox" ng-model="showAllBuckets" ng-change="showAllChanged()">{{'Show all'|translate}}
+                                </label>
+                            </div>
+                        </legend>
+                        <div style="height: 270px; overflow: auto;">
+                            <table id="catalog-buckets-table" style="width: 100%;">
+                                <tr ng-repeat="bucket in buckets track by $index"
+                                    id="bucket{{$index}}"
+                                    class="clickable-element"
+                                    ng-class="($index==selectedBucketIndex)?'catalog-selected-row':''"
+                                    ng-click="internalSelectBucket($index)">
+                                    <td title="{{bucket.name}}">{{bucket.name}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </fieldset>
+                </td>
+                <td  style="width: 500px;">
+                    <fieldset>
+                        <legend style="font-weight: bold;" id="catalog-objects-legend">{{'Catalog Objects'|translate}}</legend>
+                        <div style="height: 270px; overflow: auto;">
+                            <table id="catalog-objects-table" style="width: 100%;">
+                                <tr ng-repeat="catalogObject in catalogObjects track by $index"
+                                    id="catalogObject{{$index}}"
+                                    class="clickable-element"
+                                    ng-class="($index==selectedCatalogObjectIndex)?'catalog-selected-row':''"
+                                    ng-click="internalSelectObject($index)">
+                                    <td title="{{catalogObject.name}}">{{catalogObject.name}}</td>
+                                    <td title="{{catalogObject.project_name}}">{{catalogObject.project_name}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </fieldset>
+                </td>
+                <td style="width: 200px;">
+                    <fieldset>
+                        <legend style="font-weight: bold;">{{'Revisions'|translate}}</legend>
+                        <div style="height: 270px; overflow: auto;">
+                            <table id="catalog-revisions-table" style="width: 100%;">
+                                <tr ng-repeat="revision in revisions track by $index"
+                                    id="revision{{$index}}"
+                                    class="clickable-element"
+                                    ng-class="($index==selectedRevisionIndex)?'catalog-selected-row':''"
+                                    ng-click="internalSelectRevision($index)">
+                                    <td ng-if="revision.isLatest">{{'Latest'|translate}}</td>
+                                    <td ng-if="!revision.isLatest">{{revision.commit_time}}</td>
+                                </tr>
+                            </table>
+                        </div>
+                    </fieldset>
+                </td>
+                <td style="width: 350px;">
+                    <fieldset>
+                        <legend style="font-weight: bold;">{{'Description'|translate}}</legend>
+                        <div id="catalog-description-container" style="height: 270px; overflow: auto;">
+                            <table id="catalog-description-table" style="width: 100%;">
+                                <tr ng-if="revision" style="width:50%;">
+                                    <th style="width:40%;">{{'Name'|translate}}</th>
+                                    <td>{{revision.name}}</td>
+                                </tr>
+                                <tr ng-if="revision.project_name">
+                                    <th>{{'Project name'|translate}}</th>
+                                    <td>{{revision.project_name}}</td>
+                                </tr>
+                                <tr ng-if="revision">
+                                    <th>{{'Commit message'|translate}}</th>
+                                    <td>{{revision.commit_message}}</td>
+                                </tr>
+                                <tr ng-if="revision">
+                                    <th>{{'Committed by'|translate}}</th>
+                                    <td>{{revision.username}}</td>
+                                </tr>
+                                <tr ng-if="revision">
+                                    <th>{{'Direct URL'|translate}}</th>
+                                    <td><a href="{{revision.links[0].href}}">{{revision.links[1].href}}</a></td>
+                                </tr>
+                            </table>
+                        </div>
+                    </fieldset>
+                </td>
+            </tr>
+        </table>
+    </div>
+
+    <div class="modal-footer">
+        <button id="catalog-select-button" class="btn btn-primary" ng-click="selectCatalogObjectVariable()" data-ng-disabled="!revision">
+            {{'Select'|translate}}
+        </button>
+        <button id="catalog-close-button" class="btn btn-white" ng-click="cancel()">
+            {{'Close'|translate}}
+        </button>
+    </div>
+</div>
