@@ -776,3 +776,7 @@ md-virtual-repeat-container:-webkit-scrollbar {
 .img-bw {
     filter: grayscale(100%);
 }
+
+#page-wrapper{
+    min-height: calc(100vh - 88px)!important;
+}
