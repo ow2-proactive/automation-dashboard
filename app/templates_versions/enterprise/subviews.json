@@ -9,6 +9,7 @@
         "secondaryHtmlFiles": [
             "modals/result_map_modal.html",
             "modals/job_output_modal.html",
+            "modals/send_signals_modal.html",
             "workflow-execution/templates/catalog-view.html",
             "workflow-execution/templates/job-actions-dropdown.html",
             "workflow-execution/templates/job-details-view.html",
