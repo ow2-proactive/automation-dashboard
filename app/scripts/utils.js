@@ -348,6 +348,33 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         return result;
     };
 
+    function modelToDateFormat(model) {
+        var indexBegin = model.indexOf('(');
+        var indexEnd = model.lastIndexOf(')');
+        var javaDateTimeFormat =  model.substring(indexBegin + 1, indexEnd).trim();
+        return moment().toMomentFormatString(javaDateTimeFormat);
+    };
+
+    function modelToList (model) {
+        var indexBegin = model.indexOf('(');
+        var indexEnd = model.lastIndexOf(')');
+        var options = model.substring(indexBegin + 1, indexEnd).split(',');
+        return options.map(function (option) {
+            return option.trim();
+        });
+    };
+
+    function modelToDateScope (model) {
+        var indexBegin = model.indexOf('[');
+        var indexEnd = model.lastIndexOf(']');
+        var dates = model.substring(indexBegin + 1, indexEnd).split(',');
+        var dateScope = {};
+        if (dates.length > 1) {
+            dateScope.min = dates[0].trim();
+            dateScope.max = dates[1].trim();
+        }
+        return dateScope;
+    };
     return {
         openJobInSchedulerPortal: openJobInSchedulerPortal,
         isSpecialUIModel: isSpecialUIModel,
@@ -368,7 +395,10 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         getEndpointUrl: getEndpointUrl,
         getByKey: getByKey,
         getVariablesInKeyValueFormat: getVariablesInKeyValueFormat,
-        isVariablesIncludeAdvancedVar: isVariablesIncludeAdvancedVar
+        isVariablesIncludeAdvancedVar: isVariablesIncludeAdvancedVar,
+        modelToDateFormat: modelToDateFormat,
+        modelToList: modelToList,
+        modelToDateScope: modelToDateScope
     };
 }
 
