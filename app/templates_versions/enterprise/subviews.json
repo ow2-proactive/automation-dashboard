@@ -9,6 +9,7 @@
         "secondaryHtmlFiles": [
             "modals/result_map_modal.html",
             "modals/job_output_modal.html",
+            "modals/send_signals_modal.html",
             "workflow-execution/templates/catalog-view.html",
             "workflow-execution/templates/job-actions-dropdown.html",
             "workflow-execution/templates/job-details-view.html",
@@ -20,6 +21,7 @@
             "workflow-execution/templates/job-externals-endpoints-dropdown.html",
             "workflow-execution/templates/typehead-wf-dropdown.html",
             "workflow-execution/templates/workflow-variables.html",
+            "workflow-execution/templates/workflow-info.html",
             "workflow-execution/templates/wizard.html"
         ],
         "notAvailablePage": "workflow-execution/page_not_available_wf_execution.html",
