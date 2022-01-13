@@ -31,6 +31,16 @@ angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCt
             });
     }
 
+    $scope.changeMultilineCredential = function() {
+        if ($scope.showMultilineCred) {
+            $('#new-cred-value').hide();
+            $('#new-cred-value-multiline').show();
+        } else {
+            $('#new-cred-value').show();
+            $('#new-cred-value-multiline').hide();
+        }
+    }
+
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     }
