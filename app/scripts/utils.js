@@ -113,6 +113,19 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         });
     }
 
+    function manageThirdPartyCredentials(credKey) {
+        $uibModal.open({
+            templateUrl: 'views/modals/third_party_credentials.html',
+            controller: 'ThirdPartyCredentialModalCtrl',
+            windowClass: 'fadeIn third-party-credential-modal',
+            resolve: {
+                credKey: function () {
+                    return credKey;
+                }
+            }
+        });
+    }
+
     function uploadDataspaceFile(url, selectedFile, isGlobalFile, successCallback, errorCallback) {
         if ($rootScope.uploadingFiles === void 0) {
             $rootScope.uploadingFiles = [];
@@ -381,6 +394,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         parseEmptyVariablesValue: parseEmptyVariablesValue,
         openCatalogObjectModal: openCatalogObjectModal,
         openFileBrowser: openFileBrowser,
+        manageThirdPartyCredentials: manageThirdPartyCredentials,
         uploadDataspaceFile: uploadDataspaceFile,
         toReadableFileSize: toReadableFileSize,
         translate: translate,

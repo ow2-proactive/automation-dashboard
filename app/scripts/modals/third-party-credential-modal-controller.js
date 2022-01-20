@@ -1,4 +1,7 @@
-angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCtrl', function($scope, $http, $uibModalInstance) {
+angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCtrl', function($scope, $http, $uibModalInstance, credKey) {
+    if (credKey) {
+        $scope.credKey = credKey
+    }
     var schedulerRestUrl = JSON.parse(localStorage.schedulerRestUrl);
 
     $scope.refreshCredentials = function () {
