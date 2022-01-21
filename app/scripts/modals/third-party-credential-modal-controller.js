@@ -1,7 +1,5 @@
-angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCtrl', function($scope, $http, $uibModalInstance, credKey) {
-    if (credKey) {
-        $scope.credKey = credKey
-    }
+angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCtrl', function($scope, $http, $uibModalInstance, UtilsFactory, credKey, closeHandler) {
+    $scope.credKey = credKey
     var schedulerRestUrl = JSON.parse(localStorage.schedulerRestUrl);
 
     $scope.refreshCredentials = function () {
@@ -9,6 +7,16 @@ angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCt
         $http.get(url, {headers: {'sessionID': getSessionId()}})
             .success(function (response) {
                 $scope.credentialKeys = response.sort();
+                if ($scope.credKey) {
+                    if ($scope.credentialKeys.includes($scope.credKey)) {
+                        $('#add-third-party-credential-button').html(UtilsFactory.translate('Edit'));
+                    } else {
+                        $('#add-third-party-credential-button').html(UtilsFactory.translate('Add'));
+                    }
+                    $("#new-cred-key").prop('readonly', true);
+                } else {
+                    $("#new-cred-key").prop('readonly', false);
+                }
             })
             .error(function (response) {
                 console.error('Error while querying scheduling api on URL ' + url + ':', JSON.stringify(response));
@@ -28,7 +36,7 @@ angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCt
         var url = schedulerRestUrl + 'credentials/' + encodeURIComponent(credKey);
         var data = 'value=' + encodeURIComponent(credValue);
         $http.post(url, data, {headers: {'sessionID': getSessionId(), 'Content-Type': 'application/x-www-form-urlencoded'}})
-            .success($scope.refreshCredentials)
+            .success($scope.cancel)
             .error(function (response) {
                 console.error('Error while querying scheduling api on URL ' + url + ':', JSON.stringify(response));
             });
@@ -46,6 +54,7 @@ angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCt
 
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
+        closeHandler();
     }
 
     $scope.refreshCredentials();

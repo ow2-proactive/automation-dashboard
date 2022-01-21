@@ -113,7 +113,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         });
     }
 
-    function manageThirdPartyCredentials(credKey) {
+    function manageThirdPartyCredentials(credKey, closeHandler) {
         $uibModal.open({
             templateUrl: 'views/modals/third_party_credentials.html',
             controller: 'ThirdPartyCredentialModalCtrl',
@@ -121,6 +121,9 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             resolve: {
                 credKey: function () {
                     return credKey;
+                },
+                closeHandler: function() {
+                    return closeHandler;
                 }
             }
         });
