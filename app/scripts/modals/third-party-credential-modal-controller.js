@@ -14,8 +14,10 @@ angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCt
                         $('#add-third-party-credential-button').html(UtilsFactory.translate('Add'));
                     }
                     $("#new-cred-key").prop('readonly', true);
+                    $("#new-cred-key").prop('title', $scope.credKey);
                 } else {
                     $("#new-cred-key").prop('readonly', false);
+                    $("#new-cred-key").prop('title', UtilsFactory.translate('The credential key should not contain only white spaces.'));
                 }
             })
             .error(function (response) {
