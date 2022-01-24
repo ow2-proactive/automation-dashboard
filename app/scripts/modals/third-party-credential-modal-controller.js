@@ -56,7 +56,9 @@ angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCt
 
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
-        closeHandler();
+        if (closeHandler) {
+            closeHandler();
+        }
     }
 
     $scope.refreshCredentials();
