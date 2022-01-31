@@ -1,0 +1,150 @@
+<!-- CATALOG -->
+<div class="ibox-content p-xs" ng-controller="CatalogViewController">
+    <div class="container-flex w-100 m-b-sm">
+        <form ng-submit="filterObjectByObjectName(workflowNameQuery)" class="container-flex w-100">
+            <div class="input-group w-100 container-flex">
+                <input type="text" placeholder="{{'Workflow name'|translate}}"
+                       class="form-control"
+                       ng-model="workflowNameQuery"
+                       ng-model-options="{debounce: 1000}"
+                       ng-change="filterObjectByObjectName(workflowNameQuery)"
+                >
+                <button class="btn btn-default" type="submit">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </form>
+        <div class="container-flex m-l-md btn-group">
+            <button class="btn btn-default"  ng-click="toggleDisplay()" uib-tooltip="{{'Show workflows as icons'|translate}}" ng-model="toggleListBox.value"
+                    uib-btn-radio="false">
+                <i class="fa fa-th-large"></i>
+            </button>
+            <button class="btn btn-default" ng-click="toggleDisplay()" ng-model="toggleListBox.value" tooltip-placement="bottom" uib-tooltip="{{'Show workflows as a list'|translate}}"
+                    uib-btn-radio="true">
+                <i class="fa fa-list"></i>
+            </button>
+        </div>
+    </div>
+
+    <div class="row">
+        <div class="col-lg-3">
+            <div class="w-100">
+                <span class="font-bold">{{'Buckets'|translate}} </span>
+                <span class="m-l-sm clickable"
+                      ng-click="orderByColumn('name', OrderByBucketNameConfig, 'submissionView.orderByColumnConfig.buckets'); scrollToBucket()">
+                    <i class="fa"
+                       ng-class="getSortClasses(OrderByBucketNameConfig, 'name')"
+                       style="font-size: 17px;">
+                    </i>
+                </span>
+                <div class="checkbox pull-right" style="margin-top:0px" uib-tooltip="{{(!showPSAWorkflowsOnly ?'Show Service Workflows Only' : 'Show Standard Workflows And Service Workflows')|translate}}">
+                    <label>
+                        <input type="checkbox" ng-model="showPSAWorkflowsOnly" ng-change="filterBucketsByKind()">
+                        {{'Service Workflows Only'|translate}}
+                    </label>
+                </div>
+            </div>
+            <hr class="hr-line-solid">
+            <div class="ibox-content no-borders no-padding" ng-class="{'sk-loading':isBucketsLoading}">
+                <div class="sk-spinner sk-spinner-double-bounce">
+                    <div class="sk-double-bounce1"></div>
+                    <div class="sk-double-bounce2"></div>
+                </div>
+                <div class="table-responsive" id="buckets-scroll-area" slim-scroll box-height="calc(100vh - 310px)"
+                     style="overflow-y:auto;overflow-x:hidden; height:calc(100vh - 310px)">
+                    <table class="table table-hover">
+                        <tbody>
+                        <tr ng-repeat="bucket in bucketsMetadataList | orderBy: OrderByBucketNameConfig.comparatorLogic"
+                            id="bucket{{bucket.name}}"
+                            ng-class="{'active': bucket.name==selectedBucket.name}"
+                            class="clickable-element">
+                            <td ng-click="changeBucket(bucket)">
+                                <div class="pull-left" style="overflow: hidden; text-overflow: ellipsis; overflow-wrap: normal;">
+                                    {{bucket.name}}
+                                </div>
+                            </td>
+                        </tr>
+                        </tbody>
+                    </table>
+
+                    <!-- No Results Found -->
+                    <div ng-show="!bucketsMetadataList.length && !isBucketsLoading">
+                        <span style="font-size:18px; display:block">{{'No results for'|translate}} "{{workflowNameQuery}}".</span>
+                        <span>{{'Try checking your spelling or use more general terms.'|translate}}</span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        <div class="col-lg-9">
+            <div class="ibox-content no-borders no-padding" ng-class="{'sk-loading':isObjectsLoading}">
+                <div class="sk-spinner sk-spinner-double-bounce">
+                    <div class="sk-double-bounce1"></div>
+                    <div class="sk-double-bounce2"></div>
+                </div>
+                <div ng-if="toggleListBox.value" class="table-responsive tableFixHead"
+                     style="overflow-y:auto; overflow-x:hidden; height:calc(100vh - 260px)">
+                    <table class="table table-hover">
+                        <thead>
+                        <tr>
+                            <th></th>
+                            <th class="clickable" ng-click="orderByColumn('name', orderByColumnConfig, 'submissionView.orderByColumnConfig.workflows')">
+                                {{'Workflow'|translate}}
+                                <i class="fa m-l-sm clickable" ng-class="getSortClasses(orderByColumnConfig,'name')" style="font-size: 16px;"></i>
+                            </th>
+                            <th class="clickable" ng-click="orderByColumn('project_name', orderByColumnConfig, 'submissionView.orderByColumnConfig.workflows')">
+                                {{'Project'|translate}}
+                                <i class="fa m-l-sm clickable" ng-class="getSortClasses(orderByColumnConfig,'project_name')" style="font-size: 16px;"></i>
+                            </th>
+                        </tr>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr ng-repeat="workflows in workflowsMetadataList | filter: filterCreationWorkflows | orderBy : orderByColumnConfig.comparatorLogic"
+                            ng-click="selectWorkflow(workflows);"
+                            class="clickable-element" ng-class="{'active': workflows.name==selectedWorkflow.name}">
+                            <td>
+                                <img ng-src="{{findImageUrl(workflows)}}" style="height:25px" alt=""/>
+                            </td>
+                            <td>{{ workflows.name }}</td>
+                            <td>{{ workflows.project_name }}</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+
+                <!-- Icons view -->
+                <div ng-if="!toggleListBox.value">
+                    <div class="w-100">
+                        <span class="font-bold">{{'Workflows'|translate}} </span>
+                    </div>
+                    <hr class="hr-line-solid">
+                    <div style="overflow-y:auto; overflow-x:hidden; height:calc(100vh - 310px)">
+                        <div ng-repeat="(key, workflows) in workflowsMetadataList | filter: filterCreationWorkflows | orderBy: '+project_name' | groupBy: 'project_name'">
+                            <h3>{{key}}</h3>
+                            <div class="row">
+                                <div ng-repeat="w in workflows | orderBy: '+name'">
+                                    <div class="col-sm-3 col-md-3 col-lg-2">
+                                        <div id="{{ cleanId(w.project_name) + $index }}"
+                                             class="panel panel-default object-box clickable-element"
+                                             ng-class="getWorkflowPanelStatus(w)"
+                                             ng-click="selectWorkflow(w);">
+                                            <div class="panel-body" style="height: 70px;">
+                                                <img ng-src="{{findImageUrl(w)}}"
+                                                     alt=""/>
+                                            </div>
+                                            <div class="panel-footer object-box-footer">
+                                                <div>
+                                                    {{ w.name }}
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

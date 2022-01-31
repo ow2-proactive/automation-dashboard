@@ -1,0 +1,17 @@
+<!-- WIZARD -->
+<div class="col-lg-12 wide" style="margin-top:-25px">
+    <div class="ibox enlarge">
+        <div class="ibox-content">
+            <div class="ibox-tools headless" tooltip-placement="left" uib-tooltip="{{'Close'|translate}}">
+                <a class="close-link" ng-click="toggleOpenSubmitJobPanel(false)" style="font-size:x-large;">
+                    <i class="fa fa-times"></i>
+                </a>
+            </div>
+            <uib-tabset active="activeTab.value">
+                <uib-tab class="wizard-step" index="$index" ng-repeat="tab in tabs" heading="{{($index+1) + '. ' + tab.title}}" disable="$index == 1 ? !workflowToSubmit : false">
+                    <ng-include src="tab.url" ng-if="$index == 1 ? activeTab.value : true"></ng-include>
+                </uib-tab>
+            </uib-tabset>
+        </div>
+    </div>
+</div>
