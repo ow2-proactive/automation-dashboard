@@ -142,6 +142,25 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         return variables;
     }
 
+    /**
+     * The main object of this function is to put variables with no group on the top of the list
+     * because we want to display them on the top : 'Main variables'
+     **/
+    const orderVariables = function (modifiedVariables) {
+        var variables = [];
+        angular.forEach(modifiedVariables, function (variable) {
+            variable.value = extractVariableValue(variable, variable.model);
+            if (!variable.group) {
+                variables.push(variable)
+            }
+        })
+        angular.forEach(modifiedVariables, function (variable) {
+            if (variable.group) {
+                variables.push(variable)
+            }
+        })
+        return variables;
+    }
     // open a pop-up to browse the catalog objects and select one
     function openCatalogObjectModal(variable, variableModel) {
         $uibModal.open({
@@ -627,6 +646,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         displayTranslatedSuccessMessage: displayTranslatedSuccessMessage,
         updateCursor: updateCursor,
         extractVariables: extractVariables,
+        orderVariables: orderVariables,
         openEndpoint: openEndpoint,
         getEndpointUrl: getEndpointUrl,
         getByKey: getByKey,

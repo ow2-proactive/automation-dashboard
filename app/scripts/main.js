@@ -903,7 +903,14 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         if($scope.workflow.jobId) {
             validateJob()
         } else {
-            validateWorkflow()
+            validateWorkflow( function(response){
+                updatevariables(response)
+                if(!response.valid){
+                    $scope.WEsubmissionErrorMessage = response.errorMessage;
+                    $scope.successMessage = '';
+                }
+                UtilsFactory.replaceVariableModelsIfNeeded($scope.workflow.variables);
+            })
         }
         // helper flag for workflow valid message
         $scope.WEsubmissionErrorMessage = "";
@@ -914,7 +921,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
          **/
         $scope.footerActions = {
             Submit: submit,
-            "Execute Action": submit,
+            "Execute Action": submitServicesAndAction,
             Resubmit: function () {
                 reSubmitJob($scope.workflow.id, $scope.workflow.variables);
             },
@@ -951,132 +958,124 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         return UtilsFactory.isSpecialUIModel(variable);
     };
 
-
+    // submit services or action
+    const submitServicesAndAction = function () {
+       $scope.isSubmissionGoingOn = true;
+       const bucketName = $scope.workflow['bucketName'];
+       validateWorkflow( function(response){
+           if (response.valid === true) {
+                   /*
+                   * There are two cases : submit wf or submit action
+                   */
+                   var transformedVariables = UtilsFactory.getVariablesInKeyValueFormat($scope.workflow.variables);
+                   const variables = UtilsFactory.parseEmptyVariablesValue(UtilsFactory.getVariablesInKeyValueFormat($scope.workflow.variables));
+                   if($scope.workflow.hasOwnProperty("isCreationWorkflow") && !$scope.workflow.isCreationWorkflow) {
+                       var httpPromise = PCAService.submitActionWorkflow($scope.workflow.serviceInstance.instance_id, bucketName, $scope.workflow.name, variables);
+                       httpPromise.then(function () {
+                           toastr.success('The action has been executed.',JSON.stringify(response.id), $scope.toastrConfig);
+                           $rootScope.$broadcast('event:updateServiceInstanceList');
+                           $rootScope.$broadcast('event:updateWorkflowsGroupedByInstance');
+                           $scope.isLoading = false;
+                           //close the Submit Workflow Panel
+                          $scope.$parent.toggleOpenSubmitJobPanel(false);
+                       }).catch(function (error) {
+                           console.error('Error while executing workflow on instance ' + $scope.workflow.serviceInstance.instance_id + ': ' + angular.toJson(error));
+                           UtilsFactory.displayTranslatedErrorMessage('Error', ['The action couldn\'t be executed:', error.data.httpErrorCode + ' - ' + error.data.errorMessage]);
+                           $scope.isLoading = false;
+                       });
+                   } else {
+                       var httpPromise = PCAService.submitCreationWorkflow($scope.workflow.bucketName, $scope.workflow.name, variables, $scope.pcaWorkflowLabel);
+                       httpPromise.then(function () {
+                           //close the Submit Workflow Panel
+                           $scope.$parent.toggleOpenSubmitJobPanel(false);
+                           toastr.success('The service instance has been created.',JSON.stringify(response.id), $scope.toastrConfig);
+                       }).catch(function (error) {
+                           console.error('Error while submitting service: ' + angular.toJson(error));
+                           toastr.error('Error', ['The service instance couldn\'t be created:', error.data.httpErrorCode + ' - ' + error.data.errorMessage]);
+                       });
+                   }
+               } else {
+                   $scope.WEsubmissionErrorMessage = response.errorMessage;
+                   $scope.successMessage = '';
+               }
+               $scope.isSubmissionGoingOn = false
+           })
+    }
     // use : when clicking on the button submit
     const submit = function () {
         $scope.isSubmissionGoingOn = true;
         const bucketName = $scope.workflow['bucketName'];
+        // submit a standard workflow
+         if($scope.workflow.kind.toLowerCase().includes("workflow/psa")){
+            submitServicesAndAction();
+            return;
+         }
         // Validate + Submit if applicable
-        UtilsFactory.validateWorkflow(bucketName, $scope.workflow.name, $scope.workflow.variables)
-            .success(function (response) {
-                if (response.updatedModels != null) {
-                    angular.forEach($scope.workflow.variables, function (value) {
-                        value.resolvedModel = response.updatedModels[value.name];
-                    })
-                }
-                if (response.valid === true) {
-                    if($scope.workflow.kind.toLowerCase().includes("workflow/psa")){
-                        /*
-                        * There are two cases : submit wf or submit action
-                        */
-                        var transformedVariables = UtilsFactory.getVariablesInKeyValueFormat($scope.workflow.variables);
-                        if($scope.workflow.hasOwnProperty("isCreationWorkflow") && !$scope.workflow.isCreationWorkflow) {
-                            var httpPromise = PCAService.submitActionWorkflow(serviceInstance.instance_id, bucketName, workflowName, variables);
-                            httpPromise.then(function () {
-                                $uibModalInstance.close();
-                                displayTranslatedSuccessMessage('The action has been executed.')
-                                $rootScope.$broadcast('event:updateServiceInstanceList');
-                                $rootScope.$broadcast('event:updateWorkflowsGroupedByInstance');
-                                $scope.isLoading = false;
-                            }).catch(function (error) {
-                                console.error('Error while executing workflow on instance ' + serviceInstance.instance_id + ': ' + angular.toJson(error));
-                                UtilsFactory.displayTranslatedErrorMessage('Error', ['The action couldn\'t be executed:', error.data.httpErrorCode + ' - ' + error.data.errorMessage]);
-                                $scope.isLoading = false;
-                            });
-                        } else {
-                            var variables = UtilsFactory.parseEmptyVariablesValue(transformedVariables);
-                            var httpPromise = PCAService.submitCreationWorkflow($scope.workflow.bucketName, $scope.workflow.name, variables, $scope.pcaWorkflowLabel);
-                            httpPromise.then(function () {
-                                //close the Submit Workflow Panel
-                                $scope.$parent.toggleOpenSubmitJobPanel(false);
-                                toastr.success('The service instance has been created.',JSON.stringify(response.id), $scope.toastrConfig);
-                            }).catch(function (error) {
-                                console.error('Error while submitting service: ' + angular.toJson(error));
-                                toastr.error('Error', ['The service instance couldn\'t be created:', error.data.httpErrorCode + ' - ' + error.data.errorMessage]);
-                            });
-                        }
-                    } else {
-                        // submit a standard workflow
-                        UtilsFactory.submitJob(bucketName, $scope.workflow.name, $scope.workflow.variables)
-                        .success(function (submitResponse) {
-                            //close the Submit Workflow Panel
-                            $scope.$parent.toggleOpenSubmitJobPanel(false);
-                            toastr.success("Your Workflow has been submitted successfully" + ', Job Id: ' + JSON.stringify(submitResponse.id), $scope.toastrConfig);
-                        })
-                        .error(function () {
-                            toastr.error("An error occurred while submitting your workflow." + '\n' + "Please check you workflows and retry", $scope.toastrConfig)
-                        })
-                    }
-                } else {
-                    $scope.WEsubmissionErrorMessage = response.errorMessage;
-                    $scope.successMessage = '';
-                }
-                $scope.isSubmissionGoingOn = false
-            })
-            .error(function (response) {
-                toastr.error("An error occurred while validating your workflow" + '\n' + "Please check the format of your values and retry", $scope.toastrConfig)
-                console.error('An error occurred while validating the workflow: ' + angular.toJson(response));
-                $scope.isSubmissionGoingOn = false;
-            })
+        validateWorkflow( function(response){
+            if (response.valid === true) {
+                 UtilsFactory.submitJob(bucketName, $scope.workflow.name, $scope.workflow.variables)
+                     .success(function (submitResponse) {
+                         //close the Submit Workflow Panel
+                         $scope.$parent.toggleOpenSubmitJobPanel(false);
+                         toastr.success("Your Workflow has been submitted successfully" + ', Job Id: ' + JSON.stringify(submitResponse.id), $scope.toastrConfig);
+                     })
+                     .error(function () {
+                         toastr.error("An error occurred while submitting your workflow." + '\n' + "Please check you workflows and retry", $scope.toastrConfig)
+                     })
+            } else {
+                $scope.WEsubmissionErrorMessage = response.errorMessage;
+                $scope.successMessage = '';
+            }
+            $scope.isSubmissionGoingOn = false
+        })
     };
 
     // create new association
     function createNewCdWfAssociation() {
         const bucketName = $scope.workflow['bucketName'];
         // Validate + create association if applicable
-        UtilsFactory.validateWorkflow(bucketName, $scope.workflow.name, $scope.workflow.variables)
-            .success(function (response) {
-                if (response.updatedModels != null) {
-                    angular.forEach($scope.workflow.variables, function (value) {
-                        value.resolvedModel = response.updatedModels[value.name];
+        validateWorkflow( function(response) {
+            if (response.valid === true) {
+                // create association
+                $scope.workflowVariables = constructVariablesObject( $scope.workflow.variables );
+
+                $scope.workflowVariables = UtilsFactory.parseEmptyVariablesValue($scope.workflowVariables)
+                var newCdWf = {
+                    'calendar_bucket': $scope.$parent.selectedCalendarWithAssociatedWorkflows.calendar_bucket,
+                    'calendar_name': $scope.$parent.selectedCalendarWithAssociatedWorkflows.calendar_name,
+                    'workflow_bucket': bucketName,
+                    'workflow_name': $scope.workflow.name,
+                    'variables': $scope.workflowVariables
+                };
+
+                var configHeaders = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'sessionid': getSessionId()
+                    }
+                };
+
+                var data = JSON.stringify(newCdWf);
+                var url = JSON.parse(localStorage.jobPlannerServiceUrl) + 'planned_jobs/';
+
+                $http.post(url, data, configHeaders)
+                    .success(function() {
+                        $scope.$parent.updatePlannedJobsList();
+                        $rootScope.$broadcast('event:updatePlannedJobsCount');
+                        $scope.desectWorkflowInModal();
+                        $scope.$parent.toggleOpenSubmitJobPanel(false);
+                        toastr.success('New association successfully created', $scope.toastrConfig);
                     })
-                }
-                if (response.valid === true) {
-                    // create association
-                    $scope.workflowVariables = constructVariablesObject( $scope.workflow.variables );
-
-                    $scope.workflowVariables = UtilsFactory.parseEmptyVariablesValue($scope.workflowVariables)
-                    var newCdWf = {
-                        'calendar_bucket': $scope.$parent.selectedCalendarWithAssociatedWorkflows.calendar_bucket,
-                        'calendar_name': $scope.$parent.selectedCalendarWithAssociatedWorkflows.calendar_name,
-                        'workflow_bucket': bucketName,
-                        'workflow_name': $scope.workflow.name,
-                        'variables': $scope.workflowVariables
-                    };
-
-                    var configHeaders = {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'sessionid': getSessionId()
-                        }
-                    };
-
-                    var data = JSON.stringify(newCdWf);
-                    var url = JSON.parse(localStorage.jobPlannerServiceUrl) + 'planned_jobs/';
-
-                    $http.post(url, data, configHeaders)
-                        .success(function() {
-                            $scope.$parent.updatePlannedJobsList();
-                            $rootScope.$broadcast('event:updatePlannedJobsCount');
-                            $scope.desectWorkflowInModal();
-                            $scope.$parent.toggleOpenSubmitJobPanel(false);
-                            toastr.success('New association successfully created', $scope.toastrConfig);
-                        })
-                        .error(function(response) {
-                            $scope.errorMessage = response.errorMessage;
-                            console.error('Error while creating calendar workflow association ' + ':', angular.toJson(response));
-                        });
-                } else {
-                    $scope.WEsubmissionErrorMessage = response.errorMessage;
-                    $scope.successMessage = '';
-                }
-                $scope.isSubmissionGoingOn = false
-            })
-            .error(function (response) {
-                toastr.error("An error occurred while validating your workflow" + '\n' + "Please check the format of your values and retry", $scope.toastrConfig)
-                console.error('An error occurred while validating the workflow: ' + angular.toJson(response));
-                $scope.isSubmissionGoingOn = false;
-            })
+                    .error(function(response) {
+                        $scope.errorMessage = response.errorMessage;
+                        console.error('Error while creating calendar workflow association ' + ':', angular.toJson(response));
+                    });
+            } else {
+                $scope.WEsubmissionErrorMessage = response.errorMessage;
+                $scope.successMessage = '';
+            }
+            $scope.isSubmissionGoingOn = false
+        })
     }
 
     function updateCdWfAssociation() {
@@ -1085,47 +1084,43 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         $scope.workflowVariables = UtilsFactory.parseEmptyVariablesValue($scope.workflow.variables);
         // check if association is valid
         var schedulerRestUrl = JSON.parse(localStorage.schedulerRestUrl);
-        UtilsFactory.validateWorkflow(bucketName, $scope.workflow.name, $scope.workflow.variables)
-        // if the validate === false : we do not update the association
-        // if validate === true : we update the association
-            .success(function(response) {
-                if (response.valid === true) {
-                    // Check Successful - proceed to edit
+        validateWorkflow( function(response){
+            if (response.valid === true) {
+            // Check Successful - proceed to edit
+            var configHeaders = {
+                headers: {
+                    'Content-Type': 'application/json',
+                    'sessionid': getSessionId()
+                }
+            };
 
-                    var configHeaders = {
-                        headers: {
-                            'Content-Type': 'application/json',
-                            'sessionid': getSessionId()
-                        }
-                    };
+            var data = constructVariablesObject($scope.workflow.variables);
+            var url = JSON.parse(localStorage.jobPlannerServiceUrl) + 'planned_jobs/' + $scope.selectedAssociationId;
 
-                    var data = constructVariablesObject($scope.workflow.variables);
-                    var url = JSON.parse(localStorage.jobPlannerServiceUrl) + 'planned_jobs/' + $scope.selectedAssociationId;
-
-                    $http.put(url, data, configHeaders)
-                        .success(function() {
-                            $scope.updatePlannedJobsList();
-                            toastr.success('Association successfully updated', $scope.toastrConfig);
-                            $scope.updateLastSelectedWorkflow();
-                            $scope.isSubmissionGoingOn = false;
-                            $scope.$parent.toggleOpenSubmitJobPanel(false);
-                        })
-                        .error(function(response) {
-                            console.error('Error while updating calendar workflow association ' + ':',  angular.toJson(response));
-                            $scope.WEsubmissionErrorMessage = response.errorMessage;
-                            $scope.successMessage = '';
-                            $scope.resetSelectedWorkflowVariableValues();
-                        });
-
-
-                } else {
+            $http.put(url, data, configHeaders)
+                .success(function() {
+                    $scope.updatePlannedJobsList();
+                    toastr.success('Association successfully updated', $scope.toastrConfig);
+                    $scope.updateLastSelectedWorkflow();
                     $scope.isSubmissionGoingOn = false;
+                    $scope.$parent.toggleOpenSubmitJobPanel(false);
+                })
+                .error(function(response) {
+                    console.error('Error while updating calendar workflow association ' + ':',  angular.toJson(response));
                     $scope.WEsubmissionErrorMessage = response.errorMessage;
                     $scope.successMessage = '';
-                    console.error('Error while updating the association : '+ angular.toJson(response));
                     $scope.resetSelectedWorkflowVariableValues();
-                }
-            })
+                });
+
+
+        } else {
+            $scope.isSubmissionGoingOn = false;
+            $scope.WEsubmissionErrorMessage = response.errorMessage;
+            $scope.successMessage = '';
+            console.error('Error while updating the association : '+ angular.toJson(response));
+            $scope.resetSelectedWorkflowVariableValues();
+        }
+        })
     }
     // construct the variables object following this format: {"key":"value", ... }
     function constructVariablesObject(variables){
@@ -1192,29 +1187,28 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
     // use : When clicking on the button check
     const check = function () {
         const bucketName = $scope.workflow['bucketName'];
-        UtilsFactory.validateWorkflow(bucketName, $scope.workflow.name, $scope.workflow.variables)
-            // if the validate == false : we display an error message,  the updatevariables object is null
-            // if validate == true : we will have the object update variables is applicable and then we display : Check success
-            .success(function (response) {
-                if (response.valid === true) {
-                    $scope.successMessage = 'Check success';
-                    $scope.WEsubmissionErrorMessage = '';
-                } else {
-                    $scope.WEsubmissionErrorMessage = response.errorMessage;
-                    $scope.successMessage = '';
-                }
-            })
-            .error(function (response) {
-                $scope.WEsubmissionErrorMessage = 'An error occurred while validating your workflow, Please check the format of your values and retry';
-                console.error('validate Rest request error: ' + angular.toJson(response));
-            })
-
+        validateWorkflow( function(response){
+            if (response.valid === true) {
+                $scope.successMessage = 'Check success';
+                $scope.WEsubmissionErrorMessage = '';
+            } else {
+                $scope.WEsubmissionErrorMessage = response.errorMessage;
+                $scope.successMessage = '';
+            }
+        })
     };
     $scope.validate = function () {
         if($scope.workflow.jobId) {
             validateJob()
         } else {
-            validateWorkflow()
+            validateWorkflow( function(response){
+                updatevariables(response)
+                if(!response.valid){
+                    $scope.WEsubmissionErrorMessage = response.errorMessage;
+                    $scope.successMessage = '';
+                }
+                UtilsFactory.replaceVariableModelsIfNeeded($scope.workflow.variables);
+            })
         }
     }
 
@@ -1223,12 +1217,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         // Validate
         UtilsFactory.validateWorkflow(bucketName, $scope.workflow.name, $scope.workflow.variables)
             .success(function (response) {
-                updatevariables(response)
-                if(!response.valid){
-                   $scope.WEsubmissionErrorMessage = response.errorMessage;
-                   $scope.successMessage = '';
-                }
-                UtilsFactory.replaceVariableModelsIfNeeded($scope.workflow.variables);
+                callback(response)
             })
             .error(function (response) {
                 UtilsFactory.displayTranslatedErrorMessage(['An error occurred while validating your workflow', '\n', 'Please check the type of the provided values regarding the given variables models']);
