@@ -23,6 +23,7 @@
             "scripts/workflow-execution/workflow-execution.js",
             "services/workflow-execution-catalog-service.js",
             "services/workflow-execution-scheduler-service.js",
+            "services/workflow-execution-utility-factory.js",
             "scripts/workflow-execution/job-information-controller.js",
             "scripts/workflow-execution/job-output-controller.js"
         ],
