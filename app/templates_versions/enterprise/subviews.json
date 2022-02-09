@@ -9,13 +9,16 @@
         "secondaryHtmlFiles": [
             "modals/result_map_modal.html",
             "modals/job_output_modal.html",
+            "modals/send_signals_modal.html",
             "workflow-execution/templates/job-actions-dropdown.html",
             "workflow-execution/templates/job-details-view.html",
             "workflow-execution/templates/job-interfaces-dropdown.html",
             "workflow-execution/templates/job-output-view.html",
             "workflow-execution/templates/job-results-dropdown.html",
             "workflow-execution/templates/job-service-dropdown.html",
-            "workflow-execution/templates/job-signals-dropdown.html"
+            "workflow-execution/templates/job-signals-dropdown.html",
+            "workflow-execution/templates/job-signals-dropdown.html",
+            "workflow-execution/templates/typehead-wf-dropdown.html"
         ],
         "notAvailablePage": "workflow-execution/page_not_available_wf_execution.html",
         "jsFiles": [

@@ -4,6 +4,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     const schedulerRestUrl = JSON.parse(localStorage.schedulerRestUrl);
     const defaultUserPreferences = {
         submissionView: {
+            advancedVariables: false,
             selectedBucketName: "",
             showPSAWorkflowsOnly: false,
             toggleListBox: {
@@ -21,8 +22,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                     order: 'd'
                 }
             }
-        },
-        advancedVariables: false,
+        }
     }
 
     function loadUserPreferences(itemName) {

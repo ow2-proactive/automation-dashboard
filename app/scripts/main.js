@@ -704,7 +704,7 @@ mainModule.directive('ngDraggable', function ($document) {
 
 /*Catalog view controller: buckets and objects list*/
 
-workflowExecutionModule.controller('CatalogViewController', function ($scope, $rootScope, $uibModal, $http, $filter, $translate, $timeout, $sce, toastr, WECatalogService, UtilsFactory) {
+angular.module('main').controller('CatalogViewController', function ($scope, $rootScope, $uibModal, $http, $filter, $translate, $timeout, $sce, toastr, WECatalogService, UtilsFactory) {
 
     this.$onInit = function () {
         // Filter objects by workflowNameQuery
@@ -904,7 +904,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
             validateJob()
         } else {
             validateWorkflow( function(response){
-                updatevariables(response)
+                updateVariables(response)
                 if(!response.valid){
                     $scope.WEsubmissionErrorMessage = response.errorMessage;
                     $scope.successMessage = '';
@@ -946,7 +946,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         //psa workflow label
         $scope.pcaWorkflowLabel = '';
         // show advanced variables
-        $scope.showAdvancedVariables = false;
+        $scope.advancedVariables = UtilsFactory.getUserPreference('submissionView.advancedVariables');
     };
 
     $scope.documentationUrlWfa = function (url) {
@@ -1202,7 +1202,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
             validateJob()
         } else {
             validateWorkflow( function(response){
-                updatevariables(response)
+                updateVariables(response)
                 if(!response.valid){
                     $scope.WEsubmissionErrorMessage = response.errorMessage;
                     $scope.successMessage = '';
@@ -1230,7 +1230,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         // Validate
         UtilsFactory.validateJob(bucketName, $scope.workflow.name, $scope.workflow.variables, $scope.workflow.jobId)
             .success(function (response) {
-                updatevariables(response)
+                updateVariables(response)
                 if(!response.valid){
                    $scope.WEsubmissionErrorMessage = response.errorMessage;
                    $scope.successMessage = '';
@@ -1243,7 +1243,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
             })
     }
 
-    function updatevariables(response){
+    function updateVariables(response){
         //We add "resolvedModel" attribute in order to handle the case where we have variables substitution
         angular.forEach($scope.workflow.variables, function (variable) {
             if (variable.model && variable.resolvedModel) {
@@ -1322,12 +1322,16 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
     $scope.filterVariables = function(variable){
         if(variable.hidden){
             return false
-        } if($scope.showAdvancedVariablesToggle){
+        } if($scope.advancedVariables){
             return true
         } else if(!variable.advanced){
             return true;
         }
         return false;
+    }
+
+    $scope.toggleAdvancedVariables = function (){
+        UtilsFactory.setUserPreference('submissionView.advancedVariables', $scope.advancedVariables);
     }
 
     $scope.isVariablesIncludeAdvancedVar = function(variables){

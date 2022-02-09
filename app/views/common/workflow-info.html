@@ -47,7 +47,7 @@
                 <input class="form-control" type="text" ng-model="pcaWorkflowLabel">
             </div>
         </div>
-        <hr ng-if="workflow.variables.length">
+        <hr ng-show="workflow.variables.length">
         <ng-include src="'/automation-dashboard/views/common/workflow-variables.html'"></ng-include>
     </div>
     <div class="row fixed-bottom">
