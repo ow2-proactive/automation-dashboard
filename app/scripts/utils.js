@@ -536,22 +536,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     }
 
     /**
-        * Creation of association
-    **/
-    function addAssociation (newCdWf){
-        var configHeaders = {
-            headers: {
-                'Content-Type': 'application/json',
-                'sessionid': getSessionId()
-            }
-        };
-        var data = JSON.stringify(newCdWf);
-        var url = JSON.parse(localStorage.jobPlannerServiceUrl) + 'planned_jobs/';
-
-        return $http.post(url, data, configHeaders)
-    }
-    /**
-        *Validation of Workdlow, Job and Signal
+        *Validation of Workflow
     **/
     function validateWorkflow(bucketName, workflowName, variables) {
         const configHeaders = {
@@ -564,49 +549,6 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         return $http.post(schedulerRestUrl + 'validateurl' + (path ? ';' + path : ''), {}, configHeaders);
     }
 
-    function validateJob(bucketName, workflowName, variables, jobId){
-        const configHeaders = {
-            headers: {
-                'sessionid': getSessionId()
-            }
-        };
-        const path = createPathStringFromMap(parseEmptyVariablesValue(variables), 'value')
-        return $http.post(schedulerRestUrl + 'jobs/' + jobId + '/validate;' + (path ? ';' + path : ''), {}, configHeaders);
-    }
-
-    function validateSignals(jobId, signal, variables){
-        const configHeaders = {
-            headers: {
-                'sessionid': getSessionId(),
-                'Content-Type': 'application/json'
-            }
-        };
-        var variablesMap = variables.reduce(function(map, obj) {
-            map[obj.name] = obj.value;
-            return map;
-        }, {});
-        var data = JSON.stringify(variablesMap);
-        return $http.post(schedulerRestUrl + 'job/' + jobId + '/signals/validate/?signal=' + signal, data, configHeaders);
-    }
-
-    function sendJobSignal(jobId, signal, variables) {
-        const configHeaders = {
-            headers: {
-                'sessionid': getSessionId(),
-                'Content-Type': variables.length ? 'application/json' : 'application/octet-stream'
-            }
-        };
-        var variablesMap = variables.reduce(function(map, obj) {
-            map[obj.name] = obj.value;
-            return map;
-        }, {});
-        var data = variables.length ? JSON.stringify(variablesMap) : null;
-        return $http.post(schedulerRestUrl + 'job/' + jobId + '/signals?signal=' + signal, data, configHeaders);
-    }
-
-    /**
-        * Submit and Resubmit
-    **/
     function submitJob(bucketName, workflowName, variables) {
         const configHeaders = {
             headers: {
@@ -616,21 +558,6 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         };
         const path = createPathStringFromMap(parseEmptyVariablesValue(variables), 'value')
         return $http.post(schedulerRestUrl + 'jobs;' + path, {}, configHeaders);
-    }
-
-    function reSubmitJob(jobId, variables) {
-        const path = createPathStringFromMap(variables, 'value')
-        return $http.get(schedulerRestUrl + 'jobs/' + jobId + '/resubmit;' + path, {
-            headers: {'sessionid': getSessionId()}
-        });
-    }
-
-    /*Kill job*/
-
-    function killJob(jobId) {
-        return $http.put(schedulerRestUrl + 'jobs/' + jobId + '/kill/', '', {
-            headers: {'sessionid': getSessionId()}
-        })
     }
     return {
         openJobInSchedulerPortal: openJobInSchedulerPortal,
@@ -660,14 +587,10 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         setUserPreference: setUserPreference,
         getWorkflowMetadata : getWorkflowMetadata,
         replaceVariableModelsIfNeeded : replaceVariableModelsIfNeeded,
-        validateWorkflow: validateWorkflow,
-        validateJob: validateJob,
-        validateSignals: validateSignals,
-        sendJobSignal: sendJobSignal,
-        submitJob: submitJob,
-        reSubmitJob: reSubmitJob,
         parseEmptyVariablesValue: parseEmptyVariablesValue,
-        killJob: killJob
+        createPathStringFromMap: createPathStringFromMap,
+        validateWorkflow: validateWorkflow,
+        submitJob: submitJob
     };
 }
 

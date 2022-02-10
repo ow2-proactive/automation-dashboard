@@ -890,7 +890,7 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
 
 /*Workflow variables controller: submission template*/
 
-angular.module('main').controller('VariablesController', function ($scope, $uibModal, $http, $translate, $timeout, $sce, $rootScope, $location, toastr, PCAService, UtilsFactory) {
+angular.module('main').controller('VariablesController', function ($scope, $uibModal, $http, $translate, $timeout, $sce, $rootScope, $location, toastr, PCAService, UtilsFactory, WESchedulerService) {
     this.$onInit = function () {
         $scope.workflow =
             $scope.$parent.$parent.$parent.$parent.$parent.$parent.workflowToSubmit;
@@ -1107,7 +1107,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
      * Requests the scheduler to resubmit a job then displays a confirmation toast.
      */
     const reSubmitJob = function (id, variables) {
-        UtilsFactory.reSubmitJob(id, variables)
+        WESchedulerService.reSubmitJob(id, variables)
             .success(function (response) {
                 //close the Submit Workflow Panel
                 $scope.$parent.toggleOpenSubmitJobPanel(false);
@@ -1123,9 +1123,9 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
      **/
     const killResubmitJob = function (id, variables) {
         $scope.isSubmissionGoingOn = true;
-        UtilsFactory.reSubmitJob(id, variables)
+        WESchedulerService.reSubmitJob(id, variables)
             .success(function () {
-                UtilsFactory.killJob(id)
+                WESchedulerService.killJob(id)
                     .success(function (response) {
                         if (response) {
                             toastr.success("Job " + id + " killed and resubmitted successfully!", $scope.toastrConfig)
@@ -1192,7 +1192,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
     function validateJob() {
         const bucketName = $scope.workflow['bucketName'];
         // Validate
-        UtilsFactory.validateJob(bucketName, $scope.workflow.name, $scope.workflow.variables, $scope.workflow.jobId)
+        WESchedulerService.validateJob(bucketName, $scope.workflow.name, $scope.workflow.variables, $scope.workflow.jobId)
             .success(function (response) {
                 updateVariables(response)
                 if(!response.valid){
