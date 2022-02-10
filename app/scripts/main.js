@@ -1037,38 +1037,17 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         validateWorkflow( function(response) {
             if (response.valid === true) {
                 // create association
-                $scope.workflowVariables = constructVariablesObject( $scope.workflow.variables );
-
-                $scope.workflowVariables = UtilsFactory.parseEmptyVariablesValue($scope.workflowVariables)
-                var newCdWf = {
-                    'calendar_bucket': $scope.$parent.selectedCalendarWithAssociatedWorkflows.calendar_bucket,
-                    'calendar_name': $scope.$parent.selectedCalendarWithAssociatedWorkflows.calendar_name,
-                    'workflow_bucket': bucketName,
-                    'workflow_name': $scope.workflow.name,
-                    'variables': $scope.workflowVariables
-                };
-
-                var configHeaders = {
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'sessionid': getSessionId()
-                    }
-                };
-
-                var data = JSON.stringify(newCdWf);
-                var url = JSON.parse(localStorage.jobPlannerServiceUrl) + 'planned_jobs/';
-
-                $http.post(url, data, configHeaders)
+                $scope.$parent.createAssociation($scope.workflow.name, bucketName, $scope.workflow.variables)
                     .success(function() {
-                        $scope.$parent.updatePlannedJobsList();
-                        $rootScope.$broadcast('event:updatePlannedJobsCount');
-                        $scope.desectWorkflowInModal();
-                        $scope.$parent.toggleOpenSubmitJobPanel(false);
-                        toastr.success('New association successfully created', $scope.toastrConfig);
-                    })
-                    .error(function(response) {
-                        $scope.errorMessage = response.errorMessage;
-                        console.error('Error while creating calendar workflow association ' + ':', angular.toJson(response));
+                            $scope.updatePlannedJobsList();
+                            $rootScope.$broadcast('event:updatePlannedJobsCount');
+                            $scope.desectWorkflowInModal();
+                            $scope.toggleOpenSubmitJobPanel(false);
+                            toastr.success('New association successfully created', $scope.toastrConfig);
+                        })
+                        .error(function(response) {
+                            $scope.errorMessage = response.errorMessage;
+                            console.error('Error while creating calendar workflow association ' + ':', angular.toJson(response));
                     });
             } else {
                 $scope.WEsubmissionErrorMessage = response.errorMessage;
@@ -1087,32 +1066,20 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         validateWorkflow( function(response){
             if (response.valid === true) {
             // Check Successful - proceed to edit
-            var configHeaders = {
-                headers: {
-                    'Content-Type': 'application/json',
-                    'sessionid': getSessionId()
-                }
-            };
-
-            var data = constructVariablesObject($scope.workflow.variables);
-            var url = JSON.parse(localStorage.jobPlannerServiceUrl) + 'planned_jobs/' + $scope.selectedAssociationId;
-
-            $http.put(url, data, configHeaders)
+            $scope.$parent.updateCdWfAssociation($scope.workflow.variables)
                 .success(function() {
-                    $scope.updatePlannedJobsList();
-                    toastr.success('Association successfully updated', $scope.toastrConfig);
-                    $scope.updateLastSelectedWorkflow();
-                    $scope.isSubmissionGoingOn = false;
-                    $scope.$parent.toggleOpenSubmitJobPanel(false);
-                })
-                .error(function(response) {
-                    console.error('Error while updating calendar workflow association ' + ':',  angular.toJson(response));
-                    $scope.WEsubmissionErrorMessage = response.errorMessage;
-                    $scope.successMessage = '';
-                    $scope.resetSelectedWorkflowVariableValues();
-                });
-
-
+                        $scope.updatePlannedJobsList();
+                        toastr.success('Association successfully updated', $scope.toastrConfig);
+                        $scope.updateLastSelectedWorkflow();
+                        $scope.isSubmissionGoingOn = false;
+                        $scope.toggleOpenSubmitJobPanel(false);
+                    })
+                    .error(function(response) {
+                        console.error('Error while updating calendar workflow association ' + ':',  angular.toJson(response));
+                        $scope.WEsubmissionErrorMessage = response.errorMessage;
+                        $scope.successMessage = '';
+                        $scope.resetSelectedWorkflowVariableValues();
+                    });
         } else {
             $scope.isSubmissionGoingOn = false;
             $scope.WEsubmissionErrorMessage = response.errorMessage;
@@ -1140,18 +1107,15 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
      * Requests the scheduler to resubmit a job then displays a confirmation toast.
      */
     const reSubmitJob = function (id, variables) {
-        $scope.isSubmissionGoingOn = true;
         UtilsFactory.reSubmitJob(id, variables)
             .success(function (response) {
                 //close the Submit Workflow Panel
                 $scope.$parent.toggleOpenSubmitJobPanel(false);
                 toastr.success("Job " + id + " resubmitted successfully!", $scope.toastrConfig);
-                $scope.isSubmissionGoingOn = false;
             })
             .error(function (response) {
                 $scope.WEsubmissionErrorMessage = response.errorMessage;
                 console.error("Could not resubmit job " + id + "! " + response);
-                $scope.isSubmissionGoingOn = false;
             });
     };
     /**
