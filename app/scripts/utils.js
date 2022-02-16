@@ -1,6 +1,81 @@
-function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, $q, toastr, SweetAlert) {
+function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, $q, $location, toastr, SweetAlert) {
     var specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder', 'pa:user_folder', 'pa:catalog_object', 'pa:credential'];
+    const catalogUrlPrefix = $location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/catalog/buckets/';
+    const schedulerRestUrl = JSON.parse(localStorage.schedulerRestUrl);
+    const defaultUserPreferences = {
+        submissionView: {
+            advancedVariables: false,
+            selectedBucketName: "",
+            showPSAWorkflowsOnly: false,
+            toggleListBox: {
+                value: false
+            },
+            orderByColumnConfig: {
+                workflows: {
+                    column: '',
+                    comparatorLogic: '',
+                    order: ''
+                },
+                buckets: {
+                    column: 'name',
+                    comparatorLogic: '+name',
+                    order: 'd'
+                }
+            }
+        }
+    }
 
+    function loadUserPreferences(itemName) {
+        // Initialize them with defaults if they don't exist in the browser's Local Storage
+        if (!localStorage.WizardUserPreferences) {
+            localStorage.setItem('WizardUserPreferences', JSON.stringify(defaultUserPreferences))
+        }
+        return JSON.parse(localStorage.WizardUserPreferences)
+    }
+
+    function getUserPreference(propertyName) {
+        var preferences = loadUserPreferences();
+        // Make sure the property is created if it is not (at a deeply nested level)
+        var preference = getOrSetNestedObjectProperty(preferences, propertyName)
+        // Property should exist, but should neither be null or empty
+        if ((preference && typeof preference !== 'object') || (typeof preference === 'object' && preference !== null && !angular.equals(preference, {}))) {
+            return preference
+        } else {
+            preference = getOrSetNestedObjectProperty(defaultUserPreferences, propertyName)
+            return preference
+        }
+    }
+
+    function getSortClasses (sortParameters, column) {
+        if (sortParameters && sortParameters.column === column) {
+            return sortParameters.order === 'a' ? 'fa-sort-asc' : 'fa-sort-desc';
+        } else {
+            return 'fa-sort text-disabled'
+        }
+    }
+    function setUserPreference(propertyName, value) {
+        var userPreferences = loadUserPreferences();
+        getOrSetNestedObjectProperty(userPreferences, propertyName, value)
+        localStorage.setItem('WizardUserPreferences', JSON.stringify(userPreferences));
+        return userPreferences;
+    }
+
+    function getOrSetNestedObjectProperty(targetObject, path, value) {
+        var schema = targetObject;  // a moving reference to internal objects within obj
+        var propertiesList = path.split('.');
+        for (var i = 0; i < propertiesList.length - 1; i++) {
+            var elem = propertiesList[i];
+            if (!schema[elem]) {
+                schema[elem] = {}
+            }
+            schema = schema[elem];
+        }
+        if (value !== undefined) {
+            schema[propertiesList[propertiesList.length - 1]] = value;
+        } else {
+            return schema[propertiesList[propertiesList.length - 1]]
+        }
+    }
     function openJobInSchedulerPortal(jobId) {
         if (jobId) {
             var url = JSON.parse(localStorage.schedulerPortalUrl) + '/?job=' + jobId;
@@ -29,14 +104,11 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         });
     };
 
-    // When the variable value is null or undefined, convert it to the empty string
-    function parseEmptyVariablesValue(variables) {
-        angular.forEach(variables, function (variable) {
-            if (variable.value == null) {
-                variable.value = '';
-            }
+    function getWorkflowMetadata(workflow, label, key) {
+        var obj = workflow.object_key_values.find(function (okv) {
+            return okv.label === label & okv.key === key;
         });
-        return variables;
+        return obj && obj.value;
     }
     // returns true when variables includes advanced variables and false otherwise
     function isVariablesIncludeAdvancedVar(variables){
@@ -70,6 +142,25 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         return variables;
     }
 
+    /**
+     * The main object of this function is to put variables with no group on the top of the list
+     * because we want to display them on the top : 'Main variables'
+     **/
+    const orderVariables = function (modifiedVariables) {
+        var variables = [];
+        angular.forEach(modifiedVariables, function (variable) {
+            variable.value = extractVariableValue(variable, variable.model);
+            if (!variable.group) {
+                variables.push(variable)
+            }
+        })
+        angular.forEach(modifiedVariables, function (variable) {
+            if (variable.group) {
+                variables.push(variable)
+            }
+        })
+        return variables;
+    }
     // open a pop-up to browse the catalog objects and select one
     function openCatalogObjectModal(variable, variableModel) {
         $uibModal.open({
@@ -391,10 +482,103 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         }
         return dateScope;
     };
+
+    /**
+     * Transforms a map into a string with the following format : key1=value1;key2=value2;
+     */
+    function createPathStringFromMap(map, valuePropertyName) {
+        var result = '';
+        map.forEach(function(item){
+            result += item.name + '=' + encodeURIComponent(valuePropertyName ? item[valuePropertyName] : item) + ';'
+        })
+        return result.substring(0, result.length - 1);
+    }
+
+    // When the variable value is null or undefined, convert it to the empty string
+    function parseEmptyVariablesValue(variables) {
+        angular.forEach(variables, function (variable) {
+            if (variable.value == null) {
+                variable.value = '';
+            }
+        });
+        return variables;
+    }
+    function replaceModelWithFetched(model) {
+        var indexBegin = model.indexOf('(');
+        var indexEnd = model.lastIndexOf(')');
+        var urlToFetch = model.substring(indexBegin + 1, indexEnd);
+        var origin = $window.location.origin;
+        if (!origin.endsWith('/')) {
+            origin += '/'
+        }
+        // Replace ${PA_CATALOG_REST_URL} OR $PA_CATALOG_REST_URL by origin + 'catalog'
+        urlToFetch = urlToFetch.replace(/(\$\{PA_CATALOG_REST_URL\}|\$PA_CATALOG_REST_URL)/g, origin + 'catalog');
+
+        // Replace ${PA_SCHEDULER_REST_URL} OR $PA_SCHEDULER_REST_URL by origin + 'catalog'
+        urlToFetch = urlToFetch.replace(/(\$\{PA_SCHEDULER_REST_URL\}|\$PA_SCHEDULER_REST_URL)/g, origin + 'rest');
+
+        // Replace ${PA_SCHEDULER_REST_PUBLIC_URL} OR $PA_SCHEDULER_REST_PUBLIC_URL by origin + 'rest'
+        urlToFetch = urlToFetch.replace(/(\$\{PA_SCHEDULER_REST_PUBLIC_URL\}|\$PA_SCHEDULER_REST_PUBLIC_URL)/g, origin + 'rest');
+
+        // Replace ${PA_CATALOG_REST_PUBLIC_URL} OR $PA_CATALOG_REST_PUBLIC_URL by origin + 'catalog'
+        urlToFetch = urlToFetch.replace(/(\$\{PA_CATALOG_REST_PUBLIC_URL\}|\$PA_CATALOG_REST_PUBLIC_URL)/g, origin + 'catalog');
+        return getStringByUrl(urlToFetch);
+    };
+
+    function replaceVariableModelsIfNeeded(variables) {
+        if (Array.isArray(variables)) {
+            variables.filter(function (variable) {
+                // filter non empty models and models that should be replaced
+                return variable.model && variable.model.toLowerCase().indexOf('pa:model_from_url') !== -1;
+            }).map(function (variable) {
+                // replace models with response
+                variable.resolvedModel = replaceModelWithFetched(variable.model);
+            })
+        } else {
+            for (var prop in variables) {
+                var variable = variables[prop]
+                if (variable.model && variable.model.toLowerCase().indexOf('pa:model_from_url') !== -1) {
+                    variable.resolvedModel = replaceModelWithFetched(variable.model);
+                }
+            }
+        }
+    };
+
+    function getStringByUrl(url) {
+        var request = new XMLHttpRequest();
+        request.open("GET", url, false);
+        request.send();
+        return request.responseText;
+    }
+
+    /**
+        *Validation of Workflow
+    **/
+    function validateWorkflow(bucketName, workflowName, variables) {
+        const configHeaders = {
+            headers: {
+                'link': catalogUrlPrefix + bucketName + '/resources/ ' + encodeURIComponent(workflowName) + '/raw',
+                'sessionid': getSessionId()
+            }
+        };
+        const path = createPathStringFromMap(parseEmptyVariablesValue(variables), 'value')
+        return $http.post(schedulerRestUrl + 'validateurl' + (path ? ';' + path : ''), {}, configHeaders);
+    }
+
+    function submitJob(bucketName, workflowName, variables) {
+        const configHeaders = {
+            headers: {
+                'link': catalogUrlPrefix + bucketName + '/resources/' + encodeURIComponent(workflowName) + '/raw',
+                'sessionid': getSessionId()
+            }
+        };
+        const path = createPathStringFromMap(parseEmptyVariablesValue(variables), 'value')
+        return $http.post(schedulerRestUrl + 'jobs;' + path, {}, configHeaders);
+    }
     return {
         openJobInSchedulerPortal: openJobInSchedulerPortal,
         isSpecialUIModel: isSpecialUIModel,
-        parseEmptyVariablesValue: parseEmptyVariablesValue,
+        getSortClasses: getSortClasses,
         openCatalogObjectModal: openCatalogObjectModal,
         openFileBrowser: openFileBrowser,
         manageThirdPartyCredentials: manageThirdPartyCredentials,
@@ -404,10 +588,9 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         displayTranslatedMessage: displayTranslatedMessage,
         displayTranslatedErrorMessage: displayTranslatedErrorMessage,
         displayTranslatedSuccessMessage: displayTranslatedSuccessMessage,
-        updateCursor: function (isWaiting) {
-            return updateCursor(isWaiting);
-        },
+        updateCursor: updateCursor,
         extractVariables: extractVariables,
+        orderVariables: orderVariables,
         openEndpoint: openEndpoint,
         getEndpointUrl: getEndpointUrl,
         getByKey: getByKey,
@@ -415,7 +598,16 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         isVariablesIncludeAdvancedVar: isVariablesIncludeAdvancedVar,
         modelToDateFormat: modelToDateFormat,
         modelToList: modelToList,
-        modelToDateScope: modelToDateScope
+        modelToDateScope: modelToDateScope,
+        loadUserPreferences: loadUserPreferences,
+        getUserPreference: getUserPreference,
+        setUserPreference: setUserPreference,
+        getWorkflowMetadata : getWorkflowMetadata,
+        replaceVariableModelsIfNeeded : replaceVariableModelsIfNeeded,
+        parseEmptyVariablesValue: parseEmptyVariablesValue,
+        createPathStringFromMap: createPathStringFromMap,
+        validateWorkflow: validateWorkflow,
+        submitJob: submitJob
     };
 }
 

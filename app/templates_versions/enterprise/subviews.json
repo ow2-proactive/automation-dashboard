@@ -10,7 +10,6 @@
             "modals/result_map_modal.html",
             "modals/job_output_modal.html",
             "modals/send_signals_modal.html",
-            "workflow-execution/templates/catalog-view.html",
             "workflow-execution/templates/job-actions-dropdown.html",
             "workflow-execution/templates/job-details-view.html",
             "workflow-execution/templates/job-interfaces-dropdown.html",
@@ -18,21 +17,16 @@
             "workflow-execution/templates/job-results-dropdown.html",
             "workflow-execution/templates/job-service-dropdown.html",
             "workflow-execution/templates/job-signals-dropdown.html",
-            "workflow-execution/templates/typehead-wf-dropdown.html",
-            "workflow-execution/templates/workflow-variables.html",
-            "workflow-execution/templates/workflow-info.html",
-            "workflow-execution/templates/wizard.html"
+            "workflow-execution/templates/typehead-wf-dropdown.html"
         ],
         "notAvailablePage": "workflow-execution/page_not_available_wf_execution.html",
         "jsFiles": [
             "scripts/workflow-execution/workflow-execution.js",
             "services/workflow-execution-catalog-service.js",
-            "services/workflow-execution-scheduler-service.js",
             "services/workflow-execution-utility-factory.js",
+            "services/workflow-execution-scheduler-service.js",
             "scripts/workflow-execution/job-information-controller.js",
-            "scripts/workflow-execution/job-output-controller.js",
-            "scripts/workflow-execution/workflow-execution-catalog-controller.js",
-            "scripts/workflow-execution/workflow-execution-variables-controller.js"
+            "scripts/workflow-execution/job-output-controller.js"
         ],
         "angularModuleName": "workflow-execution",
         "cssFile": "workflow_execution_custom_style.css",
@@ -47,8 +41,7 @@
         "tooltip": "Browse and Search the Catalog",
         "secondaryHtmlFiles": [
             "modals/catalog_object_edition.html",
-            "modals/catalog-object-kind-content_type-project_name-edition.html",
-            "modals/submit_workflow.html"
+            "modals/catalog-object-kind-content_type-project_name-edition.html"
         ],
         "notAvailablePage": "page_not_available.html",
         "jsFiles": [
@@ -56,7 +49,6 @@
             "scripts/factory/catalog-service.js",
             "scripts/factory/scheduler-service.js",
             "scripts/factory/cloud-automation-service.js",
-            "scripts/submitWorkflowModalGCP.js",
             "scripts/editObjectModalGCP.js",
             "scripts/EditKindContentTypeProjectName.js"
         ],
@@ -298,7 +290,6 @@
         "htmlFile": "cloud-automation/cloud_automation.html",
         "tooltip": "Launch and Manage On-Demand Services",
         "secondaryHtmlFiles": [
-            "modals/submit_window_cloud_automation.html",
             "modals/service_instance_info_modal.html",
             "modals/service_instance_history_modal.html"
         ],
@@ -312,8 +303,7 @@
             "scripts/cloud-automation/finished-services-controller.js",
             "scripts/cloud-automation/monitoring-items-controller.js",
             "scripts/cloud-automation/services-catalog-controller.js",
-            "scripts/cloud-automation/modals/info-modal-controller.js",
-            "scripts/cloud-automation/modals/submit-modal-controller.js"
+            "scripts/cloud-automation/modals/info-modal-controller.js"
         ],
         "angularModuleName": "cloud-automation",
         "cssFile": "portal_custom_style.css",

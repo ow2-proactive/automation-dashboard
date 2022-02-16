@@ -781,3 +781,71 @@ md-virtual-repeat-container:-webkit-scrollbar {
     min-height: calc(100vh - 88px)!important;
     overflow: auto;
 }
+
+/******************
+* Submission part *
+*******************/
+
+.ibox.wizard-content {
+    z-index: 200;
+    position: fixed;
+    top: 87px;
+    left: 220px;
+    right: 0;
+    bottom: 0;
+    overflow: auto;
+    margin-bottom: 0;
+    background: #fff;
+    transition: left 300ms;
+}
+
+.ibox.wizard-content .ibox-content {
+    height: calc(100vh - 189px); /* Full Height minus footer */
+}
+
+.mini-navbar .ibox.wizard-content {
+    left: 52px ! important;
+    transition: left 100ms;
+}
+
+.wizard-step.active a {
+    background: #1c84c6 ! important;
+    border: none !important;
+}
+
+.wizard-step.disabled a {
+    background-color: #d6d6d6 !important;
+    border: none !important;
+    cursor: default !important;
+}
+
+.wizard-step {
+    width: 25%;
+}
+
+.wizard-step a {
+    background-color: #1c84c696 ! important;
+    border: none !important;
+    color: #fff;
+    margin: 0 0.5em 0.5em 0 ! important;
+    color: #fff ! important;
+    border-radius: 6px ! important;
+    padding-left: 8px !important;
+}
+
+.last-wizard-step-content {
+    max-height: calc(100% - 120px) ! important;
+}
+
+.alert {
+    margin-bottom: 10px ! important;
+}
+
+.text-white {
+    color: #FFF ! important;
+}
+
+.ibox-tools.headless {
+    display: inline-block;
+    float: right;
+}
