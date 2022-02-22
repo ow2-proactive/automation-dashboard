@@ -1273,20 +1273,12 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
     $scope.manageThirdPartyCredentials = function(credVariable) {
         validateWorkflow(function (response) {
                 var credVariableValue = response.updatedVariables[credVariable.name];
-                UtilsFactory.manageThirdPartyCredentials(credVariableValue, check);
+                UtilsFactory.openThirdPartyCredentialsModal(credVariableValue, check);
             }, function (response) {
                 console.error('An error occurred while validating the workflow, so directly using the variable value as credential key. Error: ' + angular.toJson(response));
-                UtilsFactory.manageThirdPartyCredentials(credVariable.value, check);
+                UtilsFactory.openThirdPartyCredentialsModal(credVariable.value, check);
             });
     };
-
-    function createPathStringFromWorkflowVariables(variables) {
-        var result = '';
-        angular.forEach(variables, function (variable) {
-            result += variable.name + '=' + encodeURIComponent(variable.value) + ';';
-        });
-        return result.substring(0, result.length - 1);
-    }
 
     $scope.manageFiles = function (variable, dataspace, selectFolder) {
         UtilsFactory.openFileBrowser(variable, dataspace, selectFolder);

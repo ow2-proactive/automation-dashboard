@@ -205,7 +205,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         });
     }
 
-    function manageThirdPartyCredentials(credKey, closeHandler) {
+    function openThirdPartyCredentialsModal(credKey, closeHandler) {
         $uibModal.open({
             templateUrl: 'views/modals/third_party_credentials.html',
             controller: 'ThirdPartyCredentialModalCtrl',
@@ -582,7 +582,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         getSortClasses: getSortClasses,
         openCatalogObjectModal: openCatalogObjectModal,
         openFileBrowser: openFileBrowser,
-        manageThirdPartyCredentials: manageThirdPartyCredentials,
+        openThirdPartyCredentialsModal: openThirdPartyCredentialsModal,
         uploadDataspaceFile: uploadDataspaceFile,
         toReadableFileSize: toReadableFileSize,
         translate: translate,
