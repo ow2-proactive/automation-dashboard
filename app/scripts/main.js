@@ -886,6 +886,14 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
         return UtilsFactory.getWorkflowMetadata(workflow, "generic_information", "pca.states") && UtilsFactory.getWorkflowMetadata(workflow, "generic_information", "pca.states").includes('VOID');
     };
 
+    // Close the window if ESC key pressed
+    $(document).keydown(function (e) {
+    // ESCAPE key pressed
+    if (e.keyCode === 27 && $scope.isJobSubmissionPanelOpen) {
+        $scope.toggleOpenSubmitJobPanel(false);
+    }
+    })
+
 });
 
 /*Workflow variables controller: submission template*/
@@ -1323,4 +1331,11 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         return Object.keys(obj);
     }
 
+    // Close the window if ESC key pressed
+    $(document).keydown(function (e) {
+    // ESCAPE key pressed
+    if (e.keyCode === 27 && $scope.isJobSubmissionPanelOpen) {
+        $scope.toggleOpenSubmitJobPanel(false);
+    }
+    })
 });

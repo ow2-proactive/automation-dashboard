@@ -13,6 +13,8 @@
             "workflow-execution/templates/job-actions-dropdown.html",
             "workflow-execution/templates/job-details-view.html",
             "workflow-execution/templates/job-interfaces-dropdown.html",
+            "workflow-execution/templates/job-list-row.html",
+            "workflow-execution/templates/job-list-pagination.html",
             "workflow-execution/templates/job-output-view.html",
             "workflow-execution/templates/job-results-dropdown.html",
             "workflow-execution/templates/job-service-dropdown.html",
@@ -26,7 +28,8 @@
             "services/workflow-execution-scheduler-service.js",
             "services/workflow-execution-utility-factory.js",
             "scripts/workflow-execution/job-information-controller.js",
-            "scripts/workflow-execution/job-output-controller.js"
+            "scripts/workflow-execution/job-output-controller.js",
+            "scripts/workflow-execution/signals-controller.js"
         ],
         "angularModuleName": "workflow-execution",
         "cssFile": "workflow_execution_custom_style.css",
@@ -41,7 +44,8 @@
         "tooltip": "Browse and Search the Catalog",
         "secondaryHtmlFiles": [
             "modals/catalog_object_edition.html",
-            "modals/catalog-object-kind-content_type-project_name-edition.html"
+            "modals/catalog-object-kind-content_type-project_name-edition.html",
+            "modals/catalog_rbac.html"
         ],
         "notAvailablePage": "page_not_available.html",
         "jsFiles": [
@@ -50,7 +54,8 @@
             "scripts/factory/scheduler-service.js",
             "scripts/factory/cloud-automation-service.js",
             "scripts/editObjectModalGCP.js",
-            "scripts/EditKindContentTypeProjectName.js"
+            "scripts/EditKindContentTypeProjectName.js",
+            "scripts/catalogRBAC.js"
         ],
         "angularModuleName": "gcp-rest",
         "cssFile": "gcportal_custom_style.css",
