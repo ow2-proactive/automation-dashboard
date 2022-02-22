@@ -46,13 +46,28 @@ angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCt
 
     $scope.changeMultilineCredential = function() {
         if ($scope.showMultilineCred) {
+            // switch to multi-lines credential
+            // previous single-line credential value will be copied into multi-line cred
             $('#new-cred-value').hide();
             $('#new-cred-value-multiline').show();
+            $scope.errorMessage = "";
         } else {
-            $('#new-cred-value').show();
+            // switch to single-line credential
+            // if the user has entered multi-lines credential, it will be erased when switching to single-line credential mode
+            if ($scope.credValue.includes('\n')) {
+                $scope.credValue = "";
+                $scope.errorMessage = "Switching to single-line credentials has deleted the multiline credential value, please re-enter your credential.";
+            }
             $('#new-cred-value-multiline').hide();
+            $('#new-cred-value').show();
         }
     }
+
+    $scope.$watch('credValue', function() {
+        if ($scope.credValue && $scope.errorMessage) {
+            $scope.errorMessage = "";
+        }
+    });
 
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
