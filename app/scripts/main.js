@@ -1176,16 +1176,20 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         }
     }
 
-    function validateWorkflow(callback) {
+    function validateWorkflow(successCallback, errorCallback) {
         const bucketName = $scope.workflow['bucketName'];
         // Validate
         UtilsFactory.validateWorkflow(bucketName, $scope.workflow.name, $scope.workflow.variables)
             .success(function (response) {
-                callback(response)
+                successCallback(response)
             })
             .error(function (response) {
-                UtilsFactory.displayTranslatedErrorMessage(['An error occurred while validating your workflow', '\n', 'Please check the type of the provided values regarding the given variables models']);
-                console.error('An error occurred while validating the workflow: ' + angular.toJson(response));
+                if (errorCallback) {
+                    errorCallback(response)
+                } else {
+                    UtilsFactory.displayTranslatedErrorMessage(['An error occurred while validating your workflow', '\n', 'Please check the type of the provided values regarding the given variables models']);
+                    console.error('An error occurred while validating the workflow: ' + angular.toJson(response));
+                }
             })
     }
 
@@ -1258,13 +1262,23 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         return UtilsFactory.modelToDateScope(model);
     };
 
-    $scope.manageThirdPartyCredentials = function () {
-        $uibModal.open({
-            templateUrl: 'views/modals/third_party_credentials.html',
-            controller: 'ThirdPartyCredentialModalCtrl',
-            windowClass: 'fadeIn third-party-credential-modal'
-        });
+    $scope.manageThirdPartyCredentials = function(credVariable) {
+        validateWorkflow(function (response) {
+                var credVariableValue = response.updatedVariables[credVariable.name];
+                UtilsFactory.manageThirdPartyCredentials(credVariableValue, check);
+            }, function (response) {
+                console.error('An error occurred while validating the workflow, so directly using the variable value as credential key. Error: ' + angular.toJson(response));
+                UtilsFactory.manageThirdPartyCredentials(credVariable.value, check);
+            });
     };
+
+    function createPathStringFromWorkflowVariables(variables) {
+        var result = '';
+        angular.forEach(variables, function (variable) {
+            result += variable.name + '=' + encodeURIComponent(variable.value) + ';';
+        });
+        return result.substring(0, result.length - 1);
+    }
 
     $scope.manageFiles = function (variable, dataspace, selectFolder) {
         UtilsFactory.openFileBrowser(variable, dataspace, selectFolder);
