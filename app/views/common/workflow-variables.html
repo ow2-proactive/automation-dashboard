@@ -56,7 +56,7 @@
                 <button title="{{'Manage third-party credentials'|translate}}"
                         id="third-party-credential-button" class="btn fa fa-key"
                         style="background-color:Transparent"
-                        ng-click="manageThirdPartyCredentials()"></button>
+                        ng-click="manageThirdPartyCredentials(variable)"></button>
             </div>
         </div>
         <div class="col-md-4" ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:global_file') == 0">
