@@ -13,9 +13,7 @@ angular.module('workflow-variables').controller('CatalogObjectsModalCtrl', funct
     $scope.updateBuckets = function() {
         $scope.clearData();
         var getBucketsUrl = JSON.parse(localStorage.appCatalogBucketsUrl);
-        if (!$scope.showAllBuckets) {
-            getBucketsUrl += '/?' + filterUrlParams;
-        }
+        getBucketsUrl += '/?' + filterUrlParams;
         $http.get(getBucketsUrl, restRequestHeader)
             .success(function (data){
                 $scope.buckets = data;
@@ -102,10 +100,6 @@ angular.module('workflow-variables').controller('CatalogObjectsModalCtrl', funct
             return;
         }
         $scope.revision = $scope.revisions[selectedIndex];
-    }
-
-    $scope.showAllChanged = function() {
-        $scope.updateBuckets();
     }
 
     $scope.clearData = function() {
