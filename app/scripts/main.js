@@ -179,6 +179,10 @@ mainModule.config(function ($translateProvider, $translatePartialLoaderProvider)
     $translateProvider.useSanitizeValueStrategy('escapeParameters');
 });
 
+mainModule.config(['$compileProvider', function ($compileProvider) {
+    $compileProvider.debugInfoEnabled(false);
+}]);
+
 // --------------- Controllers -----------------
 
 mainModule.controller('mainController', function ($window, $http, $scope, $rootScope, $state, $location, $interval, $translate, $uibModalStack, permissionService, SweetAlert, UtilsFactory) {
