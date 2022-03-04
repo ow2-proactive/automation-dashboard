@@ -124,5 +124,7 @@
   "Yes, download it!": "¡Sí, descarga!",
   "Yes, stop uploading!": "Sí, parada de la carga!",
   "You are about to download the folder": "Estás a punto de descargar la carpeta",
-  "Your": "Tu"
+  "Your": "Tu",
+  "Filter:": "Filtrar:",
+  "Filter files according to a glob pattern, e.g. *.xml, image*": "Filtrar archivos según el patrón glob, por ejemplo, *.xml, imagen*"
 }
