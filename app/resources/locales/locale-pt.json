@@ -124,5 +124,7 @@
   "Yes, download it!": "Sim, baixe a pasta",
   "Yes, stop uploading!": "Sim, pare de enviar!",
   "You are about to download the folder": "Você está prestes a baixar a pasta",
-  "Your": "Seu"
+  "Your": "Seu",
+  "Filter:": "Filtro:",
+  "Filter files according to a glob pattern, e.g. *.xml, image*": "Filtre os arquivos de acordo com o glob pattern, por exemplo *.xml, imagem*"
 }
