@@ -34,8 +34,8 @@
                 {{'Filter:'|translate}}
                 <input type="text"
                        id="filter-files"
-                       value="*"
                        style="width:400px; position:relative; display:inline-block;"
+                       ng-model="filterValue"
                        ng-keyup="filterFiles($event)">
             </label>
 
