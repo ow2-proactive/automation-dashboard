@@ -5,9 +5,12 @@
     </div>
 
     <div id="catalog-body" class="modal-body" style="height:100%">
-        <form class="container-flex w-100" id="get-object-by-name" ng-submit="filterByObjectsByName()">
+        <form class="container-flex w-100" id="get-object-by-name" ng-submit="filterObjectByObjectName()">
             <div class="input-group w-100">
-                <input type="text" placeholder="Catalog Object name" class="form-control">
+                <input type="text" placeholder="Catalog Object name" class="form-control"
+                    ng-model="catalogObjectNameQuery"
+                    ng-model-options="{debounce: 1000}"
+                    ng-change="filterObjectByObjectName()">
                 <button class="btn btn-default" type="submit">
                     <i class="fa fa-search"></i>
                 </button>

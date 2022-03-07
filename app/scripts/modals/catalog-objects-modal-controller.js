@@ -102,9 +102,8 @@ angular.module('workflow-variables').controller('CatalogObjectsModalCtrl', funct
         $scope.revision = $scope.revisions[selectedIndex];
     }
 
-    $scope.filterByObjectsByName = function () {
-        var objectName = $('#get-object-by-name input').val();
-        var objectNameFilterUrl = objectName ? "objectName=" + objectName : '';
+    $scope.filterObjectByObjectName = function () {
+        var objectNameFilterUrl = $scope.catalogObjectNameQuery ? "objectName=" + $scope.catalogObjectNameQuery : '';
         filterUrlParams = [kindFilterUrl, contentFilterUrl, objectNameFilterUrl].join('&');
         $scope.updateBuckets();
     }
