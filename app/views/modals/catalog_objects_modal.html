@@ -5,17 +5,23 @@
     </div>
 
     <div id="catalog-body" class="modal-body" style="height:100%">
+        <form class="container-flex w-100" id="get-object-by-name" ng-submit="filterObjectByObjectName()">
+            <div class="input-group w-100">
+                <input type="text" placeholder="Catalog Object name" class="form-control"
+                    ng-model="catalogObjectNameQuery"
+                    ng-model-options="{debounce: 1000}"
+                    ng-change="filterObjectByObjectName()">
+                <button class="btn btn-default" type="submit">
+                    <i class="fa fa-search"></i>
+                </button>
+            </div>
+        </form>
         <table style="width: 100%;">
             <tr>
                 <td style="width: 250px;">
                     <fieldset>
                         <legend class="row">
                             <div class="pull-left" style="font-weight: bold;padding-left: 15px;">{{'Buckets'|translate}}</div>
-                            <div class="pull-right" id="buckets-show-all-checkbox">
-                                <label class="checkbox-inline">
-                                    <input type="checkbox" ng-model="showAllBuckets" ng-change="showAllChanged()">{{'Show all'|translate}}
-                                </label>
-                            </div>
                         </legend>
                         <div style="height: 270px; overflow: auto;">
                             <table id="catalog-buckets-table" style="width: 100%;">

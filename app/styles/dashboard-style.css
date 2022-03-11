@@ -833,6 +833,17 @@ md-virtual-repeat-container:-webkit-scrollbar {
     padding-left: 8px !important;
 }
 
+#get-object-by-name {
+    margin-bottom: 20px;
+}
+#get-object-by-name input {
+    width: 90%;
+}
+
+.w-100 {
+    width: 100%;
+}
+
 .last-wizard-step-content {
     max-height: calc(100% - 120px) ! important;
 }
