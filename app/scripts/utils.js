@@ -4,7 +4,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     const defaultUserPreferences = {
         submissionView: {
             advancedVariables: false,
-            selectedBucketName: "",
+            selectedBucketName: '',
             showPSAWorkflowsOnly: false,
             toggleListBox: {
                 value: false
@@ -24,6 +24,10 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         }
     }
 
+    function schedulerRestUrl() {
+        return JSON.parse(localStorage.schedulerRestUrl);
+    }
+
     function loadUserPreferences(itemName) {
         // Initialize them with defaults if they don't exist in the browser's Local Storage
         if (!localStorage.WizardUserPreferences) {
@@ -31,9 +35,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         }
         return JSON.parse(localStorage.WizardUserPreferences)
     }
-    function schedulerRestUrl(){
-        return JSON.parse(localStorage.schedulerRestUrl);
-    }
+
     function getUserPreference(propertyName) {
         var preferences = loadUserPreferences();
         // Make sure the property is created if it is not (at a deeply nested level)
@@ -47,13 +49,14 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         }
     }
 
-    function getSortClasses (sortParameters, column) {
+    function getSortClasses(sortParameters, column) {
         if (sortParameters && sortParameters.column === column) {
             return sortParameters.order === 'a' ? 'fa-sort-asc' : 'fa-sort-desc';
         } else {
             return 'fa-sort text-disabled'
         }
     }
+
     function setUserPreference(propertyName, value) {
         var userPreferences = loadUserPreferences();
         getOrSetNestedObjectProperty(userPreferences, propertyName, value)
@@ -77,6 +80,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             return schema[propertiesList[propertiesList.length - 1]]
         }
     }
+
     function openJobInSchedulerPortal(jobId) {
         if (jobId) {
             var url = JSON.parse(localStorage.schedulerPortalUrl) + '/?job=' + jobId;
@@ -111,11 +115,12 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         });
         return obj && obj.value;
     }
+
     // returns true when variables includes advanced variables and false otherwise
-    function isVariablesIncludeAdvancedVar(variables){
-        return variables.findIndex(function(variable){
-                  return  variable.advanced;
-                }) > -1;
+    function isVariablesIncludeAdvancedVar(variables) {
+        return variables.findIndex(function (variable) {
+            return variable.advanced;
+        }) > -1;
     }
 
     function extractVariableValue(variable, model) {
@@ -133,8 +138,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
 
     function extractVariables(modifiedWorkflow) {
         var variables = [];
-        angular.forEach(modifiedWorkflow.variables_order, function(group, key){
-            angular.forEach(group, function(variable){
+        angular.forEach(modifiedWorkflow.variables_order, function (group, key) {
+            angular.forEach(group, function (variable) {
                 variable.value = extractVariableValue(variable, variable.model);
                 variable.group = key;
                 variables.push(variable);
@@ -162,6 +167,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         })
         return variables;
     }
+
     // open a pop-up to browse the catalog objects and select one
     function openCatalogObjectModal(variable, variableModel) {
         $uibModal.open({
@@ -214,7 +220,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                 credKey: function () {
                     return credKey;
                 },
-                closeHandler: function() {
+                closeHandler: function () {
                     return closeHandler;
                 }
             }
@@ -405,7 +411,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         }
         var parsedUrl = new URL(url);
         // Open the endpoint in the browser only if the protocol is http or https
-        if (parsedUrl.protocol.startsWith('http')){
+        if (parsedUrl.protocol.startsWith('http')) {
 
             if (parsedUrl.pathname.includes('cloud-automation-service/services/')) {
                 //override the hostname of the target url (with the hostname of the current window)
@@ -444,11 +450,11 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     }
 
     /** Transforms list of variables format to key-value without model :
-    from : ["toto": {"value": 1, "model":"PA:INTEGER"}, ...]
-    to : ["toto":1] **/
+     from : ["toto": {"value": 1, "model":"PA:INTEGER"}, ...]
+     to : ["toto":1] **/
     function getVariablesInKeyValueFormat(variables) {
         var result = {};
-        angular.forEach(variables, function(variable){
+        angular.forEach(variables, function (variable) {
             var name = variable.name;
             var value = variable.value;
             result[name] = value;
@@ -459,11 +465,11 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     function modelToDateFormat(model) {
         var indexBegin = model.indexOf('(');
         var indexEnd = model.lastIndexOf(')');
-        var javaDateTimeFormat =  model.substring(indexBegin + 1, indexEnd).trim();
+        var javaDateTimeFormat = model.substring(indexBegin + 1, indexEnd).trim();
         return moment().toMomentFormatString(javaDateTimeFormat);
     };
 
-    function modelToList (model) {
+    function modelToList(model) {
         var indexBegin = model.indexOf('(');
         var indexEnd = model.lastIndexOf(')');
         var options = model.substring(indexBegin + 1, indexEnd).split(',');
@@ -472,7 +478,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         });
     };
 
-    function modelToDateScope (model) {
+    function modelToDateScope(model) {
         var indexBegin = model.indexOf('[');
         var indexEnd = model.lastIndexOf(']');
         var dates = model.substring(indexBegin + 1, indexEnd).split(',');
@@ -489,7 +495,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
      */
     function createPathStringFromMap(map, valuePropertyName) {
         var result = '';
-        map.forEach(function(item){
+        map.forEach(function (item) {
             result += item.name + '=' + encodeURIComponent(valuePropertyName ? item[valuePropertyName] : item) + ';'
         })
         return result.substring(0, result.length - 1);
@@ -504,6 +510,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         });
         return variables;
     }
+
     function replaceModelWithFetched(model) {
         var indexBegin = model.indexOf('(');
         var indexEnd = model.lastIndexOf(')');
@@ -547,14 +554,14 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
 
     function getStringByUrl(url) {
         var request = new XMLHttpRequest();
-        request.open("GET", url, false);
+        request.open('GET', url, false);
         request.send();
         return request.responseText;
     }
 
     /**
-        *Validation of Workflow
-    **/
+     *Validation of Workflow
+     **/
     function validateWorkflow(bucketName, workflowName, variables) {
         const configHeaders = {
             headers: {
@@ -576,6 +583,15 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         const path = createPathStringFromMap(parseEmptyVariablesValue(variables), 'value')
         return $http.post(schedulerRestUrl() + 'jobs;' + path, {}, configHeaders);
     }
+
+    function getJobInfoForJob(jobId) {
+        if (getSessionId()) {
+            return $http.get(schedulerRestUrl() + 'jobs/' + jobId + '/info', {
+                headers: {'sessionid': getSessionId()}
+            })
+        }
+    }
+
     return {
         openJobInSchedulerPortal: openJobInSchedulerPortal,
         isSpecialUIModel: isSpecialUIModel,
@@ -603,12 +619,13 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         loadUserPreferences: loadUserPreferences,
         getUserPreference: getUserPreference,
         setUserPreference: setUserPreference,
-        getWorkflowMetadata : getWorkflowMetadata,
-        replaceVariableModelsIfNeeded : replaceVariableModelsIfNeeded,
+        getWorkflowMetadata: getWorkflowMetadata,
+        replaceVariableModelsIfNeeded: replaceVariableModelsIfNeeded,
         parseEmptyVariablesValue: parseEmptyVariablesValue,
         createPathStringFromMap: createPathStringFromMap,
         validateWorkflow: validateWorkflow,
-        submitJob: submitJob
+        submitJob: submitJob,
+        getJobInfoForJob: getJobInfoForJob
     };
 }
 

@@ -425,7 +425,7 @@ module.exports = function (grunt) {
                         flatten: true,
                         src: ['<%= inspinia.app %>/templates_versions/common/index.html'],
                         dest: '<%= inspinia.app %>/index.html'
-                    },
+                    }
                 ]
             }
         },
