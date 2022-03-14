@@ -1,7 +1,6 @@
 function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, $q, $location, toastr, SweetAlert) {
     var specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder', 'pa:user_folder', 'pa:catalog_object', 'pa:credential'];
     const catalogUrlPrefix = $location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/catalog/buckets/';
-    const schedulerRestUrl = JSON.parse(localStorage.schedulerRestUrl);
     const defaultUserPreferences = {
         submissionView: {
             advancedVariables: false,
@@ -23,6 +22,10 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                 }
             }
         }
+    }
+
+    function schedulerRestUrl() {
+        return JSON.parse(localStorage.schedulerRestUrl);
     }
 
     function loadUserPreferences(itemName) {
@@ -567,7 +570,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             }
         };
         const path = createPathStringFromMap(parseEmptyVariablesValue(variables), 'value')
-        return $http.post(schedulerRestUrl + 'validateurl' + (path ? ';' + path : ''), {}, configHeaders);
+        return $http.post(schedulerRestUrl() + 'validateurl' + (path ? ';' + path : ''), {}, configHeaders);
     }
 
     function submitJob(bucketName, workflowName, variables) {
@@ -578,12 +581,12 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             }
         };
         const path = createPathStringFromMap(parseEmptyVariablesValue(variables), 'value')
-        return $http.post(schedulerRestUrl + 'jobs;' + path, {}, configHeaders);
+        return $http.post(schedulerRestUrl() + 'jobs;' + path, {}, configHeaders);
     }
 
     function getJobInfoForJob(jobId) {
         if (getSessionId()) {
-            return $http.get(schedulerRestUrl + 'jobs/' + jobId + '/info', {
+            return $http.get(schedulerRestUrl() + 'jobs/' + jobId + '/info', {
                 headers: {'sessionid': getSessionId()}
             })
         }
