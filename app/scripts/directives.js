@@ -10,7 +10,7 @@
 function pageTitle($rootScope, $timeout) {
     return {
         link: function (scope, element) {
-            var listener = function (event, toState, toParams, fromState, fromParams) {
+            var listener = function (event, toState) {
                 // Default title - load on Dashboard 1
                 var title = 'ProActive Automation Dashboard';
                 // Create your own title pattern
@@ -25,7 +25,7 @@ function pageTitle($rootScope, $timeout) {
             $rootScope.$on('$stateChangeStart', listener);
         }
     }
-};
+}
 
 /**
  * sideNavigation - Directive for run metsiMenu on sidebar navigation
@@ -40,7 +40,7 @@ function sideNavigation($timeout) {
             });
         }
     };
-};
+}
 
 /**
  * iboxTools - Directive for iBox tools elements in right corner of ibox
@@ -64,15 +64,15 @@ function iboxTools($timeout) {
                     ibox.resize();
                     ibox.find('[id^=map-]').resize();
                 }, 50);
-            },
-                // Function for close ibox
-                $scope.closebox = function () {
-                    var ibox = $element.closest('div.ibox');
-                    ibox.remove();
-                }
+            }
+            // Function for close ibox
+            $scope.closebox = function () {
+                var ibox = $element.closest('div.ibox');
+                ibox.remove();
+            }
         }
     };
-};
+}
 
 /**
  * minimalizaSidebar - Directive for minimalize sidebar
@@ -105,7 +105,7 @@ function minimalizaSidebar($timeout) {
             }
         }
     };
-};
+}
 
 /**
  * iboxTools with full screen - Directive for iBox tools elements in right corner of ibox with full screen option
@@ -359,7 +359,7 @@ function showDropdownFromTemplate($document, $timeout, $uibPosition) {
 function ellipsisTooltip() {
     return {
         restrict: 'A',
-        link: function(scope, element, attrs) {
+        link: function (scope, element, attrs) {
             const el = element[0];
             const ttDisableAttr = 'tooltipEnable';
             const ttEventTrigger = 'mouseenter';
@@ -370,7 +370,7 @@ function ellipsisTooltip() {
                     if (!isTriggeredByItself) {
                         element.triggerHandler(ttEventTrigger, [true]);
                     }
-                    scope.$applyAsync(function() {
+                    scope.$applyAsync(function () {
                         attrs.$set(ttDisableAttr, 'false');
                     });
                 }
