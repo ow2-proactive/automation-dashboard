@@ -8,10 +8,10 @@
         "tooltip": "Submit Workflows to Create/Execute/Control Jobs & Services",
         "secondaryHtmlFiles": [
             "modals/result_map_modal.html",
-            "modals/job_output_modal.html",
             "modals/send_signals_modal.html",
             "workflow-execution/templates/job-actions-dropdown.html",
             "workflow-execution/templates/job-details-view.html",
+            "workflow-execution/templates/job-details-container.html",
             "workflow-execution/templates/job-interfaces-dropdown.html",
             "workflow-execution/templates/job-list-row.html",
             "workflow-execution/templates/job-list-pagination.html",
