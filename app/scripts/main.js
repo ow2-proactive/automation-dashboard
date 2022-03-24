@@ -1077,6 +1077,11 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         validateWorkflow(function (response) {
             if (response.valid === true) {
                 // Check Successful - proceed to edit
+                angular.forEach($scope.workflow.variables, function (variable){
+                  if( response.updatedModels[variable.name].toLowerCase() === "pa:hidden" ){
+                      variable.value = response.updatedVariables[variable.name];
+                  }
+                })
                 $scope.$parent.updateCdWfAssociation($scope.workflow.variables)
                     .success(function () {
                         $scope.updatePlannedJobsList();
