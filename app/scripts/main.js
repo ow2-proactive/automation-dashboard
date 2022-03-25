@@ -1081,11 +1081,6 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 // the values of pa:hidden variables shouldn't be decrypted in Workflow Description
                 encryptValues(response)
                 // Check Successful - proceed to edit
-                angular.forEach($scope.workflow.variables, function (variable){
-                  if( response.updatedModels[variable.name].toLowerCase() === "pa:hidden" ){
-                      variable.value = response.updatedVariables[variable.name];
-                  }
-                })
                 $scope.$parent.updateCdWfAssociation($scope.workflow.variables)
                     .success(function () {
                         $scope.updatePlannedJobsList();
