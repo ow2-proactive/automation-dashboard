@@ -1047,6 +1047,8 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         // Validate + create association if applicable
         validateWorkflow(function (response) {
             if (response.valid === true) {
+                // the values of pa:hidden variables shouldn't be decrypted in Workflow Description
+                encryptValues(response)
                 // create association
                 $scope.$parent.createAssociation($scope.workflow.name, bucketName, $scope.workflow.variables)
                     .success(function () {
@@ -1076,12 +1078,9 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         var schedulerRestUrl = JSON.parse(localStorage.schedulerRestUrl);
         validateWorkflow(function (response) {
             if (response.valid === true) {
+                // the values of pa:hidden variables shouldn't be decrypted in Workflow Description
+                encryptValues(response)
                 // Check Successful - proceed to edit
-                angular.forEach($scope.workflow.variables, function (variable){
-                  if( response.updatedModels[variable.name].toLowerCase() === "pa:hidden" ){
-                      variable.value = response.updatedVariables[variable.name];
-                  }
-                })
                 $scope.$parent.updateCdWfAssociation($scope.workflow.variables)
                     .success(function () {
                         $scope.updatePlannedJobsList();
@@ -1106,6 +1105,14 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         })
     }
 
+    // decrypt pa:hidden value
+    function encryptValues(response){
+        angular.forEach($scope.workflow.variables, function (variable){
+          if( response.updatedModels[variable.name].toLowerCase() === "pa:hidden" ){
+              variable.value = response.updatedVariables[variable.name];
+          }
+        })
+    }
     // construct the variables object following this format: {"key":"value", ... }
     function constructVariablesObject(variables) {
         var workflowVariables = {};
