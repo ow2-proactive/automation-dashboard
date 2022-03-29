@@ -1108,7 +1108,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
     // decrypt pa:hidden value
     function encryptValues(response){
         angular.forEach($scope.workflow.variables, function (variable){
-          if( response.updatedModels[variable.name].toLowerCase() === "pa:hidden" ){
+          if( response.updatedModels[variable.name] && response.updatedModels[variable.name].toLowerCase() === "pa:hidden" ){
               variable.value = response.updatedVariables[variable.name];
           }
         })
