@@ -1,5 +1,5 @@
 {
-"proactiveDashboardVersion": "10.0.0-rc1",
+"proactiveDashboardVersion": "10.0.19",
 "confServer": {
   "pcaServiceUrl": "/cloud-automation-service/",
   "schedulerRestUrl": "/rest/scheduler/",
