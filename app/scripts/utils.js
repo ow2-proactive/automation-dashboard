@@ -537,16 +537,16 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         if (Array.isArray(variables)) {
             variables.filter(function (variable) {
                 // filter non empty models and models that should be replaced
-                return variable.model && variable.model.toLowerCase().indexOf('pa:model_from_url') !== -1;
+                return variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:model_from_url') !== -1;
             }).map(function (variable) {
                 // replace models with response
-                variable.resolvedModel = replaceModelWithFetched(variable.model);
+                variable.resolvedModel = replaceModelWithFetched(variable.resolvedModel);
             })
         } else {
             for (var prop in variables) {
                 var variable = variables[prop]
-                if (variable.model && variable.model.toLowerCase().indexOf('pa:model_from_url') !== -1) {
-                    variable.resolvedModel = replaceModelWithFetched(variable.model);
+                if (variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:model_from_url') !== -1) {
+                    variable.resolvedModel = replaceModelWithFetched(variable.resolvedModel);
                 }
             }
         }
