@@ -1,10 +1,10 @@
-<div class="row ng-scope">
-    <nav class="navbar navbar-static-top" role="navigation" style="margin-bottom: 0px; padding: 0 15px;">
+<div id="page-header">
+    <nav class="row navbar navbar-static-top" role="navigation" style="margin-bottom: 0px; padding: 0 15px;">
         <ul class="nav navbar-nav navbar-left" style="display: inline-flex;">
             <li class="m-r-xs">
                 <div class="btn-group pa-shortcuts" style="width: auto!important;">
-                    <a href="http://activeeon.com/" target="_blank" style="padding: 0px 30px 0px 6px!important;">
-                        <img src="styles/patterns/AE-Logo.png" style="height: 40px;padding-right: 40px;" align="right">
+                    <a href="https://www.activeeon.com/" target="_blank" style="padding: 0px 30px 0px 6px!important;">
+                        <img src="styles/patterns/AE-Logo.png" style="height: 40px;padding-right: 40px;">
                     </a>
                 </div>
             </li>
@@ -69,44 +69,77 @@
             </li>
         </ul>
     </nav>
-</div>
-<div class="row gray-bg border-bottom" ng-controller="navbarController">
-    <div class="second-row-bar pull-left" style="height: 30px;display: inline-flex;padding: 0 15px;">
-        <div class="dropdown" id="help-dropdown">
-            <a data-toggle="dropdown" href="javascript:void(0)" style="color: #676a6c;padding-left: 10px;font-size: 14px;background-color: transparent;">
-                {{'Help'|translate}} <b class="caret"></b></a>
-            <ul class="dropdown-menu">
-                <li><a class="pointer" href="/doc/" target="_blank"><i aria-hidden="true" class="fa fa-book"></i>
-                    {{'ProActive Documentations'|translate}}</a></li>
-                <li><a class="pointer" href id="about-button" ng-click="displayAbout()"><i aria-hidden="true" class="fa fa-question-circle"></i>
-                    {{'About'|translate}}</a></li>
-                <li><a class="pointer" href="https://try.activeeon.com/tutorials.html" target="_blank"><i aria-hidden="true" class="fa fa-mortar-board" style="margin-left: -2px;"></i>
-                    {{'Tutorials'|translate}}</a></li>
-            </ul>
-        </div>
-        <div class="dropdown">
-            <a data-toggle="dropdown" href="javascript:void(0)" style="color: #676a6c;padding-left: 10px;font-size: 14px;background-color: transparent;" ng-click="selectedLanguage()">
-                <span id="selected">Language</span><span class="caret"></span></a>
-            <ul class="dropdown-menu" id="language-dropdown">
-                <li><a id="en" class="pointer" ng-click="changeLanguage('en')" style="
-      padding: 3px 5px;
-  " tabindex="-1" target="_blank"><img alt="En" id="en-flag" src="styles/patterns/gb.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">English</a>
-                </li>
-                <li><a id="fr" class="pointer" ng-click="changeLanguage('fr')" style="
+    <div class="row gray-bg border-bottom">
+        <div class="second-row-bar pull-left" style="height: 30px;display: inline-flex;padding: 0 15px;">
+            <div class="dropdown" id="help-dropdown">
+                <a data-toggle="dropdown" href="javascript:void(0)" style="color: #676a6c;padding-left: 10px;font-size: 14px;background-color: transparent;">
+                    {{'Help'|translate}} <b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    <li><a class="pointer" href="/doc/" target="_blank"><i aria-hidden="true" class="fa fa-book"></i>
+                        {{'ProActive Documentations'|translate}}</a></li>
+                    <li><a class="pointer" href id="about-button" ng-click="displayAbout()"><i aria-hidden="true" class="fa fa-question-circle"></i>
+                        {{'About'|translate}}</a></li>
+                    <li><a class="pointer" href="https://try.activeeon.com/tutorials.html" target="_blank"><i aria-hidden="true" class="fa fa-mortar-board" style="margin-left: -2px;"></i>
+                        {{'Tutorials'|translate}}</a></li>
+                </ul>
+            </div>
+            <div class="dropdown">
+                <a data-toggle="dropdown" href="javascript:void(0)" style="color: #676a6c;padding-left: 10px;font-size: 14px;background-color: transparent;" ng-click="selectedLanguage()">
+                    <span id="selected">Language</span><span class="caret"></span></a>
+                <ul class="dropdown-menu" id="language-dropdown">
+                    <li>
+                        <a id="en" class="pointer" ng-click="changeLanguage('en'); reloadPortal()" style="padding: 3px 5px;" tabindex="-1" target="_blank"><img alt="En" id="en-flag" src="styles/patterns/gb.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">English</a>
+                    </li>
+                    <li>
+                        <a id="fr" class="pointer" ng-click="changeLanguage('fr'); reloadPortal()" style="
       padding: 3px 5px;
   " tabindex="-1" target="_blank"><img alt="Fr" id="fr-flag" src="styles/patterns/fr.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">Français</a>
-                </li>
-                <li><a id="pt" class="pointer" ng-click="changeLanguage('pt')" style="
+                    </li>
+                    <li>
+                        <a id="pt" class="pointer" ng-click="changeLanguage('pt'); reloadPortal()" style="
       padding: 3px 5px;
   " tabindex="-1" target="_blank"><img alt="Pt" id="pt-flag" src="styles/patterns/br.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">Português</a>
-                </li>
-                <li><a id="es" class="pointer" ng-click="changeLanguage('es')" style="
+                    </li>
+                    <li>
+                        <a id="es" class="pointer" ng-click="changeLanguage('es'); reloadPortal()" style="
       padding: 3px 5px;
   " tabindex="-1" target="_blank"><img alt="ES" id="es-flag" src="styles/patterns/es.svg" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;">Español</a>
-                </li>
-            </ul>
+                    </li>
+                </ul>
+            </div>
+        </div>
+        <div class="second-row-bar pull-right" style="height: 30px">&nbsp;</div>
+        <div style="height: 3px; background: #f47930; width:100%; display: table;"></div>
+        <div id="about-modal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button aria-hidden="true" class="close" data-dismiss="modal" type="button">×</button>
+                        <h3>{{'ProActive Automation Dashboard'|translate}}</h3>
+                    </div>
+                    <div class="modal-body" style="height:100%">
+                        <div class="row">
+                            <div class="col-sm-3">
+                                <img src="styles/patterns/about_115.png" style="height:100%;display:block;">
+                            </div>
+                            <div class="col-sm-9">
+                                <p>{{'Version'|translate}}: <b> {{dashboardVersion}}</b></p>
+                                <p>{{'Copyright'|translate}} (C) 2007-{{year}}, Activeeon, {{'All rights reserved'|translate}}</p>
+                                <p>{{'Visit'|translate}} <a href="https://proactive.activeeon.com/" target="_blank">https://proactive.activeeon.com</a>
+                                    {{'and'|translate}} <a href="https://www.activeeon.com/" target="_blank">https://www.activeeon.com</a></a>
+                                </p>
+                                <p>{{'Contact'|translate}}: +33 (0)9 88 777 660, contact@activeeon.com</p>
+                                <p>{{'REST server'|translate}}: <a id="restServer" ng-href="{{restUrl}}" target="_blank">{{restUrl}}</a>
+                                </p>
+                                <p>{{'REST version'|translate}}: <b>{{dashboardVersion}}</b></p>
+                                <p>{{'Proactive Dashboard version'|translate}}: <b>{{dashboardVersion}}</b></p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
         </div>
     </div>
-    <div class="second-row-bar pull-right" style="height: 30px">&nbsp;</div>
-    <div style="height: 3px; background: #f47930; width:100%; display: table;"></div>
 </div>

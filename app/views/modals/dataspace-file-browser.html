@@ -29,6 +29,16 @@
             <button id="delete-file-btn" uib-tooltip="{{'Delete the selected file or folder'|translate}}" class="btn btn-white" ng-click="deleteFile()">
                 <i class="fa fa-trash"></i>
             </button>
+
+            <label style="margin-left:200px; position:relative; display:inline-block;" uib-tooltip="{{'Filter files according to a glob pattern, e.g. *.xml, image*'|translate}}">
+                {{'Filter:'|translate}}
+                <input type="text"
+                       id="filter-files"
+                       style="width:400px; position:relative; display:inline-block;"
+                       ng-model="filterValue"
+                       ng-keyup="filterFiles($event)">
+            </label>
+
             <div class="pull-right container-flex">
                 <div uib-dropdown class="uploading-files-dropdown container-flex m-r-sm progress-btn active" ng-if="$root.uploadingFiles && $root.uploadingFiles.length">
                     <button type="button" class="btn btn-primary container-flex w-300" uib-dropdown-toggle>

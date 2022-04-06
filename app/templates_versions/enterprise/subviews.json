@@ -5,27 +5,31 @@
         "nameForUrl": "workflow-execution",
         "appFolder": "cloud-automation/app/",
         "htmlFile": "workflow-execution/workflow_execution.html",
+        "tooltip": "Submit Workflows to Create/Execute/Control Jobs & Services",
         "secondaryHtmlFiles": [
             "modals/result_map_modal.html",
-            "modals/job_output_modal.html",
-            "workflow-execution/templates/catalog-view.html",
+            "modals/send_signals_modal.html",
             "workflow-execution/templates/job-actions-dropdown.html",
+            "workflow-execution/templates/job-details-view.html",
+            "workflow-execution/templates/job-details-container.html",
             "workflow-execution/templates/job-interfaces-dropdown.html",
+            "workflow-execution/templates/job-list-row.html",
+            "workflow-execution/templates/job-list-pagination.html",
+            "workflow-execution/templates/job-output-view.html",
             "workflow-execution/templates/job-results-dropdown.html",
             "workflow-execution/templates/job-service-dropdown.html",
             "workflow-execution/templates/job-signals-dropdown.html",
-            "workflow-execution/templates/workflow-variables.html",
-            "workflow-execution/templates/wizard.html"
+            "workflow-execution/templates/typehead-wf-dropdown.html"
         ],
         "notAvailablePage": "workflow-execution/page_not_available_wf_execution.html",
         "jsFiles": [
             "scripts/workflow-execution/workflow-execution.js",
             "services/workflow-execution-catalog-service.js",
-            "services/workflow-execution-scheduler-service.js",
             "services/workflow-execution-utility-factory.js",
+            "services/workflow-execution-scheduler-service.js",
+            "scripts/workflow-execution/job-information-controller.js",
             "scripts/workflow-execution/job-output-controller.js",
-            "scripts/workflow-execution/workflow-execution-catalog-controller.js",
-            "scripts/workflow-execution/workflow-execution-variables-controller.js"
+            "scripts/workflow-execution/signals-controller.js"
         ],
         "angularModuleName": "workflow-execution",
         "cssFile": "workflow_execution_custom_style.css",
@@ -37,10 +41,11 @@
         "nameForUrl": "catalog-portal",
         "appFolder": "generic-catalog-portal/app/",
         "htmlFile": "generic_catalog.html",
+        "tooltip": "Browse and Search the Catalog",
         "secondaryHtmlFiles": [
             "modals/catalog_object_edition.html",
             "modals/catalog-object-kind-content_type-project_name-edition.html",
-            "modals/submit_workflow.html"
+            "modals/catalog_rbac.html"
         ],
         "notAvailablePage": "page_not_available.html",
         "jsFiles": [
@@ -48,9 +53,9 @@
             "scripts/factory/catalog-service.js",
             "scripts/factory/scheduler-service.js",
             "scripts/factory/cloud-automation-service.js",
-            "scripts/submitWorkflowModalGCP.js",
             "scripts/editObjectModalGCP.js",
-            "scripts/EditKindContentTypeProjectName.js"
+            "scripts/EditKindContentTypeProjectName.js",
+            "scripts/catalogRBAC.js"
         ],
         "angularModuleName": "gcp-rest",
         "cssFile": "gcportal_custom_style.css",
@@ -70,6 +75,7 @@
         "nameForUrl": "job-analytics",
         "appFolder": "job-analytics-portal/app/",
         "htmlFile": "job_analytics.html",
+        "tooltip": "View Graphs & Tables of Job Results",
         "secondaryHtmlFiles": [
             "templates/advanced_search_hints.html",
             "templates/ui_grid_filter_date.html",
@@ -104,12 +110,14 @@
         "nameForUrl": "job-gantt",
         "appFolder": "job-analytics-portal/app/",
         "htmlFile": "job-gantt/job_gantt.html",
+        "tooltip": "View Job Spanning Time & Dependencies",
         "secondaryHtmlFiles": [
             "job-gantt/job_gantt_tooltip.html",
             "job-gantt/job_gantt_legend.html"
         ],
         "notAvailablePage": "page_not_available_job-analytics.html",
-        "jsFiles": ["scripts/job-gantt/job-gantt.js",
+        "jsFiles": [
+            "scripts/job-gantt/job-gantt.js",
             "scripts/job-gantt/job-gantt-configuration.js",
             "scripts/job-gantt/job-gantt-search-form.js"
         ],
@@ -125,6 +133,7 @@
         "nameForUrl": "node-gantt",
         "appFolder": "job-analytics-portal/app/",
         "htmlFile": "node-gantt/node_gantt.html",
+        "tooltip": "View Resources and Node Usage",
         "secondaryHtmlFiles": [
             "node-gantt/node_gantt_legend.html",
             "node-gantt/node_gantt_tooltip.html"
@@ -152,6 +161,7 @@
         "nameForUrl": "job-planner-calendar-def",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "execution_calendars.html",
+        "tooltip": "Define Calendars",
         "secondaryHtmlFiles": [
             "cron-gen.html"
         ],
@@ -173,6 +183,7 @@
         "nameForUrl": "job-planner-calendar-def-workflows",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "calendar-association/calendar_association.html",
+        "tooltip": "Associate Workflows to Calendar",
         "secondaryHtmlFiles": [
             "calendar-association/calendar_list.html"
         ],
@@ -196,6 +207,7 @@
         "nameForUrl": "job-planner-execution-planning",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "execution_planning.html",
+        "tooltip": "See Textual and Calendar-based Planning",
         "secondaryHtmlFiles": [
             "calendar_list_with_checkbox.html"
         ],
@@ -219,6 +231,7 @@
         "nameForUrl": "job-planner-gantt-chart",
         "appFolder": "job-planner-portal/app/",
         "htmlFile": "gantt-chart/gantt_view_main.html",
+        "tooltip": "See Graphical view of Past and Future Executions",
         "secondaryHtmlFiles": [
             "gantt-chart/ganttEventTooltip.tmpl.html",
             "gantt-chart/calendar_list_modal.html",
@@ -245,6 +258,7 @@
         "nameForUrl": "event-orchestration",
         "appFolder": "cloud-watch-portal/app/",
         "htmlFile": "cloud_watch.html",
+        "tooltip": "Event-Based Scheduling",
         "secondaryHtmlFiles": [
             "modals/rule_edition.html",
             "modals/rule_submission.html",
@@ -280,8 +294,8 @@
         "nameForUrl": "service-automation",
         "appFolder": "cloud-automation/app/",
         "htmlFile": "cloud-automation/cloud_automation.html",
+        "tooltip": "Launch and Manage On-Demand Services",
         "secondaryHtmlFiles": [
-            "modals/submit_window_cloud_automation.html",
             "modals/service_instance_info_modal.html",
             "modals/service_instance_history_modal.html"
         ],
@@ -295,8 +309,7 @@
             "scripts/cloud-automation/finished-services-controller.js",
             "scripts/cloud-automation/monitoring-items-controller.js",
             "scripts/cloud-automation/services-catalog-controller.js",
-            "scripts/cloud-automation/modals/info-modal-controller.js",
-            "scripts/cloud-automation/modals/submit-modal-controller.js"
+            "scripts/cloud-automation/modals/info-modal-controller.js"
         ],
         "angularModuleName": "cloud-automation",
         "cssFile": "portal_custom_style.css",
@@ -311,6 +324,7 @@
         "nameForUrl": "notification-portal",
         "appFolder": "notification-portal/app/",
         "htmlFile": "notification-portal.html",
+        "tooltip": "Configure and Receive Notifications",
         "secondaryHtmlFiles": [
             "templates/notification.html",
             "templates/basic-subscription.html",

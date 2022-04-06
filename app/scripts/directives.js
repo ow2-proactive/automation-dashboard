@@ -10,7 +10,7 @@
 function pageTitle($rootScope, $timeout) {
     return {
         link: function (scope, element) {
-            var listener = function (event, toState, toParams, fromState, fromParams) {
+            var listener = function (event, toState) {
                 // Default title - load on Dashboard 1
                 var title = 'ProActive Automation Dashboard';
                 // Create your own title pattern
@@ -25,7 +25,7 @@ function pageTitle($rootScope, $timeout) {
             $rootScope.$on('$stateChangeStart', listener);
         }
     }
-};
+}
 
 /**
  * sideNavigation - Directive for run metsiMenu on sidebar navigation
@@ -40,7 +40,7 @@ function sideNavigation($timeout) {
             });
         }
     };
-};
+}
 
 /**
  * iboxTools - Directive for iBox tools elements in right corner of ibox
@@ -64,15 +64,15 @@ function iboxTools($timeout) {
                     ibox.resize();
                     ibox.find('[id^=map-]').resize();
                 }, 50);
-            },
-                // Function for close ibox
-                $scope.closebox = function () {
-                    var ibox = $element.closest('div.ibox');
-                    ibox.remove();
-                }
+            }
+            // Function for close ibox
+            $scope.closebox = function () {
+                var ibox = $element.closest('div.ibox');
+                ibox.remove();
+            }
         }
     };
-};
+}
 
 /**
  * minimalizaSidebar - Directive for minimalize sidebar
@@ -105,7 +105,7 @@ function minimalizaSidebar($timeout) {
             }
         }
     };
-};
+}
 
 /**
  * iboxTools with full screen - Directive for iBox tools elements in right corner of ibox with full screen option
@@ -352,6 +352,42 @@ function showDropdownFromTemplate($document, $timeout, $uibPosition) {
 }
 
 /**
+ * Displays a tooltip that shows the whole text of a truncated element (by ellipsis or else)
+ * Requires using a "tooltip-enable=true" attribute and set by default to true.
+ * @returns {{link: link, restrict: string}}
+ */
+function ellipsisTooltip() {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            const el = element[0];
+            const ttDisableAttr = 'tooltipEnable';
+            const ttEventTrigger = 'mouseenter';
+
+            const ttShowEventBind = function (event, isTriggeredByItself) {
+                if (el.offsetHeight < el.scrollHeight) {
+                    attrs.$set(ttDisableAttr, 'true');
+                    if (!isTriggeredByItself) {
+                        element.triggerHandler(ttEventTrigger, [true]);
+                    }
+                    scope.$applyAsync(function () {
+                        attrs.$set(ttDisableAttr, 'false');
+                    });
+                }
+            };
+
+            if (angular.isObject(el)) {
+                attrs.$set(ttDisableAttr, 'false');
+                element.on(ttEventTrigger, ttShowEventBind);
+                element.on('$destroy', function () {
+                    element.off(ttEventTrigger, ttShowEventBind);
+                });
+            }
+        }
+    };
+}
+
+/**
  *
  * Pass all functions into module
  */
@@ -365,4 +401,5 @@ angular
     .directive('sideNavigation', sideNavigation)
     .directive('slimScroll', slimScroll)
     .directive('backTop', backToTop)
-    .directive('showDropdownFromTemplate', showDropdownFromTemplate);
+    .directive('showDropdownFromTemplate', showDropdownFromTemplate)
+    .directive('ellipsisTooltip', ellipsisTooltip);

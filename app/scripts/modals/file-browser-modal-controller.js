@@ -20,6 +20,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     $scope.variable = variable;
     $scope.selectFolder = selectFolder;
     $scope.showHiddenFiles = false;
+    $scope.filterValue = "*";
 
     $scope.enterDir = function (event) {
         $scope.currentPath = event.target.getAttribute('value');
@@ -47,7 +48,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
             pathname = "%2E"; // root path "." need to be encoded as "%2E"
         }
         var url = dataspaceRestUrl + encodeURIComponent(pathname);
-        $http.get(url + "?comp=list",
+        $http.get(url + "?comp=list&includes=" + $scope.filterValue,
             restRequestHeader)
             .success(function (data){
                 $scope.files = $scope.getFilesMetadata(data.fileListing.sort());
@@ -223,6 +224,16 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                 });
             }
         });
+    }
+
+    $scope.filterFiles = function(event) {
+     if (event.keyCode === 13) {
+            $scope.filterValue = document.getElementById("filter-files").value;
+             if ($scope.filterValue === "") {
+                $scope.filterValue = "*";
+             }
+            $scope.refreshFiles();
+        }
     }
 
     $scope.downloadFile = function() {

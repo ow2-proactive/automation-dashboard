@@ -1,0 +1,69 @@
+<div class="ibox-content" ng-controller="VariablesController">
+    <div style="max-height:calc(100% - 70px);overflow-y: auto;overflow-x: hidden;" ng-class="{'last-wizard-step-content':WEsubmissionErrorMessage || successMessage}">
+        <h2 class="text-center">
+            <a ng-href="/scheduler/?job={{::workflow.id}}" target="/scheduler/" title="{{'Open job in scheduler portal'|translate}}" ng-if="workflow.id">
+                <span class="job-id container-flex label label-default m-l-sm m-r-sm">{{::workflow.id}}</span>
+            </a>
+            {{::workflow.name}}
+        </h2>
+        <div class="container-flexbox" style="justify-content: center;">
+            <div class="m-sm m-r-lg">
+                <img ng-src="{{::workflow.icon}}" style="height:100px;">
+            </div>
+            <div class="m-sm">
+                <div ng-if="workflow.calendar">
+                    <span class="font-bold m-r-sm">{{'Calandar'|translate}} :</span>
+                    <span class="description">{{::workflow.calendar}}</span>
+                </div>
+                <div ng-if="workflow.bucketName">
+                    <span class="font-bold m-r-sm">{{'Bucket name'|translate}} :</span>
+                    <span>{{::workflow.bucketName}}</span>
+                </div>
+                <div>
+                    <span class="font-bold m-r-sm">{{'Description'|translate}} :</span>
+                    <span class="description">{{::workflow.description.trim()}}</span>
+                </div>
+                <div ng-if="workflow.projectName">
+                    <span class="font-bold m-r-sm">{{'Project name'|translate}} :</span>
+                    <span>{{::workflow.projectName}}</span>
+                </div>
+                <div ng-if="workflow.documentation">
+                    <span class="font-bold m-r-sm">{{'Documentation'|translate}} :</span>
+                    <a ng-href="{{documentationUrlWfa(workflow.documentation)}}" target="_blank">{{::workflow.documentation}}</a>
+                </div>
+                <div ng-if="workflow.commitTime">
+                    <span class="font-bold m-r-sm">{{'Latest update'|translate}} :</span>
+                    <span>{{::workflow.commitTime}}</span>
+                </div>
+                <div ng-if="workflow.userName">
+                    <span class="font-bold m-r-sm">{{'Committed by'|translate}} :</span>
+                    <span>{{::workflow.userName}}</span>
+                </div>
+            </div>
+        </div>
+        <div class="row m-b-xs container-flex w-100" ng-show="workflow.kind === 'Workflow/psa'">
+            <h4 class="col-lg-3 control-label text-right">{{'Label'|translate}}:</h4>
+            <div class="col-lg-4">
+                <input class="form-control" type="text" ng-model="pcaWorkflowLabel">
+            </div>
+        </div>
+        <hr ng-show="workflow.variables.length">
+        <ng-include src="'/automation-dashboard/views/common/workflow-variables.html'"></ng-include>
+    </div>
+    <div class="row fixed-bottom">
+        <hr>
+        <div class="alert alert-success" ng-if="successMessage">
+            {{successMessage}}
+        </div>
+        <div class="alert alert-danger" ng-if="WEsubmissionErrorMessage">
+            {{WEsubmissionErrorMessage}}
+        </div>
+        <div class="col-sm-9 col-sm-offset-3" style="padding-left: 8px;">
+            <button ng-repeat="button in footerTemplate" ng-class="button.className" ng-disabled="button.hasSpinner && isSubmissionGoingOn" ng-click="button.action()">
+                {{::button.title}}
+                <span class="fa fa-spinner fa-spin" ng-show="button.hasSpinner && isSubmissionGoingOn"></span>
+            </button>
+        </div>
+    </div>
+</div>
+</div>

@@ -316,43 +316,44 @@ module.exports = function (grunt) {
                             match: /<!-- beginSubviews-->[\s\S]*<!-- endSubviews-->/g,
                             replacement: function () {
                                 var result = '';
-                                result = '\n<li id="collapse-menu" style="margin-top:-4px;"> <a href="javascript:void(0)" ng-click ="collapseMenu()" style="background-color: #002d66;padding-right: 0px;padding-top: 0px; "><i class="fa fa-angle-double-left pull-right" style="font-size:large;"></i></a></li>'
+                                result = '\n<li id="collapse-menu" style="margin-top:-4px;"> <a href="javascript:void(0)"  ng-click ="collapseMenu()" style="background-color: #002d66;padding-right: 0px;padding-top: 0px; " ><i class="fa fa-angle-double-left pull-right" style="font-size:large;"></i></a></li>'
                                 var cnt = 0;
                                 for (var key in subviewsDefinition) {
                                     if (subviewsDefinition[key].isSubMenuTitle) {
-                                        result += '\n<li>'
+                                        result += '\n<li id="'+subviewsDefinition[key].name+'" ng-show="showParentPortal(\'' + subviewsDefinition[key].name + '\')">'
                                             + '<a style="background-color: #002d66; "><img ng-src="styles/patterns/' + subviewsDefinition[key].nameForUrl + '.png" style="height:20px;padding-right: 6px;">'
                                             +'<span class="nav-label">{{\''+subviewsDefinition[key].name+'\' | translate}}</span><span class="fa arrow"></span></span></a>';
                                             result = result + '<ul class="nav nav-second-level collapse">';
                                             for(var subMenuKey in subviewsDefinition){
                                                 if( subviewsDefinition[subMenuKey].subMenuTitle == subviewsDefinition[key].nameForUrl ){
                                                     cnt++;
-                                                    result = result + '<li ui-sref-active="active" ng-click ="changeFavicon(\'' + subviewsDefinition[subMenuKey].subMenuTitle +'\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[subMenuKey].nameForUrl + '\']"><a ui-sref="portal.subview' + cnt + '">{{\''+ subviewsDefinition[subMenuKey].name + '\' | translate}}</a></li>';
+                                                    result = result + '<li ui-sref-active="active" ng-click ="changeFavicon(\'' + subviewsDefinition[subMenuKey].subMenuTitle +'\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[subMenuKey].nameForUrl + '\']"><a ui-sref="portal.subview'
+                                                     + cnt + '" uib-tooltip="{{\''+ subviewsDefinition[subMenuKey].tooltip +'\' | translate}}" tooltip-append-to-body="true" tooltip-placement="right">{{\''+ subviewsDefinition[subMenuKey].name + '\' | translate}}</a></li>';
                                                 }
                                             }
                                             result = result + '\n</ul>';
                                      } else if( !subviewsDefinition[key].isSubMenuItem ){
                                                 cnt++;
                                                 if(subviewsDefinition[key].name === "Catalog"){
-                                                    result += '\n<li class="catalog-portal" ui-sref-active="active" ng-click ="changeFavicon(\'catalog-portal\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">' +
-                                                        '\n<a ui-sref="portal.subview' + cnt + '"><img src="styles/patterns/catalog-portal.png" style="height:20px;padding-right: 4px;"> <span class="nav-label">{{\''+
+                                                    result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'catalog-portal\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">' +
+                                                        '\n<a ui-sref="portal.subview' + cnt + '" uib-tooltip="{{\''+ subviewsDefinition[key].tooltip +'\' | translate}}" tooltip-append-to-body="true" tooltip-placement="right"><img src="styles/patterns/catalog-portal.png" style="height:20px;padding-right: 4px;"> <span class="nav-label">{{\''+
                                                          subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                                 } else if(subviewsDefinition[key].name === "Event Orchestration"){
                                                     result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'event-orchestration\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
-                                                        + '\n<a ui-sref="portal.subview' + cnt + '"><img src="styles/patterns/event-orchestration.png" style="height:20px;padding-right: 4px;"> <span class="nav-label">{{\''+
+                                                        + '\n<a ui-sref="portal.subview' + cnt + '" uib-tooltip="{{\''+ subviewsDefinition[key].tooltip +'\' | translate}}" tooltip-append-to-body="true" tooltip-placement="right"><img src="styles/patterns/event-orchestration.png" style="height:20px;padding-right: 4px;"> <span class="nav-label">{{\''+
                                                          subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                                 } else if(subviewsDefinition[key].name === "Service Automation"){
-                                                    result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'service-automation\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
-                                                        + '\n<a ui-sref="portal.subview' + cnt + '"><img src="styles/patterns/service-automation.png" style="height:20px;padding-right: 4px;"> <span class="nav-label">{{\''+
+                                                    result += '\n<li ui-sref-active="active"  ng-click ="changeFavicon(\'service-automation\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
+                                                        + '\n<a ui-sref="portal.subview' + cnt + '" uib-tooltip="{{\''+ subviewsDefinition[key].tooltip +'\' | translate}}"  tooltip-append-to-body="true" tooltip-placement="right"><img src="styles/patterns/service-automation.png" style="height:20px;padding-right: 4px;"> <span class="nav-label">{{\''+
                                                          subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                                 } else if(subviewsDefinition[key].name === "Notifications"){
                                                     result += '\n<li ui-sref-active="active" ng-click ="changeFavicon(\'notification-portal\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
-                                                        + '\n<a ui-sref="portal.subview' + cnt + '"><img src="styles/patterns/notification-portal.png" style="height:20px;padding-right: 4px;"> <span class="nav-label">{{\''+
+                                                        + '\n<a ui-sref="portal.subview' + cnt + '" uib-tooltip="{{\''+ subviewsDefinition[key].tooltip +'\' | translate}}"  tooltip-append-to-body="true" tooltip-placement="right"><img src="styles/patterns/notification-portal.png" style="height:20px;padding-right: 4px;"> <span class="nav-label">{{\''+
                                                          subviewsDefinition[key].name+ '\' | translate}}' +
-                                                        '<div ng-show="nbNewNotifications" id="new-notifications-label" style="background:#d9534f;color:white;border-radius:10px;text-align:center;margin-left: 5px;padding: 0px 5px;">{{nbNewNotifications}}</div></span> </a>\n</li>';
+                                                        '<div ng-show="nbNewNotifications" id="new-notifications-label" style="background:#d9534f;color:white;border-radius:10px;text-align:center;margin-left: 5px;padding: 0px 5px;display:-webkit-inline-box;">{{nbNewNotifications}}</div></span> </a>\n</li>';
                                                 } else {
                                                     result += '\n<li ui-sref-active="active" ng-click="changeFavicon(\'automation_dashboard_30\')" ng-if="portalsAccessPermission[\'' + subviewsDefinition[key].nameForUrl + '\']">'
-                                                        + '\n<a ui-sref="portal.subview' + cnt + '"><img src="styles/patterns/automation_dashboard_30.png" style="height:20px;"> <span class="nav-label">{{\''+
+                                                        + '\n<a ui-sref="portal.subview' + cnt + '" uib-tooltip="{{\''+ subviewsDefinition[key].tooltip +'\' | translate}}"  tooltip-append-to-body="true" tooltip-placement="right"><img src="styles/patterns/automation_dashboard_30.png" style="height:20px;"> <span class="nav-label">{{\''+
                                                          subviewsDefinition[key].name+ '\' | translate}}</span> </a>\n</li>';
                                                 }
                                        }
@@ -424,7 +425,7 @@ module.exports = function (grunt) {
                         flatten: true,
                         src: ['<%= inspinia.app %>/templates_versions/common/index.html'],
                         dest: '<%= inspinia.app %>/index.html'
-                    },
+                    }
                 ]
             }
         },

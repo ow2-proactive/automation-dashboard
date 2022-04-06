@@ -1,0 +1,132 @@
+<div ng-repeat="(key, groupVariables) in workflow.variables | filter: filterVariables |  groupBy: 'group'">
+    <span class="font-bold" style="margin-left:20px;text-decoration:underline" ng-if="key">{{::key}}</span>
+    <span class="font-bold" style="margin-left:20px;text-decoration:underline" ng-if="!key">Main Variables</span>
+    <div class="row m-b-xs container-flex w-100" ng-repeat="variable in groupVariables">
+        <label class="col-md-3 control-label text-right">{{::variable.name}}</label>
+        <div class="col-md-4"
+             ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:boolean') ==0">
+            <div class="radio-div">
+                <label class="radio-inline">
+                    <input type="radio" name="{{variable.name}}" ng-model="variable.value"
+                           value="true" ng-change="validate()"/>{{'TRUE'|translate}}
+                </label>
+                <label class="radio-inline">
+                    <input type="radio" name="{{variable.name}}" ng-model="variable.value"
+                           value="false" ng-change="validate()"/>{{'FALSE'|translate}}
+                </label>
+            </div>
+        </div>
+        <div class="col-md-4"
+             ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:list')==0">
+            <select class="form-control"
+                    n-init="variable.value = modelToList(variable.resolvedModel)[0]"
+                    ng-model="variable.value"
+                    ng-options="opt for opt in modelToList(variable.resolvedModel)"
+                    ng-change="validate()">
+            </select>
+        </div>
+        <div class="col-md-4"
+             ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:datetime')== 0"
+             ng-init=" dateScope = modelToDateScope(variable.resolvedModel)">
+            <div class="input-group"
+                 moment-picker="variable.value"
+                 format="{{modelToDateFormat(variable.resolvedModel)}}"
+                 min-date="dateScope.min"
+                 max-date="dateScope.max"
+                 locale="en_gb">
+                        <span class="input-group-addon">
+                            <i class="fa fa-calendar"></i>
+                        </span>
+                <input class="form-control"
+                       placeholder="Select a date"
+                       ng-model="variable.value"
+                       ng-model-options="{ updateOn: 'blur' }">
+            </div>
+        </div>
+        <div class="col-md-4"
+             ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:hidden')==0">
+            <input class="form-control" type="password" autocomplete="new-password"
+                   ng-model="variable.value">
+        </div>
+        <div class="col-md-4" ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:credential')==0">
+            <div class="col-md-10" style="padding-left: 0px;">
+                <input class="form-control" type="text" ng-model="variable.value">
+            </div>
+            <div class="col-md-1">
+                <button title="{{'Manage third-party credentials'|translate}}"
+                        id="third-party-credential-button" class="btn fa fa-key"
+                        style="background-color:Transparent"
+                        ng-click="manageThirdPartyCredentials(variable)"></button>
+            </div>
+        </div>
+        <div class="col-md-4" ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:global_file') == 0">
+            <div class="col-md-10" style="padding-left: 0px;">
+                <input class="form-control" type="text" ng-model="variable.value">
+            </div>
+            <div class="col-md-1">
+                <button title="{{'Browse Global Space files, Upload, and Select one file'|translate}}"
+                        class="global-file-button btn fa fa-folder-open-o"
+                        value="{{variable.name}}" style="background-color:Transparent"
+                        ng-click="manageFiles(variable, 'global', false)"></button>
+            </div>
+        </div>
+        <div class="col-md-4" ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:user_file') == 0">
+            <div class="col-md-10" style="padding-left: 0px;">
+                <input class="form-control" type="text" ng-model="variable.value">
+            </div>
+            <div class="col-md-1">
+                <button title="{{'Browse User Space files, Upload, and Select one file'|translate}}"
+                        class="user-file-button btn fa fa-folder-open-o" value="{{variable.name}}"
+                        style="background-color:Transparent"
+                        ng-click="manageFiles(variable, 'user', false)"></button>
+            </div>
+        </div>
+        <div class="col-md-4" ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:global_folder') == 0">
+            <div class="col-md-10" style="padding-left: 0px;">
+                <input class="form-control" type="text" ng-model="variable.value">
+            </div>
+            <div class="col-md-1">
+                <button title="{{'Browse, Upload Global Space files, and Select one folder'|translate}}"
+                        class="global-folder-button btn fa fa-folder-open-o"
+                        value="{{variable.name}}" style="background-color:Transparent"
+                        ng-click="manageFiles(variable, 'global', true)"></button>
+            </div>
+        </div>
+        <div class="col-md-4" ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:user_folder') == 0">
+            <div class="col-md-10" style="padding-left: 0px;">
+                <input class="form-control" type="text" ng-model="variable.value">
+            </div>
+            <div class="col-md-1">
+                <button title="{{'Browse, Upload User Space files, and Select one folder'|translate}}"
+                        class="user-folder-button btn fa fa-folder-open-o"
+                        value="{{variable.name}}" style="background-color:Transparent"
+                        ng-click="manageFiles(variable, 'user', true)"></button>
+            </div>
+        </div>
+        <div class="col-md-4" ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:catalog_object') == 0">
+            <div class="col-md-10" style="padding-left: 0px;">
+                <input class="form-control" type="text" ng-model="variable.value">
+            </div>
+            <div class="col-md-1">
+                <button title="{{'Browse Catalog Objects and Select one'|translate}}"
+                        class="catalog-objects-button btn" value="{{variable.name}}"
+                        style="background-color:Transparent"
+                        ng-click="selectCatalogObjectVar(variable, variable.resolvedModel)">
+                    <img src="styles/patterns/catalog-portal.png" height="20">
+                </button>
+            </div>
+        </div>
+        <div class="col-md-4" ng-if="!variable.resolvedModel || !isSpecialUIModel(variable)">
+            <input class="form-control" type="text" ng-model="variable.value">
+        </div>
+        <div class="col-md-5">
+            <p ng-bind-html="variable.description"></p>
+        </div>
+    </div>
+</div>
+<div class="checkbox" ng-show="workflow.variables.length && isVariablesIncludeAdvancedVar(workflow.variables)" style="text-align:center">
+    <label>
+        <input type="checkbox" ng-model="$parent.advancedVariables" ng-change="toggleAdvancedVariables()">
+        {{'Advanced Variables'|translate}}
+    </label>
+</div>
