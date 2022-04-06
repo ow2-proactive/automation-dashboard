@@ -171,9 +171,10 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
         $('#selected-upload-file').click();
     }
 
-    $scope.fileSelected = function(files) {
-        var selectedFile = files[0];
-        if (selectedFile) {
+    $scope.fileSelected = function() {
+        var files = event.target.files;
+        if (files && files.length) {
+            var selectedFile = files[0];
             var pathname = $scope.currentPath + selectedFile.name;
             if (selectedFile.name.includes(':')) {
                 UtilsFactory.displayTranslatedErrorMessage('Oops!!!', ['Failed to upload the file ', selectedFile.name, ':', 'it should not contain colon.']);
@@ -185,6 +186,8 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                     $scope.refreshFiles();
                 }, function () {});
         }
+        // clean up the value to allow the user to upload twice the file with same name, otherwise the function won't be triggered.
+        event.target.value = '';
     }
 
     $scope.createFolder = function() {
@@ -360,3 +363,20 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
 
     $scope.refreshFiles();
 });
+
+function inputFileChange($parse) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            var onChangeHandler = $parse(attrs.inputFileChange);
+            element.bind('change', function() {
+                scope.$apply(function() {
+                    onChangeHandler(scope);
+                })
+            });
+        }
+    };
+}
+
+angular.module('workflow-variables')
+    .directive('inputFileChange', inputFileChange);
