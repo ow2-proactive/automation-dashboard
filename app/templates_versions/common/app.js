@@ -2,7 +2,7 @@
  * INSPINIA - Responsive Admin Theme
  *
  */
-(function () {
+(function() {
     angular.module('inspinia', [
         'ui.router', // Routing
         'ui.bootstrap', // Bootstrap
@@ -27,20 +27,20 @@
         'gantt.corner'
     ])
         .config(['momentPickerProvider',
-            function (momentPickerProvider) {
+            function(momentPickerProvider) {
                 momentPickerProvider.options({
                     minutesFormat: 'HH:mm'
                 });
             }
         ])
         .config(['calendarConfig',
-            function (calendarConfig) {
+            function(calendarConfig) {
                 calendarConfig.allDateFormats.moment.date.hour = 'HH:mm';
                 calendarConfig.showTimesOnWeekView = true;
             }
         ])
         .config(['$compileProvider',
-            function ($compileProvider) {
+            function($compileProvider) {
                 $compileProvider.debugInfoEnabled(false);
             }
         ]);
