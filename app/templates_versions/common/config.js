@@ -45,14 +45,14 @@ function config($stateProvider, $urlRouterProvider) {
 angular
     .module('inspinia')
     .config(config)
-    .run(function ($rootScope, $state, $interval, $http, $location) {
+    .run(function($rootScope, $state, $interval, $http, $location) {
         $rootScope.$state = $state;
         $rootScope.$interval = $interval;
     });
 
 angular
     .module('inspinia')
-    .config(function ($httpProvider) {
+    .config(function($httpProvider) {
         $httpProvider.defaults.headers.common = {};
         $httpProvider.defaults.headers.post = {};
         $httpProvider.defaults.headers.put = {};
@@ -64,13 +64,13 @@ angular
 
 angular
     .module('inspinia')
-    .run(function ($rootScope, $state, $http, $location) {
-        $rootScope.$on('$locationChangeStart', function (event) {
+    .run(function($rootScope, $state, $http, $location) {
+        $rootScope.$on('$locationChangeStart', function(event) {
             if (!localStorage['pcaServiceUrl'] || !localStorage['schedulerRestUrl'] || !localStorage['notificationServiceUrl'] || !localStorage['catalogServiceUrl'] || !localStorage['appCatalogWorkflowsUrl'] || !localStorage['appCatalogBucketsUrl'] || !localStorage['configViews'] || !localStorage['rmRestUrl'] || !localStorage['restUrl']) {
                 getProperties($http, $location);
             }
             var myDataPromise = isSessionValide($http, getSessionId(), $location);
-            myDataPromise.then(function (result) {
+            myDataPromise.then(function(result) {
                 if (!result && $location.$$url != '/login') {
                     event.preventDefault();
                     $rootScope.$broadcast('event:StopRefreshing');

@@ -352,6 +352,23 @@ function showDropdownFromTemplate($document, $timeout, $uibPosition) {
 }
 
 /**
+* Upload the file, call the function specified in "input-file-change" attribute on change event.
+*/
+function inputFileChange($parse, $timeout) {
+    return {
+        restrict: 'A',
+        link: function (scope, element, attrs) {
+            var onChangeHandler = $parse(attrs.inputFileChange);
+            element.bind('change', function() {
+                $timeout (function () {
+                    onChangeHandler(scope);
+                });
+            });
+        }
+    };
+}
+
+/**
  * Displays a tooltip that shows the whole text of a truncated element (by ellipsis or else)
  * Requires using a "tooltip-enable=true" attribute and set by default to true.
  * @returns {{link: link, restrict: string}}
@@ -402,4 +419,5 @@ angular
     .directive('slimScroll', slimScroll)
     .directive('backTop', backToTop)
     .directive('showDropdownFromTemplate', showDropdownFromTemplate)
+    .directive('inputFileChange', inputFileChange)
     .directive('ellipsisTooltip', ellipsisTooltip);
