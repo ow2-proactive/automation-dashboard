@@ -171,8 +171,9 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
         $('#selected-upload-file').click();
     }
 
-    $scope.fileSelected = function(files) {
-        var selectedFile = files[0];
+    $scope.fileSelected = function() {
+        var element = document.getElementById('selected-upload-file');
+        var selectedFile = element.files[0];
         if (selectedFile) {
             var pathname = $scope.currentPath + selectedFile.name;
             if (selectedFile.name.includes(':')) {
@@ -185,6 +186,8 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                     $scope.refreshFiles();
                 }, function () {});
         }
+        // clean up the value to allow the user to upload twice the file with same name, otherwise the function won't be triggered.
+        element.value = '';
     }
 
     $scope.createFolder = function() {
