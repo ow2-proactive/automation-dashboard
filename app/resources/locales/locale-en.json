@@ -126,5 +126,6 @@
   "You are about to download the folder": "You are about to download the folder",
   "Your": "Your",
   "Filter:": "Filter:",
-  "Filter files according to a glob pattern, e.g. *.xml, image*": "Filter files according to a glob pattern, e.g. *.xml, image*"
+  "Filter files according to a glob pattern, e.g. *.xml, image*": "Filter files according to a glob pattern, e.g. *.xml, image*",
+  "Search": "Search"
 }
