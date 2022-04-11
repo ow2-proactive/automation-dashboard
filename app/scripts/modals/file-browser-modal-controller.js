@@ -229,14 +229,18 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
         });
     }
 
-    $scope.filterFiles = function(event) {
+    $scope.enterFilterFiles = function(event) {
      if (event.keyCode === 13) {
-            $scope.filterValue = document.getElementById("filter-files").value;
-             if ($scope.filterValue === "") {
-                $scope.filterValue = "*";
-             }
-            $scope.refreshFiles();
+            $scope.filterFiles();
         }
+    }
+
+    $scope.filterFiles = function() {
+         $scope.filterValue = document.getElementById("filter-files").value;
+         if ($scope.filterValue === "") {
+            $scope.filterValue = "*";
+         }
+        $scope.refreshFiles();
     }
 
     $scope.downloadFile = function() {
