@@ -38,7 +38,7 @@
                        ng-model="filterValue"
                        ng-keyup="enterFilterFiles($event)">
             </label>
-            <button ng-click="filterFiles()" class="btn btn-primary" aria-hidden="true">Search</button>
+            <button ng-click="filterFiles()" class="btn btn-primary" aria-hidden="true">{{'Search'|translate}}</button>
 
             <div class="pull-right container-flex">
                 <div uib-dropdown class="uploading-files-dropdown container-flex m-r-sm progress-btn active" ng-if="$root.uploadingFiles && $root.uploadingFiles.length">
