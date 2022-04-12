@@ -126,5 +126,6 @@
   "You are about to download the folder": "Você está prestes a baixar a pasta",
   "Your": "Seu",
   "Filter:": "Filtro:",
-  "Filter files according to a glob pattern, e.g. *.xml, image*": "Filtre os arquivos de acordo com o glob pattern, por exemplo *.xml, imagem*"
+  "Filter files according to a glob pattern, e.g. *.xml, image*, **/*.xml": "Filtre os arquivos de acordo com o glob pattern, por exemplo *.xml, imagem*, **/*.xml",
+  "Search": "Procurar"
 }
