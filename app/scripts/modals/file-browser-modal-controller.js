@@ -236,7 +236,6 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     }
 
     $scope.filterFiles = function() {
-         $scope.filterValue = document.getElementById("filter-files").value;
          if ($scope.filterValue === "") {
             $scope.filterValue = "*";
          }
