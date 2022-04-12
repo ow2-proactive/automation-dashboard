@@ -30,14 +30,15 @@
                 <i class="fa fa-trash"></i>
             </button>
 
-            <label style="margin-left:200px; position:relative; display:inline-block;" uib-tooltip="{{'Filter files according to a glob pattern, e.g. *.xml, image*'|translate}}">
+            <label style="margin-left:200px; position:relative; display:inline-block;" uib-tooltip="{{'Filter files according to a glob pattern, e.g. *.xml, image*, **/*.xml'|translate}}">
                 {{'Filter:'|translate}}
                 <input type="text"
                        id="filter-files"
                        style="width:400px; position:relative; display:inline-block;"
                        ng-model="filterValue"
-                       ng-keyup="filterFiles($event)">
+                       ng-keyup="enterFilterFiles($event)">
             </label>
+            <button ng-click="filterFiles()" class="btn btn-primary" aria-hidden="true">{{'Search'|translate}}</button>
 
             <div class="pull-right container-flex">
                 <div uib-dropdown class="uploading-files-dropdown container-flex m-r-sm progress-btn active" ng-if="$root.uploadingFiles && $root.uploadingFiles.length">
