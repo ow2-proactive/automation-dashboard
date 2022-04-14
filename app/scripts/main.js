@@ -957,7 +957,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         //psa workflow label
         $scope.pcaWorkflowLabel = '';
         // show advanced variables
-        $scope.advancedVariables = UtilsFactory.getUserPreference('submissionView.advancedVariables');
+        $scope.advancedVariables = false;
     };
 
     $scope.documentationUrlWfa = function (url) {
@@ -1009,7 +1009,6 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 $scope.WEsubmissionErrorMessage = response.errorMessage;
                 $scope.successMessage = '';
             }
-            $scope.isSubmissionGoingOn = false
         })
     }
     // use : when clicking on the button submit
@@ -1037,7 +1036,6 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 $scope.WEsubmissionErrorMessage = response.errorMessage;
                 $scope.successMessage = '';
             }
-            $scope.isSubmissionGoingOn = false
         })
     };
 
@@ -1132,6 +1130,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
      * Requests the scheduler to resubmit a job then displays a confirmation toast.
      */
     const reSubmitJob = function (id, variables) {
+        $scope.isSubmissionGoingOn = true;
         WESchedulerService.reSubmitJob(id, variables)
             .success(function (response) {
                 //close the Submit Workflow Panel
@@ -1328,10 +1327,6 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
             return true;
         }
         return false;
-    }
-
-    $scope.toggleAdvancedVariables = function () {
-        UtilsFactory.setUserPreference('submissionView.advancedVariables', $scope.advancedVariables);
     }
 
     $scope.isVariablesIncludeAdvancedVar = function (variables) {
