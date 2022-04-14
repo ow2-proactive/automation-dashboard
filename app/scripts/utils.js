@@ -3,7 +3,6 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     const catalogUrlPrefix = $location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/catalog/buckets/';
     const defaultUserPreferences = {
         submissionView: {
-            advancedVariables: false,
             selectedBucketName: '',
             showPSAWorkflowsOnly: false,
             toggleListBox: {
