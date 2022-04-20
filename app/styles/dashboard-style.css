@@ -844,6 +844,11 @@ md-virtual-repeat-container:-webkit-scrollbar {
     width: 100%;
 }
 
+.swal-style {
+    max-height: calc(100% - 200px);
+    overflow-y: scroll;
+}
+
 .last-wizard-step-content {
     max-height: calc(100% - 120px) ! important;
 }

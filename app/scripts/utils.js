@@ -368,7 +368,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     }
 
     function displayTranslatedMessage(type, titleToTranslate, messageToTranslate) {
-        var swalContent = {html: true};
+        var swalContent = {html: true, customClass: 'swal-style'};
 
         if (titleToTranslate !== undefined) {
             if (!Array.isArray(titleToTranslate)) {
