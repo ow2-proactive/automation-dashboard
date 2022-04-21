@@ -229,12 +229,6 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
         });
     }
 
-    $scope.enterFilterFiles = function(event) {
-     if (event.keyCode === 13) {
-            $scope.filterFiles();
-        }
-    }
-
     $scope.filterFiles = function() {
          if ($scope.filterValue === "") {
             $scope.filterValue = "*";
