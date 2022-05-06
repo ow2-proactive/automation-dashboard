@@ -368,6 +368,20 @@ function inputFileChange($parse, $timeout) {
     };
 }
 
+function copyClipBoard() {
+        return {
+            restrict: 'A',
+            link:link
+        };
+        function link(scope, element, attrs) {
+            element.bind('click',function(){
+                var copyInput = document.getElementById('direct-object-url-input');
+                copyInput.select(); //select the text area
+                document.execCommand("copy");
+            });
+        }
+
+}
 /**
  * Displays a tooltip that shows the whole text of a truncated element (by ellipsis or else)
  * Requires using a "tooltip-enable=true" attribute and set by default to true.
@@ -420,4 +434,5 @@ angular
     .directive('backTop', backToTop)
     .directive('showDropdownFromTemplate', showDropdownFromTemplate)
     .directive('inputFileChange', inputFileChange)
-    .directive('ellipsisTooltip', ellipsisTooltip);
+    .directive('ellipsisTooltip', ellipsisTooltip)
+    .directive('copyClipBoard', copyClipBoard);
