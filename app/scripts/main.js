@@ -1049,8 +1049,8 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 encryptValues(response)
                 // create association
                 $scope.$parent.createAssociation($scope.workflow.name, bucketName, $scope.workflow.variables)
-                    .success(function () {
-                        $scope.updatePlannedJobsList();
+                    .success(function (res) {
+                        $scope.updatePlannedJobsListAndSelect(res.id);
                         $rootScope.$broadcast('event:updatePlannedJobsCount');
                         $scope.desectWorkflowInModal();
                         $scope.toggleOpenSubmitJobPanel(false);
