@@ -1041,6 +1041,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
 
     // create new association
     function createNewCdWfAssociation() {
+        $scope.isSubmissionGoingOn = true;
         const bucketName = $scope.workflow['bucketName'];
         // Validate + create association if applicable
         validateWorkflow(function (response) {

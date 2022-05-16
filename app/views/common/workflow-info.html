@@ -1,4 +1,4 @@
-<div class="ibox-content" ng-controller="VariablesController">
+<div class="ibox-content" ng-controller="VariablesController" style="padding-bottom:50px">
     <div style="max-height:calc(100% - 70px);overflow-y: auto;overflow-x: hidden;" ng-class="{'last-wizard-step-content':WEsubmissionErrorMessage || successMessage}">
         <h2 class="text-center">
             <a ng-href="/scheduler/?job={{::workflow.id}}" target="/scheduler/" title="{{'Open job in scheduler portal'|translate}}" ng-if="workflow.id">
@@ -53,10 +53,10 @@
     <div class="row fixed-bottom">
         <hr>
         <div class="alert alert-success" ng-if="successMessage">
-            {{successMessage}}
+            {{ successMessage.length > 300 ? (successMessage | limitTo: 300) + "..." : successMessage }}
         </div>
         <div class="alert alert-danger" ng-if="WEsubmissionErrorMessage">
-            {{WEsubmissionErrorMessage}}
+            {{ WEsubmissionErrorMessage.length > 300 ? (WEsubmissionErrorMessage | limitTo: 300) + "..." : WEsubmissionErrorMessage }}
         </div>
         <div class="col-sm-9 col-sm-offset-3" style="padding-left: 8px;">
             <button ng-repeat="button in footerTemplate" ng-class="button.className" ng-disabled="button.hasSpinner && isSubmissionGoingOn" ng-click="button.action()">
