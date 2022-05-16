@@ -127,6 +127,7 @@
 .footer {
     position: fixed !important;
     z-index: 1000;
+    height:40px
 }
 
 .no-text-overflow {
