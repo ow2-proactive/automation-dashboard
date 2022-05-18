@@ -1081,8 +1081,8 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 encryptValues(response)
                 // Check Successful - proceed to edit
                 $scope.$parent.updateCdWfAssociation($scope.workflow.variables)
-                    .success(function () {
-                        $scope.updatePlannedJobsList();
+                    .success(function (res) {
+                        $scope.updatePlannedJobsListAndSelect(res.id);
                         toastr.success('Association successfully updated', $scope.toastrConfig);
                         $scope.updateLastSelectedWorkflow();
                         $scope.isSubmissionGoingOn = false;
