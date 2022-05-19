@@ -1027,13 +1027,17 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                     .success(function (submitResponse) {
                         //close the Submit Workflow Panel
                         $scope.$parent.toggleOpenSubmitJobPanel(false);
+                        $scope.isSubmissionGoingOn = false;
                         toastr.success('Your Workflow has been submitted successfully' + ', Job Id: ' + JSON.stringify(submitResponse.id), $scope.toastrConfig);
                     })
-                    .error(function () {
+                    .error(function (error) {
+                        $scope.WEsubmissionErrorMessage = error.errorMessage;
+                        $scope.isSubmissionGoingOn = false;
                         toastr.error('An error occurred while submitting your workflow.' + '\n' + 'Please check you workflows and retry', $scope.toastrConfig)
                     })
             } else {
                 $scope.WEsubmissionErrorMessage = response.errorMessage;
+                $scope.isSubmissionGoingOn = false;
                 $scope.successMessage = '';
             }
         })
@@ -1055,7 +1059,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                         $rootScope.$broadcast('event:updatePlannedJobsCount');
                         $scope.desectWorkflowInModal();
                         $scope.toggleOpenSubmitJobPanel(false);
-                        toastr.success('New association successfully created', $scope.toastrConfig);
+                        displaySuccessMessage('New association successfully created');
                     })
                     .error(function (response) {
                         $scope.errorMessage = response.errorMessage;
@@ -1083,7 +1087,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 $scope.$parent.updateCdWfAssociation($scope.workflow.variables)
                     .success(function (res) {
                         $scope.updatePlannedJobsListAndSelect(res.id);
-                        toastr.success('Association successfully updated', $scope.toastrConfig);
+                        displaySuccessMessage('Association successfully updated');
                         $scope.updateLastSelectedWorkflow();
                         $scope.isSubmissionGoingOn = false;
                         $scope.toggleOpenSubmitJobPanel(false);
@@ -1137,9 +1141,11 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 //close the Submit Workflow Panel
                 $scope.$parent.toggleOpenSubmitJobPanel(false);
                 toastr.success('Job ' + id + ' resubmitted successfully!', $scope.toastrConfig);
+                $scope.isSubmissionGoingOn = false;
             })
             .error(function (response) {
                 $scope.WEsubmissionErrorMessage = response.errorMessage;
+                $scope.isSubmissionGoingOn = false;
                 console.error('Could not resubmit job ' + id + '! ' + response);
             });
     };
@@ -1151,21 +1157,21 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         WESchedulerService.reSubmitJob(id, variables)
             .success(function () {
                 WESchedulerService.killJob(id)
-                    .success(function (response) {
-                        if (response) {
+                    .success(function (res) {
+                        if (res) {
                             toastr.success('Job ' + id + ' killed and resubmitted successfully!', $scope.toastrConfig)
                         } else {
                             toastr.warning('Could not kill job ' + id + '!', $scope.toastrConfig)
                         }
+                        //close the Submit Workflow Panel
+                        $scope.$parent.toggleOpenSubmitJobPanel(false);
                         $scope.isSubmissionGoingOn = false;
                     })
-                    .error(function (response) {
-                        console.error('Could not kill job ' + id + '! ' + response)
-                        toastr.error((response.errorMessage ? response.errorMessage : 'Something went wrong!'), 'Could not kill job ' + id + '!', $scope.toastrConfig)
+                    .error(function (error) {
+                        $scope.WEsubmissionErrorMessage = error.errorMessage;
+                        $scope.isSubmissionGoingOn = false;
+                        console.error('Could not kill job ' + id + '! ' + res)
                     });
-                //close the Submit Workflow Panel
-                $scope.$parent.toggleOpenSubmitJobPanel(false);
-                $scope.isSubmissionGoingOn = false;
             })
             .error(function (response) {
                 $scope.WEsubmissionErrorMessage = response.errorMessage;
@@ -1348,4 +1354,8 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
             $scope.toggleOpenSubmitJobPanel(false);
         }
     })
+
+    function displaySuccessMessage(message) {
+        UtilsFactory.displayTranslatedMessage('success', 'Operation Successful !', message);
+    }
 });
