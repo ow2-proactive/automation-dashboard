@@ -860,7 +860,9 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
         $scope.selectedBucketName = UtilsFactory.getUserPreference('submissionView.selectedBucketName')
         loadBuckets();
     }
-
+    $scope.hideEmptyObject = function (bucket){
+        return bucket.objectCount > 0;
+    }
     $scope.findImageUrl = function (selectedWorkflow) {
         var icon = UtilsFactory.getByKey('generic_information', 'workflow.icon', selectedWorkflow.object_key_values);
         return icon === '' ? 'styles/patterns/img/wf-icons/wf-default-icon.png' : icon
