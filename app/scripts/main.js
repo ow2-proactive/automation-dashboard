@@ -1049,7 +1049,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         const bucketName = $scope.workflow['bucketName'];
         // Validate + create association if applicable
         validateWorkflow(function (response) {
-            if (response.valid === true) {
+            if (response.valid) {
                 // the values of pa:hidden variables shouldn't be decrypted in Workflow Description
                 encryptValues(response)
                 // create association
@@ -1062,14 +1062,15 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                         displaySuccessMessage('New association successfully created');
                     })
                     .error(function (response) {
+                        $scope.isSubmissionGoingOn = false
                         $scope.errorMessage = response.errorMessage;
                         console.error('Error while creating calendar workflow association ' + ':', angular.toJson(response));
                     });
             } else {
+                $scope.isSubmissionGoingOn = false
                 $scope.WEsubmissionErrorMessage = response.errorMessage;
                 $scope.successMessage = '';
             }
-            $scope.isSubmissionGoingOn = false
         })
     }
 
