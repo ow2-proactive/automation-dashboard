@@ -54,7 +54,7 @@
                      style="overflow-y:auto;overflow-x:hidden; height:calc(100vh - 310px)">
                     <table class="table table-hover">
                         <tbody>
-                        <tr ng-repeat="bucket in bucketsMetadataList | orderBy: OrderByBucketNameConfig.comparatorLogic"
+                        <tr ng-repeat="bucket in bucketsMetadataList | filter: hideEmptyObject  | orderBy: OrderByBucketNameConfig.comparatorLogic"
                             id="bucket{{bucket.name}}"
                             ng-class="{'active': bucket.name==selectedBucket.name}"
                             class="clickable-element">
