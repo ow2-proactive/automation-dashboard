@@ -845,9 +845,14 @@ md-virtual-repeat-container:-webkit-scrollbar {
     width: 100%;
 }
 
+.ng-hide.ng-hide-animate{
+    display: none !important;
+}
+
+
 .swal-style {
     max-height: calc(100% - 200px);
-    overflow-y: scroll;
+    overflow-y: auto;
 }
 
 .last-wizard-step-content {
