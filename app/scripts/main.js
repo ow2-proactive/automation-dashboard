@@ -714,7 +714,6 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
         // Fetch defaults or cached values
         $scope.WEUserPreferences = UtilsFactory.loadUserPreferences();
         $scope.selectedBucketName = UtilsFactory.getUserPreference('submissionView.selectedBucketName');
-        $scope.showPSAWorkflowsOnly = UtilsFactory.getUserPreference('submissionView.showPSAWorkflowsOnly');
         $scope.orderByColumnConfig = UtilsFactory.getUserPreference('submissionView.orderByColumnConfig.workflows');
         $scope.OrderByBucketNameConfig = UtilsFactory.getUserPreference('submissionView.orderByColumnConfig.buckets');
         $scope.toggleListBox = UtilsFactory.getUserPreference('submissionView.toggleListBox');
@@ -733,7 +732,7 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
 
     function updateWorkflowsMetadataList() {
         $scope.isObjectsLoading = true;
-        var kind = $scope.showPSAWorkflowsOnly ? 'Workflow/psa' : 'Workflow/standard,Workflow/psa'
+        var kind = $scope.showPSAWorkflowsOnly ? 'Workflow/psa' : 'Workflow/standard'
         WECatalogService.getWorkflowsMetadataList($scope.workflowNameQuery, $scope.selectedBucket.name, kind).then(function (response) {
             $scope.workflowsMetadataList = response;
             $timeout(function () {
@@ -789,11 +788,6 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
         UtilsFactory.setUserPreference('submissionView.selectedBucketName', $scope.selectedBucket.name);
         updateWorkflowsMetadataList();
     };
-
-    $scope.filterBucketsByKind = function () {
-        UtilsFactory.setUserPreference('submissionView.showPSAWorkflowsOnly', $scope.showPSAWorkflowsOnly);
-        loadBuckets();
-    }
 
     /**
      * load all buckets with at least one workflow from server
@@ -934,6 +928,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
          **/
         $scope.footerActions = {
             Submit: submit,
+            Launch: submit,
             'Execute Action': submitServicesAndAction,
             Resubmit: function () {
                 reSubmitJob($scope.workflow.id, $scope.workflow.variables);
@@ -980,8 +975,8 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 /*
                 * There are two cases : submit wf or submit action
                 */
-                var transformedVariables = UtilsFactory.getVariablesInKeyValueFormat($scope.workflow.variables);
                 const variables = UtilsFactory.parseEmptyVariablesValue(UtilsFactory.getVariablesInKeyValueFormat($scope.workflow.variables));
+                UtilsFactory.getVariablesInKeyValueFormat($scope.workflow.variables);
                 if ($scope.workflow.hasOwnProperty('isCreationWorkflow') && !$scope.workflow.isCreationWorkflow) {
                     var httpPromise = PCAService.submitActionWorkflow($scope.workflow.serviceInstance.instance_id, bucketName, $scope.workflow.name, variables);
                     httpPromise.then(function () {
@@ -1063,10 +1058,10 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                         $scope.toggleOpenSubmitJobPanel(false);
                         displaySuccessMessage('New association successfully created');
                     })
-                    .error(function (response) {
+                    .error(function (res) {
                         $scope.isSubmissionGoingOn = false
-                        $scope.errorMessage = response.errorMessage;
-                        console.error('Error while creating calendar workflow association ' + ':', angular.toJson(response));
+                        $scope.errorMessage = res.errorMessage;
+                        console.error('Error while creating calendar workflow association ' + ':', angular.toJson(res));
                     });
             } else {
                 $scope.isSubmissionGoingOn = false
@@ -1077,11 +1072,9 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
     }
 
     function updateCdWfAssociation() {
-        const bucketName = $scope.workflow['bucketName'];
         $scope.isSubmissionGoingOn = true;
         $scope.workflowVariables = UtilsFactory.parseEmptyVariablesValue($scope.workflow.variables);
         // check if association is valid
-        var schedulerRestUrl = JSON.parse(localStorage.schedulerRestUrl);
         validateWorkflow(function (response) {
             if (response.valid === true) {
                 // the values of pa:hidden variables shouldn't be decrypted in Workflow Description
@@ -1095,9 +1088,9 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                         $scope.isSubmissionGoingOn = false;
                         $scope.toggleOpenSubmitJobPanel(false);
                     })
-                    .error(function (response) {
-                        console.error('Error while updating calendar workflow association ' + ':', angular.toJson(response));
-                        $scope.WEsubmissionErrorMessage = response.errorMessage;
+                    .error(function (res) {
+                        console.error('Error while updating calendar workflow association ' + ':', angular.toJson(res));
+                        $scope.WEsubmissionErrorMessage = res.errorMessage;
                         $scope.successMessage = '';
                         $scope.resetSelectedWorkflowVariableValues();
                     });
@@ -1112,13 +1105,14 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
     }
 
     // decrypt pa:hidden value
-    function encryptValues(response){
-        angular.forEach($scope.workflow.variables, function (variable){
-          if( response.updatedModels[variable.name] && response.updatedModels[variable.name].toLowerCase() === "pa:hidden" ){
-              variable.value = response.updatedVariables[variable.name];
-          }
+    function encryptValues(response) {
+        angular.forEach($scope.workflow.variables, function (variable) {
+            if (response.updatedModels[variable.name] && response.updatedModels[variable.name].toLowerCase() === 'pa:hidden') {
+                variable.value = response.updatedVariables[variable.name];
+            }
         })
     }
+
     // construct the variables object following this format: {"key":"value", ... }
     function constructVariablesObject(variables) {
         var workflowVariables = {};
@@ -1184,7 +1178,6 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
     }
     // use : When clicking on the button check
     const check = function () {
-        const bucketName = $scope.workflow['bucketName'];
         validateWorkflow(function (response) {
             if (response.valid === true) {
                 $scope.successMessage = 'Check success';
