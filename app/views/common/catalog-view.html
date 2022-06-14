@@ -37,12 +37,6 @@
                        style="font-size: 17px;">
                     </i>
                 </span>
-                <div class="checkbox pull-right" style="margin-top:0px" uib-tooltip="{{(!showPSAWorkflowsOnly ?'Show Service Workflows Only' : 'Show Standard Workflows And Service Workflows')|translate}}">
-                    <label>
-                        <input type="checkbox" ng-model="showPSAWorkflowsOnly" ng-change="filterBucketsByKind()">
-                        {{'Service Workflows Only'|translate}}
-                    </label>
-                </div>
             </div>
             <hr class="hr-line-solid">
             <div class="ibox-content no-borders no-padding" ng-class="{'sk-loading':isBucketsLoading}">
