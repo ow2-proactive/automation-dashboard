@@ -1,6 +1,6 @@
 <div class="ibox-content" ng-controller="VariablesController" style="padding-bottom:50px">
     <div style="max-height:calc(100% - 70px);overflow-y: auto;overflow-x: hidden;" ng-class="{'last-wizard-step-content':WEsubmissionErrorMessage || successMessage}">
-        <h2 class="text-center">
+        <h2 class="text-center" style = "height: 28px; overflow: hidden; text-overflow: ellipsis;">
             <a ng-href="/scheduler/?job={{::workflow.id}}" target="/scheduler/" title="{{'Open job in scheduler portal'|translate}}" ng-if="workflow.id">
                 <span class="job-id container-flex label label-default m-l-sm m-r-sm">{{::workflow.id}}</span>
             </a>
