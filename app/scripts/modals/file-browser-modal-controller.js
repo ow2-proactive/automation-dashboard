@@ -51,8 +51,8 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
         $http.get(url + "?comp=list&includes=" + $scope.filterValue,
             restRequestHeader)
             .success(function (data){
-                $scope.files = $scope.getFilesMetadata(data.fileListing.sort());
-                $scope.directories = $scope.getFilesMetadata(data.directoryListing.sort());
+                $scope.files = $scope.getFilesMetadata(data.fileListing);
+                $scope.directories = $scope.getFilesMetadata(data.directoryListing);
             })
             .error(function (xhr) {
                 var errorMessage = "";
