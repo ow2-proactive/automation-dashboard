@@ -883,3 +883,9 @@ md-virtual-repeat-container:-webkit-scrollbar {
         display: none;
     }
 }
+
+.wf-name-title {
+    height: 28px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
