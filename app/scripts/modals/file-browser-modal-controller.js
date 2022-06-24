@@ -48,11 +48,11 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
             pathname = "%2E"; // root path "." need to be encoded as "%2E"
         }
         var url = dataspaceRestUrl + encodeURIComponent(pathname);
-        $http.get(url + "?comp=list&includes=" + $scope.filterValue,
+        $http.get(url + "?comp=list-metadata&includes=" + $scope.filterValue,
             restRequestHeader)
             .success(function (data){
-                $scope.files = $scope.getFilesMetadata(data.fileListing);
-                $scope.directories = $scope.getFilesMetadata(data.directoryListing);
+                $scope.files = $scope.getFilesMetadata(data.fileListing, data);
+                $scope.directories = $scope.getFilesMetadata(data.directoryListing, data);
             })
             .error(function (xhr) {
                 var errorMessage = "";
@@ -64,28 +64,18 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
             });
     }
 
-    $scope.getFilesMetadata = function(fileNames) {
+    $scope.getFilesMetadata = function(fileNames, response) {
         var filesMetadata = [];
         fileNames.forEach(function(filename, index) {
-            var filePath = $scope.currentPath + filename;
-            $http({
-                url: dataspaceRestUrl + encodeURIComponent(filePath),
-                method: "HEAD",
-                headers: { "sessionid": localStorage['pa.session'] },
-                async: false
-            })
-            .success(function (data, status, headers, config){
-                filesMetadata[index] = {
-                    name: filename,
-                    type: headers('x-proactive-ds-type'),
-                    rights: headers('x-proactive-ds-permissions'),
-                    modified: $scope.toDateInClientFormat(headers('Last-Modified'))
-                };
-                if(filesMetadata[index].type == 'FILE') {
-                    filesMetadata[index].type = headers('Content-Type');
-                    filesMetadata[index].size = UtilsFactory.toReadableFileSize(headers('Content-Length'));
-                }
-            });
+            filesMetadata[index] = {
+                name: filename,
+                type: response.types[filename],
+                rights: response.permissions[filename],
+                modified: $scope.toDateInClientFormat(response.lastModifiedDates[filename])
+            };
+            if(filesMetadata[index].type != 'DIRECTORY') {
+                filesMetadata[index].size = UtilsFactory.toReadableFileSize(response.sizes[filename]);
+            }
         });
         return filesMetadata;
     }
