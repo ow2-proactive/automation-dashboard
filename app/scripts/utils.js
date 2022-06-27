@@ -110,7 +110,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
 
     function getWorkflowMetadata(workflow, label, key) {
         var obj = workflow.object_key_values.find(function (okv) {
-            return okv.label === label & okv.key === key;
+            return okv.label === label && okv.key === key;
         });
         return obj && obj.value;
     }
