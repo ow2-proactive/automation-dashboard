@@ -854,13 +854,16 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
         $scope.selectedBucketName = UtilsFactory.getUserPreference('submissionView.selectedBucketName')
         loadBuckets();
     }
+
     $scope.hideEmptyObject = function (bucket){
         return bucket.objectCount > 0;
     }
+
     $scope.findImageUrl = function (selectedWorkflow) {
         var icon = UtilsFactory.getByKey('generic_information', 'workflow.icon', selectedWorkflow.object_key_values);
         return icon === '' ? 'styles/patterns/img/wf-icons/wf-default-icon.png' : icon
     };
+
     /**
      * This function allows sorting buckets list and workflow lists
      **/
@@ -884,6 +887,10 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
         }
         return UtilsFactory.getWorkflowMetadata(workflow, 'generic_information', 'pca.states') && UtilsFactory.getWorkflowMetadata(workflow, 'generic_information', 'pca.states').includes('VOID');
     };
+
+    $scope.getObjectDescription = function (object){
+        return UtilsFactory.getWorkflowMetadata(object, 'General', 'description')
+    }
 
     // Close the window if ESC key pressed
     $(document).keydown(function (e) {
