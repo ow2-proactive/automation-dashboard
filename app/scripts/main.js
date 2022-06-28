@@ -797,7 +797,7 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
         const sessionIdHeader = {
             headers: {'sessionid': getSessionId()},
             params: {
-                'kind': $scope.showPSAWorkflowsOnly ? 'Workflow/psa' : 'Workflow/standard,Workflow/psa',
+                'kind': $scope.showPSAWorkflowsOnly ? 'Workflow/psa' : 'Workflow/standard',
                 'objectName': $scope.workflowNameQuery
             }
         };
