@@ -889,3 +889,102 @@ md-virtual-repeat-container:-webkit-scrollbar {
     overflow: hidden;
     text-overflow: ellipsis;
 }
+
+.search-input-container {
+    padding: 3px 12px;
+    min-height: 35px;
+    height: auto;
+    border: none;
+    width: 100%;
+}
+
+.search-params-list {
+    padding-left: 0;
+    display: inline;
+    list-style-type: none;
+    font-size: 15px;
+    margin-bottom: 0px;
+}
+
+.search-params-list li {
+    display: inline-flex;
+    padding-top: 2px;
+    padding-bottom: 2px;
+    margin-right: 2px;
+}
+
+.search-params-list li .uib-typeahead-match > a {
+    width: 100%;
+}
+
+.search-params-list li input, .search-params-list li select {
+    border: 2px solid #d1dade;
+    padding: 1px 6px 1px 4px;
+}
+
+.search-params-list li input:focus {
+    border-color: #1aa689;
+    outline: none;
+    background-color: #FFFFFF;
+    color: inherit;
+}
+
+.search-params-list li .label {
+    font-size: 80%;
+    padding: 5px 8px;
+    font-weight: 500;
+    margin-bottom: 1px;
+}
+
+.search-params-list li .label-primary {
+    background-color: #1ab394;
+    border-color: #1ab394;
+    color: #FFFFFF;
+}
+
+.search-params-list li .label-default {
+    background-color: #d1dade;
+}
+
+.search-params-list li .label-title {
+    border-radius: 20px 0px 0px 20px;
+    margin-right: 2px;
+    background-color: #577195d9;
+    font-weight: 500;
+    color: #ffffff;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: -o-flex;
+    display: -webkit-flex;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.search-params-list li .label-content {
+    border-radius: 0px 0px 0px 0px;
+    margin-right: 1px;
+}
+
+.search-params-list li .label-content-last {
+    border-radius: 0px 20px 20px 0px;
+}
+
+.search-items-container {
+    display: -webkit-flex; /* Safari */
+    -webkit-flex-wrap: wrap; /* Safari 6.1+ */
+    display: flex;
+    flex-wrap: wrap;
+}
+
+[uib-typeahead-popup].dropdown-menu, select.dropdown-menu {
+    display: flex;
+    flex-flow: column;
+    max-height: 500px;
+    overflow: auto;
+    width: max-content;
+}
+
+.p-w-xxs {
+    padding: 0px 5px;
+}
