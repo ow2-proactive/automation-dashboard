@@ -785,7 +785,9 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
 
     $scope.changeBucket = function (bucket) {
         $scope.selectedBucket = bucket;
-        UtilsFactory.setUserPreference('submissionView.selectedBucketName', $scope.selectedBucket.name);
+        if (!$scope.showPSAWorkflowsOnly){
+            UtilsFactory.setUserPreference('submissionView.selectedBucketName', $scope.selectedBucket.name);
+        }
         updateWorkflowsMetadataList();
     };
 
@@ -823,7 +825,9 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
                     });
                     if (!$scope.selectedBucketName || selectedBucketIndex === -1) {
                         $scope.selectedBucket = $scope.bucketsMetadataList[0];
-                        UtilsFactory.setUserPreference('submissionView.selectedBucketName', $scope.selectedBucket.name);
+                        if (!$scope.showPSAWorkflowsOnly){
+                            UtilsFactory.setUserPreference('submissionView.selectedBucketName', $scope.selectedBucket.name);
+                        }
                     } else {
                         $scope.selectedBucket = $scope.bucketsMetadataList[selectedBucketIndex];
                         $scope.scrollToBucket();
