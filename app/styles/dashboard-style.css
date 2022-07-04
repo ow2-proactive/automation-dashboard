@@ -900,6 +900,13 @@ md-virtual-repeat-container:-webkit-scrollbar {
     float: right;
 }
 
+.btn-green,
+.btn-green:hover {
+    background-color: #1ab394 !important;
+    border-color: #1ab394 !important;
+    color: #fff !important;
+}
+
 @media screen and (min-width:1600px) {
     .small-text {
         display: none;
