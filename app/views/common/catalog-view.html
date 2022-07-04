@@ -16,11 +16,11 @@
         </form>
         <div class="container-flex m-l-md btn-group">
             <button class="btn btn-default"  ng-click="toggleDisplay()" tooltip-append-to-body="true" uib-tooltip="{{showPSAWorkflowsOnly?'Show services as icons':'Show workflows as icons'|translate}}" ng-model="toggleListBox.value"
-                    uib-btn-radio="false">
+                    uib-btn-radio="false" ng-class="{'btn-green':!toggleListBox.value}">
                 <i class="fa fa-th-large"></i>
             </button>
             <button class="btn btn-default" ng-click="toggleDisplay()" ng-model="toggleListBox.value" tooltip-append-to-body="true" uib-tooltip="{{showPSAWorkflowsOnly?'Show services as a list':'Show workflows as a list'|translate}}"
-                    uib-btn-radio="true">
+                    uib-btn-radio="true" ng-class="{'btn-green':toggleListBox.value}">
                 <i class="fa fa-list"></i>
             </button>
         </div>
@@ -89,7 +89,6 @@
                                 {{'Project'|translate}}
                                 <i class="fa m-l-sm clickable" ng-class="getSortClasses(orderByColumnConfig,'project_name')" style="font-size: 16px;"></i>
                             </th>
-                        </tr>
                         </tr>
                         </thead>
                         <tbody>
