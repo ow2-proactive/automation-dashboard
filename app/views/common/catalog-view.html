@@ -16,7 +16,7 @@
             <button class="btn" ng-click="toggleDisplay()" tooltip-append-to-body="true"
                     uib-tooltip="{{showPSAWorkflowsOnly?'Show services as icons':'Show workflows as icons'|translate}}"
                     ng-model="toggleListBox.value" uib-btn-radio="false"
-                    ng-class="{'btn-primary':toggleListBox.value, 'btn-default':!toggleListBox.value}">
+                    ng-class="{'btn-primary':!toggleListBox.value, 'btn-default':toggleListBox.value}">
                 <i class="fa fa-th-large"></i>
             </button>
             <button class="btn" ng-click="toggleDisplay()" ng-model="toggleListBox.value"
