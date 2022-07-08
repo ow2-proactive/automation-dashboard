@@ -3,7 +3,6 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     const catalogUrlPrefix = $location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/catalog/buckets/';
     const defaultUserPreferences = {
         submissionView: {
-            advancedVariables: false,
             selectedBucketName: '',
             showPSAWorkflowsOnly: false,
             toggleListBox: {
@@ -111,7 +110,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
 
     function getWorkflowMetadata(workflow, label, key) {
         var obj = workflow.object_key_values.find(function (okv) {
-            return okv.label === label & okv.key === key;
+            return okv.label === label && okv.key === key;
         });
         return obj && obj.value;
     }
@@ -369,7 +368,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     }
 
     function displayTranslatedMessage(type, titleToTranslate, messageToTranslate) {
-        var swalContent = {html: true};
+        var swalContent = {html: true, customClass: 'swal-style'};
 
         if (titleToTranslate !== undefined) {
             if (!Array.isArray(titleToTranslate)) {
@@ -566,11 +565,17 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         const configHeaders = {
             headers: {
                 'link': catalogUrlPrefix + bucketName + '/resources/ ' + encodeURIComponent(workflowName) + '/raw',
-                'sessionid': getSessionId()
+                'sessionid': getSessionId(),
+                'Content-Type': 'application/json'
             }
         };
         const path = createPathStringFromMap(parseEmptyVariablesValue(variables), 'value')
-        return $http.post(schedulerRestUrl() + 'validateurl' + (path ? ';' + path : ''), {}, configHeaders);
+        var variablesMap = variables.reduce(function (map, obj) {
+            map[obj.name] = obj.value;
+            return map;
+        }, {});
+        var data = JSON.stringify(variablesMap);
+        return $http.post(schedulerRestUrl() + 'validateurl/body', data, configHeaders);
     }
 
     function submitJob(bucketName, workflowName, variables) {
