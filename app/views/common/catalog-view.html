@@ -3,24 +3,27 @@
     <div class="container-flex w-100 m-b-sm">
         <form ng-submit="filterObjectByObjectName(workflowNameQuery)" class="container-flex w-100">
             <div class="input-group w-100 container-flex">
-                <input type="text" placeholder="{{showPSAWorkflowsOnly?'Service Name':'Workflow name'|translate}}"
-                       class="form-control"
-                       ng-model="workflowNameQuery"
-                       ng-model-options="{debounce: 1000}"
-                       ng-change="filterObjectByObjectName(workflowNameQuery)"
-                >
+                <input type="text"
+                       placeholder="{{showPSAWorkflowsOnly?'Service Name':'Workflow name'|translate}}"
+                       class="form-control" ng-model="workflowNameQuery" ng-model-options="{debounce: 1000}"
+                       ng-change="filterObjectByObjectName(workflowNameQuery)">
                 <button class="btn btn-default" type="submit">
                     <i class="fa fa-search"></i>
                 </button>
             </div>
         </form>
         <div class="container-flex m-l-md btn-group">
-            <button class="btn btn-default"  ng-click="toggleDisplay()" tooltip-append-to-body="true" uib-tooltip="{{showPSAWorkflowsOnly?'Show services as icons':'Show workflows as icons'|translate}}" ng-model="toggleListBox.value"
-                    uib-btn-radio="false" ng-class="{'btn-green':!toggleListBox.value}">
+            <button class="btn" ng-click="toggleDisplay()" tooltip-append-to-body="true"
+                    uib-tooltip="{{showPSAWorkflowsOnly?'Show services as icons':'Show workflows as icons'|translate}}"
+                    ng-model="toggleListBox.value" uib-btn-radio="false"
+                    ng-class="{'btn-primary':!toggleListBox.value, 'btn-default':toggleListBox.value}">
                 <i class="fa fa-th-large"></i>
             </button>
-            <button class="btn btn-default" ng-click="toggleDisplay()" ng-model="toggleListBox.value" tooltip-append-to-body="true" uib-tooltip="{{showPSAWorkflowsOnly?'Show services as a list':'Show workflows as a list'|translate}}"
-                    uib-btn-radio="true" ng-class="{'btn-green':toggleListBox.value}">
+            <button class="btn" ng-click="toggleDisplay()" ng-model="toggleListBox.value"
+                    tooltip-append-to-body="true"
+                    uib-tooltip="{{showPSAWorkflowsOnly?'Show services as a list':'Show workflows as a list'|translate}}"
+                    uib-btn-radio="true"
+                    ng-class="{'btn-primary':toggleListBox.value, 'btn-default':!toggleListBox.value}">
                 <i class="fa fa-list"></i>
             </button>
         </div>
@@ -32,8 +35,7 @@
                 <span class="font-bold">{{'Buckets'|translate}} </span>
                 <span class="m-l-sm clickable"
                       ng-click="orderByColumn('name', OrderByBucketNameConfig, 'submissionView.orderByColumnConfig.buckets'); scrollToBucket()">
-                    <i class="fa"
-                       ng-class="getSortClasses(OrderByBucketNameConfig, 'name')"
+                    <i class="fa" ng-class="getSortClasses(OrderByBucketNameConfig, 'name')"
                        style="font-size: 17px;">
                     </i>
                 </span>
@@ -44,7 +46,8 @@
                     <div class="sk-double-bounce1"></div>
                     <div class="sk-double-bounce2"></div>
                 </div>
-                <div class="table-responsive" id="buckets-scroll-area" slim-scroll box-height="calc(100vh - 310px)"
+                <div class="table-responsive" id="buckets-scroll-area" slim-scroll
+                     box-height="calc(100vh - 310px)"
                      style="overflow-y:auto;overflow-x:hidden; height:calc(100vh - 310px)">
                     <table class="table table-hover">
                         <tbody>
@@ -53,7 +56,8 @@
                             ng-class="{'active': bucket.name==selectedBucket.name}"
                             class="clickable-element">
                             <td ng-click="changeBucket(bucket)">
-                                <div class="pull-left" style="overflow: hidden; text-overflow: ellipsis; overflow-wrap: normal;">
+                                <div class="pull-left"
+                                     style="overflow: hidden; text-overflow: ellipsis; overflow-wrap: normal;">
                                     {{bucket.name}}
                                 </div>
                             </td>
@@ -63,7 +67,8 @@
 
                     <!-- No Results Found -->
                     <div ng-show="!bucketsMetadataList.length && !isBucketsLoading">
-                        <span style="font-size:18px; display:block">{{'No results for'|translate}} "{{workflowNameQuery}}".</span>
+                        <span style="font-size:18px; display:block">{{'No results for'|translate}}
+                            "{{workflowNameQuery}}".</span>
                         <span>{{'Try checking your spelling or use more general terms.'|translate}}</span>
                     </div>
                 </div>
@@ -81,23 +86,30 @@
                         <thead>
                         <tr>
                             <th></th>
-                            <th class="clickable" ng-click="orderByColumn('name', orderByColumnConfig, 'submissionView.orderByColumnConfig.workflows')">
+                            <th class="clickable"
+                                ng-click="orderByColumn('name', orderByColumnConfig, 'submissionView.orderByColumnConfig.workflows')">
                                 {{showPSAWorkflowsOnly?'Service':'Workflow'|translate}}
-                                <i class="fa m-l-sm clickable" ng-class="getSortClasses(orderByColumnConfig,'name')" style="font-size: 16px;"></i>
+                                <i class="fa m-l-sm clickable"
+                                   ng-class="getSortClasses(orderByColumnConfig,'name')"
+                                   style="font-size: 16px;"></i>
                             </th>
-                            <th class="clickable" ng-click="orderByColumn('project_name', orderByColumnConfig, 'submissionView.orderByColumnConfig.workflows')">
+                            <th class="clickable"
+                                ng-click="orderByColumn('project_name', orderByColumnConfig, 'submissionView.orderByColumnConfig.workflows')">
                                 {{'Project'|translate}}
-                                <i class="fa m-l-sm clickable" ng-class="getSortClasses(orderByColumnConfig,'project_name')" style="font-size: 16px;"></i>
+                                <i class="fa m-l-sm clickable"
+                                   ng-class="getSortClasses(orderByColumnConfig,'project_name')"
+                                   style="font-size: 16px;"></i>
                             </th>
                         </tr>
                         </thead>
                         <tbody>
                         <tr ng-repeat="workflow in workflowsMetadataList | filter: filterCreationWorkflows | orderBy : orderByColumnConfig.comparatorLogic"
-                            ng-click="selectWorkflow(workflow);"
-                            class="clickable-element" ng-class="{'active': workflow.name===selectedWorkflow.name}"
-                            uib-tooltip="{{getObjectDescription(workflow)}}" tooltip-append-to-body="true">
+                            ng-click="selectWorkflow(workflow);" class="clickable-element"
+                            ng-class="{'active': workflow.name===selectedWorkflow.name}"
+                            uib-tooltip="{{getObjectDescription(workflow)}}"
+                            tooltip-append-to-body="true">
                             <td>
-                                <img ng-src="{{findImageUrl(workflow)}}" style="height:25px" alt=""/>
+                                <img ng-src="{{findImageUrl(workflow)}}" style="height:25px" alt="" />
                             </td>
                             <td>{{ workflow.name }}</td>
                             <td>{{ workflow.project_name }}</td>
@@ -109,22 +121,25 @@
                 <!-- Icons view -->
                 <div ng-if="!toggleListBox.value">
                     <div class="w-100">
-                        <span class="font-bold">{{showPSAWorkflowsOnly?'Services':'Workflows'|translate}} </span>
+                        <span class="font-bold">{{showPSAWorkflowsOnly?'Services':'Workflows'|translate}}
+                        </span>
                     </div>
                     <hr class="hr-line-solid">
                     <div style="overflow-y:auto; overflow-x:hidden; height:calc(100vh - 310px)">
-                        <div ng-repeat="(key, workflows) in workflowsMetadataList | filter: filterCreationWorkflows | orderBy: '+project_name' | groupBy: 'project_name'">
+                        <div
+                                ng-repeat="(key, workflows) in workflowsMetadataList | filter: filterCreationWorkflows | orderBy: '+project_name' | groupBy: 'project_name'">
                             <h3>{{key}}</h3>
                             <div class="row">
                                 <div ng-repeat="w in workflows | orderBy: '+name'">
-                                    <div class="col-sm-3 col-md-3 col-lg-2" uib-tooltip="{{getObjectDescription(w)}}" tooltip-append-to-body="true">
+                                    <div class="col-sm-3 col-md-3 col-lg-2"
+                                         uib-tooltip="{{getObjectDescription(w)}}"
+                                         tooltip-append-to-body="true">
                                         <div id="{{ cleanId(w.project_name) + $index }}"
                                              class="panel panel-default object-box clickable-element"
                                              ng-class="getWorkflowPanelStatus(w)"
                                              ng-click="selectWorkflow(w);">
                                             <div class="panel-body" style="height: 70px;">
-                                                <img ng-src="{{findImageUrl(w)}}"
-                                                     alt=""/>
+                                                <img ng-src="{{findImageUrl(w)}}" alt="" />
                                             </div>
                                             <div class="panel-footer object-box-footer">
                                                 <div>

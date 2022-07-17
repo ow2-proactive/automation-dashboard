@@ -45,7 +45,8 @@
         "secondaryHtmlFiles": [
             "modals/catalog_object_edition.html",
             "modals/catalog-object-kind-content_type-project_name-edition.html",
-            "modals/catalog_rbac.html"
+            "modals/catalog_rbac.html",
+            "templates/typehead-wf-dropdown.html"
         ],
         "notAvailablePage": "page_not_available.html",
         "jsFiles": [
