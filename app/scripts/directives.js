@@ -368,6 +368,82 @@ function inputFileChange($parse, $timeout) {
     };
 }
 
+function shiftKeyEvent($rootScope){
+    return {
+        restrict: 'A',
+        scope: {
+            selectedItems: '=selectedItems',
+            allItems: '=items'
+        },
+        link: function (scope, element){
+            const shiftKey = 16;
+            const upKey = 38;
+            const downKey = 40;
+            var ctrlDown = false;
+            if (!Array.isArray) return;
+            element.keydown(function(event) {
+                if (event.keyCode == shiftKey) ctrlDown = true;
+            }).keyup(function(event) {
+                if (event.keyCode == shiftKey) ctrlDown = false;
+            });
+
+            // select associations when user press shift key and ArrowUp or ArrowDown
+            element.keydown(function(event) {
+                if (ctrlDown && event.keyCode == upKey && scope.selectedItems && scope.selectedItems.length) {
+                    moveUp();
+                } else if (ctrlDown && event.keyCode == downKey && scope.selectedItems && scope.selectedItems.length) {
+                    moveDown();
+                }
+            })
+
+            function moveUp() {
+                const lastSelectIndex = scope.allItems.result.findIndex(function(association) {
+                    return association.id === scope.selectedItems[scope.selectedItems
+                        .length - 1].id;
+                });
+                var index = scope.selectedItems.findIndex(function(item){
+                            return item.id === scope.allItems.result[lastSelectIndex - 1].id;
+                        })
+
+                if (index >= 0) { // the item is already in the list
+                    return;
+                }
+
+                var nextWorkflow;
+                if (lastSelectIndex) {
+                    nextWorkflow = scope.allItems.result[lastSelectIndex - 1];
+                } else if (lastSelectIndex === 0) {
+                    nextWorkflow = scope.allItems.result[scope.allItems.result.length - 1];
+                }
+
+                scope.$apply(function() {
+                    scope.selectedItems.push(nextWorkflow);
+                });
+            }
+
+            function moveDown() {
+                const lastSelectIndex = scope.allItems.result.findIndex(function(association) {
+                    return association.id === scope.selectedItems[scope.selectedItems
+                        .length - 1].id;
+                });
+
+                var index = scope.selectedItems.findIndex(function(item){
+                            return item.id === scope.allItems.result[lastSelectIndex + 1].id;
+                        })
+
+                if (index >= 0) { // the item is already in the list
+                    return;
+                }
+
+                if (lastSelectIndex !== scope.allItems.result.length - 1) {
+                    scope.$apply(function() {
+                        scope.selectedItems.push(scope.allItems.result[lastSelectIndex + 1]);
+                    });
+                }
+            }
+        }
+    }
+}
 function copyClipBoard() {
         return {
             restrict: 'A',
@@ -435,4 +511,5 @@ angular
     .directive('showDropdownFromTemplate', showDropdownFromTemplate)
     .directive('inputFileChange', inputFileChange)
     .directive('ellipsisTooltip', ellipsisTooltip)
-    .directive('copyClipBoard', copyClipBoard);
+    .directive('copyClipBoard', copyClipBoard)
+    .directive('shiftKeyEvent', shiftKeyEvent);
