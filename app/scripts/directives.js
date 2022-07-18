@@ -372,7 +372,7 @@ function inputFileChange($parse, $timeout) {
 * inputs: selectedItems and allItems
 * output: a new selectedItems
 */
-function shiftKeyEvent() {
+function multiselectShiftKey() {
     return {
         restrict: 'AE',
         scope: {
@@ -522,4 +522,4 @@ angular
     .directive('inputFileChange', inputFileChange)
     .directive('ellipsisTooltip', ellipsisTooltip)
     .directive('copyClipBoard', copyClipBoard)
-    .directive('shiftKeyEvent', shiftKeyEvent);
+    .directive('multiselectShiftKey', multiselectShiftKey);
