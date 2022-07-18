@@ -1016,3 +1016,11 @@ md-virtual-repeat-container:-webkit-scrollbar {
 .p-w-xxs {
     padding: 0px 5px;
 }
+
+.no-outline {
+    outline: none;
+}
+
+.no-outline:focus {
+    outline: none;
+}
