@@ -367,7 +367,11 @@ function inputFileChange($parse, $timeout) {
         }
     };
 }
-
+/**
+* Upload the selected items: push new items to selected items
+* inputs: selectedItems and allItems
+* output: a new selectedItems
+*/
 function shiftKeyEvent() {
     return {
         restrict: 'AE',
