@@ -370,7 +370,7 @@ function inputFileChange($parse, $timeout) {
 
 function shiftKeyEvent() {
     return {
-        restrict: 'A',
+        restrict: 'AE',
         scope: {
             selectedItems: '=selectedItems',
             allItems: '=items'
@@ -386,7 +386,7 @@ function shiftKeyEvent() {
                 if (event.keyCode == shiftKey) ctrlDown = false;
             });
 
-            // select associations when user press shift key and ArrowUp or ArrowDown
+            // select rows in table when user press shift key and ArrowUp or ArrowDown
             element.keydown(function(event) {
                 if (scope.allItems.result && !Array.isArray(scope.allItems.result)) return;
                 if (ctrlDown && event.keyCode == upKey && scope.selectedItems && scope
@@ -408,7 +408,7 @@ function shiftKeyEvent() {
                 })
 
                 if (index >= 0) { // the item is already in the list
-                    return;
+                    scope.selectedItems.splice(index, 1)
                 }
 
                 var nextWorkflow;
@@ -434,7 +434,7 @@ function shiftKeyEvent() {
                 })
 
                 if (index >= 0) { // the item is already in the list
-                    return;
+                    scope.selectedItems.splice(index, 1);
                 }
 
                 if (lastSelectIndex !== scope.allItems.result.length - 1) {
