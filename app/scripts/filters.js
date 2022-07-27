@@ -31,6 +31,16 @@ function dateTimeFormat() {
     };
 }
 
+function escapeQuotes() {
+    return function (input) {
+        if (input === null) {
+            return input;
+        } else {
+            return input.replace(/["']/g, "&lsquo;");
+        }
+    };
+}
+
 /**
  * angular filter to format a duration value (input in milliseconds)
  */
@@ -54,3 +64,4 @@ angular
     .filter('searchHighlight', searchHighlight)
     .filter('dateTimeFormat', dateTimeFormat)
     .filter('durationFormatWE', durationFormatWE)
+    .filter('escapeQuotes', escapeQuotes)
