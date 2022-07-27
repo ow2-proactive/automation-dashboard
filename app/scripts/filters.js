@@ -33,8 +33,6 @@ function dateTimeFormat() {
 
 function escapeQuotes() {
     return function (input) {
-        console.log("escapeQuotes1 " + input);
-
         if (input === null) {
             return input;
         } else {
