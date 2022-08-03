@@ -41,6 +41,18 @@ function escapeQuotes() {
     };
 }
 
+function isDigit() {
+    return function (input) {
+        return input.match(/^\d/);
+    };
+}
+
+function getFirstLetter() {
+    return function (input) {
+        return Array.from(input)[0];
+    };
+}
+
 /**
  * angular filter to format a duration value (input in milliseconds)
  */
@@ -65,3 +77,5 @@ angular
     .filter('dateTimeFormat', dateTimeFormat)
     .filter('durationFormatWE', durationFormatWE)
     .filter('escapeQuotes', escapeQuotes)
+    .filter('isDigit', isDigit)
+    .filter('getFirstLetter', getFirstLetter)
