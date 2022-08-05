@@ -116,7 +116,13 @@
                 </button>
             </div>
         </div>
-        <div class="col-md-4" ng-if="!variable.resolvedModel || !isSpecialUIModel(variable)">
+        <div class="col-md-4"
+             ng-if="!variable.resolvedModel || variable.resolvedModel.toLowerCase().indexOf('pa:regexp') == 0 || variable.resolvedModel.toLowerCase().indexOf('pa:json') == 0
+              || variable.resolvedModel.toLowerCase().indexOf('pa:spel') == 0 || variable.resolvedModel.toLowerCase().indexOf('pa:not_empty_string') == 0">
+            <textarea class="w-100" ng-model="variable.value">
+            </textarea>
+        </div>
+        <div class="col-md-4" ng-else-if="!isSpecialUIModel(variable)">
             <input class="form-control" type="text" ng-model="variable.value">
         </div>
         <div class="col-md-5">
