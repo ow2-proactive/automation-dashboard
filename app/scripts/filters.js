@@ -31,6 +31,28 @@ function dateTimeFormat() {
     };
 }
 
+function escapeQuotes() {
+    return function (input) {
+        if (input === null) {
+            return input;
+        } else {
+            return input.replace(/["']/g, "&lsquo;");
+        }
+    };
+}
+
+function isDigit() {
+    return function (input) {
+        return input.match(/^\d/);
+    };
+}
+
+function getFirstLetter() {
+    return function (input) {
+        return Array.from(input)[0];
+    };
+}
+
 /**
  * angular filter to format a duration value (input in milliseconds)
  */
@@ -54,3 +76,6 @@ angular
     .filter('searchHighlight', searchHighlight)
     .filter('dateTimeFormat', dateTimeFormat)
     .filter('durationFormatWE', durationFormatWE)
+    .filter('escapeQuotes', escapeQuotes)
+    .filter('isDigit', isDigit)
+    .filter('getFirstLetter', getFirstLetter)

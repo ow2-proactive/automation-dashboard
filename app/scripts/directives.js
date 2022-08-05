@@ -367,31 +367,37 @@ function inputFileChange($parse, $timeout) {
         }
     };
 }
-
-function shiftKeyEvent($rootScope){
+/**
+* Upload the selected items: push new items to selected items
+* inputs: selectedItems and allItems
+* output: a new selectedItems
+*/
+function multiselectShiftKey() {
     return {
-        restrict: 'A',
+        restrict: 'AE',
         scope: {
             selectedItems: '=selectedItems',
             allItems: '=items'
         },
-        link: function (scope, element){
+        link: function(scope, element) {
             const shiftKey = 16;
             const upKey = 38;
             const downKey = 40;
             var ctrlDown = false;
-            if (!Array.isArray) return;
             element.keydown(function(event) {
                 if (event.keyCode == shiftKey) ctrlDown = true;
             }).keyup(function(event) {
                 if (event.keyCode == shiftKey) ctrlDown = false;
             });
 
-            // select associations when user press shift key and ArrowUp or ArrowDown
+            // select rows in table when user press shift key and ArrowUp or ArrowDown
             element.keydown(function(event) {
-                if (ctrlDown && event.keyCode == upKey && scope.selectedItems && scope.selectedItems.length) {
+                if (scope.allItems.result && !Array.isArray(scope.allItems.result)) return;
+                if (ctrlDown && event.keyCode == upKey && scope.selectedItems && scope
+                    .selectedItems.length) {
                     moveUp();
-                } else if (ctrlDown && event.keyCode == downKey && scope.selectedItems && scope.selectedItems.length) {
+                } else if (ctrlDown && event.keyCode == downKey && scope.selectedItems && scope
+                    .selectedItems.length) {
                     moveDown();
                 }
             })
@@ -401,12 +407,12 @@ function shiftKeyEvent($rootScope){
                     return association.id === scope.selectedItems[scope.selectedItems
                         .length - 1].id;
                 });
-                var index = scope.selectedItems.findIndex(function(item){
-                            return item.id === scope.allItems.result[lastSelectIndex - 1].id;
-                        })
+                var index = scope.selectedItems.findIndex(function(item, index) {
+                    return index > 0 && item.id === scope.allItems.result[lastSelectIndex - 1].id;
+                })
 
                 if (index >= 0) { // the item is already in the list
-                    return;
+                    scope.selectedItems.splice(index, 1)
                 }
 
                 var nextWorkflow;
@@ -427,12 +433,12 @@ function shiftKeyEvent($rootScope){
                         .length - 1].id;
                 });
 
-                var index = scope.selectedItems.findIndex(function(item){
-                            return item.id === scope.allItems.result[lastSelectIndex + 1].id;
-                        })
+                var index = scope.selectedItems.findIndex(function(item) {
+                    return item.id === scope.allItems.result[lastSelectIndex + 1].id;
+                })
 
                 if (index >= 0) { // the item is already in the list
-                    return;
+                    scope.selectedItems.splice(index, 1);
                 }
 
                 if (lastSelectIndex !== scope.allItems.result.length - 1) {
@@ -441,6 +447,10 @@ function shiftKeyEvent($rootScope){
                     });
                 }
             }
+
+            scope.$on('$destroy', function() {
+                element.off("keydown");
+            })
         }
     }
 }
@@ -512,4 +522,4 @@ angular
     .directive('inputFileChange', inputFileChange)
     .directive('ellipsisTooltip', ellipsisTooltip)
     .directive('copyClipBoard', copyClipBoard)
-    .directive('shiftKeyEvent', shiftKeyEvent);
+    .directive('multiselectShiftKey', multiselectShiftKey);
