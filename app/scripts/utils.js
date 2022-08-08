@@ -1,6 +1,7 @@
 function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, $q, $location, toastr, SweetAlert) {
-    var specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder',
-     'pa:user_folder', 'pa:catalog_object', 'pa:credential', 'pa:regexp', 'pa:spel', 'pa:json', 'pa:not_empty_string'];
+    const specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder',
+                            'pa:user_folder', 'pa:catalog_object', 'pa:credential'];
+    const textAreaModel = ['pa:regexp', 'pa:spel', 'pa:json', 'pa:not_empty_string'];
     const catalogUrlPrefix = $location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/catalog/buckets/';
     const defaultUserPreferences = {
         submissionView: {
@@ -105,15 +106,20 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             if (variable.resolvedModel) {
                 return variable.resolvedModel.toLowerCase().indexOf(targetModel) == 0;
             } else {
-                return true;
+                return false;
             }
         });
     };
 
     function isTextAreaModel(variable) {
-        return variable.resolvedModel.toLowerCase().indexOf('pa:regexp') == 0 || variable.resolvedModel.toLowerCase().indexOf('pa:json') == 0 ||
-                variable.resolvedModel.toLowerCase().indexOf('pa:spel') == 0 || variable.resolvedModel.toLowerCase().indexOf('pa:not_empty_string') == 0
-    }
+        return -1 !== textAreaModel.findIndex(function (targetModel) {
+            if (variable.resolvedModel) {
+                return variable.resolvedModel.toLowerCase().indexOf(targetModel) == 0;
+            } else {
+                return true;
+            }
+        });
+    };
 
     function getWorkflowMetadata(workflow, label, key) {
         var obj = workflow.object_key_values.find(function (okv) {
