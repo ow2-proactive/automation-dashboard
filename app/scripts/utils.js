@@ -110,6 +110,11 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         });
     };
 
+    function isTextAreaModel(variable) {
+        return variable.resolvedModel.toLowerCase().indexOf('pa:regexp') == 0 || variable.resolvedModel.toLowerCase().indexOf('pa:json') == 0 ||
+                variable.resolvedModel.toLowerCase().indexOf('pa:spel') == 0 || variable.resolvedModel.toLowerCase().indexOf('pa:not_empty_string') == 0
+    }
+
     function getWorkflowMetadata(workflow, label, key) {
         var obj = workflow.object_key_values.find(function (okv) {
             return okv.label === label && okv.key === key;
@@ -602,6 +607,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     return {
         openJobInSchedulerPortal: openJobInSchedulerPortal,
         isSpecialUIModel: isSpecialUIModel,
+        isTextAreaModel: isTextAreaModel,
         getSortClasses: getSortClasses,
         openCatalogObjectModal: openCatalogObjectModal,
         openFileBrowser: openFileBrowser,
