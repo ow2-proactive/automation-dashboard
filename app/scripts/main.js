@@ -972,6 +972,9 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         return url.startsWith('http') ? url : JSON.parse(localStorage.appUrl).concat('/doc/', url);
     }
 
+    $scope.isTextAreaModel = function (variable) {
+        return UtilsFactory.isTextAreaModel(variable)
+    }
 
     $scope.isSpecialUIModel = function (variable) {
         return UtilsFactory.isSpecialUIModel(variable);
