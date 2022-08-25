@@ -595,11 +595,16 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         const configHeaders = {
             headers: {
                 'link': catalogUrlPrefix + bucketName + '/resources/' + encodeURIComponent(workflowName) + '/raw',
-                'sessionid': getSessionId()
+                'sessionid': getSessionId(),
+                'Content-Type': 'application/json'
             }
         };
-        const path = createPathStringFromMap(parseEmptyVariablesValue(variables), 'value')
-        return $http.post(schedulerRestUrl() + 'jobs;' + path, {}, configHeaders);
+        var variablesMap = variables.reduce(function (map, obj) {
+                    map[obj.name] = obj.value;
+                    return map;
+                }, {});
+        var data = JSON.stringify(variablesMap);
+        return $http.post(schedulerRestUrl() + 'jobs/body', data, configHeaders);
     }
 
     function getJobInfoForJob(jobId) {
