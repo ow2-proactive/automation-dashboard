@@ -1236,9 +1236,8 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
     }
 
     function validateJob() {
-        const bucketName = $scope.workflow['bucketName'];
         // Validate
-        WESchedulerService.validateJob(bucketName, $scope.workflow.name, $scope.workflow.variables, $scope.workflow.jobId)
+        WESchedulerService.validateJob($scope.workflow.variables, $scope.workflow.jobId)
             .success(function (response) {
                 updateVariables(response)
                 if (!response.valid) {
