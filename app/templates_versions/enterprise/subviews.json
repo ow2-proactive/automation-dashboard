@@ -68,6 +68,25 @@
         "name": "Analytics",
         "nameForUrl": "analytics-portal"
     },
+    "heathDashboard": {
+        "isAvailable": true,
+        "isSubMenuItem": true,
+        "name": "Health Dashboard",
+        "subMenuTitle": "analytics-portal",
+        "nameForUrl": "health-dashboard",
+        "appFolder": "job-analytics-portal/app/",
+        "htmlFile": "health-dashboard/health-dashboard.html",
+        "tooltip": "View Job Spanning Time & Dependencies",
+        "secondaryHtmlFiles": ["components/chart_component.html"],
+        "notAvailablePage": "page_not_available_job-analytics.html",
+        "jsFiles": [
+            "scripts/health-dashboard/health-dashboard.js",
+            "scripts/components/chart-component.js"
+        ],
+        "angularModuleName": "health-dashboard",
+        "cssFile": "heath_dashboard_custom_style.css",
+        "authenticate": true
+    },
     "jobAnalytics": {
         "isAvailable": true,
         "isSubMenuItem": true,
@@ -103,6 +122,7 @@
         "cssFile": "job_analytics_custom_style.css",
         "authenticate": true
     },
+
     "jobGantt": {
         "isAvailable": true,
         "isSubMenuItem": true,
