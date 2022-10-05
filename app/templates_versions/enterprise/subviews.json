@@ -81,7 +81,8 @@
         "notAvailablePage": "page_not_available_job-analytics.html",
         "jsFiles": [
             "scripts/health-dashboard/health-dashboard.js",
-            "scripts/components/chart-component.js"
+            "scripts/components/chart-component.js",
+            "scripts/services/job-planner-requests.js"
         ],
         "angularModuleName": "health-dashboard",
         "cssFile": "heath_dashboard_custom_style.css",
