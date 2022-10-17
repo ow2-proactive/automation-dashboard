@@ -117,7 +117,8 @@
             "scripts/services/catalog-service.js",
             "scripts/services/chart-utils.js",
             "scripts/services/job-analytics-service.js",
-            "scripts/services/scheduler-service.js"
+            "scripts/services/scheduler-service.js",
+            "scripts/services/cloud-automation-service.js"
         ],
         "angularModuleName": "job-analytics",
         "cssFile": "job_analytics_custom_style.css",
