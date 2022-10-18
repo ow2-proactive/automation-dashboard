@@ -1024,3 +1024,7 @@ md-virtual-repeat-container:-webkit-scrollbar {
 .no-outline:focus {
     outline: none;
 }
+
+.no-scroll {
+    overflow: hidden;
+}
