@@ -380,7 +380,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         return translatedStr.trim();
     }
 
-    function displayTranslatedMessage(type, titleToTranslate, messageToTranslate) {
+    function displayTranslatedMessage(type, titleToTranslate, messageToTranslate, callback) {
         var swalContent = {html: true, customClass: 'swal-style'};
 
         if (titleToTranslate !== undefined) {
@@ -404,16 +404,15 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         } else {
             console.log(type + ' is not a valid message type to be displayed')
         }
-
-        SweetAlert.swal(swalContent);
+        SweetAlert.swal(swalContent, callback);
     }
 
     function displayTranslatedErrorMessage(title, message) {
         displayTranslatedMessage('error', title, message);
     }
 
-    function displayTranslatedSuccessMessage(title, message) {
-        displayTranslatedMessage('success', title, message);
+    function displayTranslatedSuccessMessage(title, message, callback) {
+        displayTranslatedMessage('success', title, message, callback);
     }
 
     function openEndpoint(url) {
