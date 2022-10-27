@@ -1,5 +1,7 @@
 function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, $q, $location, toastr, SweetAlert) {
-    var specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder', 'pa:user_folder', 'pa:catalog_object', 'pa:credential'];
+    const specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder',
+                            'pa:user_folder', 'pa:catalog_object', 'pa:credential'];
+    const textAreaModel = ['pa:regexp', 'pa:spel', 'pa:json', 'pa:not_empty_string'];
     const catalogUrlPrefix = $location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/catalog/buckets/';
     const defaultUserPreferences = {
         submissionView: {
@@ -103,8 +105,19 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         return -1 !== specialUIModel.findIndex(function (targetModel) {
             if (variable.resolvedModel) {
                 return variable.resolvedModel.toLowerCase().indexOf(targetModel) == 0;
+            } else {
+                return false;
             }
-            return variable.resolvedModel.toLowerCase().indexOf(targetModel) == 0;
+        });
+    };
+
+    function isTextAreaModel(variable) {
+        return -1 !== textAreaModel.findIndex(function (targetModel) {
+            if (variable.resolvedModel) {
+                return variable.resolvedModel.toLowerCase().indexOf(targetModel) == 0;
+            } else {
+                return true;
+            }
         });
     };
 
@@ -367,7 +380,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         return translatedStr.trim();
     }
 
-    function displayTranslatedMessage(type, titleToTranslate, messageToTranslate) {
+    function displayTranslatedMessage(type, titleToTranslate, messageToTranslate, callback) {
         var swalContent = {html: true, customClass: 'swal-style'};
 
         if (titleToTranslate !== undefined) {
@@ -391,16 +404,15 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         } else {
             console.log(type + ' is not a valid message type to be displayed')
         }
-
-        SweetAlert.swal(swalContent);
+        SweetAlert.swal(swalContent, callback);
     }
 
     function displayTranslatedErrorMessage(title, message) {
         displayTranslatedMessage('error', title, message);
     }
 
-    function displayTranslatedSuccessMessage(title, message) {
-        displayTranslatedMessage('success', title, message);
+    function displayTranslatedSuccessMessage(title, message, callback) {
+        displayTranslatedMessage('success', title, message, callback);
     }
 
     function openEndpoint(url) {
@@ -582,11 +594,16 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         const configHeaders = {
             headers: {
                 'link': catalogUrlPrefix + bucketName + '/resources/' + encodeURIComponent(workflowName) + '/raw',
-                'sessionid': getSessionId()
+                'sessionid': getSessionId(),
+                'Content-Type': 'application/json'
             }
         };
-        const path = createPathStringFromMap(parseEmptyVariablesValue(variables), 'value')
-        return $http.post(schedulerRestUrl() + 'jobs;' + path, {}, configHeaders);
+        var variablesMap = variables.reduce(function (map, obj) {
+                    map[obj.name] = obj.value;
+                    return map;
+                }, {});
+        var data = JSON.stringify(variablesMap);
+        return $http.post(schedulerRestUrl() + 'jobs/body', data, configHeaders);
     }
 
     function getJobInfoForJob(jobId) {
@@ -600,6 +617,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     return {
         openJobInSchedulerPortal: openJobInSchedulerPortal,
         isSpecialUIModel: isSpecialUIModel,
+        isTextAreaModel: isTextAreaModel,
         getSortClasses: getSortClasses,
         openCatalogObjectModal: openCatalogObjectModal,
         openFileBrowser: openFileBrowser,
