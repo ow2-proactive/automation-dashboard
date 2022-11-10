@@ -77,11 +77,19 @@
         "appFolder": "job-analytics-portal/app/",
         "htmlFile": "health-dashboard/health-dashboard.html",
         "tooltip": "View Job Spanning Time & Dependencies",
-        "secondaryHtmlFiles": ["components/chart_component.html"],
+        "secondaryHtmlFiles": [
+            "components/line_chart_component.html",
+            "components/pie_chart_component.html",
+            "components/bar_chart_component.html",
+            "components/doughnut_chart_component.html"
+        ],
         "notAvailablePage": "page_not_available_job-analytics.html",
         "jsFiles": [
             "scripts/health-dashboard/health-dashboard.js",
-            "scripts/components/chart-component.js",
+            "scripts/components/line-chart-component.js",
+            "scripts/components/pie-chart-component.js",
+            "scripts/components/bar-chart-component.js",
+            "scripts/components/doughnut-chart-component.js",
             "scripts/services/job-planner-requests.js"
         ],
         "angularModuleName": "health-dashboard",
