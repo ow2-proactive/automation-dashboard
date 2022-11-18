@@ -576,7 +576,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     function validateWorkflow(bucketName, workflowName, variables) {
         const configHeaders = {
             headers: {
-                'link': catalogUrlPrefix + bucketName + '/resources/ ' + encodeURIComponent(workflowName) + '/raw',
+                'link': catalogUrlPrefix + bucketName + '/resources/' + encodeURIComponent(workflowName) + '/raw',
                 'sessionid': getSessionId(),
                 'Content-Type': 'application/json'
             }
