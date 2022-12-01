@@ -217,6 +217,7 @@
         "htmlFile": "calendar-association/calendar_association.html",
         "tooltip": "Associate Workflows to Calendar",
         "secondaryHtmlFiles": [
+            "calendar-association/association_rbac.html",
             "calendar-association/calendar_list.html"
         ],
         "notAvailablePage": "page_not_available_calendar_association.html",
@@ -225,6 +226,7 @@
             "scripts/services/job-planner-service.js",
             "scripts/services/calendar-list-service.js",
             "scripts/controllers/components/calendar-list.component.js",
+            "scripts/controllers/components/association-RBAC-modal.js",
             "scripts/controllers/calendar-association-controller.js"
         ],
         "angularModuleName": "calendar-association",
