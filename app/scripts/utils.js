@@ -90,6 +90,15 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         }
     }
 
+    /**
+     * open detailed job info in popup window
+     **/
+    function openJobInfoPopup(jobId) {
+        window.open('#/job-info?jobid=' + jobId + '&tab=0',
+            'job-info-' + jobId,
+            'toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,directories=no,status=no');
+    }
+
     function updateCursor(isWaiting) {
         var body = angular.element(document).find('body');
         if (isWaiting) {
@@ -616,6 +625,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
 
     return {
         openJobInSchedulerPortal: openJobInSchedulerPortal,
+        openJobInfoPopup:openJobInfoPopup,
         isSpecialUIModel: isSpecialUIModel,
         isTextAreaModel: isTextAreaModel,
         getSortClasses: getSortClasses,
