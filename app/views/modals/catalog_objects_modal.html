@@ -45,7 +45,7 @@
                                     id="catalogObject{{$index}}"
                                     class="clickable-element"
                                     ng-class="($index==selectedCatalogObjectIndex)?'catalog-selected-row':''"
-                                    ng-click="internalSelectObject($index)">
+                                    ng-click="internalSelectObject($index, catalogObject.bucket_name)">
                                     <td title="{{catalogObject.name}}">{{catalogObject.name}}</td>
                                     <td title="{{catalogObject.project_name}}">{{catalogObject.project_name}}</td>
                                 </tr>
