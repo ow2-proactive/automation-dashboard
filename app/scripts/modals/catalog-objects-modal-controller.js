@@ -45,7 +45,7 @@ angular.module('workflow-variables').controller('CatalogObjectsModalCtrl', funct
                 $scope.catalogObjects = data;
                 // auto select the first catalog object in the bucket
                 if ($scope.catalogObjects && $scope.catalogObjects.length > 0) {
-                    $scope.internalSelectObject(0);
+                    $scope.internalSelectObject(0, bucketName);
                 }
             })
             .error(function (xhr) {
@@ -57,18 +57,10 @@ angular.module('workflow-variables').controller('CatalogObjectsModalCtrl', funct
             });
     }
 
-    $scope.internalSelectObject = function (selectedIndex) {
+    $scope.internalSelectObject = function (selectedIndex, bucketName) {
         $scope.revisions = undefined;
         $scope.revision = undefined;
         $scope.selectedCatalogObjectIndex = selectedIndex;
-        if (!$scope.buckets || $scope.selectedBucketIndex >= $scope.buckets.length || !$scope.buckets[$scope.selectedBucketIndex]){
-            return;
-        }
-        if (!$scope.catalogObjects || selectedIndex >= $scope.catalogObjects.length || !$scope.catalogObjects[selectedIndex]) {
-            return;
-        }
-
-        var bucketName = $scope.buckets[$scope.selectedBucketIndex].name;
         var objectName = $scope.catalogObjects[selectedIndex].name;
         var getRevisionsUrl = JSON.parse(localStorage.appCatalogBucketsUrl) + "/" + bucketName + '/resources/' + encodeURIComponent(objectName) + '/revisions';
 
