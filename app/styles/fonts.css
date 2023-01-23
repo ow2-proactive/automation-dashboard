@@ -102,3 +102,12 @@
     url('../resources/fonts/open-sans-v18-latin-ext_latin-700italic.ttf') format('truetype'), /* Safari, Android, iOS */
     url('../resources/fonts/open-sans-v18-latin-ext_latin-700italic.svg#OpenSans') format('svg'); /* Legacy iOS */
 }
+
+@font-face {font-family: "Password Dots";
+    src: url("../resources/fonts/password-dots.eot"); /* IE9*/
+    src: url("../resources/fonts/password-dots.eot?#iefix") format("embedded-opentype"), /* IE6-IE8 */
+    url("../resources/fonts/password-dots.woff2") format("woff2"), /* chrome、firefox */
+    url("../resources/fonts/password-dots.woff") format("woff"), /* chrome、firefox */
+    url("../resources/fonts/password-dots.ttf") format("truetype"), /* chrome、firefox、opera、Safari, Android, iOS 4.2+*/
+    url("../resources/fonts/password-dots.svg#Password Dots Regular") format("svg"); /* iOS 4.1- */
+}
