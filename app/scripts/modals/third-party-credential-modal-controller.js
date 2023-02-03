@@ -1,80 +1,108 @@
-angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCtrl', function($scope, $http, $uibModalInstance, UtilsFactory, credKey, closeHandler) {
-    $scope.credKey = credKey
-    var schedulerRestUrl = JSON.parse(localStorage.schedulerRestUrl);
+angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCtrl', function($scope, $uibModalInstance, toastr, SweetAlert, UtilsFactory, credKey) {
 
-    $scope.refreshCredentials = function () {
-        var url = schedulerRestUrl + 'credentials/';
-        $http.get(url, {headers: {'sessionID': getSessionId()}})
-            .success(function (response) {
-                $scope.credentialKeys = response.sort();
-                if ($scope.credKey) {
-                    if ($scope.credentialKeys.includes($scope.credKey)) {
-                        $('#add-third-party-credential-button').html(UtilsFactory.translate('Edit'));
-                    } else {
-                        $('#add-third-party-credential-button').html(UtilsFactory.translate('Add'));
-                    }
-                    $("#new-cred-key").prop('readonly', true);
-                    $("#new-cred-key").prop('title', $scope.credKey);
+    $scope.isVariableModelEditMode = !!credKey;
+
+    $scope.thirdPartyCredentials = [];
+    $scope.newForm = {
+        key: '',
+        value: ''
+    }
+    $scope.editForm = {
+        key: '',
+        value: ''
+    }
+    $scope.isTextAreaMode = false;
+    $scope.isTextAreaEditMode = false;
+    $scope.isEditMode = false;
+    $scope.isReverseKeySort = false;
+
+    function loadThirdPartyCredentials() {
+        UtilsFactory.getThirdPartyCredentials()
+            .then(function (response) {
+                $scope.thirdPartyCredentials = angular.copy(response.data)
+                if (credKey && $scope.thirdPartyCredentials.includes(credKey)){
+                    $scope.enableEditMode(credKey)
                 } else {
-                    $("#new-cred-key").prop('readonly', false);
-                    $("#new-cred-key").prop('title', UtilsFactory.translate('The credential key should not contain only white spaces.'));
+                    $scope.newForm.key = credKey;
                 }
             })
-            .error(function (response) {
-                console.error('Error while querying scheduling api on URL ' + url + ':', JSON.stringify(response));
+            .catch(function (response) {
+                console.error("Error while getting third party credentials: ", response);
+                toastr.error((response.errorMessage ? response.errorMessage : "Something went wrong!"), (response.httpErrorCode === 403 ? "Permission denied!" : "Cannot load third party credentials"), $scope.toastrConfig);
             });
     }
 
-    $scope.removeThirdPartyCredential = function (credKey) {
-        var url = schedulerRestUrl + 'credentials/' + encodeURIComponent(credKey);
-        $http.delete(url, {headers: {'sessionID': getSessionId()}})
-            .success($scope.refreshCredentials)
-            .error(function (response) {
-                console.error('Error while querying scheduling api on URL ' + url + ':', JSON.stringify(response));
+    $scope.addNewCredential = function (key, value, isUpdateMode) {
+        UtilsFactory.postThirdPartyCredentials(key, value)
+            .then(function (response) {
+                loadThirdPartyCredentials();
+                toastr.success(isUpdateMode ? "Credential updated successfully!" : "Credential added successfully!", $scope.toastrConfig);
+                if(isUpdateMode){
+                    $scope.editForm = {
+                        key: '',
+                        value: ''
+                    }
+                } else {
+                    $scope.newForm = {
+                        key: '',
+                        value: ''
+                    }
+                }
+            })
+            .catch(function (response) {
+                console.error("Error while getting third party credentials: ", response);
+                toastr.error((response.errorMessage ? response.errorMessage : "Something went wrong!"), (response.httpErrorCode === 403 ? "Permission denied!" : "Cannot create a or update third party credential " + key), $scope.toastrConfig);
             });
     }
 
-    $scope.addThirdPartyCredential = function (credKey, credValue) {
-        var url = schedulerRestUrl + 'credentials/' + encodeURIComponent(credKey);
-        var data = 'value=' + encodeURIComponent(credValue);
-        $http.post(url, data, {headers: {'sessionID': getSessionId(), 'Content-Type': 'application/x-www-form-urlencoded'}})
-            .success($scope.cancel)
-            .error(function (response) {
-                console.error('Error while querying scheduling api on URL ' + url + ':', JSON.stringify(response));
+    $scope.editCredential = function (key, value) {
+        $scope.addNewCredential(key, value, true);
+        $scope.disableEditMode();
+    }
+
+    $scope.removeCredential = function (key) {
+        SweetAlert.swal({
+                title: UtilsFactory.translate('Are you sure?'),
+                text: UtilsFactory.translate("You are about to remove credential " + key),
+                type: 'warning',
+                showCancelButton: true,
+                confirmButtonColor: '#DD6B55',
+                confirmButtonText: UtilsFactory.translate("Remove"),
+                cancelButtonText: UtilsFactory.translate('Cancel'),
+                closeOnConfirm: true,
+                closeOnCancel: true
+            },
+            function (isConfirm) {
+                if (isConfirm) {
+                    UtilsFactory.removeThirdPartyCredentials(key)
+                        .then(function (response) {
+                            loadThirdPartyCredentials();
+                            toastr.success("Credential " + key + " removed successfully!", $scope.toastrConfig);
+                        })
+                        .catch(function (response) {
+                            console.error("Error while getting third party credentials: ", response);
+                            toastr.error((response.errorMessage ? response.errorMessage : "Something went wrong!"), (response.httpErrorCode === 403 ? "Permission denied!" : "Cannot remove third party credential " + key), $scope.toastrConfig);
+                        });
+                }
             });
     }
 
-    $scope.changeMultilineCredential = function() {
-        if ($scope.showMultilineCred) {
-            // switch to multi-lines credential
-            // previous single-line credential value will be copied into multi-line cred
-            $('#new-cred-value').hide();
-            $('#new-cred-value-multiline').show();
-            $scope.errorMessage = "";
-        } else {
-            // switch to single-line credential
-            // if the user has entered multi-lines credential, it will be erased when switching to single-line credential mode
-            if ($scope.credValue.includes('\n')) {
-                $scope.credValue = "";
-                $scope.errorMessage = "Switching to single-line credentials has deleted the multiline credential value, please re-enter your credential.";
-            }
-            $('#new-cred-value-multiline').hide();
-            $('#new-cred-value').show();
-        }
+    $scope.enableEditMode = function (key) {
+        $scope.isEditMode = true;
+        $scope.editForm.key = key;
+        $scope.editForm.value = '';
     }
 
-    $scope.$watch('credValue', function() {
-        if ($scope.credValue && $scope.errorMessage) {
-            $scope.errorMessage = "";
-        }
-    });
+    $scope.disableEditMode = function () {
+        $scope.isEditMode = false;
+        $scope.editForm.key = '';
+        $scope.editForm.value = ''
+    }
 
+    loadThirdPartyCredentials();
+
+    // use : refers to the click on the button close
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
-        if (closeHandler) {
-            closeHandler();
-        }
-    }
-
-    $scope.refreshCredentials();
+    };
 });

@@ -1,4 +1,4 @@
-function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, $q, $location, toastr, SweetAlert) {
+function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, $q, $location, toastr, SweetAlert, $httpParamSerializerJQLike) {
     const specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder',
                             'pa:user_folder', 'pa:catalog_object', 'pa:credential'];
     const textAreaModel = ['pa:regexp', 'pa:spel', 'pa:json', 'pa:not_empty_string'];
@@ -232,17 +232,17 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         });
     }
 
-    function openThirdPartyCredentialsModal(credKey, closeHandler) {
+    function openThirdPartyCredentialsModal(credKey) {
         $uibModal.open({
             templateUrl: 'views/modals/third_party_credentials.html',
             controller: 'ThirdPartyCredentialModalCtrl',
-            windowClass: 'fadeIn third-party-credential-modal',
+            windowClass: 'fadeIn',
+            keyboard: true,
+            backdrop: 'static',
+            size: 'lg',
             resolve: {
                 credKey: function () {
                     return credKey;
-                },
-                closeHandler: function () {
-                    return closeHandler;
                 }
             }
         });
@@ -623,6 +623,27 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         }
     }
 
+    function getThirdPartyCredentials() {
+        return $http.get(schedulerRestUrl() + 'credentials/', {
+            headers: {'sessionid': getSessionId()}
+        })
+    }
+
+    function postThirdPartyCredentials(key, value) {
+        const configHeaders = {
+            headers: {
+                'sessionid': getSessionId(),
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        };
+        return $http.post(schedulerRestUrl() + 'credentials/' + encodeURIComponent(key), $httpParamSerializerJQLike({value:value}), configHeaders);
+
+    }
+
+    function removeThirdPartyCredentials(key) {
+        return $http.delete(schedulerRestUrl() + 'credentials/' + key, {headers: {'sessionID': getSessionId()}});
+    }
+
     return {
         openJobInSchedulerPortal: openJobInSchedulerPortal,
         openJobInfoPopup:openJobInfoPopup,
@@ -658,7 +679,10 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         createPathStringFromMap: createPathStringFromMap,
         validateWorkflow: validateWorkflow,
         submitJob: submitJob,
-        getJobInfoForJob: getJobInfoForJob
+        getJobInfoForJob: getJobInfoForJob,
+        getThirdPartyCredentials: getThirdPartyCredentials,
+        postThirdPartyCredentials: postThirdPartyCredentials,
+        removeThirdPartyCredentials: removeThirdPartyCredentials
     };
 }
 

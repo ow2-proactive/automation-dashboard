@@ -9,7 +9,6 @@
         "secondaryHtmlFiles": [
             "modals/result_map_modal.html",
             "modals/send_signals_modal.html",
-            "modals/third_party_credentials_modal.html",
             "workflow-execution/templates/job-actions-dropdown.html",
             "workflow-execution/templates/job-details-view.html",
             "workflow-execution/templates/job-details-container.html",
