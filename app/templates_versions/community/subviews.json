@@ -82,17 +82,22 @@
         "secondaryHtmlFiles": [
             "components/line_chart_component.html",
             "components/pie_chart_component.html",
-            "components/bar_chart_component.html",
-            "components/doughnut_chart_component.html"
+            "components/bar_chart_component.html"
         ],
         "notAvailablePage": "page_not_available_job-analytics.html",
         "jsFiles": [
             "scripts/health-dashboard/health-dashboard.js",
+            "scripts/health-dashboard/current-view.js",
+            "scripts/health-dashboard/future-view.js",
+            "scripts/health-dashboard/past-view.js",
+            "scripts/health-dashboard/top-workflows.js",
             "scripts/components/line-chart-component.js",
             "scripts/components/pie-chart-component.js",
             "scripts/components/bar-chart-component.js",
-            "scripts/components/doughnut-chart-component.js",
-            "scripts/services/job-planner-requests.js"
+            "scripts/services/job-planner-requests.js",
+            "scripts/services/job-planner-requests.js",
+            "scripts/services/cloud-watch.js",
+            "scripts/utilities/colors-factory.js"
         ],
         "angularModuleName": "health-dashboard",
         "cssFile": "heath_dashboard_custom_style.css",
