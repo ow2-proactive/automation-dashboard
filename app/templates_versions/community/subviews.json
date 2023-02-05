@@ -97,7 +97,7 @@
             "scripts/services/job-planner-requests.js",
             "scripts/services/job-planner-requests.js",
             "scripts/services/cloud-watch.js",
-            "scripts/utilities/colors-factory.js"
+            "scripts/Utilities/colors-factory.js"
         ],
         "angularModuleName": "health-dashboard",
         "cssFile": "heath_dashboard_custom_style.css",
