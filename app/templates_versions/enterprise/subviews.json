@@ -89,6 +89,7 @@
             "scripts/health-dashboard/future-view.js",
             "scripts/health-dashboard/past-view.js",
             "scripts/health-dashboard/top-workflows.js",
+            "scripts/health-dashboard/optimization-view.js",
             "scripts/components/line-chart-component.js",
             "scripts/components/pie-chart-component.js",
             "scripts/components/bar-chart-component.js",
