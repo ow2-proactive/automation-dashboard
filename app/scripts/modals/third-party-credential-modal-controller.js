@@ -20,7 +20,7 @@ angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCt
         UtilsFactory.getThirdPartyCredentials()
             .then(function (response) {
                 $scope.thirdPartyCredentials = angular.copy(response.data)
-                if (isReload && credKey){
+                if (isReload && credKey) {
                     $scope.isVariableModelEditMode = true;
                     return;
                 }
@@ -42,7 +42,7 @@ angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCt
         UtilsFactory.postThirdPartyCredentials(key, value)
             .then(function (response) {
                 loadThirdPartyCredentials(true);
-                toastr.success(isUpdateMode ? 'Credential updated successfully!' : 'Credential added successfully!', $scope.toastrConfig);
+                toastr.success(isUpdateMode ? 'Credential ' + key + 'updated successfully!' : 'Credential ' + key + 'added successfully!', $scope.toastrConfig);
                 if (isUpdateMode) {
                     $scope.editForm = {
                         key: '',
@@ -103,7 +103,6 @@ angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCt
         $scope.isEditMode = false;
         $scope.editForm.key = '';
         $scope.editForm.value = ''
-        console.log("disabled");
     }
 
     loadThirdPartyCredentials();
