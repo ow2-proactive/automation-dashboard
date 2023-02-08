@@ -641,7 +641,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     }
 
     function removeThirdPartyCredentials(key) {
-        return $http.delete(schedulerRestUrl() + 'credentials/' + key, {headers: {'sessionID': getSessionId()}});
+        return $http.delete(schedulerRestUrl() + 'credentials/' + encodeURIComponent(key), {headers: {'sessionID': getSessionId()}});
     }
 
     return {
