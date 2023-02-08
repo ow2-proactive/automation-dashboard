@@ -1,4 +1,4 @@
-angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCtrl', function($scope, $uibModalInstance, toastr, SweetAlert, UtilsFactory, credKey) {
+angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCtrl', function ($scope, $uibModalInstance, toastr, SweetAlert, UtilsFactory, credKey) {
 
     $scope.isVariableModelEditMode = !!credKey;
 
@@ -16,28 +16,34 @@ angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCt
     $scope.isEditMode = false;
     $scope.isReverseKeySort = false;
 
-    function loadThirdPartyCredentials() {
+    function loadThirdPartyCredentials(isReload) {
         UtilsFactory.getThirdPartyCredentials()
             .then(function (response) {
                 $scope.thirdPartyCredentials = angular.copy(response.data)
-                if (credKey && $scope.thirdPartyCredentials.includes(credKey)){
+                if (isReload && credKey) {
+                    $scope.isVariableModelEditMode = true;
+                    return;
+                }
+                if (credKey && $scope.thirdPartyCredentials.includes(credKey)) {
                     $scope.enableEditMode(credKey)
+                    $scope.isVariableModelEditMode = true;
                 } else {
                     $scope.newForm.key = credKey;
+                    $scope.isVariableModelEditMode = false;
                 }
             })
             .catch(function (response) {
-                console.error("Error while getting third party credentials: ", response);
-                toastr.error((response.errorMessage ? response.errorMessage : "Something went wrong!"), (response.httpErrorCode === 403 ? "Permission denied!" : "Cannot load third party credentials"), $scope.toastrConfig);
+                console.error('Error while getting third party credentials: ', response);
+                toastr.error((response.errorMessage ? response.errorMessage : 'Something went wrong!'), (response.httpErrorCode === 403 ? 'Permission denied!' : 'Cannot load third party credentials'), $scope.toastrConfig);
             });
     }
 
     $scope.addNewCredential = function (key, value, isUpdateMode) {
         UtilsFactory.postThirdPartyCredentials(key, value)
             .then(function (response) {
-                loadThirdPartyCredentials();
-                toastr.success(isUpdateMode ? "Credential updated successfully!" : "Credential added successfully!", $scope.toastrConfig);
-                if(isUpdateMode){
+                loadThirdPartyCredentials(true);
+                toastr.success(isUpdateMode ? 'Credential ' + key + 'updated successfully!' : 'Credential ' + key + 'added successfully!', $scope.toastrConfig);
+                if (isUpdateMode) {
                     $scope.editForm = {
                         key: '',
                         value: ''
@@ -50,8 +56,8 @@ angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCt
                 }
             })
             .catch(function (response) {
-                console.error("Error while getting third party credentials: ", response);
-                toastr.error((response.errorMessage ? response.errorMessage : "Something went wrong!"), (response.httpErrorCode === 403 ? "Permission denied!" : "Cannot create a or update third party credential " + key), $scope.toastrConfig);
+                console.error('Error while getting third party credentials: ', response);
+                toastr.error((response.errorMessage ? response.errorMessage : 'Something went wrong!'), (response.httpErrorCode === 403 ? 'Permission denied!' : 'Cannot create a or update third party credential ' + key), $scope.toastrConfig);
             });
     }
 
@@ -63,11 +69,11 @@ angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCt
     $scope.removeCredential = function (key) {
         SweetAlert.swal({
                 title: UtilsFactory.translate('Are you sure?'),
-                text: UtilsFactory.translate("You are about to remove credential " + key),
+                text: UtilsFactory.translate('You are about to remove credential ' + key),
                 type: 'warning',
                 showCancelButton: true,
                 confirmButtonColor: '#DD6B55',
-                confirmButtonText: UtilsFactory.translate("Remove"),
+                confirmButtonText: UtilsFactory.translate('Remove'),
                 cancelButtonText: UtilsFactory.translate('Cancel'),
                 closeOnConfirm: true,
                 closeOnCancel: true
@@ -77,11 +83,11 @@ angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCt
                     UtilsFactory.removeThirdPartyCredentials(key)
                         .then(function (response) {
                             loadThirdPartyCredentials();
-                            toastr.success("Credential " + key + " removed successfully!", $scope.toastrConfig);
+                            toastr.success('Credential ' + key + ' removed successfully!', $scope.toastrConfig);
                         })
                         .catch(function (response) {
-                            console.error("Error while getting third party credentials: ", response);
-                            toastr.error((response.errorMessage ? response.errorMessage : "Something went wrong!"), (response.httpErrorCode === 403 ? "Permission denied!" : "Cannot remove third party credential " + key), $scope.toastrConfig);
+                            console.error('Error while getting third party credentials: ', response);
+                            toastr.error((response.errorMessage ? response.errorMessage : 'Something went wrong!'), (response.httpErrorCode === 403 ? 'Permission denied!' : 'Cannot remove third party credential ' + key), $scope.toastrConfig);
                         });
                 }
             });
