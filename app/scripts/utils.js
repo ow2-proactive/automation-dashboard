@@ -1,6 +1,6 @@
 function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, $q, $location, toastr, SweetAlert, $httpParamSerializerJQLike) {
     const specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder',
-                            'pa:user_folder', 'pa:catalog_object', 'pa:credential'];
+        'pa:user_folder', 'pa:catalog_object', 'pa:credential'];
     const textAreaModel = ['pa:regexp', 'pa:spel', 'pa:json', 'pa:not_empty_string'];
     const catalogUrlPrefix = $location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/catalog/buckets/';
     const defaultUserPreferences = {
@@ -608,9 +608,9 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             }
         };
         var variablesMap = variables.reduce(function (map, obj) {
-                    map[obj.name] = obj.value;
-                    return map;
-                }, {});
+            map[obj.name] = obj.value;
+            return map;
+        }, {});
         var data = JSON.stringify(variablesMap);
         return $http.post(schedulerRestUrl() + 'jobs/body', data, configHeaders);
     }
@@ -636,7 +636,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         };
-        return $http.post(schedulerRestUrl() + 'credentials/' + encodeURIComponent(key), $httpParamSerializerJQLike({value:value}), configHeaders);
+        return $http.post(schedulerRestUrl() + 'credentials/' + encodeURIComponent(key), $httpParamSerializerJQLike({value: value}), configHeaders);
 
     }
 
@@ -646,7 +646,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
 
     return {
         openJobInSchedulerPortal: openJobInSchedulerPortal,
-        openJobInfoPopup:openJobInfoPopup,
+        openJobInfoPopup: openJobInfoPopup,
         isSpecialUIModel: isSpecialUIModel,
         isTextAreaModel: isTextAreaModel,
         getSortClasses: getSortClasses,
