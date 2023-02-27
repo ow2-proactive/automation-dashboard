@@ -19,6 +19,7 @@
             "workflow-execution/templates/job-results-dropdown.html",
             "workflow-execution/templates/job-service-dropdown.html",
             "workflow-execution/templates/job-signals-dropdown.html",
+            "workflow-execution/templates/typehead-bucket-dropdown.html",
             "workflow-execution/templates/typehead-wf-dropdown.html"
         ],
         "notAvailablePage": "workflow-execution/page_not_available_wf_execution.html",
