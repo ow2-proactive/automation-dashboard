@@ -612,7 +612,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             return map;
         }, {});
         var data = JSON.stringify(variablesMap);
-        return $http.post(schedulerRestUrl() + 'jobs/body', data, configHeaders);
+        return $http.post(schedulerRestUrl() + 'jobs/body?submission.mode='+ submissionMode, data, configHeaders);
     }
 
     function getJobInfoForJob(jobId) {

@@ -1035,7 +1035,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         // Validate + Submit if applicable
         validateWorkflow(function (response) {
             if (response.valid === true) {
-                UtilsFactory.submitJob(bucketName, $scope.workflow.name, $scope.workflow.variables)
+                UtilsFactory.submitJob(bucketName, $scope.workflow.name, $scope.workflow.variables, $scope.workflow.submissionMode)
                     .success(function (submitResponse) {
                         //close the Submit Workflow Panel
                         $scope.$parent.toggleOpenSubmitJobPanel(false);
