@@ -599,7 +599,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         return $http.post(schedulerRestUrl() + 'validateurl/body', data, configHeaders);
     }
 
-    function submitJob(bucketName, workflowName, variables) {
+    function submitJob(bucketName, workflowName, variables, submissionMode) {
         const configHeaders = {
             headers: {
                 'link': catalogUrlPrefix + bucketName + '/resources/' + encodeURIComponent(workflowName) + '/raw',
