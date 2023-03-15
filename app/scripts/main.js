@@ -777,7 +777,8 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
             description: UtilsFactory.getWorkflowMetadata(workflow, 'General', 'description'),
             name: workflow.name,
             commitTime: workflow.commit_time,
-            userName: workflow.username
+            userName: workflow.username,
+            submissionMode: workflow.submissionMode
         }
         $scope.selectedWorkflow = $scope.$parent.$parent.$parent.$parent.$parent.$parent.workflowToSubmit;
         // go to Submit tab
