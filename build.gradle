@@ -225,5 +225,6 @@ grunt_build.dependsOn 'npmInstall'
 // runs "grunt build" as part of your gradle build
 build.dependsOn grunt_build
 
+// force building the jar before the install task (needed for release project)
 jar.mustRunAfter packageDist
 install.dependsOn jar
