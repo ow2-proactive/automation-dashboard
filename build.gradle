@@ -1,7 +1,7 @@
 apply plugin: 'maven'
 apply plugin: 'java'
-apply plugin: 'com.moowork.grunt'
-apply plugin: 'com.moowork.node'
+apply plugin: 'com.github.node-gradle.grunt'
+apply plugin: 'com.github.node-gradle.node'
 
 
 group = 'org.ow2.proactive'
@@ -26,14 +26,15 @@ buildscript {
         maven {
             url "http://repository.activeeon.com/content/groups/proactive/"
         }
-	    maven {
-	          url "https://plugins.gradle.org/m2/"
-	    }
+        maven {
+            url "https://plugins.gradle.org/m2/"
+        }
 
-}
+    }
     dependencies {
-        classpath 'com.moowork.gradle:gradle-grunt-plugin:0.12'
-        classpath 'com.moowork.gradle:gradle-node-plugin:0.12'
+        // version 1.5.3 is the latest version that supports grunt
+        classpath 'com.github.node-gradle.grunt:com.github.node-gradle.grunt.gradle.plugin:1.5.3'
+        classpath 'com.github.node-gradle.node:com.github.node-gradle.node.gradle.plugin:1.5.3'
     }
 }
 
@@ -45,14 +46,14 @@ node {
     // npmVersion = '3.8.6'
 
     // Base URL for fetching node distributions (change if you have a mirror).
-    distBaseUrl = 'https://nodejs.org/dist'
+    distBaseUrl = 'https://mirrors.dotsrc.org/nodejs/release'
 
     // If true, it will download node using above parameters.
     // If false, it will try to use globally installed node.
     download = true
 
     // Set the work directory for unpacking node
-    workDir = file("${project.buildDir}/nodejs")
+    workDir = file("${project.buildDir}")
 
     // Set the work directory where node_modules should be located
     nodeModulesDir = file("${project.projectDir}")
@@ -70,14 +71,14 @@ grunt {
 }
 
 repositories {
-   if (project.hasProperty('local')) {
-       mavenLocal()
-   }
+    if (project.hasProperty('local')) {
+        mavenLocal()
+    }
 
     mavenCentral()
-   maven {
-       url "http://repository.activeeon.com/content/groups/proactive/"
-   }
+    maven {
+        url "http://repository.activeeon.com/content/groups/proactive/"
+    }
 }
 
 uploadArchives {
@@ -118,11 +119,11 @@ task bowerInstall(type: NodeTask) {
 }
 
 task buildEnterprise(type: GruntTask) {
-  args = ["build", "--target=enterprise"]
+    args = ["build", "--target=enterprise"]
 }
 
 task buildCommunity(type: GruntTask) {
-  args = ["build", "--target=community"]
+    args = ["build", "--target=community"]
 }
 
 // delete dist folder with clean
