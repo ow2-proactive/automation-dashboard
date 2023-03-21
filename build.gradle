@@ -96,6 +96,11 @@ uploadArchives {
     }
 }
 
+jar {
+    manifest {
+    }
+}
+
 task packageDist(type: Zip) {
     from 'dist'
     dependsOn grunt_build
@@ -219,3 +224,6 @@ grunt_build.dependsOn 'npmInstall'
 
 // runs "grunt build" as part of your gradle build
 build.dependsOn grunt_build
+
+jar.mustRunAfter packageDist
+install.dependsOn jar
