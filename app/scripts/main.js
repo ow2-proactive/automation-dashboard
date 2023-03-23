@@ -403,7 +403,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 // controller used in navigation.html :
 mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval, $timeout) {
     this.$onInit = function () {
-        var jobAnalyticsChildren = ['job-analytics', 'job-gantt', 'node-gantt'];
+        var jobAnalyticsChildren = ['health-dashboard', 'job-analytics', 'job-gantt', 'node-gantt'];
         var jobPlannerChildren = ['job-planner-calendar-def', 'job-planner-calendar-def-workflows', 'job-planner-execution-planning', 'job-planner-gantt-chart'];
         $timeout(function () {
             var splitUrl = window.location.hash.split('/');
@@ -777,7 +777,8 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
             description: UtilsFactory.getWorkflowMetadata(workflow, 'General', 'description'),
             name: workflow.name,
             commitTime: workflow.commit_time,
-            userName: workflow.username
+            userName: workflow.username,
+            submissionMode: workflow.submissionMode
         }
         $scope.selectedWorkflow = $scope.$parent.$parent.$parent.$parent.$parent.$parent.workflowToSubmit;
         // go to Submit tab
@@ -1035,7 +1036,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         // Validate + Submit if applicable
         validateWorkflow(function (response) {
             if (response.valid === true) {
-                UtilsFactory.submitJob(bucketName, $scope.workflow.name, $scope.workflow.variables)
+                UtilsFactory.submitJob(bucketName, $scope.workflow.name, $scope.workflow.variables, $scope.workflow.submissionMode)
                     .success(function (submitResponse) {
                         //close the Submit Workflow Panel
                         $scope.$parent.toggleOpenSubmitJobPanel(false);

@@ -697,16 +697,6 @@ button[disabled="disabled"] {
     color: #18a689;
 }
 
-.dropdown-menu-right {
-    right: 0;
-    left: auto;
-}
-
-.dropdown-menu-left {
-    right: auto !important;
-    left: 0 !important;
-}
-
 .dropdown-menu>.disabled>a,
 .dropdown-menu>.disabled>a:focus,
 .dropdown-menu>.disabled>a:hover {

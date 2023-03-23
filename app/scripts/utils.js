@@ -1,6 +1,6 @@
-function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, $q, $location, toastr, SweetAlert) {
+function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, $q, $location, toastr, SweetAlert, $httpParamSerializerJQLike) {
     const specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder',
-                            'pa:user_folder', 'pa:catalog_object', 'pa:credential'];
+        'pa:user_folder', 'pa:catalog_object', 'pa:credential'];
     const textAreaModel = ['pa:regexp', 'pa:spel', 'pa:json', 'pa:not_empty_string'];
     const catalogUrlPrefix = $location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/catalog/buckets/';
     const defaultUserPreferences = {
@@ -88,6 +88,15 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             var win = $window.open(url, '/scheduler/');
             win.focus();
         }
+    }
+
+    /**
+     * open detailed job info in popup window
+     **/
+    function openJobInfoPopup(jobId) {
+        window.open('#/job-info?jobid=' + jobId + '&tab=0',
+            'job-info-' + jobId,
+            'toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,directories=no,status=no');
     }
 
     function updateCursor(isWaiting) {
@@ -223,17 +232,17 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         });
     }
 
-    function openThirdPartyCredentialsModal(credKey, closeHandler) {
+    function openThirdPartyCredentialsModal(credKey) {
         $uibModal.open({
             templateUrl: 'views/modals/third_party_credentials.html',
             controller: 'ThirdPartyCredentialModalCtrl',
-            windowClass: 'fadeIn third-party-credential-modal',
+            windowClass: 'fadeIn',
+            keyboard: true,
+            backdrop: 'static',
+            size: 'lg',
             resolve: {
                 credKey: function () {
                     return credKey;
-                },
-                closeHandler: function () {
-                    return closeHandler;
                 }
             }
         });
@@ -576,7 +585,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     function validateWorkflow(bucketName, workflowName, variables) {
         const configHeaders = {
             headers: {
-                'link': catalogUrlPrefix + bucketName + '/resources/ ' + encodeURIComponent(workflowName) + '/raw',
+                'link': catalogUrlPrefix + bucketName + '/resources/' + encodeURIComponent(workflowName) + '/raw',
                 'sessionid': getSessionId(),
                 'Content-Type': 'application/json'
             }
@@ -590,7 +599,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         return $http.post(schedulerRestUrl() + 'validateurl/body', data, configHeaders);
     }
 
-    function submitJob(bucketName, workflowName, variables) {
+    function submitJob(bucketName, workflowName, variables, submissionMode) {
         const configHeaders = {
             headers: {
                 'link': catalogUrlPrefix + bucketName + '/resources/' + encodeURIComponent(workflowName) + '/raw',
@@ -599,11 +608,11 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             }
         };
         var variablesMap = variables.reduce(function (map, obj) {
-                    map[obj.name] = obj.value;
-                    return map;
-                }, {});
+            map[obj.name] = obj.value;
+            return map;
+        }, {});
         var data = JSON.stringify(variablesMap);
-        return $http.post(schedulerRestUrl() + 'jobs/body', data, configHeaders);
+        return $http.post(schedulerRestUrl() + 'jobs/body?submission.mode='+ submissionMode, data, configHeaders);
     }
 
     function getJobInfoForJob(jobId) {
@@ -614,8 +623,30 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         }
     }
 
+    function getThirdPartyCredentials() {
+        return $http.get(schedulerRestUrl() + 'credentials/', {
+            headers: {'sessionid': getSessionId()}
+        })
+    }
+
+    function postThirdPartyCredentials(key, value) {
+        const configHeaders = {
+            headers: {
+                'sessionid': getSessionId(),
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        };
+        return $http.post(schedulerRestUrl() + 'credentials/' + encodeURIComponent(key), $httpParamSerializerJQLike({value: value}), configHeaders);
+
+    }
+
+    function removeThirdPartyCredentials(key) {
+        return $http.delete(schedulerRestUrl() + 'credentials/' + encodeURIComponent(key), {headers: {'sessionID': getSessionId()}});
+    }
+
     return {
         openJobInSchedulerPortal: openJobInSchedulerPortal,
+        openJobInfoPopup: openJobInfoPopup,
         isSpecialUIModel: isSpecialUIModel,
         isTextAreaModel: isTextAreaModel,
         getSortClasses: getSortClasses,
@@ -648,7 +679,10 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         createPathStringFromMap: createPathStringFromMap,
         validateWorkflow: validateWorkflow,
         submitJob: submitJob,
-        getJobInfoForJob: getJobInfoForJob
+        getJobInfoForJob: getJobInfoForJob,
+        getThirdPartyCredentials: getThirdPartyCredentials,
+        postThirdPartyCredentials: postThirdPartyCredentials,
+        removeThirdPartyCredentials: removeThirdPartyCredentials
     };
 }
 

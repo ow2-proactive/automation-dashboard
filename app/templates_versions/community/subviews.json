@@ -19,6 +19,7 @@
             "workflow-execution/templates/job-results-dropdown.html",
             "workflow-execution/templates/job-service-dropdown.html",
             "workflow-execution/templates/job-signals-dropdown.html",
+            "workflow-execution/templates/typehead-bucket-dropdown.html",
             "workflow-execution/templates/typehead-wf-dropdown.html"
         ],
         "notAvailablePage": "workflow-execution/page_not_available_wf_execution.html",
@@ -78,12 +79,26 @@
         "appFolder": "job-analytics-portal/app/",
         "htmlFile": "health-dashboard/health-dashboard.html",
         "tooltip": "View Job Spanning Time & Dependencies",
-        "secondaryHtmlFiles": ["components/chart_component.html"],
+        "secondaryHtmlFiles": [
+            "components/line_chart_component.html",
+            "components/pie_chart_component.html",
+            "components/bar_chart_component.html"
+        ],
         "notAvailablePage": "page_not_available_job-analytics.html",
         "jsFiles": [
             "scripts/health-dashboard/health-dashboard.js",
-            "scripts/components/chart-component.js",
-            "scripts/services/job-planner-requests.js"
+            "scripts/health-dashboard/current-view.js",
+            "scripts/health-dashboard/future-view.js",
+            "scripts/health-dashboard/past-view.js",
+            "scripts/health-dashboard/top-workflows.js",
+            "scripts/health-dashboard/optimization-view.js",
+            "scripts/components/line-chart-component.js",
+            "scripts/components/pie-chart-component.js",
+            "scripts/components/bar-chart-component.js",
+            "scripts/services/job-planner-requests.js",
+            "scripts/services/job-planner-requests.js",
+            "scripts/services/cloud-watch.js",
+            "scripts/Utilities/colors-factory.js"
         ],
         "angularModuleName": "health-dashboard",
         "cssFile": "heath_dashboard_custom_style.css",
@@ -209,6 +224,7 @@
         "htmlFile": "calendar-association/calendar_association.html",
         "tooltip": "Associate Workflows to Calendar",
         "secondaryHtmlFiles": [
+            "calendar-association/association_rbac.html",
             "calendar-association/calendar_list.html"
         ],
         "notAvailablePage": "page_not_available_calendar_association.html",
@@ -217,6 +233,7 @@
             "scripts/services/job-planner-service.js",
             "scripts/services/calendar-list-service.js",
             "scripts/controllers/components/calendar-list.component.js",
+            "scripts/controllers/components/association-RBAC-modal.js",
             "scripts/controllers/calendar-association-controller.js"
         ],
         "angularModuleName": "calendar-association",
