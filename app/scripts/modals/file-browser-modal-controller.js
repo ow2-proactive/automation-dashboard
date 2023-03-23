@@ -1,7 +1,8 @@
-angular.module('workflow-variables').controller('FileBrowserModalCtrl', function($scope, $rootScope, $http, $uibModalInstance, $q, dataspace, variable, selectFolder, SweetAlert, UtilsFactory) {
+angular.module('workflow-variables').controller('FileBrowserModalCtrl', function($scope, $rootScope, $http, $uibModalInstance, $q, dataspace, variable, selectFolder, allowToEdit, SweetAlert, UtilsFactory) {
     var dataspaceRestUrl = JSON.parse(localStorage.restUrl) + "/data/" + dataspace + "/";
     var restRequestHeader = { headers: {'sessionid': getSessionId() }};
     $scope.currentPath = "";
+    $scope.allowToEdit = allowToEdit;
     $scope.locationDescription = UtilsFactory.translate(dataspace.toUpperCase() + " DataSpace");
     $scope.title = UtilsFactory.translate(dataspace.toUpperCase() + " DataSpace File Browser");
     switch(dataspace.toUpperCase()){
