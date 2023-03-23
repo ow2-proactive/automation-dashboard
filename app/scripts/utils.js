@@ -210,7 +210,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     }
 
     // open a pop-up to manage (browse, upload, delete) the global or user data space files
-    function openFileBrowser(variable, dataspace, selectFolder) {
+    function openFileBrowser(variable, dataspace, selectFolder, allowToEdit) {
         $uibModal.open({
             templateUrl: 'views/modals/dataspace-file-browser.html',
             controller: 'FileBrowserModalCtrl',
@@ -227,7 +227,11 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                 },
                 selectFolder: function () {
                     return selectFolder;
-                }
+                },
+                allowToEdit: function () {
+                    return allowToEdit === undefined ? true : allowToEdit;
+                },
+
             }
         });
     }
