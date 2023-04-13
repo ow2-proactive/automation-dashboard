@@ -457,7 +457,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         var len = collection.length;
         var value = '';
         for (var i = 0; i < len; i++) {
-            if ((collection[i].label === propertyLabel) && (collection[i].key === propertyName)) {
+            if ((collection[i].label === propertyLabel) && (collection[i].key.toLowerCase() === propertyName.toLowerCase())) {
                 value = collection[i].value;
             }
         }
