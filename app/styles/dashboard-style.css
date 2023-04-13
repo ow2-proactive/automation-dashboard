@@ -1018,3 +1018,61 @@ md-virtual-repeat-container:-webkit-scrollbar {
 .no-scroll {
     overflow: hidden;
 }
+
+.tight-column {
+    width: 1px;
+    white-space: nowrap;
+}
+
+.tableFixedHead {
+    overflow-y: auto;
+    height: calc(100vh - 360px);
+}
+
+.tableFixedHead thead th {
+    position: sticky;
+    top: 0;
+    background-color: #FFFFFF;
+    z-index: 10;
+    box-shadow: inset 0 -1px 0 #ddd;
+}
+
+.table {
+    table-layout: auto;
+    border-collapse: collapse;
+    width: 100%;
+}
+
+.table .absorbing-column {
+    width: 100%;
+}
+
+.tableFixHead thead th {
+    background-color: #fff;
+    position: sticky;
+    top: 0;
+    z-index: 11;
+    white-space: nowrap;
+    box-shadow: inset 0 -1px 0 #ddd;
+}
+
+.tableFixHead thead th.fixed-column {
+    z-index: 12;
+    left: 0;
+}
+
+.table-hover > tbody > tr:hover .fixed-column {
+    background-color: inherit;
+}
+
+.tableFixHead tbody td.fixed-column {
+    position: sticky;
+    left: 0;
+    z-index: 10;
+    vertical-align: middle !important;
+    background-color: #FFFFFF;
+}
+
+.cell-shadow-right {
+    box-shadow: inset -2px 0px 1px -1px #ddd;
+}
