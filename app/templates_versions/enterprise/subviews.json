@@ -81,7 +81,8 @@
         "secondaryHtmlFiles": [
             "components/line_chart_component.html",
             "components/pie_chart_component.html",
-            "components/bar_chart_component.html"
+            "components/bar_chart_component.html",
+            "health-dashboard/modals/submission-from-modal.html"
         ],
         "notAvailablePage": "page_not_available_job-analytics.html",
         "jsFiles": [
