@@ -2,7 +2,7 @@
  * Created by ActiveEon Team on 18/04/2017.
  */
 
-var mainModule = angular.module('main', ['ngResource', 'spring-data-rest', 'angular-toArrayFilter', 'oitozero.ngSweetAlert', 'ngSanitize', 'pascalprecht.translate']);
+var mainModule = angular.module('main', ['ngResource', 'spring-data-rest', 'angular-toArrayFilter', 'oitozero.ngSweetAlert', 'ngSanitize', 'pascalprecht.translate', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.moveColumns', 'ui.grid.pinning', 'ui.grid.autoResize',]);
 
 function getSessionId() {
     return localStorage['pa.session'];
