@@ -1076,3 +1076,28 @@ md-virtual-repeat-container:-webkit-scrollbar {
 .cell-shadow-right {
     box-shadow: inset -2px 0px 1px -1px #ddd;
 }
+
+.box-container {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(170px,1fr));
+    grid-gap: 5px;
+}
+
+.box-container .ibox {
+    margin-bottom: 0px;
+    padding-right: 0px;
+    padding-left: 0px;
+}
+
+.box-container .ibox .ibox-content {
+    display: grid;
+    grid-template-columns: min-content 1fr;
+    grid-template-rows: repeat(2, min-content);
+    grid-column-gap: 10px;
+    padding: 10px 5px;
+}
+
+.box-container .ibox .ibox-content p {
+    align-self: center;
+    margin-bottom: 0px;
+}
