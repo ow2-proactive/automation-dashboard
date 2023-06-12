@@ -1080,7 +1080,7 @@ md-virtual-repeat-container:-webkit-scrollbar {
 .box-container {
     display: grid;
     grid-template-columns: repeat(auto-fit, minmax(170px,1fr));
-    grid-gap: 5px;
+    grid-gap: 1%;
 }
 
 .box-container .ibox {
