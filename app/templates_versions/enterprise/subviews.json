@@ -79,9 +79,9 @@
         "htmlFile": "health-dashboard/health-dashboard.html",
         "tooltip": "View Job Spanning Time & Dependencies",
         "secondaryHtmlFiles": [
-            "components/line_chart_component.html",
-            "components/pie_chart_component.html",
-            "components/bar_chart_component.html",
+            "directives/line_chart_directive.html",
+            "directives/pie_chart_directive.html",
+            "directives/bar_chart_directive.html",
             "health-dashboard/modals/submission-from-modal.html"
         ],
         "notAvailablePage": "page_not_available_job-analytics.html",
@@ -94,12 +94,12 @@
             "scripts/health-dashboard/optimization-execution-times-view.js",
             "scripts/health-dashboard/optimization-current-platform-view.js",
             "scripts/health-dashboard/optimization-nodes.js",
-            "scripts/components/line-chart-component.js",
-            "scripts/components/pie-chart-component.js",
-            "scripts/components/bar-chart-component.js",
+            "scripts/directives/line-chart-directive.js",
+            "scripts/directives/pie-chart-directive.js",
+            "scripts/directives/bar-chart-directive.js",
             "scripts/services/job-planner-requests.js",
             "scripts/services/cloud-watch.js",
-            "scripts/Utilities/colors-factory.js"
+            "scripts/Utilities/hd-utility.js"
         ],
         "angularModuleName": "health-dashboard",
         "cssFile": "heath_dashboard_custom_style.css",
