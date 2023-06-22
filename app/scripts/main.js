@@ -394,7 +394,6 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 
     // Move the contextual menu near the click according to its position in the window
     $scope.moveContextualMenu = function (clickEvent) {
-        //console.log(angular.element('#context-menu'))
         var contextMenuHeight = angular.element('#context-menu')[0].offsetHeight;
         //if contextual menu will get out of the panel catalog-tab-content, we display it upper
         if (clickEvent['clientY'] + contextMenuHeight < window.innerHeight) {
@@ -613,7 +612,7 @@ mainModule.directive('ngRightClick', function ($parse) {
         restrict: 'A',
         link: {
             //the pre function will determine which item of the contextual menu will be displayed
-            pre: function (scope, element, attrs, data, isBool) {
+            pre: function (scope, element, attrs) {
                 //create a function that will invoke ngRightClick value
                 var fn = $parse(attrs.ngRightClick);
                 //attach the contextmenu event to the element
