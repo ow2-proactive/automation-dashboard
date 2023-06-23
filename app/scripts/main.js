@@ -361,7 +361,6 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         clickEvent.stopPropagation();
         if (isWEJobRowContextMenu) {
             waitAndApplyWEJobRowContextMenuDisplay();
-            closeCustomDropdowns();
         }
     };
 
@@ -369,11 +368,11 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         if(!$('#context-menu').length){
             // we set an observation in order to wait for the render of the context menu
             var observer = new MutationObserver(function (mutations) {
-                console.log(mutations);
                 var contextMenuIncludeElement = angular.element('#context-menu')[0].children[0].children[0];
                 if (mutations.length && contextMenuIncludeElement) {
                     // Remove the dropdown-menu class which prevents the context-menu to be displayed
                     angular.element(contextMenuIncludeElement.childNodes[0]).removeClass('dropdown-menu');
+                    closeJobRowOtherActionsDropDown();
                     observer.disconnect();
                 }
             });
@@ -384,8 +383,8 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         }
     }
 
-    function closeCustomDropdowns() {
-        var dropdownMenu = angular.element('.custom-dropdown');
+    function closeJobRowOtherActionsDropDown() {
+        var dropdownMenu = angular.element(document.getElementsByClassName('dropdown-menu dropdown-menu-right custom-dropdown ng-scope'));
         if (dropdownMenu) {
             dropdownMenu.toggle();
         }
