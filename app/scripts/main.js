@@ -361,6 +361,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         clickEvent.stopPropagation();
         if (isWEJobRowContextMenu) {
             waitAndApplyWEJobRowContextMenuDisplay();
+            closeWEJobRowActionsButtonDropDown();
         }
     };
 
@@ -380,6 +381,13 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                 childList: true,
                 subtree: true
             })
+        }
+    }
+
+    function closeWEJobRowActionsButtonDropDown() {
+        var dropdownMenu = angular.element('.custom-dropdown');
+        if (dropdownMenu) {
+            dropdownMenu.toggle();
         }
     }
 
