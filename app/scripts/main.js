@@ -355,11 +355,40 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         $rootScope.$broadcast('event:StopRefreshing');
     };
 
-    $scope.displayContextualMenu = function (clickEvent, position) {
+    $scope.displayContextualMenu = function (clickEvent, position, isWEJobRowContextMenu) {
         $scope.contextPosition = position;
         $scope.contextDisplay = true;
         clickEvent.stopPropagation();
+        if (isWEJobRowContextMenu) {
+            waitAndApplyWEJobRowContextMenuDisplay();
+        }
     };
+
+    function waitAndApplyWEJobRowContextMenuDisplay() {
+        if(!$('#context-menu').length){
+            // we set an observation in order to wait for the render of the context menu
+            var observer = new MutationObserver(function (mutations) {
+                var contextMenuIncludeElement = angular.element('#context-menu')[0].children[0].children[0];
+                if (mutations.length && contextMenuIncludeElement) {
+                    // Remove the dropdown-menu class which prevents the context-menu to be displayed
+                    angular.element(contextMenuIncludeElement.childNodes[0]).removeClass('dropdown-menu');
+                    closeJobRowOtherActionsDropDown();
+                    observer.disconnect();
+                }
+            });
+            observer.observe($('#workflow-execution-main')[0], {
+                childList: true,
+                subtree: true
+            })
+        }
+    }
+
+    function closeJobRowOtherActionsDropDown() {
+        var dropdownMenu = angular.element(document.getElementsByClassName('dropdown-menu dropdown-menu-right custom-dropdown ng-scope'));
+        if (dropdownMenu) {
+            dropdownMenu.toggle();
+        }
+    }
 
     $scope.hideContextualMenu = function () {
         $scope.contextDisplay = false;
@@ -372,7 +401,6 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 
     // Move the contextual menu near the click according to its position in the window
     $scope.moveContextualMenu = function (clickEvent) {
-
         var contextMenuHeight = angular.element('#context-menu')[0].offsetHeight;
         //if contextual menu will get out of the panel catalog-tab-content, we display it upper
         if (clickEvent['clientY'] + contextMenuHeight < window.innerHeight) {
@@ -593,16 +621,22 @@ mainModule.directive('ngRightClick', function ($parse) {
             //the pre function will determine which item of the contextual menu will be displayed
             pre: function (scope, element, attrs) {
                 //create a function that will invoke ngRightClick value
-
                 var fn = $parse(attrs.ngRightClick);
                 //attach the contextmenu event to the element
                 element.bind('contextmenu', function (event) {
                     scope.$apply(function (scope) {
                         //cancel the os default contextual menu
                         event.preventDefault();
-
+                        /*
+                            contextMenuData holds the job data used by the context-menu that
+                            is displayed when a right click in a job row of WE is done.
+                            If contextMenuData is undefined, we are not on the WE portal.
+                        */
+                        if (scope.contextMenuData) {
+                            scope.contextMenuData['job'] = scope.job;
+                            scope.contextMenuData['subsLevel'] = scope.subsLevel;
+                        }
                         if (attrs.ngRightClick !== '') {
-                            //call the function that invoke the function included in ngRightClick value
                             fn(scope, {$event: event});
                         }
                     });
@@ -616,7 +650,6 @@ mainModule.directive('ngRightClick', function ($parse) {
                 if (attrs.ngRightClick !== '') {
                     element.bind('contextmenu', function (event) {
                         scope.moveContextualMenu(event)
-
                     });
                 }
             }
