@@ -390,8 +390,13 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         }
     }
 
-    $scope.hideContextualMenu = function () {
-        $scope.contextDisplay = false;
+    $scope.hideContextualMenu = function (event) {
+        if (!event) {
+            // It's a scroll event
+            return;
+        } else {
+            $scope.contextDisplay = false;
+        }
     };
 
     // Check if position match with the position set by displayContextualMenu
