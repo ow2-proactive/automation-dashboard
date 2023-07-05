@@ -183,7 +183,7 @@ mainModule.config(function ($translateProvider, $translatePartialLoaderProvider)
 
 // --------------- Controllers -----------------
 
-mainModule.controller('mainController', function ($window, $http, $scope, $rootScope, $state, $location, $interval, $translate, $uibModalStack, permissionService, SweetAlert, UtilsFactory) {
+mainModule.controller('mainController', function ($window, $http, $scope, $rootScope, $state, $location, $interval, $translate, $uibModalStack, $timeout, permissionService, SweetAlert, UtilsFactory) {
 
     this.$onInit = function () {
         $scope.main.userName = localStorage['pa.login'];
@@ -356,16 +356,34 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
     };
 
     $scope.displayContextualMenu = function (clickEvent, position, isWEJobRowContextMenu) {
-        $scope.contextPosition = position;
-        $scope.contextDisplay = true;
-        clickEvent.stopPropagation();
-        if (isWEJobRowContextMenu) {
-            waitAndApplyWEJobRowContextMenuDisplay();
-        }
+        console.log('displayContextualMenu execution ...')
+        // Force refresh of contextMenu to trigger variables init in ng-init
+        //if ($scope.contextDisplay) {
+            //$scope.contextDisplay = false;
+            //$timeout(function () {
+                $scope.contextPosition = position;
+                $scope.contextDisplay = true;
+                clickEvent.stopPropagation();
+                if (isWEJobRowContextMenu) {
+                    //console.log("waitAndApplyWEJobRowContextMenuDisplay IN TIMEOUT is true")
+                    waitAndApplyWEJobRowContextMenuDisplay();
+                }
+            /*}, 200)
+        } else {
+            var isContextMenuOpen = angular.element(document.getElementById('context-menu'));
+            console.log('contextDisplay before = '+$scope.contextDisplay)
+            if (isContextMenuOpen[0]) {
+                console.log('ContextMenu is toggle !')
+                $scope.contextDisplay = false;
+                isContextMenuOpen.toggle();
+            }
+            console.log('contextDisplay after = '+$scope.contextDisplay)
+        }*/
     };
 
     function waitAndApplyWEJobRowContextMenuDisplay() {
-        if(!$('#context-menu').length){
+        console.log("waitAndApplyWEJobRowContextMenuDisplay exec ...")
+        if(!$('#context-menu').length) {
             // we set an observation in order to wait for the render of the context menu
             var observer = new MutationObserver(function (mutations) {
                 var contextMenuIncludeElement = angular.element('#context-menu')[0].children[0].children[0];
@@ -391,10 +409,13 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
     }
 
     $scope.hideContextualMenu = function (event) {
+        console.log('hideContextualMenu called !')
         if (!event) {
+            console.log('event is undefined ... exit function')
             // It's a scroll event
             return;
         } else {
+            console.log('event is defined :) set contextDisplay to false')
             $scope.contextDisplay = false;
         }
     };
@@ -406,22 +427,24 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 
     // Move the contextual menu near the click according to its position in the window
     $scope.moveContextualMenu = function (clickEvent) {
-        var contextMenuHeight = angular.element('#context-menu')[0].offsetHeight;
-        //if contextual menu will get out of the panel catalog-tab-content, we display it upper
-        if (clickEvent['clientY'] + contextMenuHeight < window.innerHeight) {
-            angular.element('#context-menu').css('top', clickEvent['clientY'] + 'px')
-        } else {
-            angular.element('#context-menu').css('top', (clickEvent['clientY'] - contextMenuHeight) + 'px')
-        }
+        console.log('moveContextualMenu execution ...')
+        //$timeout(function() {
+            var contextMenuHeight = angular.element('#context-menu')[0].offsetHeight;
+            //if contextual menu will get out of the panel catalog-tab-content, we display it upper
+            if (clickEvent['clientY'] + contextMenuHeight < window.innerHeight) {
+                angular.element('#context-menu').css('top', clickEvent['clientY'] + 'px')
+            } else {
+                angular.element('#context-menu').css('top', (clickEvent['clientY'] - contextMenuHeight) + 'px')
+            }
 
-        var contextMenuWidth = angular.element('#context-menu')[0].offsetWidth;
-        //if contextual menu will get out of the panel catalog-tab-content, we display it upper
-        if (clickEvent['clientX'] + contextMenuWidth < window.innerWidth) {
-            angular.element('#context-menu').css('left', clickEvent['clientX'] + 'px')
-        } else {
-            angular.element('#context-menu').css('left', (clickEvent['clientX'] - contextMenuWidth) + 'px')
-        }
-
+            var contextMenuWidth = angular.element('#context-menu')[0].offsetWidth;
+            //if contextual menu will get out of the panel catalog-tab-content, we display it upper
+            if (clickEvent['clientX'] + contextMenuWidth < window.innerWidth) {
+                angular.element('#context-menu').css('left', clickEvent['clientX'] + 'px')
+            } else {
+                angular.element('#context-menu').css('left', (clickEvent['clientX'] - contextMenuWidth) + 'px')
+            }
+        //}, 500);
     };
 
     /**
@@ -627,9 +650,12 @@ mainModule.directive('ngRightClick', function ($parse) {
             pre: function (scope, element, attrs) {
                 //create a function that will invoke ngRightClick value
                 var fn = $parse(attrs.ngRightClick);
+                console.log('element = '+ JSON.stringify(element))
                 //attach the contextmenu event to the element
                 element.bind('contextmenu', function (event) {
+                    console.log('In element.bind')
                     scope.$apply(function (scope) {
+                        console.log('In scope.apply')
                         //cancel the os default contextual menu
                         event.preventDefault();
                         /*
@@ -641,6 +667,7 @@ mainModule.directive('ngRightClick', function ($parse) {
                             scope.contextMenuData['job'] = scope.job;
                             scope.contextMenuData['subsLevel'] = scope.subsLevel;
                         }
+
                         if (attrs.ngRightClick !== '') {
                             fn(scope, {$event: event});
                         }
