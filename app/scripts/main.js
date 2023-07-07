@@ -183,7 +183,7 @@ mainModule.config(function ($translateProvider, $translatePartialLoaderProvider)
 
 // --------------- Controllers -----------------
 
-mainModule.controller('mainController', function ($window, $http, $scope, $rootScope, $state, $location, $interval, $translate, $uibModalStack, $timeout, permissionService, SweetAlert, UtilsFactory) {
+mainModule.controller('mainController', function ($window, $http, $scope, $rootScope, $state, $location, $interval, $translate, $uibModalStack, permissionService, SweetAlert, UtilsFactory) {
 
     this.$onInit = function () {
         $scope.main.userName = localStorage['pa.login'];
@@ -404,13 +404,10 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
     }
 
     $scope.hideContextualMenu = function (event) {
-        console.log('hideContextualMenu called !')
         if (!event) {
-            console.log('event is undefined ... exit function')
             // It's a scroll event
             return;
         } else {
-            console.log('event is defined :) set contextDisplay to false')
             $scope.contextDisplay = false;
         }
     };
@@ -634,7 +631,7 @@ mainModule.controller('footerController', function ($scope) {
 });
 
 
-mainModule.directive('ngRightClick', function ($parse, $timeout) {
+mainModule.directive('ngRightClick', function ($parse) {
     return {
         restrict: 'A',
         link: {
@@ -644,26 +641,23 @@ mainModule.directive('ngRightClick', function ($parse, $timeout) {
                 var fn = $parse(attrs.ngRightClick);
                 //attach the contextmenu event to the element
                 element.bind('contextmenu', function (event) {
-                    console.log('In element.bind')
-                    scope.$parent.contextDisplay=false;
-                        scope.$apply(function (scope) {
-                            console.log('In scope.apply')
-                            //cancel the os default contextual menu
-                            event.preventDefault();
-                            /*
-                                contextMenuData holds the job data used by the context-menu that
-                                is displayed when a right click in a job row of WE is done.
-                                If contextMenuData is undefined, we are not on the WE portal.
-                            */
-                            if (scope.contextMenuData) {
-                                scope.contextMenuData['job'] = scope.job;
-                                scope.contextMenuData['subsLevel'] = scope.subsLevel;
-                            }
+                    scope.$apply(function (scope) {
+                        //cancel the os default contextual menu
+                        event.preventDefault();
+                        /*
+                            contextMenuData holds the job data used by the context-menu that
+                            is displayed when a right click in a job row of WE is done.
+                            If contextMenuData is undefined, we are not on the WE portal.
+                        */
+                        if (scope.contextMenuData) {
+                            scope.contextMenuData['job'] = scope.job;
+                            scope.contextMenuData['subsLevel'] = scope.subsLevel;
+                        }
 
-                            if (attrs.ngRightClick !== '') {
-                                fn(scope, {$event: event});
-                            }
-                        });
+                        if (attrs.ngRightClick !== '') {
+                            fn(scope, {$event: event});
+                        }
+                    });
                 });
             },
 
