@@ -355,34 +355,20 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         $rootScope.$broadcast('event:StopRefreshing');
     };
 
-    $scope.displayContextualMenu = function (clickEvent, position, isWEJobRowContextMenu) {
-        console.log('displayContextualMenu execution ...')
-        // Force refresh of contextMenu to trigger variables init in ng-init
-        //if ($scope.contextDisplay) {
-            //$scope.contextDisplay = false;
-            //$timeout(function () {
-                $scope.contextPosition = position;
-                $scope.contextDisplay = true;
-                clickEvent.stopPropagation();
-                if (isWEJobRowContextMenu) {
-                    //console.log("waitAndApplyWEJobRowContextMenuDisplay IN TIMEOUT is true")
-                    waitAndApplyWEJobRowContextMenuDisplay();
-                }
-            /*}, 200)
-        } else {
-            var isContextMenuOpen = angular.element(document.getElementById('context-menu'));
-            console.log('contextDisplay before = '+$scope.contextDisplay)
-            if (isContextMenuOpen[0]) {
-                console.log('ContextMenu is toggle !')
-                $scope.contextDisplay = false;
-                isContextMenuOpen.toggle();
+    $scope.displayContextualMenu = function (clickEvent, position, isWEJobRowContextMenu, data) {
+            $scope.contextPosition = position;
+            $scope.contextDisplay = true;
+            clickEvent.stopPropagation();
+            var isNeedToInjectDataInContextMenuScope = false;
+            if (isWEJobRowContextMenu) {
+                isNeedToInjectDataInContextMenuScope = waitAndApplyWEJobRowContextMenuDisplay(data);
             }
-            console.log('contextDisplay after = '+$scope.contextDisplay)
-        }*/
+            if (data && isNeedToInjectDataInContextMenuScope) {
+                injectDataInContextMenuScope(data);
+            }
     };
 
-    function waitAndApplyWEJobRowContextMenuDisplay() {
-        console.log("waitAndApplyWEJobRowContextMenuDisplay exec ...")
+    function waitAndApplyWEJobRowContextMenuDisplay(data) {
         if(!$('#context-menu').length) {
             // we set an observation in order to wait for the render of the context menu
             var observer = new MutationObserver(function (mutations) {
@@ -398,7 +384,16 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                 childList: true,
                 subtree: true
             })
+            return false;
+        } else {
+            return true;
         }
+    }
+
+    function injectDataInContextMenuScope(data) {
+        Object.keys(data).forEach(function(key) {
+            angular.element(document.getElementById('context-menu')).scope()[key] = data[key];
+        });
     }
 
     function closeJobRowOtherActionsDropDown() {
@@ -427,24 +422,21 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 
     // Move the contextual menu near the click according to its position in the window
     $scope.moveContextualMenu = function (clickEvent) {
-        console.log('moveContextualMenu execution ...')
-        //$timeout(function() {
-            var contextMenuHeight = angular.element('#context-menu')[0].offsetHeight;
-            //if contextual menu will get out of the panel catalog-tab-content, we display it upper
-            if (clickEvent['clientY'] + contextMenuHeight < window.innerHeight) {
-                angular.element('#context-menu').css('top', clickEvent['clientY'] + 'px')
-            } else {
-                angular.element('#context-menu').css('top', (clickEvent['clientY'] - contextMenuHeight) + 'px')
-            }
+        var contextMenuHeight = angular.element('#context-menu')[0].offsetHeight;
+        //if contextual menu will get out of the panel catalog-tab-content, we display it upper
+        if (clickEvent['clientY'] + contextMenuHeight < window.innerHeight) {
+            angular.element('#context-menu').css('top', clickEvent['clientY'] + 'px')
+        } else {
+            angular.element('#context-menu').css('top', (clickEvent['clientY'] - contextMenuHeight) + 'px')
+        }
 
-            var contextMenuWidth = angular.element('#context-menu')[0].offsetWidth;
-            //if contextual menu will get out of the panel catalog-tab-content, we display it upper
-            if (clickEvent['clientX'] + contextMenuWidth < window.innerWidth) {
-                angular.element('#context-menu').css('left', clickEvent['clientX'] + 'px')
-            } else {
-                angular.element('#context-menu').css('left', (clickEvent['clientX'] - contextMenuWidth) + 'px')
-            }
-        //}, 500);
+        var contextMenuWidth = angular.element('#context-menu')[0].offsetWidth;
+        //if contextual menu will get out of the panel catalog-tab-content, we display it upper
+        if (clickEvent['clientX'] + contextMenuWidth < window.innerWidth) {
+            angular.element('#context-menu').css('left', clickEvent['clientX'] + 'px')
+        } else {
+            angular.element('#context-menu').css('left', (clickEvent['clientX'] - contextMenuWidth) + 'px')
+        }
     };
 
     /**
@@ -642,7 +634,7 @@ mainModule.controller('footerController', function ($scope) {
 });
 
 
-mainModule.directive('ngRightClick', function ($parse) {
+mainModule.directive('ngRightClick', function ($parse, $timeout) {
     return {
         restrict: 'A',
         link: {
@@ -650,28 +642,28 @@ mainModule.directive('ngRightClick', function ($parse) {
             pre: function (scope, element, attrs) {
                 //create a function that will invoke ngRightClick value
                 var fn = $parse(attrs.ngRightClick);
-                console.log('element = '+ JSON.stringify(element))
                 //attach the contextmenu event to the element
                 element.bind('contextmenu', function (event) {
                     console.log('In element.bind')
-                    scope.$apply(function (scope) {
-                        console.log('In scope.apply')
-                        //cancel the os default contextual menu
-                        event.preventDefault();
-                        /*
-                            contextMenuData holds the job data used by the context-menu that
-                            is displayed when a right click in a job row of WE is done.
-                            If contextMenuData is undefined, we are not on the WE portal.
-                        */
-                        if (scope.contextMenuData) {
-                            scope.contextMenuData['job'] = scope.job;
-                            scope.contextMenuData['subsLevel'] = scope.subsLevel;
-                        }
+                    scope.$parent.contextDisplay=false;
+                        scope.$apply(function (scope) {
+                            console.log('In scope.apply')
+                            //cancel the os default contextual menu
+                            event.preventDefault();
+                            /*
+                                contextMenuData holds the job data used by the context-menu that
+                                is displayed when a right click in a job row of WE is done.
+                                If contextMenuData is undefined, we are not on the WE portal.
+                            */
+                            if (scope.contextMenuData) {
+                                scope.contextMenuData['job'] = scope.job;
+                                scope.contextMenuData['subsLevel'] = scope.subsLevel;
+                            }
 
-                        if (attrs.ngRightClick !== '') {
-                            fn(scope, {$event: event});
-                        }
-                    });
+                            if (attrs.ngRightClick !== '') {
+                                fn(scope, {$event: event});
+                            }
+                        });
                 });
             },
 
