@@ -124,6 +124,112 @@
     background-color: #DEF;
 }
 
+.col-flex {
+    display: -moz-flex;
+    display: -ms-inline-flexbox;
+    display: -webkit-inline-flex;
+    display: inline-flex;
+}
+
+.col-flexbox {
+    display: -webkit-box;
+    display: -moz-box;
+    display: -ms-flexbox;
+    display: -webkit-flex;
+    display: flex;
+}
+
+.status-box {
+    height: 11px;
+    width: 20px;
+    display: inline-block;
+}
+
+#search-form.show-search-form {
+    max-height: 100vh;
+    visibility: visible;
+}
+
+.search-form-container {
+    margin-bottom: 30px;
+}
+
+.search-form-box {
+    margin-right: 30px;
+    box-shadow: 0 4px 8px 0 rgba(0, 0, 0, 0.2), 0 6px 20px 0 rgba(0, 0, 0, 0.19);
+}
+
+#search-params-list {
+    padding-left: 0;
+    display: inline;
+    list-style-type: none;
+    font-size: 15px;
+}
+
+#search-params-list li {
+    display: inline-flex;
+    padding: 2px 0px;
+}
+
+#search-params-list li .label {
+    font-size: 80%;
+    padding: 5px 8px;
+    font-weight: 300;
+    margin-bottom: 1px;
+}
+
+#search-params-list li .label-primary {
+    background-color: #1ab394;
+}
+
+#search-params-list li .label-default {
+    background-color: #d1dade;
+}
+
+#search-params-list li .label-title {
+    border-radius: 20px 0px 0px 20px;
+    margin-right: 2px;
+    background-color: #577195d9;
+    font-weight: 500;
+    color: #ffffff;
+    display: -moz-flex;
+    display: -ms-flex;
+    display: -o-flex;
+    display: -webkit-flex;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+#search-params-list li .label-content {
+    border-radius: 0px 0px 0px 0px;
+    margin-right: 1px;
+}
+
+#search-params-list li .label-content-last {
+    border-radius: 0px 20px 20px 0px;
+}
+
+.search-items-container {
+    display: -webkit-flex; /* Safari */
+    -webkit-flex-wrap: wrap; /* Safari 6.1+ */
+    display: flex;
+    flex-wrap: wrap;
+}
+
+#search-input {
+    float: left;
+    display: inline-flex;
+    padding-top: 5px;
+    z-index: 10;
+}
+#search-input-container {
+    padding: 3px 12px;
+    min-height: 35px;
+    cursor: pointer;
+    height: auto;
+}
+
 .footer {
     position: fixed !important;
     z-index: 1000;
