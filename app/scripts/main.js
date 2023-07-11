@@ -355,17 +355,21 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         $rootScope.$broadcast('event:StopRefreshing');
     };
 
-    $scope.displayContextualMenu = function (clickEvent, position, isWEJobRowContextMenu) {
-        $scope.contextPosition = position;
-        $scope.contextDisplay = true;
-        clickEvent.stopPropagation();
-        if (isWEJobRowContextMenu) {
-            waitAndApplyWEJobRowContextMenuDisplay();
-        }
+    $scope.displayContextualMenu = function (clickEvent, position, isWEJobRowContextMenu, data) {
+            clickEvent.stopPropagation();
+            $scope.contextPosition = position;
+            $scope.contextDisplay = true;
+            var isNeedToInjectDataInContextMenuScope = false;
+            if (isWEJobRowContextMenu) {
+                isNeedToInjectDataInContextMenuScope = waitAndApplyWEJobRowContextMenuDisplay(data);
+            }
+            if (data && isNeedToInjectDataInContextMenuScope) {
+                injectDataInContextMenuScope(data);
+            }
     };
 
-    function waitAndApplyWEJobRowContextMenuDisplay() {
-        if(!$('#context-menu').length){
+    function waitAndApplyWEJobRowContextMenuDisplay(data) {
+        if(!$('#context-menu').length) {
             // we set an observation in order to wait for the render of the context menu
             var observer = new MutationObserver(function (mutations) {
                 var contextMenuIncludeElement = angular.element('#context-menu')[0].children[0].children[0];
@@ -380,7 +384,16 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                 childList: true,
                 subtree: true
             })
+            return false;
+        } else {
+            return true;
         }
+    }
+
+    function injectDataInContextMenuScope(data) {
+        Object.keys(data).forEach(function(key) {
+            angular.element(document.getElementById('context-menu')).scope()[key] = data[key];
+        });
     }
 
     function closeJobRowOtherActionsDropDown() {
@@ -421,7 +434,6 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         } else {
             angular.element('#context-menu').css('left', (clickEvent['clientX'] - contextMenuWidth) + 'px')
         }
-
     };
 
     /**
@@ -641,6 +653,7 @@ mainModule.directive('ngRightClick', function ($parse) {
                             scope.contextMenuData['job'] = scope.job;
                             scope.contextMenuData['subsLevel'] = scope.subsLevel;
                         }
+
                         if (attrs.ngRightClick !== '') {
                             fn(scope, {$event: event});
                         }
