@@ -356,9 +356,9 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
     };
 
     $scope.displayContextualMenu = function (clickEvent, position, isWEJobRowContextMenu, data) {
+            clickEvent.stopPropagation();
             $scope.contextPosition = position;
             $scope.contextDisplay = true;
-            clickEvent.stopPropagation();
             var isNeedToInjectDataInContextMenuScope = false;
             if (isWEJobRowContextMenu) {
                 isNeedToInjectDataInContextMenuScope = waitAndApplyWEJobRowContextMenuDisplay(data);
@@ -641,6 +641,7 @@ mainModule.directive('ngRightClick', function ($parse) {
                 var fn = $parse(attrs.ngRightClick);
                 //attach the contextmenu event to the element
                 element.bind('contextmenu', function (event) {
+                    scope.$parent.contextDisplay=false;
                     scope.$apply(function (scope) {
                         //cancel the os default contextual menu
                         event.preventDefault();
