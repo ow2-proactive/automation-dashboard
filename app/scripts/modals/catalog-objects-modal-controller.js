@@ -5,10 +5,13 @@ angular.module('workflow-variables').controller('CatalogObjectsModalCtrl', funct
         var params = matches[1].split(',');
         var kindFilter = params[0];
         var filterContentType = params[1];
+        var objectNameFilter = params[3];
     }
+
     var kindFilterUrl = (kindFilter) ? 'kind=' + kindFilter : '';
-    var contentFilterUrl = (filterContentType) ? 'contentType=' + filterContentType : '';
-    var filterUrlParams = [kindFilterUrl, contentFilterUrl].join('&');
+    var contentFilterUrl = (filterContentType) ? 'contentType=' + encodeURIComponent(filterContentType) : '';
+    var objectNameFilterUrl = (objectNameFilter) ? "objectName=" + encodeURIComponent(objectNameFilter) : "";
+    var filterUrlParams = [kindFilterUrl, contentFilterUrl, objectNameFilterUrl].join('&');
 
     $scope.updateBuckets = function() {
         $scope.clearData();
