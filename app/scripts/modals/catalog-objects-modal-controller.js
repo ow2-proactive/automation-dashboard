@@ -8,10 +8,10 @@ angular.module('workflow-variables').controller('CatalogObjectsModalCtrl', funct
         var objectNameFilter = params[3];
     }
 
-    var kindFilterUrl = (kindFilter) ? 'kind=' + kindFilter : '';
+    var kindFilterUrl = (kindFilter) ? 'kind=' + encodeURIComponent(kindFilter) : '';
     var contentFilterUrl = (filterContentType) ? 'contentType=' + encodeURIComponent(filterContentType) : '';
     var objectNameFilterUrl = (objectNameFilter) ? "objectName=" + encodeURIComponent(objectNameFilter) : "";
-    var filterUrlParams = [kindFilterUrl, contentFilterUrl, objectNameFilterUrl].join('&');
+    var filterUrlParams = [kindFilterUrl, contentFilterUrl, objectNameFilterUrl].filter(x => typeof x === 'string' && x.length > 0).join('&');
 
     $scope.updateBuckets = function() {
         $scope.clearData();
