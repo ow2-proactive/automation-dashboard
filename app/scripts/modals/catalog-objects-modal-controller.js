@@ -11,7 +11,9 @@ angular.module('workflow-variables').controller('CatalogObjectsModalCtrl', funct
     var kindFilterUrl = (kindFilter) ? 'kind=' + encodeURIComponent(kindFilter) : '';
     var contentFilterUrl = (filterContentType) ? 'contentType=' + encodeURIComponent(filterContentType) : '';
     var objectNameFilterUrl = (objectNameFilter) ? "objectName=" + encodeURIComponent(objectNameFilter) : "";
-    var filterUrlParams = [kindFilterUrl, contentFilterUrl, objectNameFilterUrl].filter(x => typeof x === 'string' && x.length > 0).join('&');
+    var filterUrlParams = [kindFilterUrl, contentFilterUrl, objectNameFilterUrl].filter(function(x) {
+        return (typeof x === 'string' && x.length > 0)
+    }).join('&');
 
     $scope.updateBuckets = function() {
         $scope.clearData();
