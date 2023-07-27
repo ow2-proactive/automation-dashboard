@@ -47,7 +47,12 @@ Before building, you need to clone the projects to the following tree structure 
 cloud-automation, cloud-watch-portal, generic-catalog-portal, job-analytics-portal, job-planner-portal, notification-portal are the subview of the dashboard here but it can be different.
 First, clone ProActive Dashboard, and then clone each subviews project inside. `npm install` & `bower install` will respectively create `node_modules` & `bower_components` folders.
 
-Once you have this tree structure, to build the ProActive Dashboard, just use the following command to generate the enterprise version of the dashboard:
+In case of Windows environment, you will need to execute the following command from the project root directory:
+```
+find . -type f -print0 | xargs -0 dos2unix -s
+```
+
+Once you have the same tree structure as presented above, to build the ProActive Dashboard, just use the following command to generate the enterprise version of the dashboard:
 ```
 grunt clean build --target=enterprise
 ```
