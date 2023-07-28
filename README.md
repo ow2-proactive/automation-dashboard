@@ -47,7 +47,7 @@ Before building, you need to clone the projects to the following tree structure 
 cloud-automation, cloud-watch-portal, generic-catalog-portal, job-analytics-portal, job-planner-portal, notification-portal are the subview of the dashboard here but it can be different.
 First, clone ProActive Dashboard, and then clone each subviews project inside. `npm install` & `bower install` will respectively create `node_modules` & `bower_components` folders.
 
-In case of Windows environment, you will need to execute the following command from the project root directory:
+In case of Windows environment, you will need to execute the following command from the project root directory (from a linux commands compatible terminal):
 ```
 find . -type f -print0 | xargs -0 dos2unix -s
 ```
