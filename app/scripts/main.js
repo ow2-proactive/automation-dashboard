@@ -253,6 +253,20 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         }
     }
 
+    $scope.getDomains = function () {
+        $http.get(JSON.parse(localStorage.schedulerRestUrl) + 'domains/')
+            .then(function (response) {
+                $scope.domains = response.data;
+                if(!$scope.domains.includes("")) {
+                    $scope.domains.unshift("");
+                }
+                $scope.selectedDomain = $scope.domains[0];
+            })
+            .catch(function (response) {
+                 console.error('Error getting domains:', response);
+            });
+    }
+
     function displayAlertAndRedirectToFirstAccessiblePortalIfExist(portal) {
         UtilsFactory.displayTranslatedMessage('warning', 'Access not authorized', ['Cannot connect to', portal + '.', 'The access is not authorized']);
         if (!$scope.firstAccessiblePortal) {
@@ -577,19 +591,36 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
 });
 
 mainModule.controller('loginController', function ($scope, $state, permissionService, $stateParams, $location, $rootScope) {
+    this.$onInit = function () {
+        $scope.domains = [];
+        $scope.getDomains();
+    };
     $scope.redirectsTo = $stateParams.redirectsTo;
     var host = $location.host();
     $scope.showLinkAccountCreation = (host === 'try.activeeon.com' || host === 'azure-try.activeeon.com');
     var username = getCookie('username');
     if (username === 'null') {
-        $scope.username = localStorage['pa.login'];
+        var localStorageUser = localStorage['pa.login'];
+        if (localStorageUser && localStorageUser.includes("\\")) {
+            var domainUsername = localStorageUser.split("\\");
+            $scope.selectedDomain = domainUsername[0];
+            localStorageUser = domainUsername[1];
+        }
+        $scope.username = localStorageUser;
     } else {
+        if (username && username.includes("\\")) {
+            var domainUsername = username.split("\\");
+            $scope.selectedDomain = domainUsername[0];
+            username = domainUsername[1];
+        }
         $scope.username = username;
     }
     $scope.login = function () {
         var username = $scope.username;
+        if($scope.selectedDomain) {
+            username = $scope.selectedDomain + "\\" + $scope.username;
+        }
         var password = $scope.password;
-
         localStorage['pa.login'] = username;
         $scope.main.userName = localStorage['pa.login'];
 

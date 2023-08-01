@@ -18,6 +18,12 @@
                 <form class="form-horizontal" id="login-form" ng-submit="login()">
 
                     <div class="form-group">
+                        <label class="control-label">Domain | Tenant: </label>
+                        <select ng-style="{'width': 165 + 'px'}" n-init="selectedDomain" ng-model="selectedDomain" ng-disabled="!$parent.$parent.domains.length"
+                                ng-options='domain for domain in $parent.$parent.domains'></select>
+                    </div>
+
+                    <div class="form-group">
                         <label class="control-label">{{'Username'|translate}}: </label>
                         <input type="text" id="username" ng-model="username" required autofocus>
                     </div>
