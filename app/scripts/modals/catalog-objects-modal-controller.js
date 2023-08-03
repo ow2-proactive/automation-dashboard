@@ -5,13 +5,15 @@ angular.module('workflow-variables').controller('CatalogObjectsModalCtrl', funct
         var params = matches[1].split(',');
         var kindFilter = params[0];
         var filterContentType = params[1];
+        var bucketNameFilter = params[2];
         var objectNameFilter = params[3];
     }
 
     var kindFilterUrl = (kindFilter) ? 'kind=' + encodeURIComponent(kindFilter) : '';
     var contentFilterUrl = (filterContentType) ? 'contentType=' + encodeURIComponent(filterContentType) : '';
-    var objectNameFilterUrl = (objectNameFilter) ? "objectName=" + encodeURIComponent(objectNameFilter) : "";
-    var filterUrlParams = [kindFilterUrl, contentFilterUrl, objectNameFilterUrl].filter(function(x) {
+    var bucketNameFilterUrl = (bucketNameFilter) ? "bucketName=" + encodeURIComponent(bucketNameFilter) : '';
+    var objectNameFilterUrl = (objectNameFilter) ? "objectName=" + encodeURIComponent(objectNameFilter) : '';
+    var filterUrlParams = [kindFilterUrl, contentFilterUrl, bucketNameFilterUrl, objectNameFilterUrl].filter(function(x) {
         return (typeof x === 'string' && x.length > 0)
     }).join('&');
 
