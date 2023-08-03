@@ -2,16 +2,29 @@ angular.module('workflow-variables').controller('CatalogObjectsModalCtrl', funct
     var restRequestHeader = { headers: {'sessionid': getSessionId() }};
     var matches = variableModel.match(/\((.*)\)/); //matches[1] contains the value between the parentheses
     if (matches && matches.length > 1) {
+        var kindFilter;
+        var filterContentType;
+        var bucketNameFilter;
+        var objectNameFilter;
+
         var params = matches[1].split(',');
-        var kindFilter = params[0];
-        var filterContentType = params[1];
-        var objectNameFilter = params[3];
+        switch (params.length) {
+            case 4:
+                objectNameFilter = params[3];
+            case 3:
+                bucketNameFilter = params[2];
+            case 2:
+                filterContentType = params[1];
+            case 1:
+                kindFilter = params[0];
+        }
     }
 
-    var kindFilterUrl = (kindFilter) ? 'kind=' + encodeURIComponent(kindFilter) : '';
-    var contentFilterUrl = (filterContentType) ? 'contentType=' + encodeURIComponent(filterContentType) : '';
-    var objectNameFilterUrl = (objectNameFilter) ? "objectName=" + encodeURIComponent(objectNameFilter) : "";
-    var filterUrlParams = [kindFilterUrl, contentFilterUrl, objectNameFilterUrl].filter(function(x) {
+    var kindFilterUrl = kindFilter ? 'kind=' + encodeURIComponent(kindFilter) : '';
+    var contentFilterUrl = filterContentType ? 'contentType=' + encodeURIComponent(filterContentType) : '';
+    var bucketNameFilterUrl = bucketNameFilter ? "bucketName=" + encodeURIComponent(bucketNameFilter) : '';
+    var objectNameFilterUrl = objectNameFilter ? "objectName=" + encodeURIComponent(objectNameFilter) : '';
+    var filterUrlParams = [kindFilterUrl, contentFilterUrl, bucketNameFilterUrl, objectNameFilterUrl].filter(function(x) {
         return (typeof x === 'string' && x.length > 0)
     }).join('&');
 
