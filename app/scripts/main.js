@@ -253,20 +253,6 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         }
     }
 
-    $scope.getDomains = function () {
-        $http.get(JSON.parse(localStorage.schedulerRestUrl) + 'domains/')
-            .then(function (response) {
-                $scope.domains = response.data;
-                if(!$scope.domains.includes("")) {
-                    $scope.domains.unshift("");
-                }
-                $scope.selectedDomain = $scope.domains[0];
-            })
-            .catch(function (response) {
-                 console.error('Error getting domains:', response);
-            });
-    }
-
     function displayAlertAndRedirectToFirstAccessiblePortalIfExist(portal) {
         UtilsFactory.displayTranslatedMessage('warning', 'Access not authorized', ['Cannot connect to', portal + '.', 'The access is not authorized']);
         if (!$scope.firstAccessiblePortal) {
@@ -590,7 +576,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     }
 });
 
-mainModule.controller('loginController', function ($scope, $state, permissionService, $stateParams, $location, $rootScope) {
+mainModule.controller('loginController', function ($scope, $http, $state, permissionService, $stateParams, $location, $rootScope) {
     this.$onInit = function () {
         $scope.domains = [];
         $scope.getDomains();
@@ -648,6 +634,20 @@ mainModule.controller('loginController', function ($scope, $state, permissionSer
                 }
             });
     };
+
+    $scope.getDomains = function () {
+        $http.get(JSON.parse(localStorage.schedulerRestUrl) + 'domains/')
+            .then(function (response) {
+                $scope.domains = response.data;
+                if(!$scope.domains.includes("")) {
+                    $scope.domains.unshift("");
+                }
+                $scope.selectedDomain = $scope.domains[0];
+            })
+            .catch(function (response) {
+                 console.error('Error getting domains:', response);
+            });
+    }
 
 });
 
@@ -992,7 +992,7 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
 
 /*Workflow variables controller: submission template*/
 
-angular.module('main').controller('VariablesController', function ($scope, $uibModal, $http, $translate, $timeout, $sce, $rootScope, $location, toastr, PCAService, UtilsFactory, WESchedulerService) {
+angular.module('main').controller('VariablesController', function ($scope, $uibModal, $http, $translate, $timeout, $sce, $rootScope, $location, toastr, sanitizer, PCAService, UtilsFactory, WESchedulerService) {
     this.$onInit = function () {
         $scope.workflow =
             $scope.$parent.$parent.$parent.$parent.$parent.$parent.workflowToSubmit;
@@ -1123,7 +1123,14 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                         //close the Submit Workflow Panel
                         $scope.$parent.toggleOpenSubmitJobPanel(false);
                         $scope.isSubmissionGoingOn = false;
-                        toastr.success('Your Workflow has been submitted successfully' + ', Job Id: ' + JSON.stringify(submitResponse.id), $scope.toastrConfig);
+                    //    var messageWithLink = "Your Workflow has been submitted successfully" + ", Job Id: " + JSON.stringify(submitResponse.id) + "<br><a href='/automation-dashboard/#/job-info?jobid=" + JSON.stringify(submitResponse.id) + "&tab=0' target='_blank'>Open in Workflow Execution Portal</a>";
+                       var messageWithLink = 'Congratulations! Your task was completed successfully. Click <a href="https://example.com">here</a> to view details.';
+
+                             toastr.success(messageWithLink, 'Success', {
+                               closeButton: true,
+                               extendedTimeOut: 0, // Keeps the message visible until clicked
+                               tapToDismiss: true, // Dismisses the message on click
+                             });
                     })
                     .error(function (error) {
                         $scope.WEsubmissionErrorMessage = error.errorMessage;
