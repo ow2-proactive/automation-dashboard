@@ -2,11 +2,32 @@ angular.module('workflow-variables').controller('CatalogObjectsModalCtrl', funct
     var restRequestHeader = { headers: {'sessionid': getSessionId() }};
     var matches = variableModel.match(/\((.*)\)/); //matches[1] contains the value between the parentheses
     if (matches && matches.length > 1) {
+        var kindFilter;
+        var filterContentType;
+        var bucketNameFilter;
+        var objectNameFilter;
+
         var params = matches[1].split(',');
-        var kindFilter = params[0];
-        var filterContentType = params[1];
-        var bucketNameFilter = params[2];
-        var objectNameFilter = params[3];
+        switch (params.length) {
+            case 1:
+                kindFilter = params[0];
+                break;
+            case 2:
+                kindFilter = params[0];
+                filterContentType = params[1];
+                break;
+            case 3:
+                kindFilter = params[0];
+                filterContentType = params[1];
+                bucketNameFilter = params[2];
+                break;
+            case 4:
+                kindFilter = params[0];
+                filterContentType = params[1];
+                bucketNameFilter = params[2];
+                objectNameFilter = params[3];
+                break;
+        }
     }
 
     var kindFilterUrl = (kindFilter) ? 'kind=' + encodeURIComponent(kindFilter) : '';
