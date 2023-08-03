@@ -9,31 +9,21 @@ angular.module('workflow-variables').controller('CatalogObjectsModalCtrl', funct
 
         var params = matches[1].split(',');
         switch (params.length) {
+            case 4:
+                objectNameFilter = params[3];
+            case 3:
+                bucketNameFilter = params[2];
+            case 2:
+                filterContentType = params[1];
             case 1:
                 kindFilter = params[0];
-                break;
-            case 2:
-                kindFilter = params[0];
-                filterContentType = params[1];
-                break;
-            case 3:
-                kindFilter = params[0];
-                filterContentType = params[1];
-                bucketNameFilter = params[2];
-                break;
-            case 4:
-                kindFilter = params[0];
-                filterContentType = params[1];
-                bucketNameFilter = params[2];
-                objectNameFilter = params[3];
-                break;
         }
     }
 
-    var kindFilterUrl = (kindFilter) ? 'kind=' + encodeURIComponent(kindFilter) : '';
-    var contentFilterUrl = (filterContentType) ? 'contentType=' + encodeURIComponent(filterContentType) : '';
-    var bucketNameFilterUrl = (bucketNameFilter) ? "bucketName=" + encodeURIComponent(bucketNameFilter) : '';
-    var objectNameFilterUrl = (objectNameFilter) ? "objectName=" + encodeURIComponent(objectNameFilter) : '';
+    var kindFilterUrl = kindFilter ? 'kind=' + encodeURIComponent(kindFilter) : '';
+    var contentFilterUrl = filterContentType ? 'contentType=' + encodeURIComponent(filterContentType) : '';
+    var bucketNameFilterUrl = bucketNameFilter ? "bucketName=" + encodeURIComponent(bucketNameFilter) : '';
+    var objectNameFilterUrl = objectNameFilter ? "objectName=" + encodeURIComponent(objectNameFilter) : '';
     var filterUrlParams = [kindFilterUrl, contentFilterUrl, bucketNameFilterUrl, objectNameFilterUrl].filter(function(x) {
         return (typeof x === 'string' && x.length > 0)
     }).join('&');
