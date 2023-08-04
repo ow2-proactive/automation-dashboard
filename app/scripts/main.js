@@ -639,10 +639,15 @@ mainModule.controller('loginController', function ($scope, $http, $state, permis
         $http.get(JSON.parse(localStorage.schedulerRestUrl) + 'domains/')
             .then(function (response) {
                 $scope.domains = response.data;
-                if(!$scope.domains.includes("")) {
+                if($scope.domains.length && !$scope.domains.includes("")) {
                     $scope.domains.unshift("");
                 }
-                $scope.selectedDomain = $scope.domains[0];
+                if ($scope.domains.length) {
+                    $scope.selectedDomain = $scope.domains[0];
+                }
+                else {
+                    $scope.selectedDomain = "";
+                }
             })
             .catch(function (response) {
                  console.error('Error getting domains:', response);
