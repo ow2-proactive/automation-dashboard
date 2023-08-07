@@ -18,6 +18,10 @@
     border-color: #353535;
 }
 
+.opacity-0 {
+    opacity: 0
+}
+
 .panel-selected>.panel-footer {
     color: #353535;
     background-color: #bababa;

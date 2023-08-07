@@ -183,7 +183,7 @@ mainModule.config(function ($translateProvider, $translatePartialLoaderProvider)
 
 // --------------- Controllers -----------------
 
-mainModule.controller('mainController', function ($window, $http, $scope, $rootScope, $state, $location, $interval, $translate, $uibModalStack, permissionService, SweetAlert, UtilsFactory) {
+mainModule.controller('mainController', function ($window, $http, $scope, $rootScope, $state, $location, $interval, $translate, $timeout, $uibModalStack, permissionService, SweetAlert, UtilsFactory) {
 
     this.$onInit = function () {
         $scope.main.userName = localStorage['pa.login'];
@@ -419,20 +419,24 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 
     // Move the contextual menu near the click according to its position in the window
     $scope.moveContextualMenu = function (clickEvent) {
-        var contextMenuHeight = angular.element('#context-menu')[0].offsetHeight;
-        //if contextual menu will get out of the panel catalog-tab-content, we display it upper
-        if (clickEvent['clientY'] + contextMenuHeight < window.innerHeight) {
-            angular.element('#context-menu').css('top', clickEvent['clientY'] + 'px')
-        } else {
-            angular.element('#context-menu').css('top', (clickEvent['clientY'] - contextMenuHeight) + 'px')
-        }
+        $timeout(callBack, 10);
+        function callBack() {
+            var contextMenuHeight = angular.element('#context-menu')[0].offsetHeight;
+            //if contextual menu will get out of the panel catalog-tab-content, we display it upper
+            if (clickEvent['clientY'] + contextMenuHeight < window.innerHeight && contextMenuHeight > 2) {
+                angular.element('#context-menu').css('top', clickEvent['clientY'] + 'px')
+            } else {
+                angular.element('#context-menu').css('top', (clickEvent['clientY'] - contextMenuHeight) + 'px')
+            }
 
-        var contextMenuWidth = angular.element('#context-menu')[0].offsetWidth;
-        //if contextual menu will get out of the panel catalog-tab-content, we display it upper
-        if (clickEvent['clientX'] + contextMenuWidth < window.innerWidth) {
-            angular.element('#context-menu').css('left', clickEvent['clientX'] + 'px')
-        } else {
-            angular.element('#context-menu').css('left', (clickEvent['clientX'] - contextMenuWidth) + 'px')
+            var contextMenuWidth = angular.element('#context-menu')[0].offsetWidth;
+            //if contextual menu will get out of the panel catalog-tab-content, we display it upper
+            if ((clickEvent['clientX'] + contextMenuWidth < window.innerWidth)) {
+                angular.element('#context-menu').css('left', clickEvent['clientX'] + 'px')
+            } else {
+                angular.element('#context-menu').css('left', (clickEvent['clientX'] - contextMenuWidth) + 'px')
+            }
+            angular.element('#context-menu').removeClass("opacity-0");
         }
     };
 
