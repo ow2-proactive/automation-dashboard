@@ -2,7 +2,7 @@
  * Created by ActiveEon Team on 18/04/2017.
  */
 
-var mainModule = angular.module('main', ['ngResource', 'spring-data-rest', 'angular-toArrayFilter', 'oitozero.ngSweetAlert', 'ngSanitize', 'pascalprecht.translate', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.moveColumns', 'ui.grid.pinning', 'ui.grid.autoResize',]);
+var mainModule = angular.module('main', ['ngResource', 'spring-data-rest', 'angular-toArrayFilter', 'oitozero.ngSweetAlert', 'ngSanitize', 'pascalprecht.translate', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.moveColumns', 'ui.grid.pinning','toaster', 'ui.grid.autoResize',]);
 
 function getSessionId() {
     return localStorage['pa.session'];
@@ -795,7 +795,7 @@ mainModule.directive('ngDraggable', function ($document) {
 
 /*Catalog view controller: buckets and objects list*/
 
-angular.module('main').controller('CatalogViewController', function ($scope, $rootScope, $uibModal, $http, $filter, $translate, $timeout, $sce, toastr, WECatalogService, UtilsFactory) {
+angular.module('main').controller('CatalogViewController', function ($scope, $rootScope, $uibModal, $http, $filter, $translate, $timeout, $sce, toaster, WECatalogService, UtilsFactory) {
 
     this.$onInit = function () {
         // Filter objects by workflowNameQuery
@@ -999,12 +999,12 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
 
 /*Workflow variables controller: submission template*/
 
-angular.module('main').controller('VariablesController', function ($scope, $uibModal, $http, $translate, $timeout, $sce, $rootScope, $location, toastr, PCAService, UtilsFactory, WESchedulerService) {
+angular.module('main').controller('VariablesController', function ($scope, $uibModal, $http, $translate, $timeout, $sce, $rootScope, $location, toaster , PCAService, UtilsFactory, WESchedulerService) {
     this.$onInit = function () {
         $scope.workflow =
             $scope.$parent.$parent.$parent.$parent.$parent.$parent.workflowToSubmit;
         // toast config
-        $scope.toastrConfig = {closeButton: true, progressBar: true};
+        $scope.toasterConfig = {closeButton: true, progressBar: true};
         const variablesTemplateFooterButtonInfo =
             $scope.$parent.$parent.$parent.$parent.$parent.$parent
                 .variablesTemplateFooterButtonInfo;
@@ -1085,7 +1085,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 if ($scope.workflow.hasOwnProperty('isCreationWorkflow') && !$scope.workflow.isCreationWorkflow) {
                     var httpPromise = PCAService.submitActionWorkflow($scope.workflow.serviceInstance.instance_id, bucketName, $scope.workflow.name, variables);
                     httpPromise.then(function () {
-                        toastr.success('The action has been executed.', JSON.stringify(response.id), $scope.toastrConfig);
+                        toaster.success('The action has been executed.', JSON.stringify(response.id));
                         $rootScope.$broadcast('event:updateServiceInstanceList');
                         $rootScope.$broadcast('event:updateWorkflowsGroupedByInstance');
                         $scope.isLoading = false;
@@ -1101,10 +1101,10 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                     httpPromise.then(function () {
                         //close the Submit Workflow Panel
                         $scope.$parent.toggleOpenSubmitJobPanel(false);
-                        toastr.success('The service instance has been created.', JSON.stringify(response.id), $scope.toastrConfig);
+                        toaster.success('The service instance has been created.', JSON.stringify(response.id));
                     }).catch(function (error) {
                         console.error('Error while submitting service: ' + angular.toJson(error));
-                        toastr.error('Error', ['The service instance couldn\'t be created:', error.data.httpErrorCode + ' - ' + error.data.errorMessage]);
+                        toaster.error('Error', ['The service instance couldn\'t be created:', error.data.httpErrorCode + ' - ' + error.data.errorMessage]);
                     });
                 }
             } else {
@@ -1130,12 +1130,14 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                         //close the Submit Workflow Panel
                         $scope.$parent.toggleOpenSubmitJobPanel(false);
                         $scope.isSubmissionGoingOn = false;
-                        toastr.success('Your Workflow has been submitted successfully' + ', Job Id: ' + JSON.stringify(submitResponse.id), $scope.toastrConfig);
+                        toaster.pop('success', "", 'Your Workflow has been submitted successfully ' + ', Job Id:'+ JSON.stringify(submitResponse.id) + '<br>' +
+                        '<a href="/automation-dashboard/#/job-info?jobid=' + JSON.stringify(submitResponse.id) + '&tab=0" target="_blank">Open in Workflow Execution Portal</a></br>' +
+                        '<a href="/scheduler" target="_blank">Open in Scheduler Portal</a>', 5000, 'trustedHtml');
                     })
                     .error(function (error) {
                         $scope.WEsubmissionErrorMessage = error.errorMessage;
                         $scope.isSubmissionGoingOn = false;
-                        toastr.error('An error occurred while submitting your workflow.' + '\n' + 'Please check you workflows and retry', $scope.toastrConfig)
+                        toaster.error('An error occurred while submitting your workflow.' + '\n' + 'Please check you workflows and retry')
                     })
             } else {
                 $scope.WEsubmissionErrorMessage = response.errorMessage;
@@ -1242,7 +1244,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
             .success(function (response) {
                 //close the Submit Workflow Panel
                 $scope.$parent.toggleOpenSubmitJobPanel(false);
-                toastr.success('Job ' + id + ' resubmitted successfully!', $scope.toastrConfig);
+                toaster.success('Job ' + id + ' resubmitted successfully!');
                 $scope.isSubmissionGoingOn = false;
             })
             .error(function (response) {
@@ -1261,9 +1263,9 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 WESchedulerService.killJob(id)
                     .success(function (res) {
                         if (res) {
-                            toastr.success('Job ' + id + ' killed and resubmitted successfully!', $scope.toastrConfig)
+                            toastr.success('Job ' + id + ' killed and resubmitted successfully!')
                         } else {
-                            toastr.warning('Could not kill job ' + id + '!', $scope.toastrConfig)
+                            toastr.warning('Could not kill job ' + id + '!')
                         }
                         //close the Submit Workflow Panel
                         $scope.$parent.toggleOpenSubmitJobPanel(false);

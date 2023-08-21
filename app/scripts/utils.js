@@ -1,4 +1,4 @@
-function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, $q, $location, toastr, SweetAlert, $httpParamSerializerJQLike) {
+function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, $q, $location, toaster, SweetAlert, $httpParamSerializerJQLike) {
     const specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder',
         'pa:user_folder', 'pa:catalog_object', 'pa:credential'];
     const textAreaModel = ['pa:regexp', 'pa:spel', 'pa:json', 'pa:not_empty_string'];
@@ -315,11 +315,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         })
             .success(function (data) {
                 successCallback();
-                toastr.success('Your file ' + selectedFile.name + ' has been successfully uploaded.', {
-                    closeButton: true,
-                    timeOut: 5000,
-                    extendedTimeOut: 0
-                });
+                toaster.success('Your file ' + selectedFile.name + ' has been successfully uploaded.');
                 $rootScope.uploadingFiles = $rootScope.uploadingFiles.filter(function (x) {
                     return x.id !== uploadId;
                 });
@@ -333,11 +329,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                     if (xhr) {
                         errorMessage = ': ' + xhr;
                     }
-                    toastr.error('Failed to upload the file ' + selectedFile.name + errorMessage, {
-                        closeButton: true,
-                        timeOut: 0,
-                        extendedTimeOut: 0
-                    })
+                    toaster.error('Failed to upload the file ' + selectedFile.name + errorMessage)
                 }
                 $rootScope.uploadingFiles = $rootScope.uploadingFiles.filter(function (x) {
                     return x.id !== uploadId;
