@@ -315,11 +315,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         })
             .success(function (data) {
                 successCallback();
-                toaster.success('Your file ' + selectedFile.name + ' has been successfully uploaded.', {
-                    closeButton: true,
-                    timeOut: 5000,
-                    extendedTimeOut: 0
-                });
+                toaster.success('Your file ' + selectedFile.name + ' has been successfully uploaded.');
                 $rootScope.uploadingFiles = $rootScope.uploadingFiles.filter(function (x) {
                     return x.id !== uploadId;
                 });
@@ -333,11 +329,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                     if (xhr) {
                         errorMessage = ': ' + xhr;
                     }
-                    toaster.error('Failed to upload the file ' + selectedFile.name + errorMessage, {
-                        closeButton: true,
-                        timeOut: 0,
-                        extendedTimeOut: 0
-                    })
+                    toaster.error('Failed to upload the file ' + selectedFile.name + errorMessage)
                 }
                 $rootScope.uploadingFiles = $rootScope.uploadingFiles.filter(function (x) {
                     return x.id !== uploadId;
