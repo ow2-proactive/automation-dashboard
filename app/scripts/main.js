@@ -1009,7 +1009,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
             $scope.$parent.$parent.$parent.$parent.$parent.$parent
                 .variablesTemplateFooterButtonInfo;
         // fetch resolvedModel from the server: update variables
-        if ($scope.workflow.jobId) {
+        if ($scope.workflow && $scope.workflow.jobId) {
             validateJob()
         } else {
             validateWorkflow(function (response) {
