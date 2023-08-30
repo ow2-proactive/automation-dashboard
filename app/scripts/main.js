@@ -1046,7 +1046,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 killResubmitJob($scope.workflow.id, $scope.workflow.variables);
             },
             'Confirm Association': createNewCdWfAssociation,
-            'Scheduler Workflow': schedulerWf,
+            'Schedule Workflow': schedulerWf,
             'Update': updateCdWfAssociation,
             Previous: previous,
             Check: check,
