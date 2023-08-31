@@ -706,6 +706,13 @@ mainModule.directive('ngRightClick', function ($parse) {
                 if (attrs.ngRightClick !== '') {
                     element.bind('contextmenu', function (event) {
                         scope.moveContextualMenu(event)
+
+                        var contextMenu = document.querySelector('.calendar-list');
+                        if (contextMenu) {
+                            contextMenu.addEventListener('click', function (event) {
+                                event.stopPropagation();
+                            });
+                        }
                     });
                 }
             }
@@ -1039,6 +1046,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 killResubmitJob($scope.workflow.id, $scope.workflow.variables);
             },
             'Confirm Association': createNewCdWfAssociation,
+            'Schedule Workflow': schedulerWf,
             'Update': updateCdWfAssociation,
             Previous: previous,
             Check: check,
@@ -1162,6 +1170,54 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                         $scope.updatePlannedJobsListAndSelect(res.id);
                         $rootScope.$broadcast('event:updatePlannedJobsCount');
                         $scope.desectWorkflowInModal();
+                        $scope.toggleOpenSubmitJobPanel(false);
+                        displaySuccessMessage('New association successfully created');
+                    })
+                    .error(function (res) {
+                        $scope.isSubmissionGoingOn = false
+                        $scope.errorMessage = res.errorMessage;
+                        console.error('Error while creating calendar workflow association ' + ':', angular.toJson(res));
+                    });
+            } else {
+                $scope.isSubmissionGoingOn = false
+                $scope.WEsubmissionErrorMessage = response.errorMessage;
+                $scope.successMessage = '';
+            }
+        })
+    }
+
+    function schedulerWf() {
+        $scope.isSubmissionGoingOn = true;
+        $scope.isSubmissionGoingOn = true;
+        const bucketName = $scope.workflow['bucketName'];
+        // Validate + create association if applicable
+        validateWorkflow(function (response) {
+            if (response.valid) {
+                // the values of pa:hidden variables shouldn't be decrypted in Workflow Description
+                encryptValues(response)
+                // create association
+                var workflowVariables = constructVariablesObject( $scope.workflow.variables );
+                var workflowVariables = UtilsFactory.parseEmptyVariablesValue(workflowVariables)
+                var newCdWf = {
+                    'calendar_bucket': $scope.workflow.calendar_bucket,
+                    'calendar_name': $scope.workflow.calendar_name,
+                    'workflow_bucket': $scope.workflow['bucketName'],
+                    'workflow_name': $scope.workflow.name,
+                    'variables': workflowVariables
+                };
+
+                var configHeaders = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'sessionid': getSessionId()
+                    }
+                };
+
+                var data = JSON.stringify(newCdWf);
+                var url = JSON.parse(localStorage.jobPlannerServiceUrl) + 'planned_jobs/';
+
+                $http.post(url, data, configHeaders)
+                    .success(function (res) {
                         $scope.toggleOpenSubmitJobPanel(false);
                         displaySuccessMessage('New association successfully created');
                     })
