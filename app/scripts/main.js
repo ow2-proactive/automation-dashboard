@@ -1046,7 +1046,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 killResubmitJob($scope.workflow.id, $scope.workflow.variables);
             },
             'Confirm Association': createNewCdWfAssociation,
-            'Schedule Workflow': schedulerWf,
+            'Schedule Workflow': scheduleWf,
             'Update': updateCdWfAssociation,
             Previous: previous,
             Check: check,
@@ -1186,7 +1186,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         })
     }
 
-    function schedulerWf() {
+    function scheduleWf() {
         $scope.isSubmissionGoingOn = true;
         $scope.isSubmissionGoingOn = true;
         const bucketName = $scope.workflow['bucketName'];
@@ -1219,6 +1219,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 $http.post(url, data, configHeaders)
                     .success(function (res) {
                         $scope.toggleOpenSubmitJobPanel(false);
+                        $scope.updateCurrentSelectedObjet();
                         displaySuccessMessage('New association successfully created');
                     })
                     .error(function (res) {
