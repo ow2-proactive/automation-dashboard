@@ -1219,7 +1219,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 $http.post(url, data, configHeaders)
                     .success(function (res) {
                         $scope.toggleOpenSubmitJobPanel(false);
-                        $scope.updateCurrentSelectedObjet()
+                        $scope.updateCurrentSelectedObjet();
                         displaySuccessMessage('New association successfully created');
                     })
                     .error(function (res) {
