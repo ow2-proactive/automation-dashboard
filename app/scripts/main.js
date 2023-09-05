@@ -1138,9 +1138,13 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                         //close the Submit Workflow Panel
                         $scope.$parent.toggleOpenSubmitJobPanel(false);
                         $scope.isSubmissionGoingOn = false;
-                        toaster.pop('success', "", 'Your Workflow has been submitted successfully ' + ', Job Id:'+ JSON.stringify(submitResponse.id) + '<br>' +
-                        '<a href="/automation-dashboard/#/job-info?jobid=' + JSON.stringify(submitResponse.id) + '&tab=0" target="_blank">Open in Workflow Execution Portal</a></br>' +
-                        '<a href="/scheduler" target="_blank">Open in Scheduler Portal</a>', 5000, 'trustedHtml');
+                        if( $scope.workflow.submissionMode === "catalog" ) {
+                            toaster.pop('success', "", 'Your Workflow has been submitted successfully ' + ', Job Id:'+ JSON.stringify(submitResponse.id) + '<br>' +
+                                    '<a href="/automation-dashboard/#/job-info?jobid=' + JSON.stringify(submitResponse.id) + '&tab=0" target="_blank">Open Workflow Execution Portal</a></br>' +
+                                    '<a href="/scheduler" target="_blank">Open Scheduler Portal</a>', 5000, 'trustedHtml');
+                        } else {
+                            toaster.pop('success',"", 'Your Workflow has been submitted successfully' + ', Job Id: ' + JSON.stringify(submitResponse.id), 5000, 'trustedHtml');
+                        }
                     })
                     .error(function (error) {
                         $scope.WEsubmissionErrorMessage = error.errorMessage;
