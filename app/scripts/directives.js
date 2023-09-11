@@ -504,6 +504,24 @@ function ellipsisTooltip() {
     };
 }
 
+function uiSelectDirective($timeout) {
+    return {
+        restrict: 'E',
+        scope:false,
+        link: function(scope, element, attrs){
+            $timeout(function(){
+              const selectElement = element[0].querySelector('.ui-select-container');
+              const uiSelect = angular.element(selectElement).controller('uiSelect');
+              $timeout(
+                  function(){
+                      uiSelect.open = true;
+                      uiSelect.activate(false, true);
+                  });
+              });
+            }
+      }
+}
+
 /**
  *
  * Pass all functions into module
@@ -522,4 +540,5 @@ angular
     .directive('inputFileChange', inputFileChange)
     .directive('ellipsisTooltip', ellipsisTooltip)
     .directive('copyClipBoard', copyClipBoard)
-    .directive('multiselectShiftKey', multiselectShiftKey);
+    .directive('multiselectShiftKey', multiselectShiftKey)
+    .directive('uiSelectDirective', uiSelectDirective);
