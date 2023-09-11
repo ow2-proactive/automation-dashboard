@@ -131,7 +131,7 @@
     cursor: pointer;
 }
 
-.context-menu__items li:hover {
+.context-menu__items > li:hover {
     background-color: #DEF;
 }
 
