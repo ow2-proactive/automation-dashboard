@@ -1171,7 +1171,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 // create association
                 $scope.$parent.createAssociation($scope.workflow.name, bucketName, $scope.workflow.variables)
                     .success(function (res) {
-                        $scope.updatePlannedJobsListAndSelect(res.id);
+                        //$scope.updatePlannedJobsListAndSelect(res.id);
                         $rootScope.$broadcast('event:updatePlannedJobsCount');
                         $scope.desectWorkflowInModal();
                         $scope.toggleOpenSubmitJobPanel(false);
@@ -1250,7 +1250,6 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 // Check Successful - proceed to edit
                 $scope.$parent.updateCdWfAssociation($scope.workflow.variables)
                     .success(function (res) {
-                        $scope.updatePlannedJobsListAndSelect(res.id);
                         displaySuccessMessage('Association successfully updated');
                         $scope.updateLastSelectedWorkflow();
                         $scope.isSubmissionGoingOn = false;
