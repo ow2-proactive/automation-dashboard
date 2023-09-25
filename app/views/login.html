@@ -48,5 +48,8 @@
             <strong>{{'Unable to login'|translate}}.</strong> {{errorMessage}}
         </div>
         <a ng-if="showLinkAccountCreation" href="https://www.activeeon.com/register/web-download" target="_blank">{{'Or create an account'|translate}}</a>
+        <div id="connection-error" ng-show="serverIsDown" style="color:red; font-weight:bold; font-size:13px; width=100%;">
+            <strong>You are logged out of the server. You have to log into the portal again.</strong>
+        </div>
     </div>
 </div>

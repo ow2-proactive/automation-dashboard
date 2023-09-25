@@ -249,6 +249,10 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                 })
                 .catch(function (response) {
                     console.error('Error checking if session is valid:', response);
+                    var connectionError = $('<div id="connection-error"><label style="color:red; font-weight:bold; font-size:15px; padding-left:30px;">The server cannot be reached. Check first your network connection, and potentially the server status.</label></div>');
+                    if (!$("#connection-error").is(":visible")) {
+                        $("#top-toolbar").append(connectionError);
+                    }
                 });
         }
     }
@@ -549,6 +553,10 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             })
             .error(function (response) {
                 console.error('Error while querying notification service: ', response);
+                if (response !== null && response.httpErrorCode === 401) {
+                    $scope.closeSession();
+                    $rootScope.serverIsDown = true;
+                }
             });
     }
 
@@ -621,6 +629,7 @@ mainModule.controller('loginController', function ($scope, $http, $state, permis
                     $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($scope.redirectsTo);
                 }
                 $scope.startRegularCheckSession();
+                $rootScope.serverIsDown = false;
             })
             .error(function (response) {
                 try {
