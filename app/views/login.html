@@ -1,7 +1,9 @@
 <div id="login-view"  ng-controller="loginController">
     <div class="login-container">
         <img src="styles/patterns/logo_350.png" class="login-logo-image"/>
-
+        <div id="connection-error" ng-show="serverIsDown" style="height: 50px; padding: 10px; border: 1px solid red; background-color: #fff0f0; margin-top: 10px; color:red; font-size:12px; width:100%;">
+            {{'You are logged out of the server. Please log into the portal again.'|translate}}
+        </div>
         <div class="login-header-container">
             <div class="login-header" style="overflow:hidden">
                 <div class="automation-dashboard-logo">
@@ -48,8 +50,5 @@
             <strong>{{'Unable to login'|translate}}.</strong> {{errorMessage}}
         </div>
         <a ng-if="showLinkAccountCreation" href="https://www.activeeon.com/register/web-download" target="_blank">{{'Or create an account'|translate}}</a>
-        <div id="connection-error" ng-show="serverIsDown" style="color:red; font-weight:bold; font-size:13px; width=100%;">
-            <strong>You are logged out of the server. You have to log into the portal again.</strong>
-        </div>
     </div>
 </div>

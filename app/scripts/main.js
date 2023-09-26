@@ -245,14 +245,13 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                 .then(function (response) {
                     if (!response) {
                         $scope.closeSession();
+                    } else {
+                        $rootScope.isLoggedOut = false;
                     }
                 })
                 .catch(function (response) {
                     console.error('Error checking if session is valid:', response);
-                    var connectionError = $('<div id="connection-error"><label style="color:red; font-weight:bold; font-size:15px; padding-left:30px;">The server cannot be reached. Check first your network connection, and potentially the server status.</label></div>');
-                    if (!$("#connection-error").is(":visible")) {
-                        $("#top-toolbar").append(connectionError);
-                    }
+                    $rootScope.isLoggedOut = true;
                 });
         }
     }

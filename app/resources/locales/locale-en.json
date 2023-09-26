@@ -137,5 +137,7 @@
   "Yes, download it!": "Yes, download it!",
   "Yes, stop uploading!": "Yes, stop uploading!",
   "You are about to download the folder": "You are about to download the folder",
-  "Your": "Your"
+  "Your": "Your",
+  "The server cannot be reached. Check first your network connection, and potentially the server status." : "The server cannot be reached. Check first your network connection, and potentially the server status.",
+  "You are logged out of the server. Please log into the portal again.": "You are logged out of the server. Please log into the portal again."
 }
