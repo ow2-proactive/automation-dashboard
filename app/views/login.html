@@ -1,7 +1,9 @@
 <div id="login-view"  ng-controller="loginController">
     <div class="login-container">
         <img src="styles/patterns/logo_350.png" class="login-logo-image"/>
-
+        <div id="connection-error" ng-show="serverIsDown" style="height: 40px; padding: 10px; border: 1px solid red; background-color: #fff0f0; margin-top: 10px; color:red; font-size:12px; width:100%;">
+            {{'You are logged out of the server. Please log into the portal again.'|translate}}
+        </div>
         <div class="login-header-container">
             <div class="login-header" style="overflow:hidden">
                 <div class="automation-dashboard-logo">

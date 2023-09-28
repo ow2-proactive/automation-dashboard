@@ -137,5 +137,7 @@
   "Yes, download it!": "¡Sí, descarga!",
   "Yes, stop uploading!": "Sí, parada de la carga!",
   "You are about to download the folder": "Estás a punto de descargar la carpeta",
-  "Your": "Tu"
+  "Your": "Tu",
+  "The server cannot be reached. Check first your network connection, and potentially the server status." : "No se puede acceder al servidor. Primero verifique su conexión de red y, potencialmente, el estado del servidor.",
+  "You are logged out of the server. Please log into the portal again.": "Ha cerrado sesión en el servidor. Por favor inicie sesión en el portal nuevamente."
 }

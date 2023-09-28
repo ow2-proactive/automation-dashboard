@@ -108,6 +108,9 @@
                     </li>
                 </ul>
             </div>
+            <div id="connection-error" ng-show="isLoggedOut" style="color:red; font-size:15px; padding-left:30px;">
+                <strong>{{'The server cannot be reached. Check first your network connection, and potentially the server status.'|translate}}</strong>
+            </div>
         </div>
         <div class="second-row-bar pull-right" style="height: 30px">&nbsp;</div>
         <div style="height: 3px; background: #f47930; width:100%; display: table;"></div>

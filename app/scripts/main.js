@@ -245,10 +245,13 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                 .then(function (response) {
                     if (!response) {
                         $scope.closeSession();
+                    } else {
+                        $rootScope.isLoggedOut = false;
                     }
                 })
                 .catch(function (response) {
                     console.error('Error checking if session is valid:', response);
+                    $rootScope.isLoggedOut = true;
                 });
         }
     }
@@ -549,6 +552,10 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             })
             .error(function (response) {
                 console.error('Error while querying notification service: ', response);
+                if (response !== null && response.httpErrorCode === 401) {
+                    $scope.closeSession();
+                    $rootScope.serverIsDown = true;
+                }
             });
     }
 
@@ -621,6 +628,7 @@ mainModule.controller('loginController', function ($scope, $http, $state, permis
                     $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($scope.redirectsTo);
                 }
                 $scope.startRegularCheckSession();
+                $rootScope.serverIsDown = false;
             })
             .error(function (response) {
                 try {
