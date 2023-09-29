@@ -1179,7 +1179,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 // create association
                 $scope.$parent.createAssociation($scope.workflow.name, bucketName, $scope.workflow.variables)
                     .success(function (res) {
-                        $rootScope.$broadcast('event:updatePlannedJobsCount');
+                        $rootScope.$broadcast('event:updatePlannedJobsCount', res.id);
                         $scope.desectWorkflowInModal();
                         $scope.toggleOpenSubmitJobPanel(false);
                         displaySuccessMessage('New association successfully created');
