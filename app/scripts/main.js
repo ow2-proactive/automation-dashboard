@@ -362,7 +362,6 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         var disconnectUrlPrefix = JSON.parse(localStorage.schedulerRestUrl) + 'disconnect';
         $http.put(disconnectUrlPrefix, null, { headers: {'sessionid': getSessionId() }})
             .then(function (response) {
-                console.log("User is disconnected");
             })
             .catch(function (response) {
                 console.error('Error while disconnecting:', response);
