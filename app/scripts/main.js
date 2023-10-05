@@ -247,6 +247,12 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                         $scope.closeSession();
                     } else {
                         $rootScope.isLoggedOut = false;
+                        var sessionid = getSessionId();
+                        if (sessionid) {
+                            $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($scope.redirectsTo);
+                        }
+                        $scope.startRegularCheckSession();
+                        $rootScope.serverIsDown = false;
                     }
                 })
                 .catch(function (response) {
@@ -354,7 +360,6 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         }
 
         localStorage.removeItem('pa.session');
-        $scope.stopRegularCheckSession();
         $rootScope.$broadcast('event:StopRefreshing');
     };
 
