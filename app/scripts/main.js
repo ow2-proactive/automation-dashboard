@@ -358,6 +358,16 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         $rootScope.$broadcast('event:StopRefreshing');
     };
 
+    $scope.disconnect = function () {
+        var disconnectUrlPrefix = JSON.parse(localStorage.schedulerRestUrl) + 'disconnect';
+        $http.put(disconnectUrlPrefix, null, { headers: {'sessionid': getSessionId() }})
+            .then(function (response) {
+            })
+            .catch(function (response) {
+                console.error('Error while disconnecting:', response);
+            });
+    };
+
     $scope.displayContextualMenu = function (clickEvent, position, isWEJobRowContextMenu, data) {
             clickEvent.stopPropagation();
             $scope.contextPosition = position;
@@ -668,6 +678,7 @@ mainModule.controller('loginController', function ($scope, $http, $state, permis
 
 mainModule.controller('logoutController', function ($scope, $state) {
     $scope.logout = function () {
+        $scope.disconnect();
         $scope.closeSession();
     };
 });
