@@ -251,7 +251,6 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                         if (sessionid) {
                             $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($scope.redirectsTo);
                         }
-                        $scope.startRegularCheckSession();
                         $rootScope.serverIsDown = false;
                     }
                 })
