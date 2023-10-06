@@ -247,6 +247,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                         $scope.closeSession();
                     } else {
                         $rootScope.isLoggedOut = false;
+                        $scope.main.userName = localStorage['pa.login'];
                         var sessionid = getSessionId();
                         if (sessionid) {
                             $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($scope.redirectsTo);
