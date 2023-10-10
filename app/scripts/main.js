@@ -247,7 +247,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                         $scope.closeSession();
                     } else {
                         $rootScope.isLoggedOut = false;
-                        if ($("#login-view").is(":visible")) {
+                        if ($("#login-view").is(":visible") && !$scope.firstAccessiblePortal) {
                             $scope.main.userName = localStorage['pa.login'];
                             var sessionid = getSessionId();
                             if (sessionid) {
