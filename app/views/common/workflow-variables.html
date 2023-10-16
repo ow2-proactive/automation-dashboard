@@ -19,7 +19,6 @@
         <div class="col-md-4"
              ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:list')==0">
             <select class="form-control"
-                    n-init="variable.value = modelToList(variable.resolvedModel)[0]"
                     ng-model="variable.value"
                     ng-options="opt for opt in modelToList(variable.resolvedModel)"
                     ng-change="validate()">
