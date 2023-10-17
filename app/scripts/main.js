@@ -1387,7 +1387,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
             validateWorkflow(function (response) {
                 updateVariables(response)
                 if (!response.valid) {
-                    $scope.WEsubmissionErrorMessage = response.errorMessage;
+                    $scope.WEsubmissionErrorMessage = "";
                     $scope.successMessage = '';
                 }
                 UtilsFactory.replaceVariableModelsIfNeeded($scope.workflow.variables);
