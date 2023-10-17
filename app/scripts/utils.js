@@ -557,12 +557,20 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             }).map(function (variable) {
                 // replace models with response
                 variable.resolvedModel = replaceModelWithFetched(variable.resolvedModel);
+                // select the first item in the list
+                if(variable.resolvedModel.toLowerCase().indexOf('pa:list') == 0 && !variable.value) {
+                    variable.value = modelToList(variable.resolvedModel)[0];
+                }
             })
         } else {
             for (var prop in variables) {
                 var variable = variables[prop]
                 if (variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:model_from_url') !== -1) {
                     variable.resolvedModel = replaceModelWithFetched(variable.resolvedModel);
+                }
+                // select the first item in the list
+                if(variable.resolvedModel.toLowerCase().indexOf('pa:list') == 0 && !variable.value) {
+                    variable.value = modelToList(variable.resolvedModel)[0];
                 }
             }
         }

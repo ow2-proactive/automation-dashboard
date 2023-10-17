@@ -247,12 +247,14 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                         $scope.closeSession();
                     } else {
                         $rootScope.isLoggedOut = false;
-                        $scope.main.userName = localStorage['pa.login'];
-                        var sessionid = getSessionId();
-                        if (sessionid) {
-                            $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($scope.redirectsTo);
+                        if ($("#login-view").is(":visible") && !$scope.firstAccessiblePortal) {
+                            $scope.main.userName = localStorage['pa.login'];
+                            var sessionid = getSessionId();
+                            if (sessionid) {
+                                $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($scope.redirectsTo);
+                            }
+                            $rootScope.serverIsDown = false;
                         }
-                        $rootScope.serverIsDown = false;
                     }
                 })
                 .catch(function (response) {
@@ -1385,7 +1387,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
             validateWorkflow(function (response) {
                 updateVariables(response)
                 if (!response.valid) {
-                    $scope.WEsubmissionErrorMessage = response.errorMessage;
+                    $scope.WEsubmissionErrorMessage = "";
                     $scope.successMessage = '';
                 }
                 UtilsFactory.replaceVariableModelsIfNeeded($scope.workflow.variables);
