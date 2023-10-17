@@ -1229,3 +1229,18 @@ md-virtual-repeat-container::-webkit-scrollbar {
     align-self: center;
     margin-bottom: 0px;
 }
+
+.variable_name_column {
+    padding-left: 20px;
+    font-weight: 500;
+}
+
+.advanced-checkbox {
+    color: #E86D1F;
+    font-weight: 500;
+}
+
+.hidden-checkbox {
+    color: #888;
+    font-weight: 500;
+}
