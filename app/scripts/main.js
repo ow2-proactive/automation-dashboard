@@ -198,7 +198,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         if (getSessionId()) {
             var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/rest');
             localStorage['restUrl'] = restUrl;
-            $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($window.location.href);
+            $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($scope.redirectsTo);
         }
     };
 
@@ -229,7 +229,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 
     $scope.startRegularCheckSession = function () {
         if (!$scope.checkSessionInterval) {
-            $scope.checkSessionInterval = $scope.$interval(checkSession, 30000);
+            $scope.checkSessionInterval = $scope.$interval(checkSession, 15000);
         }
     };
 
