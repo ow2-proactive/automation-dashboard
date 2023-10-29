@@ -1041,22 +1041,20 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         const variablesTemplateFooterButtonInfo =
             $scope.$parent.$parent.$parent.$parent.$parent.$parent
                 .variablesTemplateFooterButtonInfo;
+
+        // helper flag for workflow valid message
+        $scope.WEsubmissionErrorMessage = '';
+        $scope.successMessage = '';
         // fetch resolvedModel from the server: update variables
         if ($scope.workflow.jobId) {
             validateJob()
         } else {
             validateWorkflow(function (response) {
-                updateVariables(response)
-                if (!response.valid) {
-                    $scope.WEsubmissionErrorMessage = response.errorMessage;
-                    $scope.successMessage = '';
-                }
+                updateVariables(response);
                 UtilsFactory.replaceVariableModelsIfNeeded($scope.workflow.variables);
             })
         }
-        // helper flag for workflow valid message
-        $scope.WEsubmissionErrorMessage = '';
-        $scope.successMessage = '';
+
 
         /**
          * footer button actions: functions that will be called when user clicks
@@ -1418,7 +1416,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
             .success(function (response) {
                 updateVariables(response)
                 if (!response.valid) {
-                    $scope.WEsubmissionErrorMessage = response.errorMessage;
+                    $scope.WEsubmissionErrorMessage = "";
                     $scope.successMessage = '';
                 }
                 UtilsFactory.replaceVariableModelsIfNeeded($scope.workflow.variables);
