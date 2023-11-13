@@ -189,6 +189,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         $scope.main.userName = localStorage['pa.login'];
         $scope.startRegularCheckSession();
         $scope.contextDisplay = false;
+        $scope.contextBucketDisplay = false;
         // contextPosition enables directive to specify where the context menu was opened
         $scope.contextPosition = '';
         $scope.firstAccessiblePortal = '';
@@ -388,6 +389,14 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
             }
     };
 
+    // display context-menu on buckets in the catalog
+    $scope.displayContextualMenuOnBucket = function (clickEvent, position) {
+            //display the context menu on bucket
+            $scope.contextBucketDisplay = true;
+            // close context menu on objects
+            $scope.contextDisplay = false;
+    };
+
     function waitAndApplyWEJobRowContextMenuDisplay(data) {
         if(!$('#context-menu').length) {
             // we set an observation in order to wait for the render of the context menu
@@ -429,6 +438,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
             return;
         } else {
             $scope.contextDisplay = false;
+            $scope.contextBucketDisplay = false;
         }
     };
 
