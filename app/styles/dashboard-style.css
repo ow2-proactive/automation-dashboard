@@ -772,8 +772,23 @@ button[disabled="disabled"] {
     align-items: center;
 }
 
+.container-flex-vertical {
+    display: flex;
+    flex-direction: column;
+    height: 100%
+}
+
+.container-flex-vertical-body {
+    flex-grow: 1;
+    overflow: auto;
+}
+
 .w-100 {
     width: 100%;
+}
+
+.h100 {
+    height: 100%;
 }
 
 .ibox-content > .sk-spinner {
