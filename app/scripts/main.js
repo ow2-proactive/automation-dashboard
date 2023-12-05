@@ -1356,9 +1356,9 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 WESchedulerService.killJob(id)
                     .success(function (res) {
                         if (res) {
-                            toastr.success('Job ' + id + ' killed and resubmitted successfully!')
+                            toaster.success('Job ' + id + ' killed and resubmitted successfully!')
                         } else {
-                            toastr.warning('Could not kill job ' + id + '!')
+                            toaster.warning('Could not kill job ' + id + '!')
                         }
                         //close the Submit Workflow Panel
                         $scope.$parent.toggleOpenSubmitJobPanel(false);
