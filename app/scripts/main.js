@@ -1379,6 +1379,12 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
     // use : When clicking on the button check
     const check = function () {
         validateWorkflow(function (response) {
+            // update workflow variables
+            angular.forEach($scope.workflow.variables, function (variable) {
+                variable.value = response.updatedVariables[variable.name];
+            })
+
+            // update warning messages
             if (response.valid === true) {
                 $scope.successMessage = 'Check success';
                 $scope.WEsubmissionErrorMessage = '';
