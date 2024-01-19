@@ -554,6 +554,39 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         $('#about-modal').modal('show');
     };
 
+    $scope.showAccountInfo = function () {
+        var requestGetAccountInfoUrl = JSON.parse(localStorage['restUrl']) + '/common/currentuserdata';
+        var config = { headers: {'sessionid': getSessionId()} };
+        $http.get(requestGetAccountInfoUrl, config).then(function (result) {
+           $scope.accountUsername = result.data.userName;
+           $scope.accountDomain = result.data.domain;
+           $scope.accountGroups = "";
+           for (var i=0; i<result.data.groups.length; i++) {
+              $scope.accountGroups = $scope.accountGroups + result.data.groups[i];
+              if (i< result.data.groups.length -1) {
+                $scope.accountGroups = $scope.accountGroups + ", ";
+              }
+           }
+           $scope.accountTenant = result.data.tenant;
+           $scope.accountAdminRoles = "";
+            for (var i=0; i<result.data.adminRoles.length; i++) {
+                $scope.accountAdminRoles = $scope.accountAdminRoles + result.data.adminRoles[i];
+                 if (i< result.data.adminRoles.length -1) {
+                    $scope.accountAdminRoles = $scope.accountAdminRoles + ", ";
+                }
+            }
+            $scope.accountPortalAccessPermissionDisplay = "";
+            for (var i=0; i<result.data.portalAccessPermissionDisplay.length; i++) {
+                $scope.accountPortalAccessPermissionDisplay = $scope.accountPortalAccessPermissionDisplay + result.data.portalAccessPermissionDisplay[i];
+                 if (i< result.data.portalAccessPermissionDisplay.length -1) {
+                    $scope.accountPortalAccessPermissionDisplay = $scope.accountPortalAccessPermissionDisplay + ", ";
+                }
+            }
+           $('#account-modal').modal('show');
+           return result.data;
+        });
+    };
+
     function startRegularUpdateNotificationLabel() {
         if (!$scope.intervalNotificationUpdate) {
             $scope.intervalNotificationUpdate = $scope.$interval(queryNotificationService, localStorage['notificationPortalQueryPeriod']);

@@ -139,5 +139,11 @@
   "You are about to download the folder": "You are about to download the folder",
   "Your": "Your",
   "The server cannot be reached. Check first your network connection, and potentially the server status." : "The server cannot be reached. Check first your network connection, and potentially the server status.",
-  "You are logged out of the server. Please log into the portal again.": "You are logged out of the server. Please log into the portal again."
+  "You are logged out of the server. Please log into the portal again.": "You are logged out of the server. Please log into the portal again.",
+  "Account Info": "Account Info",
+  "Domain": "Domain",
+  "Tenant": "Tenant",
+  "Groups": "Groups",
+  "Admin roles": "Admin roles",
+  "Portal Access": "Portal Access"
 }

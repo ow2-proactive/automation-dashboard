@@ -139,5 +139,11 @@
   "You are about to download the folder": "Você está prestes a baixar a pasta",
   "Your": "Seu",
   "The server cannot be reached. Check first your network connection, and potentially the server status." : "O servidor não pode ser alcançado. Verifique primeiro sua conexão de rede e, potencialmente, o status do servidor.",
-  "You are logged out of the server. Please log into the portal again.": "Você está desconectado do servidor. Por favor, faça login no portal novamente."
+  "You are logged out of the server. Please log into the portal again.": "Você está desconectado do servidor. Por favor, faça login no portal novamente.",
+  "Account Info": "Informações da Conta",
+  "Domain": "Domínio",
+  "Tenant": "Tenant",
+  "Groups": "Grupos",
+  "Admin roles": "Funções administrativas",
+  "Portal Access": "Acesso ao Portal"
 }
