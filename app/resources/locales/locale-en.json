@@ -145,5 +145,8 @@
   "Tenant": "Tenant",
   "Groups": "Groups",
   "Admin roles": "Admin roles",
-  "Portal Access": "Portal Access"
+  "Portal Access": "Portal Access",
+  "Are you sure you want to exit?": "Are you sure you want to exit?",
+  "OK": "OK",
+  "Cancel": "Cancel"
 }

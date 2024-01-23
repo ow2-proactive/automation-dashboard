@@ -173,5 +173,25 @@
                 </div>
             </div>
         </div>
+        <div id="confirm-logout-modal" class="modal" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div style="padding:15px; text-align:center;">
+                        <button aria-hidden="true" class="close" data-dismiss="modal" type="button">×</button>
+                        <h3>{{'Are you sure you want to exit?'|translate}}</h3>
+                    </div>
+                    <div style="padding:15px; text-align:center;" ng-controller="logoutController">
+                        <button id="confirm-logout-button" class="btn btn-primary" data-dismiss="modal" ng-click="confirmLogout()">
+                            {{'OK'|translate}}
+                        </button>
+                        <button id="cancel-logout-button" class="btn btn-white" data-dismiss="modal"
+                                aria-hidden="true">
+                            {{'Cancel'|translate}}
+                        </button>
+                    </div>
+
+                </div>
+            </div>
+        </div>
     </div>
 </div>

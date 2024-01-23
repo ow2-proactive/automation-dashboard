@@ -145,5 +145,8 @@
   "Tenant": "Tenant",
   "Groups": "Grupos",
   "Admin roles": "Funções administrativas",
-  "Portal Access": "Acesso ao Portal"
+  "Portal Access": "Acesso ao Portal",
+  "Are you sure you want to exit?": "Você tem certeza que quer sair?",
+  "OK": "De acordo",
+  "Cancel": "Cancelar"
 }
