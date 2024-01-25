@@ -176,20 +176,20 @@
         <div id="confirm-logout-modal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
             <div class="modal-dialog" style="width:26%; padding-top:250px;">
                 <div class="modal-content">
-                    <div style="margin-top:30px; float:left; padding-left:50px;">
+                    <div class="m-t-lg" style="float:left; padding-left:50px;">
                         <img src="styles/patterns/confirm.png">
                     </div>
                     <div>
-                        <div style="padding:15px;">
+                        <div class="p-sm">
                             <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
-                            <h4 style="text-align: center">{{'Are you sure you want to exit?'|translate}}</h4>
+                            <h4 class="text-center">{{'Are you sure you want to exit?'|translate}}</h4>
                         </div>
-                        <div style="padding:15px; text-align:center;" ng-controller="logoutController">
+                        <div class="p-sm text-center" ng-controller="logoutController">
                             <button id="confirm-logout-button" class="btn btn-primary" data-dismiss="modal" ng-click="confirmLogout()">
                                 {{'OK'|translate}}
                             </button>
-                            <button id="cancel-logout-button" class="btn btn-white" data-dismiss="modal"
-                                    aria-hidden="true" style="margin-left:10px;">
+                            <button id="cancel-logout-button" class="btn btn-white m-l-sm" data-dismiss="modal"
+                                    aria-hidden="true">
                                 {{'Cancel'|translate}}
                             </button>
                         </div>
