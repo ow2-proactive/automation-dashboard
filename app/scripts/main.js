@@ -728,6 +728,11 @@ mainModule.controller('loginController', function ($scope, $http, $state, permis
 
 mainModule.controller('logoutController', function ($scope, $state) {
     $scope.logout = function () {
+        $('#confirm-logout-modal').modal('show');
+    };
+
+    $scope.confirmLogout = function () {
+        $('#confirm-logout-modal').modal('hide');
         $scope.disconnect();
         $scope.closeSession();
     };
