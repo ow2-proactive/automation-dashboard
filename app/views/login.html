@@ -1,9 +1,11 @@
 <div id="login-view"  ng-controller="loginController">
     <div class="login-container">
         <img src="styles/patterns/logo_350.png" class="login-logo-image"/>
-
+        <div id="connection-error" ng-show="serverIsDown" style="height: 40px; padding: 10px; border: 1px solid red; background-color: #fff0f0; margin-top: 10px; color:red; font-size:12px; width:100%;">
+            {{'You are logged out of the server. Please log into the portal again.'|translate}}
+        </div>
         <div class="login-header-container">
-            <div class="login-header">
+            <div class="login-header" style="overflow:hidden">
                 <div class="automation-dashboard-logo">
                     <img src="styles/patterns/pps-dashboard.png" alt="Automation Dashboard logo"/>
                 </div>
@@ -16,6 +18,12 @@
             <div class="login-form-container">
 
                 <form class="form-horizontal" id="login-form" ng-submit="login()">
+
+                    <div class="form-group">
+                        <label class="control-label">Domain | Tenant: </label>
+                        <select style="width:165px" n-init="selectedDomain" ng-model="selectedDomain" ng-disabled="!domains.length"
+                                ng-options='domain for domain in domains'></select>
+                    </div>
 
                     <div class="form-group">
                         <label class="control-label">{{'Username'|translate}}: </label>

@@ -1,10 +1,11 @@
-function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, $q, $location, toastr, SweetAlert) {
-    var specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder', 'pa:user_folder', 'pa:catalog_object', 'pa:credential'];
+function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, $q, $location, toaster, SweetAlert, $httpParamSerializerJQLike) {
+    const specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder',
+        'pa:user_folder', 'pa:catalog_object', 'pa:credential'];
+    const textAreaModel = ['pa:regexp', 'pa:spel', 'pa:json', 'pa:not_empty_string'];
     const catalogUrlPrefix = $location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/catalog/buckets/';
     const defaultUserPreferences = {
         submissionView: {
-            advancedVariables: false,
-            selectedBucketName: "",
+            selectedBucketName: '',
             showPSAWorkflowsOnly: false,
             toggleListBox: {
                 value: false
@@ -24,6 +25,10 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         }
     }
 
+    function schedulerRestUrl() {
+        return JSON.parse(localStorage.schedulerRestUrl);
+    }
+
     function loadUserPreferences(itemName) {
         // Initialize them with defaults if they don't exist in the browser's Local Storage
         if (!localStorage.WizardUserPreferences) {
@@ -31,9 +36,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         }
         return JSON.parse(localStorage.WizardUserPreferences)
     }
-    function schedulerRestUrl(){
-        return JSON.parse(localStorage.schedulerRestUrl);
-    }
+
     function getUserPreference(propertyName) {
         var preferences = loadUserPreferences();
         // Make sure the property is created if it is not (at a deeply nested level)
@@ -47,13 +50,14 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         }
     }
 
-    function getSortClasses (sortParameters, column) {
+    function getSortClasses(sortParameters, column) {
         if (sortParameters && sortParameters.column === column) {
             return sortParameters.order === 'a' ? 'fa-sort-asc' : 'fa-sort-desc';
         } else {
             return 'fa-sort text-disabled'
         }
     }
+
     function setUserPreference(propertyName, value) {
         var userPreferences = loadUserPreferences();
         getOrSetNestedObjectProperty(userPreferences, propertyName, value)
@@ -77,12 +81,22 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             return schema[propertiesList[propertiesList.length - 1]]
         }
     }
+
     function openJobInSchedulerPortal(jobId) {
         if (jobId) {
             var url = JSON.parse(localStorage.schedulerPortalUrl) + '/?job=' + jobId;
             var win = $window.open(url, '/scheduler/');
             win.focus();
         }
+    }
+
+    /**
+     * open detailed job info in popup window
+     **/
+    function openJobInfoPopup(jobId) {
+        window.open('#/job-info?jobid=' + jobId + '&tab=0',
+            'job-info-' + jobId,
+            'toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,directories=no,status=no');
     }
 
     function updateCursor(isWaiting) {
@@ -100,22 +114,34 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         return -1 !== specialUIModel.findIndex(function (targetModel) {
             if (variable.resolvedModel) {
                 return variable.resolvedModel.toLowerCase().indexOf(targetModel) == 0;
+            } else {
+                return false;
             }
-            return variable.resolvedModel.toLowerCase().indexOf(targetModel) == 0;
+        });
+    };
+
+    function isTextAreaModel(variable) {
+        return -1 !== textAreaModel.findIndex(function (targetModel) {
+            if (variable.resolvedModel) {
+                return variable.resolvedModel.toLowerCase().indexOf(targetModel) == 0;
+            } else {
+                return true;
+            }
         });
     };
 
     function getWorkflowMetadata(workflow, label, key) {
         var obj = workflow.object_key_values.find(function (okv) {
-            return okv.label === label & okv.key === key;
+            return okv.label === label && okv.key === key;
         });
         return obj && obj.value;
     }
+
     // returns true when variables includes advanced variables and false otherwise
-    function isVariablesIncludeAdvancedVar(variables){
-        return variables.findIndex(function(variable){
-                  return  variable.advanced;
-                }) > -1;
+    function isVariablesIncludeAdvancedVar(variables) {
+        return variables.findIndex(function (variable) {
+            return variable.advanced;
+        }) > -1;
     }
 
     function extractVariableValue(variable, model) {
@@ -133,8 +159,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
 
     function extractVariables(modifiedWorkflow) {
         var variables = [];
-        angular.forEach(modifiedWorkflow.variables_order, function(group, key){
-            angular.forEach(group, function(variable){
+        angular.forEach(modifiedWorkflow.variables_order, function (group, key) {
+            angular.forEach(group, function (variable) {
                 variable.value = extractVariableValue(variable, variable.model);
                 variable.group = key;
                 variables.push(variable);
@@ -162,6 +188,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         })
         return variables;
     }
+
     // open a pop-up to browse the catalog objects and select one
     function openCatalogObjectModal(variable, variableModel) {
         $uibModal.open({
@@ -183,7 +210,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     }
 
     // open a pop-up to manage (browse, upload, delete) the global or user data space files
-    function openFileBrowser(variable, dataspace, selectFolder) {
+    function openFileBrowser(variable, dataspace, selectFolder, allowToEdit) {
         $uibModal.open({
             templateUrl: 'views/modals/dataspace-file-browser.html',
             controller: 'FileBrowserModalCtrl',
@@ -200,22 +227,26 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                 },
                 selectFolder: function () {
                     return selectFolder;
-                }
+                },
+                allowToEdit: function () {
+                    return allowToEdit === undefined ? true : allowToEdit;
+                },
+
             }
         });
     }
 
-    function openThirdPartyCredentialsModal(credKey, closeHandler) {
+    function openThirdPartyCredentialsModal(credKey) {
         $uibModal.open({
             templateUrl: 'views/modals/third_party_credentials.html',
             controller: 'ThirdPartyCredentialModalCtrl',
-            windowClass: 'fadeIn third-party-credential-modal',
+            windowClass: 'fadeIn',
+            keyboard: true,
+            backdrop: 'static',
+            size: 'lg',
             resolve: {
                 credKey: function () {
                     return credKey;
-                },
-                closeHandler: function() {
-                    return closeHandler;
                 }
             }
         });
@@ -284,11 +315,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         })
             .success(function (data) {
                 successCallback();
-                toastr.success('Your file ' + selectedFile.name + ' has been successfully uploaded.', {
-                    closeButton: true,
-                    timeOut: 5000,
-                    extendedTimeOut: 0
-                });
+                toaster.success('Your file ' + selectedFile.name + ' has been successfully uploaded.');
                 $rootScope.uploadingFiles = $rootScope.uploadingFiles.filter(function (x) {
                     return x.id !== uploadId;
                 });
@@ -302,11 +329,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                     if (xhr) {
                         errorMessage = ': ' + xhr;
                     }
-                    toastr.error('Failed to upload the file ' + selectedFile.name + errorMessage, {
-                        closeButton: true,
-                        timeOut: 0,
-                        extendedTimeOut: 0
-                    })
+                    toaster.error('Failed to upload the file ' + selectedFile.name + errorMessage)
                 }
                 $rootScope.uploadingFiles = $rootScope.uploadingFiles.filter(function (x) {
                     return x.id !== uploadId;
@@ -362,8 +385,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         return translatedStr.trim();
     }
 
-    function displayTranslatedMessage(type, titleToTranslate, messageToTranslate) {
-        var swalContent = {html: true};
+    function displayTranslatedMessage(type, titleToTranslate, messageToTranslate, callback) {
+        var swalContent = {html: true, customClass: 'swal-style'};
 
         if (titleToTranslate !== undefined) {
             if (!Array.isArray(titleToTranslate)) {
@@ -386,16 +409,15 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         } else {
             console.log(type + ' is not a valid message type to be displayed')
         }
-
-        SweetAlert.swal(swalContent);
+        SweetAlert.swal(swalContent, callback);
     }
 
     function displayTranslatedErrorMessage(title, message) {
         displayTranslatedMessage('error', title, message);
     }
 
-    function displayTranslatedSuccessMessage(title, message) {
-        displayTranslatedMessage('success', title, message);
+    function displayTranslatedSuccessMessage(title, message, callback) {
+        displayTranslatedMessage('success', title, message, callback);
     }
 
     function openEndpoint(url) {
@@ -405,7 +427,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         }
         var parsedUrl = new URL(url);
         // Open the endpoint in the browser only if the protocol is http or https
-        if (parsedUrl.protocol.startsWith('http')){
+        if (parsedUrl.protocol.startsWith('http')) {
 
             if (parsedUrl.pathname.includes('cloud-automation-service/services/')) {
                 //override the hostname of the target url (with the hostname of the current window)
@@ -427,7 +449,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         var len = collection.length;
         var value = '';
         for (var i = 0; i < len; i++) {
-            if ((collection[i].label === propertyLabel) && (collection[i].key === propertyName)) {
+            if ((collection[i].label === propertyLabel) && (collection[i].key.toLowerCase() === propertyName.toLowerCase())) {
                 value = collection[i].value;
             }
         }
@@ -444,11 +466,11 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     }
 
     /** Transforms list of variables format to key-value without model :
-    from : ["toto": {"value": 1, "model":"PA:INTEGER"}, ...]
-    to : ["toto":1] **/
+     from : ["toto": {"value": 1, "model":"PA:INTEGER"}, ...]
+     to : ["toto":1] **/
     function getVariablesInKeyValueFormat(variables) {
         var result = {};
-        angular.forEach(variables, function(variable){
+        angular.forEach(variables, function (variable) {
             var name = variable.name;
             var value = variable.value;
             result[name] = value;
@@ -459,11 +481,11 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     function modelToDateFormat(model) {
         var indexBegin = model.indexOf('(');
         var indexEnd = model.lastIndexOf(')');
-        var javaDateTimeFormat =  model.substring(indexBegin + 1, indexEnd).trim();
+        var javaDateTimeFormat = model.substring(indexBegin + 1, indexEnd).trim();
         return moment().toMomentFormatString(javaDateTimeFormat);
     };
 
-    function modelToList (model) {
+    function modelToList(model) {
         var indexBegin = model.indexOf('(');
         var indexEnd = model.lastIndexOf(')');
         var options = model.substring(indexBegin + 1, indexEnd).split(',');
@@ -472,7 +494,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         });
     };
 
-    function modelToDateScope (model) {
+    function modelToDateScope(model) {
         var indexBegin = model.indexOf('[');
         var indexEnd = model.lastIndexOf(']');
         var dates = model.substring(indexBegin + 1, indexEnd).split(',');
@@ -489,7 +511,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
      */
     function createPathStringFromMap(map, valuePropertyName) {
         var result = '';
-        map.forEach(function(item){
+        map.forEach(function (item) {
             result += item.name + '=' + encodeURIComponent(valuePropertyName ? item[valuePropertyName] : item) + ';'
         })
         return result.substring(0, result.length - 1);
@@ -504,6 +526,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         });
         return variables;
     }
+
     function replaceModelWithFetched(model) {
         var indexBegin = model.indexOf('(');
         var indexEnd = model.lastIndexOf(')');
@@ -530,16 +553,24 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         if (Array.isArray(variables)) {
             variables.filter(function (variable) {
                 // filter non empty models and models that should be replaced
-                return variable.model && variable.model.toLowerCase().indexOf('pa:model_from_url') !== -1;
+                return variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:model_from_url') !== -1;
             }).map(function (variable) {
                 // replace models with response
-                variable.resolvedModel = replaceModelWithFetched(variable.model);
+                variable.resolvedModel = replaceModelWithFetched(variable.resolvedModel);
+                // select the first item in the list
+                if(variable.resolvedModel.toLowerCase().indexOf('pa:list') == 0 && !variable.value) {
+                    variable.value = modelToList(variable.resolvedModel)[0];
+                }
             })
         } else {
             for (var prop in variables) {
                 var variable = variables[prop]
-                if (variable.model && variable.model.toLowerCase().indexOf('pa:model_from_url') !== -1) {
-                    variable.resolvedModel = replaceModelWithFetched(variable.model);
+                if (variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:model_from_url') !== -1) {
+                    variable.resolvedModel = replaceModelWithFetched(variable.resolvedModel);
+                }
+                // select the first item in the list
+                if(variable.resolvedModel.toLowerCase().indexOf('pa:list') == 0 && !variable.value) {
+                    variable.value = modelToList(variable.resolvedModel)[0];
                 }
             }
         }
@@ -547,38 +578,81 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
 
     function getStringByUrl(url) {
         var request = new XMLHttpRequest();
-        request.open("GET", url, false);
+        request.open('GET', url, false);
         request.send();
         return request.responseText;
     }
 
     /**
-        *Validation of Workflow
-    **/
+     *Validation of Workflow
+     **/
     function validateWorkflow(bucketName, workflowName, variables) {
         const configHeaders = {
             headers: {
-                'link': catalogUrlPrefix + bucketName + '/resources/ ' + encodeURIComponent(workflowName) + '/raw',
-                'sessionid': getSessionId()
+                'link': catalogUrlPrefix + bucketName + '/resources/' + encodeURIComponent(workflowName) + '/raw',
+                'sessionid': getSessionId(),
+                'Content-Type': 'application/json'
             }
         };
         const path = createPathStringFromMap(parseEmptyVariablesValue(variables), 'value')
-        return $http.post(schedulerRestUrl() + 'validateurl' + (path ? ';' + path : ''), {}, configHeaders);
+        var variablesMap = variables.reduce(function (map, obj) {
+            map[obj.name] = obj.value;
+            return map;
+        }, {});
+        var data = JSON.stringify(variablesMap);
+        return $http.post(schedulerRestUrl() + 'validateurl/body', data, configHeaders);
     }
 
-    function submitJob(bucketName, workflowName, variables) {
+    function submitJob(bucketName, workflowName, variables, submissionMode) {
         const configHeaders = {
             headers: {
                 'link': catalogUrlPrefix + bucketName + '/resources/' + encodeURIComponent(workflowName) + '/raw',
-                'sessionid': getSessionId()
+                'sessionid': getSessionId(),
+                'Content-Type': 'application/json'
             }
         };
-        const path = createPathStringFromMap(parseEmptyVariablesValue(variables), 'value')
-        return $http.post(schedulerRestUrl() + 'jobs;' + path, {}, configHeaders);
+        var variablesMap = variables.reduce(function (map, obj) {
+            map[obj.name] = obj.value;
+            return map;
+        }, {});
+        var data = JSON.stringify(variablesMap);
+        return $http.post(schedulerRestUrl() + 'jobs/body?submission.mode='+ submissionMode, data, configHeaders);
     }
+
+    function getJobInfoForJob(jobId) {
+        if (getSessionId()) {
+            return $http.get(schedulerRestUrl() + 'jobs/' + jobId + '/info', {
+                headers: {'sessionid': getSessionId()}
+            })
+        }
+    }
+
+    function getThirdPartyCredentials() {
+        return $http.get(schedulerRestUrl() + 'credentials/', {
+            headers: {'sessionid': getSessionId()}
+        })
+    }
+
+    function postThirdPartyCredentials(key, value) {
+        const configHeaders = {
+            headers: {
+                'sessionid': getSessionId(),
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        };
+        return $http.post(schedulerRestUrl() + 'credentials/' + encodeURIComponent(key), $httpParamSerializerJQLike({value: value}), configHeaders);
+
+    }
+
+    function removeThirdPartyCredentials(key) {
+        return $http.delete(schedulerRestUrl() + 'credentials/' + encodeURIComponent(key), {headers: {'sessionID': getSessionId()}});
+    }
+
     return {
         openJobInSchedulerPortal: openJobInSchedulerPortal,
+        openJobInfoPopup: openJobInfoPopup,
         isSpecialUIModel: isSpecialUIModel,
+        isTextAreaModel: isTextAreaModel,
         getSortClasses: getSortClasses,
         openCatalogObjectModal: openCatalogObjectModal,
         openFileBrowser: openFileBrowser,
@@ -603,12 +677,16 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         loadUserPreferences: loadUserPreferences,
         getUserPreference: getUserPreference,
         setUserPreference: setUserPreference,
-        getWorkflowMetadata : getWorkflowMetadata,
-        replaceVariableModelsIfNeeded : replaceVariableModelsIfNeeded,
+        getWorkflowMetadata: getWorkflowMetadata,
+        replaceVariableModelsIfNeeded: replaceVariableModelsIfNeeded,
         parseEmptyVariablesValue: parseEmptyVariablesValue,
         createPathStringFromMap: createPathStringFromMap,
         validateWorkflow: validateWorkflow,
-        submitJob: submitJob
+        submitJob: submitJob,
+        getJobInfoForJob: getJobInfoForJob,
+        getThirdPartyCredentials: getThirdPartyCredentials,
+        postThirdPartyCredentials: postThirdPartyCredentials,
+        removeThirdPartyCredentials: removeThirdPartyCredentials
     };
 }
 

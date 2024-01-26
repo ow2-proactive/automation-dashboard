@@ -11,8 +11,8 @@ function config($stateProvider, $urlRouterProvider) {
 
     $stateProvider
         .state('login', {
-            url: "/login",
-            templateUrl: "views/login.html",
+            url: '/login',
+            templateUrl: 'views/login.html',
             authenticate: false,
             params: {
                 redirectsTo: ''
@@ -20,9 +20,18 @@ function config($stateProvider, $urlRouterProvider) {
         })
         .state('portal', {
             abstract: true,
-            url: "/portal",
-            templateUrl: "views/common/content.html",
-            authenticate: true,
+            url: '/portal',
+            templateUrl: 'views/common/content.html',
+            authenticate: true
+        })
+        .state('job-info', {
+            url: '/job-info?jobid&tab',
+            data: {
+                pageTitle: 'Job details'
+            },
+            templateUrl: 'views/workflow-execution/workflow-execution/templates/job-details-container.html',
+            css: 'styles/workflow-execution/workflow_execution_custom_style.css',
+            authenticate: true
         })
     //!DO NOT EDIT! The following code related to subviews is automatically generated with grunt build. You can't modify it from here.
     //See 'replace' task in Gruntfile.js and subviews definition in enterpriseSubviews.json.
@@ -32,6 +41,7 @@ function config($stateProvider, $urlRouterProvider) {
     //endSubviewsStates
 
 }
+
 angular
     .module('inspinia')
     .config(config)

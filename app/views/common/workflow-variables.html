@@ -2,7 +2,7 @@
     <span class="font-bold" style="margin-left:20px;text-decoration:underline" ng-if="key">{{::key}}</span>
     <span class="font-bold" style="margin-left:20px;text-decoration:underline" ng-if="!key">Main Variables</span>
     <div class="row m-b-xs container-flex w-100" ng-repeat="variable in groupVariables">
-        <label class="col-md-3 control-label text-right">{{::variable.name}}</label>
+        <label class="col-md-3 control-label text-right variable_name_column" ng-style="{'color':variable.advanced?'#E86D1F':(variable.hidden?'#888':'#333')}">{{::variable.name}}</label>
         <div class="col-md-4"
              ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:boolean') ==0">
             <div class="radio-div">
@@ -19,7 +19,6 @@
         <div class="col-md-4"
              ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:list')==0">
             <select class="form-control"
-                    n-init="variable.value = modelToList(variable.resolvedModel)[0]"
                     ng-model="variable.value"
                     ng-options="opt for opt in modelToList(variable.resolvedModel)"
                     ng-change="validate()">
@@ -49,7 +48,7 @@
                    ng-model="variable.value">
         </div>
         <div class="col-md-4" ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:credential')==0">
-            <div class="col-md-8" style="padding-left: 0px;">
+            <div class="col-md-10" style="padding-left: 0px;">
                 <input class="form-control" type="text" ng-model="variable.value">
             </div>
             <div class="col-md-1">
@@ -60,7 +59,7 @@
             </div>
         </div>
         <div class="col-md-4" ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:global_file') == 0">
-            <div class="col-md-8" style="padding-left: 0px;">
+            <div class="col-md-10" style="padding-left: 0px;">
                 <input class="form-control" type="text" ng-model="variable.value">
             </div>
             <div class="col-md-1">
@@ -71,7 +70,7 @@
             </div>
         </div>
         <div class="col-md-4" ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:user_file') == 0">
-            <div class="col-md-8" style="padding-left: 0px;">
+            <div class="col-md-10" style="padding-left: 0px;">
                 <input class="form-control" type="text" ng-model="variable.value">
             </div>
             <div class="col-md-1">
@@ -82,7 +81,7 @@
             </div>
         </div>
         <div class="col-md-4" ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:global_folder') == 0">
-            <div class="col-md-8" style="padding-left: 0px;">
+            <div class="col-md-10" style="padding-left: 0px;">
                 <input class="form-control" type="text" ng-model="variable.value">
             </div>
             <div class="col-md-1">
@@ -93,7 +92,7 @@
             </div>
         </div>
         <div class="col-md-4" ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:user_folder') == 0">
-            <div class="col-md-8" style="padding-left: 0px;">
+            <div class="col-md-10" style="padding-left: 0px;">
                 <input class="form-control" type="text" ng-model="variable.value">
             </div>
             <div class="col-md-1">
@@ -104,7 +103,7 @@
             </div>
         </div>
         <div class="col-md-4" ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:catalog_object') == 0">
-            <div class="col-md-8" style="padding-left: 0px;">
+            <div class="col-md-10" style="padding-left: 0px;">
                 <input class="form-control" type="text" ng-model="variable.value">
             </div>
             <div class="col-md-1">
@@ -116,7 +115,12 @@
                 </button>
             </div>
         </div>
-        <div class="col-md-4" ng-if="!variable.resolvedModel || !isSpecialUIModel(variable)">
+        <div class="col-md-4"
+             ng-if="isTextAreaModel(variable)">
+            <textarea class="w-100" ng-model="variable.value" style="max-width: 100%;">
+            </textarea>
+        </div>
+        <div class="col-md-4" ng-if="!isSpecialUIModel(variable) && !isTextAreaModel(variable)">
             <input class="form-control" type="text" ng-model="variable.value">
         </div>
         <div class="col-md-5">
@@ -125,8 +129,8 @@
     </div>
 </div>
 <div class="checkbox" ng-show="workflow.variables.length && isVariablesIncludeAdvancedVar(workflow.variables)" style="text-align:center">
-    <label>
-        <input type="checkbox" ng-model="$parent.advancedVariables" ng-change="toggleAdvancedVariables()">
+    <label style="color:#E86D1F">
+        <input type="checkbox" ng-model="$parent.advancedVariables">
         {{'Advanced Variables'|translate}}
     </label>
 </div>

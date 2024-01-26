@@ -69,6 +69,7 @@
             </li>
         </ul>
     </nav>
+    <toaster-container toaster-options="{'close-button':true}"></toaster-container>
     <div class="row gray-bg border-bottom">
         <div class="second-row-bar pull-left" style="height: 30px;display: inline-flex;padding: 0 15px;">
             <div class="dropdown" id="help-dropdown">
@@ -107,6 +108,14 @@
                     </li>
                 </ul>
             </div>
+            <div id="connection-error" ng-show="isLoggedOut" style="color:red; font-size:15px; padding-left:30px;">
+                <strong>{{'The server cannot be reached. Check first your network connection, and potentially the server status.'|translate}}</strong>
+            </div>
+        </div>
+        <div style="float:right; padding-right:30px">
+            <a ng-click="showAccountInfo()">
+                <span style="color:#676a6c; padding-left:10px; font-size:14px; background-color:transparent;" >{{'Account Info'|translate}}</span>
+            </a>
         </div>
         <div class="second-row-bar pull-right" style="height: 30px">&nbsp;</div>
         <div style="height: 3px; background: #f47930; width:100%; display: table;"></div>
@@ -138,6 +147,53 @@
 
                     </div>
 
+                </div>
+            </div>
+        </div>
+        <div id="account-modal" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+                <div class="modal-content">
+                    <div class="modal-header">
+                        <button aria-hidden="true" class="close" data-dismiss="modal" type="button">×</button>
+                        <h3>{{'Account Info'|translate}}</h3>
+                    </div>
+                    <div class="modal-body" style="height:100%">
+                        <div class="row">
+                            <div class="col-sm-9" style="width:100%">
+                                <h3><b>{{'Username'|translate}}:</b> {{accountUsername}}</h3>
+                                <br><p><b>{{'Domain'|translate}}:</b> {{accountDomain}}<b>&nbsp&nbsp&nbsp&nbsp{{'Tenant'|translate}}:</b> {{accountTenant}}</p>
+                                <p><b>{{'Groups'|translate}}:</b> {{accountGroups}}</p>
+                                <p><b>{{'Admin roles'|translate}}:</b> {{accountAdminRoles}}</p>
+                                <p><b>{{'Portal Access'|translate}}:</b> {{accountPortalAccessPermissionDisplay}}</p>
+                            </div>
+                        </div>
+
+                    </div>
+
+                </div>
+            </div>
+        </div>
+        <div id="confirm-logout-modal" class="modal" tabindex="-1" role="dialog" aria-hidden="true">
+            <div class="modal-dialog" style="width:26%; padding-top:250px;">
+                <div class="modal-content">
+                    <div class="m-t-lg pull-left" style="padding-left:50px;">
+                        <img src="styles/patterns/confirm.png">
+                    </div>
+                    <div>
+                        <div class="p-sm">
+                            <button type="button" class="close" data-dismiss="modal" aria-hidden="true">×</button>
+                            <h4 class="text-center">{{'Are you sure you want to exit?'|translate}}</h4>
+                        </div>
+                        <div class="p-sm text-center" ng-controller="logoutController">
+                            <button id="confirm-logout-button" class="btn btn-primary" data-dismiss="modal" ng-click="confirmLogout()">
+                                {{'OK'|translate}}
+                            </button>
+                            <button class="btn btn-white m-l-sm" data-dismiss="modal"
+                                    aria-hidden="true">
+                                {{'Cancel'|translate}}
+                            </button>
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>

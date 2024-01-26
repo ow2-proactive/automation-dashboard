@@ -2,7 +2,7 @@
  * Created by ActiveEon Team on 18/04/2017.
  */
 
-var mainModule = angular.module('main', ['ngResource', 'spring-data-rest', 'angular-toArrayFilter', 'oitozero.ngSweetAlert', 'ngSanitize', 'pascalprecht.translate']);
+var mainModule = angular.module('main', ['ngResource', 'spring-data-rest', 'angular-toArrayFilter', 'oitozero.ngSweetAlert', 'ngSanitize', 'pascalprecht.translate', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.moveColumns', 'ui.grid.pinning','toaster', 'ui.grid.autoResize',]);
 
 function getSessionId() {
     return localStorage['pa.session'];
@@ -124,7 +124,7 @@ mainModule.factory('permissionService', function ($http, $interval, $rootScope, 
             .error(function (response) {
                 console.error('doLogin authentication error:', status, response);
             });
-    };
+    }
 
     function getPortalAccessPermission(portal) {
         var requestGetPortalAccessPermissionUrl = JSON.parse(localStorage['restUrl']) + '/common/permissions/portals/' + portal;
@@ -132,25 +132,27 @@ mainModule.factory('permissionService', function ($http, $interval, $rootScope, 
             headers: {
                 'sessionid': getSessionId(),
                 'Content-Type': 'application/json'
-            },
+            }
         };
         return $http.get(requestGetPortalAccessPermissionUrl, config);
-    };
+    }
 
     function getPortalsAccessPermission(portals) {
-        var requestGetPortalsAccessPermissionUrl = JSON.parse(localStorage['restUrl']) + '/common/permissions/portals?' + expandListParam("portals", portals).concat("&");
+        var requestGetPortalsAccessPermissionUrl = JSON.parse(localStorage['restUrl']) + '/common/permissions/portals?' + expandListParam('portals', portals).concat('&');
         var config = {
             headers: {
                 'sessionid': getSessionId(),
                 'Content-Type': 'application/json'
-            },
+            }
         };
         return $http.get(decodeURIComponent(requestGetPortalsAccessPermissionUrl.slice(0, -1)), config);
-    };
+    }
 
 
     function expandListParam(queryParam, listParam) {
-        return listParam.map(function(item) { return queryParam + '=' + item; }).join('&')
+        return listParam.map(function (item) {
+            return queryParam + '=' + item;
+        }).join('&')
     }
 
     return {
@@ -185,26 +187,27 @@ mainModule.config(['$compileProvider', function ($compileProvider) {
 
 // --------------- Controllers -----------------
 
-mainModule.controller('mainController', function ($window, $http, $scope, $rootScope, $state, $location, $interval, $translate, $uibModalStack, permissionService, SweetAlert, UtilsFactory) {
+mainModule.controller('mainController', function ($window, $http, $scope, $rootScope, $state, $location, $interval, $translate, $timeout, $uibModalStack, permissionService, SweetAlert, UtilsFactory) {
 
     this.$onInit = function () {
         $scope.main.userName = localStorage['pa.login'];
         $scope.startRegularCheckSession();
         $scope.contextDisplay = false;
+        $scope.contextBucketDisplay = false;
         // contextPosition enables directive to specify where the context menu was opened
         $scope.contextPosition = '';
         $scope.firstAccessiblePortal = '';
         $scope.portalsAccessPermission = {};
         $scope.automationDashboardPortals = {};
         $rootScope.errorMessage = undefined;
-        if(getSessionId()){
+        if (getSessionId()) {
             var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/rest');
             localStorage['restUrl'] = restUrl;
             $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($window.location.href);
         }
     };
 
-    $scope.showParentPortal = function(id){
+    $scope.showParentPortal = function (id) {
         return angular.element(document.getElementById(id)).find('li').length;
     };
 
@@ -214,7 +217,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         localStorage['proactiveLanguage'] = key;
     };
 
-    $scope.reloadPortal = function (){
+    $scope.reloadPortal = function () {
         location.reload()
     }
 
@@ -222,6 +225,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
     $scope.selectedLanguage = function () {
         $('#language-dropdown').find('a').click(function () {
             var language = $(this).text();
+            localStorage['selectedLanguage'] = language;
             var flagObject = $(this).find('img').attr('src');
             var flag = '<img alt="' + language + '" style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;" src="' + flagObject + '"/>';
             $('#selected').html(flag + language);
@@ -230,7 +234,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 
     $scope.startRegularCheckSession = function () {
         if (!$scope.checkSessionInterval) {
-            $scope.checkSessionInterval = $scope.$interval(checkSession, 30000);
+            $scope.checkSessionInterval = $scope.$interval(checkSession, 15000);
         }
     };
 
@@ -246,28 +250,39 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                 .then(function (response) {
                     if (!response) {
                         $scope.closeSession();
+                    } else {
+                        $rootScope.isLoggedOut = false;
+                        if ($("#login-view").is(":visible") && !$scope.firstAccessiblePortal) {
+                            $scope.main.userName = localStorage['pa.login'];
+                            var sessionid = getSessionId();
+                            if (sessionid) {
+                                $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($scope.redirectsTo);
+                            }
+                            $rootScope.serverIsDown = false;
+                        }
                     }
                 })
                 .catch(function (response) {
                     console.error('Error checking if session is valid:', response);
+                    $rootScope.isLoggedOut = true;
                 });
         }
     }
 
     function displayAlertAndRedirectToFirstAccessiblePortalIfExist(portal) {
-        UtilsFactory.displayTranslatedMessage('warning', 'Access not authorized', ['Cannot connect to', portal+'.', 'The access is not authorized']);
-        if(!$scope.firstAccessiblePortal){
+        UtilsFactory.displayTranslatedMessage('warning', 'Access not authorized', ['Cannot connect to', portal + '.', 'The access is not authorized']);
+        if (!$scope.firstAccessiblePortal) {
             $rootScope.errorMessage = 'The user ' + localStorage['pa.login'] + ' is not allowed to access to the Automation Dashboard Portal';
             $state.go('login');
             console.error('The user ' + localStorage['pa.login'] + ' is not allowed to access to the Automation Dashboard Portal', response);
-        } else{
+        } else {
             $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal]);
         }
     }
 
 
     $scope.checkPortalAccessPermission = function (url) {
-        var portal = url.substring(url.lastIndexOf("/") + 1);
+        var portal = url.substring(url.lastIndexOf('/') + 1, (url.lastIndexOf('?') > 0 ? url.lastIndexOf('?') : undefined));
         if (getSessionId()) {
             permissionService.getPortalAccessPermission(portal).then(function (response) {
                 if (!response.data) {
@@ -276,22 +291,22 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                     $location.path(url);
                 }
             })
-            .catch(function (error, status) {
-                $scope.closeSession();
-                console.error('Error while checking portal access permission', status, error);
-            });
-        }  else {
+                .catch(function (error, status) {
+                    $scope.closeSession();
+                    console.error('Error while checking portal access permission', status, error);
+                });
+        } else {
             $scope.closeSession();
         }
     };
 
-    $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission = function(url) {
+    $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission = function (url) {
         var portal = '';
-        if(url){
-            portal = url.substring(url.lastIndexOf("/") + 1);
+        if (url) {
+            portal = url.substring(url.lastIndexOf('/') + 1, (url.lastIndexOf('?') > 0 ? url.lastIndexOf('?') : undefined));
         }
         $state.get().forEach(function (item) {
-            if(item.name && item.name !== 'login' && item.name !== 'portal'){
+            if (item.name && item.name !== 'login' && item.name !== 'portal' && item.name !== 'job-info') {
                 $scope.automationDashboardPortals[item.url.substring(1)] = item.name;
                 $scope.portalsAccessPermission[item.url.substring(1)] = false;
             }
@@ -305,13 +320,13 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                 response.data.forEach(function (authorizedPortal) {
                     $scope.portalsAccessPermission[authorizedPortal] = true;
                 });
-                if(portal){
-                    if($scope.portalsAccessPermission[portal]){
+                if (portal) {
+                    if ($scope.portalsAccessPermission[portal]) {
                         $state.go($scope.automationDashboardPortals[portal]);
-                    } else{
+                    } else if (portal !== 'job-info' || doHaveAccessToWA === -1) {
                         displayAlertAndRedirectToFirstAccessiblePortalIfExist(portal);
                     }
-                } else{
+                } else {
                     $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal]);
                 }
             } else {
@@ -321,10 +336,10 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
             }
 
         })
-        .catch(function(error){
-            $scope.closeSession();
-            console.error('Error while checking portals access permission',error)
-        })
+            .catch(function (error) {
+                $scope.closeSession();
+                console.error('Error while checking portals access permission', error)
+            })
     };
 
 
@@ -340,8 +355,8 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         $scope.portalsAccessPermission = {};
 
         // cancel the in-progress uploading dataspace files
-        if ($rootScope.uploadingCancelers){
-            $rootScope.uploadingCancelers.forEach(function (upload, uploadId){
+        if ($rootScope.uploadingCancelers) {
+            $rootScope.uploadingCancelers.forEach(function (upload, uploadId) {
                 if (upload && upload.canceler) {
                     upload.canceler.promise.status = 499; // Set 499 status to flag cancelled http requests
                     upload.canceler.resolve()
@@ -352,18 +367,83 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         }
 
         localStorage.removeItem('pa.session');
-        $scope.stopRegularCheckSession();
         $rootScope.$broadcast('event:StopRefreshing');
     };
 
-    $scope.displayContextualMenu = function (clickEvent, position) {
-        $scope.contextPosition = position;
-        $scope.contextDisplay = true;
-        clickEvent.stopPropagation();
+    $scope.disconnect = function () {
+        var disconnectUrlPrefix = JSON.parse(localStorage.schedulerRestUrl) + 'disconnect';
+        $http.put(disconnectUrlPrefix, null, { headers: {'sessionid': getSessionId() }})
+            .then(function (response) {
+            })
+            .catch(function (response) {
+                console.error('Error while disconnecting:', response);
+            });
     };
 
-    $scope.hideContextualMenu = function () {
-        $scope.contextDisplay = false;
+    $scope.displayContextualMenu = function (clickEvent, position, isWEJobRowContextMenu, data) {
+            clickEvent.stopPropagation();
+            $scope.contextPosition = position;
+            $scope.contextDisplay = true;
+            var isNeedToInjectDataInContextMenuScope = false;
+            if (isWEJobRowContextMenu) {
+                isNeedToInjectDataInContextMenuScope = waitAndApplyWEJobRowContextMenuDisplay(data);
+            }
+            if (data && isNeedToInjectDataInContextMenuScope) {
+                injectDataInContextMenuScope(data);
+            }
+    };
+
+    // display context-menu on buckets in the catalog
+    $scope.displayContextualMenuOnBucket = function (clickEvent, position) {
+            //display the context menu on bucket
+            $scope.contextBucketDisplay = true;
+            // close context menu on objects
+            $scope.contextDisplay = false;
+    };
+
+    function waitAndApplyWEJobRowContextMenuDisplay(data) {
+        if(!$('#context-menu').length) {
+            // we set an observation in order to wait for the render of the context menu
+            var observer = new MutationObserver(function (mutations) {
+                var contextMenuIncludeElement = angular.element('#context-menu')[0].children[0].children[0];
+                if (mutations.length && contextMenuIncludeElement) {
+                    // Remove the dropdown-menu class which prevents the context-menu to be displayed
+                    angular.element(contextMenuIncludeElement.childNodes[0]).removeClass('dropdown-menu');
+                    closeJobRowOtherActionsDropDown();
+                    observer.disconnect();
+                }
+            });
+            observer.observe($('#workflow-execution-main')[0], {
+                childList: true,
+                subtree: true
+            })
+            return false;
+        } else {
+            return true;
+        }
+    }
+
+    function injectDataInContextMenuScope(data) {
+        Object.keys(data).forEach(function(key) {
+            angular.element(document.getElementById('context-menu')).scope()[key] = data[key];
+        });
+    }
+
+    function closeJobRowOtherActionsDropDown() {
+        var dropdownMenu = angular.element(document.getElementsByClassName('dropdown-menu dropdown-menu-right custom-dropdown ng-scope'));
+        if (dropdownMenu) {
+            dropdownMenu.toggle();
+        }
+    }
+
+    $scope.hideContextualMenu = function (event) {
+        if (!event) {
+            // It's a scroll event
+            return;
+        } else {
+            $scope.contextDisplay = false;
+            $scope.contextBucketDisplay = false;
+        }
     };
 
     // Check if position match with the position set by displayContextualMenu
@@ -373,30 +453,32 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 
     // Move the contextual menu near the click according to its position in the window
     $scope.moveContextualMenu = function (clickEvent) {
+        $timeout(callBack, 10);
+        function callBack() {
+            var contextMenuHeight = angular.element('#context-menu')[0].offsetHeight;
+            //if contextual menu will get out of the panel catalog-tab-content, we display it upper
+            if (clickEvent['clientY'] + contextMenuHeight < window.innerHeight && contextMenuHeight > 2) {
+                angular.element('#context-menu').css('top', clickEvent['clientY'] + 'px')
+            } else {
+                angular.element('#context-menu').css('top', (clickEvent['clientY'] - contextMenuHeight) + 'px')
+            }
 
-        var contextMenuHeight = angular.element('#context-menu')[0].offsetHeight;
-        //if contextual menu will get out of the panel catalog-tab-content, we display it upper
-        if (clickEvent['clientY'] + contextMenuHeight < window.innerHeight) {
-            angular.element('#context-menu').css('top', clickEvent['clientY'] + 'px')
-        } else {
-            angular.element('#context-menu').css('top', (clickEvent['clientY'] - contextMenuHeight) + 'px')
+            var contextMenuWidth = angular.element('#context-menu')[0].offsetWidth;
+            //if contextual menu will get out of the panel catalog-tab-content, we display it upper
+            if ((clickEvent['clientX'] + contextMenuWidth < window.innerWidth)) {
+                angular.element('#context-menu').css('left', clickEvent['clientX'] + 'px')
+            } else {
+                angular.element('#context-menu').css('left', (clickEvent['clientX'] - contextMenuWidth) + 'px')
+            }
+            angular.element('#context-menu').removeClass("opacity-0");
         }
-
-        var contextMenuWidth = angular.element('#context-menu')[0].offsetWidth;
-        //if contextual menu will get out of the panel catalog-tab-content, we display it upper
-        if (clickEvent['clientX'] + contextMenuWidth < window.innerWidth) {
-            angular.element('#context-menu').css('left', clickEvent['clientX'] + 'px')
-        } else {
-            angular.element('#context-menu').css('left', (clickEvent['clientX'] - contextMenuWidth) + 'px')
-        }
-
     };
 
     /**
      * Lose focus (blur) on the given element. Useful to lose :focus styling after pressing a button
      * @param elementSelector jQuery light selector expression
      */
-    $scope.loseFocusForElement = function(elementSelector){
+    $scope.loseFocusForElement = function (elementSelector) {
         angular.element(elementSelector)[0].blur();
     }
 });
@@ -404,20 +486,20 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 // controller used in navigation.html :
 mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval, $timeout) {
     this.$onInit = function () {
-        var jobAnalyticsChildren = ['job-analytics', 'job-gantt', 'node-gantt'];
+        var jobAnalyticsChildren = ['health-dashboard', 'job-analytics', 'job-gantt', 'node-gantt'];
         var jobPlannerChildren = ['job-planner-calendar-def', 'job-planner-calendar-def-workflows', 'job-planner-execution-planning', 'job-planner-gantt-chart'];
-        $timeout(function(){
-            var splitUrl = window.location.hash.split("/");
-            var portal = splitUrl[splitUrl.length-1];
+        $timeout(function () {
+            var splitUrl = window.location.hash.split('/');
+            var portal = splitUrl[splitUrl.length - 1];
             setDefaultSelectedLanguage(localStorage['proactiveLanguage']);
-            if(jobAnalyticsChildren.indexOf(portal) !== -1){
+            if (jobAnalyticsChildren.indexOf(portal) !== -1) {
                 $scope.changeFavicon('analytics-portal');
-            } else if(jobPlannerChildren.indexOf(portal) !== -1){
+            } else if (jobPlannerChildren.indexOf(portal) !== -1) {
                 $scope.changeFavicon('job-planner-portal');
-            } else if(splitUrl[splitUrl.length-1] ==="workflow-execution"){
-                $scope.changeFavicon("automation_dashboard_30");
+            } else if (splitUrl[splitUrl.length - 1] === 'workflow-execution') {
+                $scope.changeFavicon('automation_dashboard_30');
             } else {
-                $scope.changeFavicon(splitUrl[splitUrl.length-1]);
+                $scope.changeFavicon(splitUrl[splitUrl.length - 1]);
             }
         }, 1000)
 
@@ -432,8 +514,8 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         $scope.nbNewNotifications = 0;
         startRegularUpdateNotificationLabel();
 
-        $timeout( function(){
-            if(localStorage.getItem('collapsePreference') && localStorage.getItem('collapsePreference') === "in"){
+        $timeout(function () {
+            if (localStorage.getItem('collapsePreference') && localStorage.getItem('collapsePreference') === 'in') {
                 $scope.collapseMenu()
             }
         }, 2000)
@@ -441,28 +523,28 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
 
     };
 
-    $scope.collapseMenu = function(){
-        if($('#collapse-menu').next().find('span').is(':visible')){
-            $("#collapse-menu > a > i").removeClass('fa-angle-double-left')
-            $("#collapse-menu > a > i").addClass('fa-angle-double-right')
+    $scope.collapseMenu = function () {
+        if ($('#collapse-menu').next().find('span').is(':visible')) {
+            $('#collapse-menu > a > i').removeClass('fa-angle-double-left')
+            $('#collapse-menu > a > i').addClass('fa-angle-double-right')
             localStorage.setItem('collapsePreference', 'in')
         } else {
-            $("#collapse-menu > a > i").removeClass('fa-angle-double-right')
-            $("#collapse-menu > a > i").addClass('fa-angle-double-left')
+            $('#collapse-menu > a > i').removeClass('fa-angle-double-right')
+            $('#collapse-menu > a > i').addClass('fa-angle-double-left')
             localStorage.setItem('collapsePreference', 'out')
         }
         $('.pace-done').toggleClass('mini-navbar');
     }
-    $scope.changeFavicon = function(portal){
-         var link = document.createElement('link');
-         var oldLink = document.getElementById('favicon');
-         link.id = 'favicon';
-         link.rel = 'icon';
-         link.href = "styles/patterns/"+ portal + ".png";
-         if (oldLink) {
+    $scope.changeFavicon = function (portal) {
+        var link = document.createElement('link');
+        var oldLink = document.getElementById('favicon');
+        link.id = 'favicon';
+        link.rel = 'icon';
+        link.href = 'styles/patterns/' + portal + '.png';
+        if (oldLink) {
             document.head.removeChild(oldLink);
-         }
-         document.head.appendChild(link);
+        }
+        document.head.appendChild(link);
     };
 
     $scope.displayAbout = function () {
@@ -474,6 +556,39 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         $scope.restUrl = result;
         $scope.year = new Date().getFullYear();
         $('#about-modal').modal('show');
+    };
+
+    $scope.showAccountInfo = function () {
+        var requestGetAccountInfoUrl = JSON.parse(localStorage['restUrl']) + '/common/currentuserdata';
+        var config = { headers: {'sessionid': getSessionId()} };
+        $http.get(requestGetAccountInfoUrl, config).then(function (result) {
+           $scope.accountUsername = result.data.userName;
+           $scope.accountDomain = result.data.domain;
+           $scope.accountGroups = "";
+           for (var i=0; i<result.data.groups.length; i++) {
+              $scope.accountGroups = $scope.accountGroups + result.data.groups[i];
+              if (i< result.data.groups.length -1) {
+                $scope.accountGroups = $scope.accountGroups + ", ";
+              }
+           }
+           $scope.accountTenant = result.data.tenant;
+           $scope.accountAdminRoles = "";
+            for (var i=0; i<result.data.adminRoles.length; i++) {
+                $scope.accountAdminRoles = $scope.accountAdminRoles + result.data.adminRoles[i];
+                 if (i< result.data.adminRoles.length -1) {
+                    $scope.accountAdminRoles = $scope.accountAdminRoles + ", ";
+                }
+            }
+            $scope.accountPortalAccessPermissionDisplay = "";
+            for (var i=0; i<result.data.portalAccessPermissionDisplay.length; i++) {
+                $scope.accountPortalAccessPermissionDisplay = $scope.accountPortalAccessPermissionDisplay + result.data.portalAccessPermissionDisplay[i];
+                 if (i< result.data.portalAccessPermissionDisplay.length -1) {
+                    $scope.accountPortalAccessPermissionDisplay = $scope.accountPortalAccessPermissionDisplay + ", ";
+                }
+            }
+           $('#account-modal').modal('show');
+           return result.data;
+        });
     };
 
     function startRegularUpdateNotificationLabel() {
@@ -495,12 +610,16 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         var eventsUrlPrefix = JSON.parse(localStorage['notificationServiceUrl']) + 'notifications/unreadCount';
         $http.get(eventsUrlPrefix, {headers: {'sessionID': getSessionId()}})
             .success(function (response) {
-                if(Number.isInteger(response)){
-                    $scope.nbNewNotifications=response;
+                if (Number.isInteger(response)) {
+                    $scope.nbNewNotifications = response;
                 }
             })
             .error(function (response) {
                 console.error('Error while querying notification service: ', response);
+                if (response !== null && response.httpErrorCode === 401) {
+                    $scope.closeSession();
+                    $rootScope.serverIsDown = true;
+                }
             });
     }
 
@@ -532,20 +651,37 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     }
 });
 
-mainModule.controller('loginController', function ($scope, $state, permissionService, $stateParams, $location, $rootScope) {
+mainModule.controller('loginController', function ($scope, $http, $state, permissionService, $stateParams, $location, $rootScope) {
+    this.$onInit = function () {
+        $scope.domains = [];
+        $scope.getDomains();
+    };
     $scope.redirectsTo = $stateParams.redirectsTo;
     var host = $location.host();
     $scope.showLinkAccountCreation = (host === 'try.activeeon.com' || host === 'azure-try.activeeon.com');
     var username = getCookie('username');
     if (username === 'null') {
-        $scope.username = localStorage['pa.login'];
+        var localStorageUser = localStorage['pa.login'];
+        if (localStorageUser && localStorageUser.includes("\\")) {
+            var domainUsername = localStorageUser.split("\\");
+            $scope.selectedDomain = domainUsername[0];
+            localStorageUser = domainUsername[1];
+        }
+        $scope.username = localStorageUser;
     } else {
+        if (username && username.includes("\\")) {
+            var domainUsername = username.split("\\");
+            $scope.selectedDomain = domainUsername[0];
+            username = domainUsername[1];
+        }
         $scope.username = username;
     }
     $scope.login = function () {
         var username = $scope.username;
+        if($scope.selectedDomain) {
+            username = $scope.selectedDomain + "\\" + $scope.username;
+        }
         var password = $scope.password;
-
         localStorage['pa.login'] = username;
         $scope.main.userName = localStorage['pa.login'];
 
@@ -556,15 +692,14 @@ mainModule.controller('loginController', function ($scope, $state, permissionSer
                     $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($scope.redirectsTo);
                 }
                 $scope.startRegularCheckSession();
+                $rootScope.serverIsDown = false;
             })
             .error(function (response) {
                 try {
                     var error = JSON.parse(response);
                     $rootScope.errorMessage = error.errorMessage;
                     if (error.httpErrorCode === 404) {
-                        if (error.stackTrace.indexOf('login.LoginException') >= 0) {
-                            $rootScope.errorMessage = 'Invalid Login or Password';
-                        } else {
+                        if (error.stackTrace.indexOf('login.LoginException') < 0) {
                             $rootScope.errorMessage = 'The server is not available, please try again later.';
                         }
                     }
@@ -574,10 +709,35 @@ mainModule.controller('loginController', function ($scope, $state, permissionSer
             });
     };
 
+    $scope.getDomains = function () {
+        $http.get(JSON.parse(localStorage.schedulerRestUrl) + 'domains/')
+            .then(function (response) {
+                $scope.domains = response.data;
+                if($scope.domains.length && !$scope.domains.includes("")) {
+                    $scope.domains.unshift("");
+                }
+                if ($scope.domains.length) {
+                    $scope.selectedDomain = $scope.domains[0];
+                }
+                else {
+                    $scope.selectedDomain = "";
+                }
+            })
+            .catch(function (response) {
+                 console.error('Error getting domains:', response);
+            });
+    }
+
 });
 
 mainModule.controller('logoutController', function ($scope, $state) {
     $scope.logout = function () {
+        $('#confirm-logout-modal').modal('show');
+    };
+
+    $scope.confirmLogout = function () {
+        $('#confirm-logout-modal').modal('hide');
+        $scope.disconnect();
         $scope.closeSession();
     };
 });
@@ -587,7 +747,6 @@ mainModule.controller('footerController', function ($scope) {
 });
 
 
-
 mainModule.directive('ngRightClick', function ($parse) {
     return {
         restrict: 'A',
@@ -595,16 +754,23 @@ mainModule.directive('ngRightClick', function ($parse) {
             //the pre function will determine which item of the contextual menu will be displayed
             pre: function (scope, element, attrs) {
                 //create a function that will invoke ngRightClick value
-
                 var fn = $parse(attrs.ngRightClick);
                 //attach the contextmenu event to the element
                 element.bind('contextmenu', function (event) {
                     scope.$apply(function (scope) {
                         //cancel the os default contextual menu
                         event.preventDefault();
+                        /*
+                            contextMenuData holds the job data used by the context-menu that
+                            is displayed when a right click in a job row of WE is done.
+                            If contextMenuData is undefined, we are not on the WE portal.
+                        */
+                        if (scope.contextMenuData) {
+                            scope.contextMenuData['job'] = scope.job;
+                            scope.contextMenuData['subsLevel'] = scope.subsLevel;
+                        }
 
                         if (attrs.ngRightClick !== '') {
-                            //call the function that invoke the function included in ngRightClick value
                             fn(scope, {$event: event});
                         }
                     });
@@ -619,6 +785,12 @@ mainModule.directive('ngRightClick', function ($parse) {
                     element.bind('contextmenu', function (event) {
                         scope.moveContextualMenu(event)
 
+                        var contextMenu = document.querySelector('.calendar-list');
+                        if (contextMenu) {
+                            contextMenu.addEventListener('click', function (event) {
+                                event.stopPropagation();
+                            });
+                        }
                     });
                 }
             }
@@ -708,7 +880,7 @@ mainModule.directive('ngDraggable', function ($document) {
 
 /*Catalog view controller: buckets and objects list*/
 
-angular.module('main').controller('CatalogViewController', function ($scope, $rootScope, $uibModal, $http, $filter, $translate, $timeout, $sce, toastr, WECatalogService, UtilsFactory) {
+angular.module('main').controller('CatalogViewController', function ($scope, $rootScope, $uibModal, $http, $filter, $translate, $timeout, $sce, toaster, WECatalogService, UtilsFactory) {
 
     this.$onInit = function () {
         // Filter objects by workflowNameQuery
@@ -717,7 +889,6 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
         // Fetch defaults or cached values
         $scope.WEUserPreferences = UtilsFactory.loadUserPreferences();
         $scope.selectedBucketName = UtilsFactory.getUserPreference('submissionView.selectedBucketName');
-        $scope.showPSAWorkflowsOnly = UtilsFactory.getUserPreference('submissionView.showPSAWorkflowsOnly');
         $scope.orderByColumnConfig = UtilsFactory.getUserPreference('submissionView.orderByColumnConfig.workflows');
         $scope.OrderByBucketNameConfig = UtilsFactory.getUserPreference('submissionView.orderByColumnConfig.buckets');
         $scope.toggleListBox = UtilsFactory.getUserPreference('submissionView.toggleListBox');
@@ -736,7 +907,7 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
 
     function updateWorkflowsMetadataList() {
         $scope.isObjectsLoading = true;
-        var kind = $scope.showPSAWorkflowsOnly ? 'Workflow/psa' : 'Workflow/standard,Workflow/psa'
+        var kind = $scope.showPSAWorkflowsOnly ? 'Workflow/psa' : 'Workflow/standard'
         WECatalogService.getWorkflowsMetadataList($scope.workflowNameQuery, $scope.selectedBucket.name, kind).then(function (response) {
             $scope.workflowsMetadataList = response;
             $timeout(function () {
@@ -780,7 +951,8 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
             description: UtilsFactory.getWorkflowMetadata(workflow, 'General', 'description'),
             name: workflow.name,
             commitTime: workflow.commit_time,
-            userName: workflow.username
+            userName: workflow.username,
+            submissionMode: workflow.submissionMode
         }
         $scope.selectedWorkflow = $scope.$parent.$parent.$parent.$parent.$parent.$parent.workflowToSubmit;
         // go to Submit tab
@@ -789,25 +961,24 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
 
     $scope.changeBucket = function (bucket) {
         $scope.selectedBucket = bucket;
-        UtilsFactory.setUserPreference('submissionView.selectedBucketName', $scope.selectedBucket.name);
+        if (!$scope.showPSAWorkflowsOnly){
+            UtilsFactory.setUserPreference('submissionView.selectedBucketName', $scope.selectedBucket.name);
+        }
         updateWorkflowsMetadataList();
     };
 
-     $scope.filterBucketsByKind = function(){
-        UtilsFactory.setUserPreference('submissionView.showPSAWorkflowsOnly', $scope.showPSAWorkflowsOnly);
-        loadBuckets();
-     }
-     /**
-      * load all buckets with at least one workflow from server
-      **/
+    /**
+     * load all buckets with at least one workflow from server
+     **/
     function loadBuckets() {
         const appCatalog = JSON.parse(localStorage.appCatalogBucketsUrl);
         const sessionIdHeader = {
             headers: {'sessionid': getSessionId()},
             params: {
-                     'kind': $scope.showPSAWorkflowsOnly ? 'Workflow/psa' : 'Workflow/standard,Workflow/psa',
-                     'objectName': $scope.workflowNameQuery}
-            };
+                'kind': $scope.showPSAWorkflowsOnly ? 'Workflow/psa' : 'Workflow/standard',
+                'objectName': $scope.workflowNameQuery
+            }
+        };
         $scope.isBucketsLoading = true;
         $scope.bucketsMetadataList = [];
         $http.get(appCatalog, sessionIdHeader)
@@ -830,7 +1001,9 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
                     });
                     if (!$scope.selectedBucketName || selectedBucketIndex === -1) {
                         $scope.selectedBucket = $scope.bucketsMetadataList[0];
-                        UtilsFactory.setUserPreference('submissionView.selectedBucketName', $scope.selectedBucket.name);
+                        if (!$scope.showPSAWorkflowsOnly){
+                            UtilsFactory.setUserPreference('submissionView.selectedBucketName', $scope.selectedBucket.name);
+                        }
                     } else {
                         $scope.selectedBucket = $scope.bucketsMetadataList[selectedBucketIndex];
                         $scope.scrollToBucket();
@@ -862,21 +1035,26 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
         loadBuckets();
     }
 
+    $scope.hideEmptyObject = function (bucket){
+        return bucket.objectCount > 0;
+    }
+
     $scope.findImageUrl = function (selectedWorkflow) {
         var icon = UtilsFactory.getByKey('generic_information', 'workflow.icon', selectedWorkflow.object_key_values);
         return icon === '' ? 'styles/patterns/img/wf-icons/wf-default-icon.png' : icon
     };
+
     /**
      * This function allows sorting buckets list and workflow lists
      **/
     $scope.orderByColumn = function (column, config, propertyName) {
-        config.order = (config.column !== column) ? 'd' : config.order === 'a' ? "d" : "a";
+        config.order = (config.column !== column) ? 'd' : config.order === 'a' ? 'd' : 'a';
         config.comparatorLogic = (config.column !== column) ? '+' + column : config.order === 'd' ? '+' + column : '-' + column;
         config.column = column;
         UtilsFactory.setUserPreference(propertyName, config);
     }
 
-    $scope.getSortClasses = function (sortParameters, column){
+    $scope.getSortClasses = function (sortParameters, column) {
         return UtilsFactory.getSortClasses(sortParameters, column)
     }
     $scope.toggleDisplay = function () {
@@ -884,69 +1062,73 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
     }
 
     $scope.filterCreationWorkflows = function (workflow) {
-        if(workflow.kind.toLowerCase().includes("workflow/standard")){
+        if (workflow.kind.toLowerCase().includes('workflow/standard')) {
             return true
         }
-        return UtilsFactory.getWorkflowMetadata(workflow, "generic_information", "pca.states") && UtilsFactory.getWorkflowMetadata(workflow, "generic_information", "pca.states").includes('VOID');
+        return UtilsFactory.getWorkflowMetadata(workflow, 'generic_information', 'pca.states') && UtilsFactory.getWorkflowMetadata(workflow, 'generic_information', 'pca.states').includes('VOID');
     };
+
+    $scope.getObjectDescription = function (object){
+        return UtilsFactory.getWorkflowMetadata(object, 'General', 'description')
+    }
 
     // Close the window if ESC key pressed
     $(document).keydown(function (e) {
-    // ESCAPE key pressed
-    if (e.keyCode === 27 && $scope.isJobSubmissionPanelOpen) {
-        $scope.toggleOpenSubmitJobPanel(false);
-    }
+        // ESCAPE key pressed
+        if (e.keyCode === 27 && $scope.isJobSubmissionPanelOpen) {
+            $scope.toggleOpenSubmitJobPanel(false);
+        }
     })
 
 });
 
 /*Workflow variables controller: submission template*/
 
-angular.module('main').controller('VariablesController', function ($scope, $uibModal, $http, $translate, $timeout, $sce, $rootScope, $location, toastr, PCAService, UtilsFactory, WESchedulerService) {
+angular.module('main').controller('VariablesController', function ($scope, $uibModal, $http, $translate, $timeout, $sce, $rootScope, $location, toaster , PCAService, UtilsFactory, WESchedulerService) {
     this.$onInit = function () {
         $scope.workflow =
             $scope.$parent.$parent.$parent.$parent.$parent.$parent.workflowToSubmit;
         // toast config
-        $scope.toastrConfig = {closeButton: true, progressBar: true};
+        $scope.toasterConfig = {closeButton: true, progressBar: true};
         const variablesTemplateFooterButtonInfo =
             $scope.$parent.$parent.$parent.$parent.$parent.$parent
                 .variablesTemplateFooterButtonInfo;
+
+        // helper flag for workflow valid message
+        $scope.WEsubmissionErrorMessage = '';
+        $scope.successMessage = '';
         // fetch resolvedModel from the server: update variables
-        if($scope.workflow.jobId) {
+        if ($scope.workflow.jobId) {
             validateJob()
         } else {
-            validateWorkflow( function(response){
-                updateVariables(response)
-                if(!response.valid){
-                    $scope.WEsubmissionErrorMessage = response.errorMessage;
-                    $scope.successMessage = '';
-                }
+            validateWorkflow(function (response) {
+                updateVariables(response);
                 UtilsFactory.replaceVariableModelsIfNeeded($scope.workflow.variables);
             })
         }
-        // helper flag for workflow valid message
-        $scope.WEsubmissionErrorMessage = "";
-        $scope.successMessage = "";
+
 
         /**
          * footer button actions: functions that will be called when user clicks
          **/
         $scope.footerActions = {
             Submit: submit,
-            "Execute Action": submitServicesAndAction,
+            Launch: submit,
+            'Execute Action': submitServicesAndAction,
             Resubmit: function () {
                 reSubmitJob($scope.workflow.id, $scope.workflow.variables);
             },
-            "Kill & Re-Submit": function () {
+            'Kill & Re-Submit': function () {
                 killResubmitJob($scope.workflow.id, $scope.workflow.variables);
             },
-            "Confirm Association": createNewCdWfAssociation,
-            "Update": updateCdWfAssociation,
+            'Confirm Association': createNewCdWfAssociation,
+            'Schedule Workflow': scheduleWf,
+            'Update': updateCdWfAssociation,
             Previous: previous,
             Check: check,
             Cancel: function () {
                 $scope.$parent.toggleOpenSubmitJobPanel(false);
-            },
+            }
         };
         // footer section
         $scope.footerTemplate = variablesTemplateFooterButtonInfo.map(function (item) {
@@ -958,13 +1140,16 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         //psa workflow label
         $scope.pcaWorkflowLabel = '';
         // show advanced variables
-        $scope.advancedVariables = UtilsFactory.getUserPreference('submissionView.advancedVariables');
+        $scope.advancedVariables = false;
     };
 
     $scope.documentationUrlWfa = function (url) {
         return url.startsWith('http') ? url : JSON.parse(localStorage.appUrl).concat('/doc/', url);
     }
 
+    $scope.isTextAreaModel = function (variable) {
+        return UtilsFactory.isTextAreaModel(variable)
+    }
 
     $scope.isSpecialUIModel = function (variable) {
         return UtilsFactory.isSpecialUIModel(variable);
@@ -972,139 +1157,208 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
 
     // submit services or action
     const submitServicesAndAction = function () {
-       $scope.isSubmissionGoingOn = true;
-       const bucketName = $scope.workflow['bucketName'];
-       validateWorkflow( function(response){
-           if (response.valid === true) {
-                   /*
-                   * There are two cases : submit wf or submit action
-                   */
-                   var transformedVariables = UtilsFactory.getVariablesInKeyValueFormat($scope.workflow.variables);
-                   const variables = UtilsFactory.parseEmptyVariablesValue(UtilsFactory.getVariablesInKeyValueFormat($scope.workflow.variables));
-                   if($scope.workflow.hasOwnProperty("isCreationWorkflow") && !$scope.workflow.isCreationWorkflow) {
-                       var httpPromise = PCAService.submitActionWorkflow($scope.workflow.serviceInstance.instance_id, bucketName, $scope.workflow.name, variables);
-                       httpPromise.then(function () {
-                           toastr.success('The action has been executed.',JSON.stringify(response.id), $scope.toastrConfig);
-                           $rootScope.$broadcast('event:updateServiceInstanceList');
-                           $rootScope.$broadcast('event:updateWorkflowsGroupedByInstance');
-                           $scope.isLoading = false;
-                           //close the Submit Workflow Panel
-                          $scope.$parent.toggleOpenSubmitJobPanel(false);
-                       }).catch(function (error) {
-                           console.error('Error while executing workflow on instance ' + $scope.workflow.serviceInstance.instance_id + ': ' + angular.toJson(error));
-                           UtilsFactory.displayTranslatedErrorMessage('Error', ['The action couldn\'t be executed:', error.data.httpErrorCode + ' - ' + error.data.errorMessage]);
-                           $scope.isLoading = false;
-                       });
-                   } else {
-                       var httpPromise = PCAService.submitCreationWorkflow($scope.workflow.bucketName, $scope.workflow.name, variables, $scope.pcaWorkflowLabel);
-                       httpPromise.then(function () {
-                           //close the Submit Workflow Panel
-                           $scope.$parent.toggleOpenSubmitJobPanel(false);
-                           toastr.success('The service instance has been created.',JSON.stringify(response.id), $scope.toastrConfig);
-                       }).catch(function (error) {
-                           console.error('Error while submitting service: ' + angular.toJson(error));
-                           toastr.error('Error', ['The service instance couldn\'t be created:', error.data.httpErrorCode + ' - ' + error.data.errorMessage]);
-                       });
-                   }
-               } else {
-                   $scope.WEsubmissionErrorMessage = response.errorMessage;
-                   $scope.successMessage = '';
-               }
-               $scope.isSubmissionGoingOn = false
-           })
+        $scope.isSubmissionGoingOn = true;
+        const bucketName = $scope.workflow['bucketName'];
+        validateWorkflow(function (response) {
+            if (response.valid === true) {
+                /*
+                * There are two cases : submit wf or submit action
+                */
+                const variables = UtilsFactory.parseEmptyVariablesValue(UtilsFactory.getVariablesInKeyValueFormat($scope.workflow.variables));
+                UtilsFactory.getVariablesInKeyValueFormat($scope.workflow.variables);
+                if ($scope.workflow.hasOwnProperty('isCreationWorkflow') && !$scope.workflow.isCreationWorkflow) {
+                    var httpPromise = PCAService.submitActionWorkflow($scope.workflow.serviceInstance.instance_id, bucketName, $scope.workflow.name, variables);
+                    httpPromise.then(function () {
+                        toaster.success('The action has been executed.', JSON.stringify(response.id));
+                        $rootScope.$broadcast('event:updateServiceInstanceList');
+                        $rootScope.$broadcast('event:updateWorkflowsGroupedByInstance');
+                        $scope.isLoading = false;
+                        //close the Submit Workflow Panel
+                        $scope.$parent.toggleOpenSubmitJobPanel(false);
+                    }).catch(function (error) {
+                        console.error('Error while executing workflow on instance ' + $scope.workflow.serviceInstance.instance_id + ': ' + angular.toJson(error));
+                        UtilsFactory.displayTranslatedErrorMessage('Error', ['The action couldn\'t be executed:', error.data.httpErrorCode + ' - ' + error.data.errorMessage]);
+                        $scope.isLoading = false;
+                    });
+                } else {
+                    var httpPromise = PCAService.submitCreationWorkflow($scope.workflow.bucketName, $scope.workflow.name, variables, $scope.pcaWorkflowLabel);
+                    httpPromise.then(function () {
+                        //close the Submit Workflow Panel
+                        $scope.$parent.toggleOpenSubmitJobPanel(false);
+                        toaster.success('The service instance has been created.', JSON.stringify(response.id));
+                    }).catch(function (error) {
+                        console.error('Error while submitting service: ' + angular.toJson(error));
+                        toaster.error('Error', ['The service instance couldn\'t be created:', error.data.httpErrorCode + ' - ' + error.data.errorMessage]);
+                    });
+                }
+            } else {
+                $scope.WEsubmissionErrorMessage = response.errorMessage;
+                $scope.successMessage = '';
+            }
+        })
     }
     // use : when clicking on the button submit
     const submit = function () {
         $scope.isSubmissionGoingOn = true;
         const bucketName = $scope.workflow['bucketName'];
         // submit a standard workflow
-         if($scope.workflow.kind.toLowerCase().includes("workflow/psa")){
+        if ($scope.workflow.kind.toLowerCase().includes('workflow/psa')) {
             submitServicesAndAction();
             return;
-         }
+        }
         // Validate + Submit if applicable
-        validateWorkflow( function(response){
+        validateWorkflow(function (response) {
             if (response.valid === true) {
-                 UtilsFactory.submitJob(bucketName, $scope.workflow.name, $scope.workflow.variables)
-                     .success(function (submitResponse) {
-                         //close the Submit Workflow Panel
-                         $scope.$parent.toggleOpenSubmitJobPanel(false);
-                         toastr.success("Your Workflow has been submitted successfully" + ', Job Id: ' + JSON.stringify(submitResponse.id), $scope.toastrConfig);
-                     })
-                     .error(function () {
-                         toastr.error("An error occurred while submitting your workflow." + '\n' + "Please check you workflows and retry", $scope.toastrConfig)
-                     })
+                UtilsFactory.submitJob(bucketName, $scope.workflow.name, $scope.workflow.variables, $scope.workflow.submissionMode)
+                    .success(function (submitResponse) {
+                        //close the Submit Workflow Panel
+                        $scope.$parent.toggleOpenSubmitJobPanel(false);
+                        $scope.isSubmissionGoingOn = false;
+                        if( $scope.workflow.submissionMode === "catalog" ) {
+                            toaster.pop('success', "", 'Your Workflow has been submitted successfully ' + ', Job Id:'+ JSON.stringify(submitResponse.id) + '<br>' +
+                                    '<a href="/automation-dashboard/#/workflow-execution" target="_blank">Open Job in Workflow Execution Portal</a></br>' +
+                                    '<a href="/scheduler" target="_blank">Open Job in Scheduler Portal</a>', 5000, 'trustedHtml');
+                        } else {
+                            toaster.pop('success',"", 'Your Workflow has been submitted successfully' + ', Job Id: ' + JSON.stringify(submitResponse.id), 5000, 'trustedHtml');
+                        }
+                    })
+                    .error(function (error) {
+                        $scope.WEsubmissionErrorMessage = error.errorMessage;
+                        $scope.isSubmissionGoingOn = false;
+                        toaster.error('An error occurred while submitting your workflow.' + '\n' + 'Please check you workflows and retry')
+                    })
             } else {
                 $scope.WEsubmissionErrorMessage = response.errorMessage;
+                $scope.isSubmissionGoingOn = false;
                 $scope.successMessage = '';
             }
-            $scope.isSubmissionGoingOn = false
         })
     };
 
     // create new association
     function createNewCdWfAssociation() {
+        $scope.isSubmissionGoingOn = true;
         const bucketName = $scope.workflow['bucketName'];
         // Validate + create association if applicable
-        validateWorkflow( function(response) {
-            if (response.valid === true) {
+        validateWorkflow(function (response) {
+            if (response.valid) {
+                // the values of pa:hidden variables shouldn't be decrypted in Workflow Description
+                encryptValues(response)
                 // create association
                 $scope.$parent.createAssociation($scope.workflow.name, bucketName, $scope.workflow.variables)
-                    .success(function() {
-                            $scope.updatePlannedJobsList();
-                            $rootScope.$broadcast('event:updatePlannedJobsCount');
-                            $scope.desectWorkflowInModal();
-                            $scope.toggleOpenSubmitJobPanel(false);
-                            toastr.success('New association successfully created', $scope.toastrConfig);
-                        })
-                        .error(function(response) {
-                            $scope.errorMessage = response.errorMessage;
-                            console.error('Error while creating calendar workflow association ' + ':', angular.toJson(response));
+                    .success(function (res) {
+                        $rootScope.$broadcast('event:updatePlannedJobsCount', res.id);
+                        $scope.desectWorkflowInModal();
+                        $scope.toggleOpenSubmitJobPanel(false);
+                        displaySuccessMessage('New association successfully created');
+                    })
+                    .error(function (res) {
+                        $scope.isSubmissionGoingOn = false
+                        $scope.errorMessage = res.errorMessage;
+                        console.error('Error while creating calendar workflow association ' + ':', angular.toJson(res));
                     });
             } else {
+                $scope.isSubmissionGoingOn = false
                 $scope.WEsubmissionErrorMessage = response.errorMessage;
                 $scope.successMessage = '';
             }
-            $scope.isSubmissionGoingOn = false
+        })
+    }
+
+    function scheduleWf() {
+        $scope.isSubmissionGoingOn = true;
+        $scope.isSubmissionGoingOn = true;
+        const bucketName = $scope.workflow['bucketName'];
+        // Validate + create association if applicable
+        validateWorkflow(function (response) {
+            if (response.valid) {
+                // the values of pa:hidden variables shouldn't be decrypted in Workflow Description
+                encryptValues(response)
+                // create association
+                var workflowVariables = constructVariablesObject( $scope.workflow.variables );
+                var workflowVariables = UtilsFactory.parseEmptyVariablesValue(workflowVariables)
+                var newCdWf = {
+                    'calendar_bucket': $scope.workflow.calendar_bucket,
+                    'calendar_name': $scope.workflow.calendar_name,
+                    'workflow_bucket': $scope.workflow['bucketName'],
+                    'workflow_name': $scope.workflow.name,
+                    'variables': workflowVariables
+                };
+
+                var configHeaders = {
+                    headers: {
+                        'Content-Type': 'application/json',
+                        'sessionid': getSessionId()
+                    }
+                };
+
+                var data = JSON.stringify(newCdWf);
+                var url = JSON.parse(localStorage.jobPlannerServiceUrl) + 'planned_jobs/';
+
+                $http.post(url, data, configHeaders)
+                    .success(function (res) {
+                        $scope.toggleOpenSubmitJobPanel(false);
+                        $scope.updateCurrentSelectedObjet();
+                        displaySuccessMessage('New association successfully created');
+                    })
+                    .error(function (res) {
+                        $scope.isSubmissionGoingOn = false
+                        $scope.errorMessage = res.errorMessage;
+                        console.error('Error while creating calendar workflow association ' + ':', angular.toJson(res));
+                    });
+            } else {
+                $scope.isSubmissionGoingOn = false
+                $scope.WEsubmissionErrorMessage = response.errorMessage;
+                $scope.successMessage = '';
+            }
         })
     }
 
     function updateCdWfAssociation() {
-        const bucketName = $scope.workflow['bucketName'];
         $scope.isSubmissionGoingOn = true;
         $scope.workflowVariables = UtilsFactory.parseEmptyVariablesValue($scope.workflow.variables);
         // check if association is valid
-        var schedulerRestUrl = JSON.parse(localStorage.schedulerRestUrl);
-        validateWorkflow( function(response){
+        validateWorkflow(function (response) {
             if (response.valid === true) {
-            // Check Successful - proceed to edit
-            $scope.$parent.updateCdWfAssociation($scope.workflow.variables)
-                .success(function() {
-                        $scope.updatePlannedJobsList();
-                        toastr.success('Association successfully updated', $scope.toastrConfig);
+                // the values of pa:hidden variables shouldn't be decrypted in Workflow Description
+                encryptValues(response)
+                // Check Successful - proceed to edit
+                $scope.$parent.updateCdWfAssociation($scope.workflow.variables)
+                    .success(function (res) {
+                        displaySuccessMessage('Association successfully updated');
                         $scope.updateLastSelectedWorkflow();
                         $scope.isSubmissionGoingOn = false;
                         $scope.toggleOpenSubmitJobPanel(false);
                     })
-                    .error(function(response) {
-                        console.error('Error while updating calendar workflow association ' + ':',  angular.toJson(response));
-                        $scope.WEsubmissionErrorMessage = response.errorMessage;
+                    .error(function (res) {
+                        console.error('Error while updating calendar workflow association ' + ':', angular.toJson(res));
+                        $scope.WEsubmissionErrorMessage = res.errorMessage;
                         $scope.successMessage = '';
                         $scope.resetSelectedWorkflowVariableValues();
                     });
-        } else {
-            $scope.isSubmissionGoingOn = false;
-            $scope.WEsubmissionErrorMessage = response.errorMessage;
-            $scope.successMessage = '';
-            console.error('Error while updating the association : '+ angular.toJson(response));
-            $scope.resetSelectedWorkflowVariableValues();
-        }
+            } else {
+                $scope.isSubmissionGoingOn = false;
+                $scope.WEsubmissionErrorMessage = response.errorMessage;
+                $scope.successMessage = '';
+                console.error('Error while updating the association : ' + angular.toJson(response));
+                $scope.resetSelectedWorkflowVariableValues();
+            }
         })
     }
+
+    // decrypt pa:hidden value
+    function encryptValues(response) {
+        angular.forEach($scope.workflow.variables, function (variable) {
+            if (response.updatedModels[variable.name] && response.updatedModels[variable.name].toLowerCase() === 'pa:hidden') {
+                variable.value = response.updatedVariables[variable.name];
+            }
+        })
+    }
+
     // construct the variables object following this format: {"key":"value", ... }
-    function constructVariablesObject(variables){
+    function constructVariablesObject(variables) {
         var workflowVariables = {};
-        if( Array.isArray(variables) ){
+        if (Array.isArray(variables)) {
             for (var i = 0; i < variables.length; i++) {
                 workflowVariables[variables[i].name] = variables[i].value;
             }
@@ -1115,19 +1369,23 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         }
         return workflowVariables;
     }
+
     /**
      * Requests the scheduler to resubmit a job then displays a confirmation toast.
      */
     const reSubmitJob = function (id, variables) {
+        $scope.isSubmissionGoingOn = true;
         WESchedulerService.reSubmitJob(id, variables)
             .success(function (response) {
                 //close the Submit Workflow Panel
                 $scope.$parent.toggleOpenSubmitJobPanel(false);
-                toastr.success("Job " + id + " resubmitted successfully!", $scope.toastrConfig);
+                toaster.success('Job ' + id + ' resubmitted successfully!');
+                $scope.isSubmissionGoingOn = false;
             })
             .error(function (response) {
                 $scope.WEsubmissionErrorMessage = response.errorMessage;
-                console.error("Could not resubmit job " + id + "! " + response);
+                $scope.isSubmissionGoingOn = false;
+                console.error('Could not resubmit job ' + id + '! ' + response);
             });
     };
     /**
@@ -1138,21 +1396,21 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         WESchedulerService.reSubmitJob(id, variables)
             .success(function () {
                 WESchedulerService.killJob(id)
-                    .success(function (response) {
-                        if (response) {
-                            toastr.success("Job " + id + " killed and resubmitted successfully!", $scope.toastrConfig)
+                    .success(function (res) {
+                        if (res) {
+                            toaster.success('Job ' + id + ' killed and resubmitted successfully!')
                         } else {
-                            toastr.warning("Could not kill job " + id + "!", $scope.toastrConfig)
+                            toaster.warning('Could not kill job ' + id + '!')
                         }
+                        //close the Submit Workflow Panel
+                        $scope.$parent.toggleOpenSubmitJobPanel(false);
                         $scope.isSubmissionGoingOn = false;
                     })
-                    .error(function (response) {
-                        console.error('Could not kill job ' + id + '! ' + response)
-                        toastr.error((response.errorMessage ? response.errorMessage : "Something went wrong!"), "Could not kill job " + id + "!", $scope.toastrConfig)
+                    .error(function (error) {
+                        $scope.WEsubmissionErrorMessage = error.errorMessage;
+                        $scope.isSubmissionGoingOn = false;
+                        console.error('Could not kill job ' + id + '! ' + res)
                     });
-                //close the Submit Workflow Panel
-                $scope.$parent.toggleOpenSubmitJobPanel(false);
-                $scope.isSubmissionGoingOn = false;
             })
             .error(function (response) {
                 $scope.WEsubmissionErrorMessage = response.errorMessage;
@@ -1162,8 +1420,13 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
     }
     // use : When clicking on the button check
     const check = function () {
-        const bucketName = $scope.workflow['bucketName'];
-        validateWorkflow( function(response){
+        validateWorkflow(function (response) {
+            // update workflow variables
+            angular.forEach($scope.workflow.variables, function (variable) {
+                variable.value = response.updatedVariables[variable.name];
+            })
+
+            // update warning messages
             if (response.valid === true) {
                 $scope.successMessage = 'Check success';
                 $scope.WEsubmissionErrorMessage = '';
@@ -1174,13 +1437,13 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         })
     };
     $scope.validate = function () {
-        if($scope.workflow.jobId) {
+        if ($scope.workflow.jobId) {
             validateJob()
         } else {
-            validateWorkflow( function(response){
+            validateWorkflow(function (response) {
                 updateVariables(response)
-                if(!response.valid){
-                    $scope.WEsubmissionErrorMessage = response.errorMessage;
+                if (!response.valid) {
+                    $scope.WEsubmissionErrorMessage = "";
                     $scope.successMessage = '';
                 }
                 UtilsFactory.replaceVariableModelsIfNeeded($scope.workflow.variables);
@@ -1206,14 +1469,13 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
     }
 
     function validateJob() {
-        const bucketName = $scope.workflow['bucketName'];
         // Validate
-        WESchedulerService.validateJob(bucketName, $scope.workflow.name, $scope.workflow.variables, $scope.workflow.jobId)
+        WESchedulerService.validateJob($scope.workflow.variables, $scope.workflow.jobId)
             .success(function (response) {
                 updateVariables(response)
-                if(!response.valid){
-                   $scope.WEsubmissionErrorMessage = response.errorMessage;
-                   $scope.successMessage = '';
+                if (!response.valid) {
+                    $scope.WEsubmissionErrorMessage = "";
+                    $scope.successMessage = '';
                 }
                 UtilsFactory.replaceVariableModelsIfNeeded($scope.workflow.variables);
             })
@@ -1223,40 +1485,43 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
             })
     }
 
-    function updateVariables(response){
+    function updateVariables(response) {
         //We add "resolvedModel" attribute in order to handle the case where we have variables substitution
         angular.forEach($scope.workflow.variables, function (variable) {
             if (variable.model && variable.resolvedModel) {
-                if (variable.model.toLowerCase().indexOf("pa:model_from_url") === 0) {
+                if (variable.model.toLowerCase().indexOf('pa:model_from_url') === 0) {
                     // keep the same value
                 } else if (variable.resolvedModel !== response.updatedModels[variable.name]) {
-                    variable.value = response.updatedModels[variable.name].toLowerCase().indexOf("pa:boolean") === 0 ? "false" : "";
+                    variable.value = response.updatedModels[variable.name].toLowerCase().indexOf('pa:boolean') === 0 ? 'false' : '';
                 }
             }
             variable.resolvedModel = response.updatedModels[variable.name];
-            variable.group = response.updatedGroups[variable.name] ? response.updatedGroups[variable.name] : "";
+            variable.group = response.updatedGroups[variable.name] ? response.updatedGroups[variable.name] : '';
             variable.advanced = response.updatedAdvanced[variable.name];
             variable.hidden = response.updatedHidden[variable.name];
-            variable.description = response.updatedDescriptions[variable.name] ? response.updatedDescriptions[variable.name] : "";
+            variable.description = response.updatedDescriptions[variable.name] ? response.updatedDescriptions[variable.name] : '';
         })
         for (var key in response.updatedVariables) {
             // then, add global variables not defined in the workflow
-            var index = $scope.workflow.variables.findIndex(function(variable){return variable.name === key });
-            if (key.indexOf(":") < 0 && index<0) {
+            var index = $scope.workflow.variables.findIndex(function (variable) {
+                return variable.name === key
+            });
+            if (key.indexOf(':') < 0 && index < 0) {
                 var globalVariable = {
-                                        name: key,
-                                        value: response.updatedVariables[key],
-                                        model: response.updatedModels[key],
-                                        resolvedModel: response.updatedModels[key],
-                                        group: response.updatedGroups[key] ? response.updatedGroups[key] : "",
-                                        advanced: response.updatedAdvanced[key],
-                                        hidden: response.updatedHidden[key],
-                                        description: response.updatedDescriptions[key] ? response.updatedDescriptions[key] : ""
-                                    }
+                    name: key,
+                    value: response.updatedVariables[key],
+                    model: response.updatedModels[key],
+                    resolvedModel: response.updatedModels[key],
+                    group: response.updatedGroups[key] ? response.updatedGroups[key] : '',
+                    advanced: response.updatedAdvanced[key],
+                    hidden: response.updatedHidden[key],
+                    description: response.updatedDescriptions[key] ? response.updatedDescriptions[key] : ''
+                }
                 $scope.workflow.variables.push(globalVariable);
             }
         }
     }
+
     // Go to the previous tab:  catalog-view
     function previous() {
         $scope.$parent.$parent.$parent.$parent.$parent.$parent.activeTab.value = 0;
@@ -1274,14 +1539,14 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         return UtilsFactory.modelToDateScope(model);
     };
 
-    $scope.manageThirdPartyCredentials = function(credVariable) {
+    $scope.manageThirdPartyCredentials = function (credVariable) {
         validateWorkflow(function (response) {
-                var credVariableValue = response.updatedVariables[credVariable.name];
-                UtilsFactory.openThirdPartyCredentialsModal(credVariableValue, check);
-            }, function (response) {
-                console.error('An error occurred while validating the workflow, so directly using the variable value as credential key. Error: ' + angular.toJson(response));
-                UtilsFactory.openThirdPartyCredentialsModal(credVariable.value, check);
-            });
+            var credVariableValue = response.updatedVariables[credVariable.name];
+            UtilsFactory.openThirdPartyCredentialsModal(credVariableValue, check);
+        }, function (response) {
+            console.error('An error occurred while validating the workflow, so directly using the variable value as credential key. Error: ' + angular.toJson(response));
+            UtilsFactory.openThirdPartyCredentialsModal(credVariable.value, check);
+        });
     };
 
     $scope.manageFiles = function (variable, dataspace, selectFolder) {
@@ -1290,33 +1555,31 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
 
     // click on folder icon besides PA:CATALOG_OBJECT variable open a pop-up
     // this pop-up will be used to browse catalog objects, and user can select one as the variable value.
-    $scope.selectCatalogObjectVar = function(variable, variableModel) {
+    $scope.selectCatalogObjectVar = function (variable, variableModel) {
         UtilsFactory.openCatalogObjectModal(variable, variableModel);
     };
 
     $scope.documentationUrl = function (url) {
-        if (url.startsWith('http'))
+        if (url.startsWith('http')) {
             return url;
-        else
+        } else {
             return JSON.parse(localStorage.appUrl).concat('/doc/', url);
+        }
     }
 
-    $scope.filterVariables = function(variable){
-        if(variable.hidden){
+    $scope.filterVariables = function (variable) {
+        if (variable.hidden) {
             return false
-        } if($scope.advancedVariables){
+        }
+        if ($scope.advancedVariables) {
             return true
-        } else if(!variable.advanced){
+        } else if (!variable.advanced) {
             return true;
         }
         return false;
     }
 
-    $scope.toggleAdvancedVariables = function (){
-        UtilsFactory.setUserPreference('submissionView.advancedVariables', $scope.advancedVariables);
-    }
-
-    $scope.isVariablesIncludeAdvancedVar = function(variables){
+    $scope.isVariablesIncludeAdvancedVar = function (variables) {
         return UtilsFactory.isVariablesIncludeAdvancedVar(variables)
     }
     $scope.cleanId = function (name) {
@@ -1329,9 +1592,13 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
 
     // Close the window if ESC key pressed
     $(document).keydown(function (e) {
-    // ESCAPE key pressed
-    if (e.keyCode === 27 && $scope.isJobSubmissionPanelOpen) {
-        $scope.toggleOpenSubmitJobPanel(false);
-    }
+        // ESCAPE key pressed
+        if (e.keyCode === 27 && $scope.isJobSubmissionPanelOpen) {
+            $scope.toggleOpenSubmitJobPanel(false);
+        }
     })
+
+    function displaySuccessMessage(message) {
+        UtilsFactory.displayTranslatedMessage('success', 'Operation Successful !', message);
+    }
 });

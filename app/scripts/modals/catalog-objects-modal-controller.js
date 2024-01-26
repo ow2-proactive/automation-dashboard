@@ -2,20 +2,36 @@ angular.module('workflow-variables').controller('CatalogObjectsModalCtrl', funct
     var restRequestHeader = { headers: {'sessionid': getSessionId() }};
     var matches = variableModel.match(/\((.*)\)/); //matches[1] contains the value between the parentheses
     if (matches && matches.length > 1) {
+        var kindFilter;
+        var filterContentType;
+        var bucketNameFilter;
+        var objectNameFilter;
+
         var params = matches[1].split(',');
-        var kindFilter = params[0];
-        var filterContentType = params[1];
+        switch (params.length) {
+            case 4:
+                objectNameFilter = params[3];
+            case 3:
+                bucketNameFilter = params[2];
+            case 2:
+                filterContentType = params[1];
+            case 1:
+                kindFilter = params[0];
+        }
     }
-    var kindFilterUrl = (kindFilter) ? 'kind=' + kindFilter : '';
-    var contentFilterUrl = (filterContentType) ? 'contentType=' + filterContentType : '';
-    var filterUrlParams = [kindFilterUrl, contentFilterUrl].join('&');
+
+    var kindFilterUrl = kindFilter ? 'kind=' + encodeURIComponent(kindFilter) : '';
+    var contentFilterUrl = filterContentType ? 'contentType=' + encodeURIComponent(filterContentType) : '';
+    var bucketNameFilterUrl = bucketNameFilter ? "bucketName=" + encodeURIComponent(bucketNameFilter) : '';
+    var objectNameFilterUrl = objectNameFilter ? "objectName=" + encodeURIComponent(objectNameFilter) : '';
+    var filterUrlParams = [kindFilterUrl, contentFilterUrl, bucketNameFilterUrl, objectNameFilterUrl].filter(function(x) {
+        return (typeof x === 'string' && x.length > 0)
+    }).join('&');
 
     $scope.updateBuckets = function() {
         $scope.clearData();
         var getBucketsUrl = JSON.parse(localStorage.appCatalogBucketsUrl);
-        if (!$scope.showAllBuckets) {
-            getBucketsUrl += '/?' + filterUrlParams;
-        }
+        getBucketsUrl += '/?' + filterUrlParams;
         $http.get(getBucketsUrl, restRequestHeader)
             .success(function (data){
                 $scope.buckets = data;
@@ -47,7 +63,7 @@ angular.module('workflow-variables').controller('CatalogObjectsModalCtrl', funct
                 $scope.catalogObjects = data;
                 // auto select the first catalog object in the bucket
                 if ($scope.catalogObjects && $scope.catalogObjects.length > 0) {
-                    $scope.internalSelectObject(0);
+                    $scope.internalSelectObject(0, bucketName);
                 }
             })
             .error(function (xhr) {
@@ -59,18 +75,10 @@ angular.module('workflow-variables').controller('CatalogObjectsModalCtrl', funct
             });
     }
 
-    $scope.internalSelectObject = function (selectedIndex) {
+    $scope.internalSelectObject = function (selectedIndex, bucketName) {
         $scope.revisions = undefined;
         $scope.revision = undefined;
         $scope.selectedCatalogObjectIndex = selectedIndex;
-        if (!$scope.buckets || $scope.selectedBucketIndex >= $scope.buckets.length || !$scope.buckets[$scope.selectedBucketIndex]){
-            return;
-        }
-        if (!$scope.catalogObjects || selectedIndex >= $scope.catalogObjects.length || !$scope.catalogObjects[selectedIndex]) {
-            return;
-        }
-
-        var bucketName = $scope.buckets[$scope.selectedBucketIndex].name;
         var objectName = $scope.catalogObjects[selectedIndex].name;
         var getRevisionsUrl = JSON.parse(localStorage.appCatalogBucketsUrl) + "/" + bucketName + '/resources/' + encodeURIComponent(objectName) + '/revisions';
 
@@ -104,7 +112,9 @@ angular.module('workflow-variables').controller('CatalogObjectsModalCtrl', funct
         $scope.revision = $scope.revisions[selectedIndex];
     }
 
-    $scope.showAllChanged = function() {
+    $scope.filterObjectByObjectName = function () {
+        var objectNameFilterUrl = $scope.catalogObjectNameQuery ? "objectName=" + $scope.catalogObjectNameQuery : '';
+        filterUrlParams = [kindFilterUrl, contentFilterUrl, objectNameFilterUrl].join('&');
         $scope.updateBuckets();
     }
 

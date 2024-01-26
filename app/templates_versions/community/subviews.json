@@ -8,10 +8,10 @@
         "tooltip": "Submit Workflows to Create/Execute/Control Jobs & Services",
         "secondaryHtmlFiles": [
             "modals/result_map_modal.html",
-            "modals/job_output_modal.html",
             "modals/send_signals_modal.html",
             "workflow-execution/templates/job-actions-dropdown.html",
             "workflow-execution/templates/job-details-view.html",
+            "workflow-execution/templates/job-details-container.html",
             "workflow-execution/templates/job-interfaces-dropdown.html",
             "workflow-execution/templates/job-list-row.html",
             "workflow-execution/templates/job-list-pagination.html",
@@ -19,6 +19,7 @@
             "workflow-execution/templates/job-results-dropdown.html",
             "workflow-execution/templates/job-service-dropdown.html",
             "workflow-execution/templates/job-signals-dropdown.html",
+            "workflow-execution/templates/typehead-bucket-dropdown.html",
             "workflow-execution/templates/typehead-wf-dropdown.html"
         ],
         "notAvailablePage": "workflow-execution/page_not_available_wf_execution.html",
@@ -45,7 +46,9 @@
         "secondaryHtmlFiles": [
             "modals/catalog_object_edition.html",
             "modals/catalog-object-kind-content_type-project_name-edition.html",
-            "modals/catalog_rbac.html"
+            "modals/catalog_rbac.html",
+            "templates/typehead-wf-dropdown.html",
+            "templates/catalog-filters-form.html"
         ],
         "notAvailablePage": "page_not_available.html",
         "jsFiles": [
@@ -67,6 +70,43 @@
         "name": "Analytics",
         "nameForUrl": "analytics-portal",
         "tooltip": "Analyze Job Execution, Results, Dependencies, and Resource Usage"
+    },
+    "heathDashboard": {
+        "isAvailable": true,
+        "isSubMenuItem": true,
+        "name": "Health Dashboard",
+        "subMenuTitle": "analytics-portal",
+        "nameForUrl": "health-dashboard",
+        "appFolder": "job-analytics-portal/app/",
+        "htmlFile": "health-dashboard/health-dashboard.html",
+        "tooltip": "View Job Spanning Time & Dependencies",
+        "secondaryHtmlFiles": [
+            "directives/line_chart_directive.html",
+            "directives/pie_chart_directive.html",
+            "directives/bar_chart_directive.html",
+            "health-dashboard/modals/submission-from-modal.html"
+        ],
+        "notAvailablePage": "page_not_available_job-analytics.html",
+        "jsFiles": [
+            "scripts/health-dashboard/health-dashboard.js",
+            "scripts/health-dashboard/current-view.js",
+            "scripts/health-dashboard/future-view.js",
+            "scripts/health-dashboard/past-view.js",
+            "scripts/health-dashboard/top-workflows.js",
+            "scripts/health-dashboard/optimization-execution-times-view.js",
+            "scripts/health-dashboard/optimization-current-platform-view.js",
+            "scripts/health-dashboard/optimization-nodes.js",
+            "scripts/directives/line-chart-directive.js",
+            "scripts/directives/pie-chart-directive.js",
+            "scripts/directives/bar-chart-directive.js",
+            "scripts/services/job-planner-requests.js",
+            "scripts/services/job-planner-requests.js",
+            "scripts/services/cloud-watch.js",
+            "scripts/Utilities/hd-utility.js"
+        ],
+        "angularModuleName": "health-dashboard",
+        "cssFile": "heath_dashboard_custom_style.css",
+        "authenticate": true
     },
     "jobAnalytics": {
         "isAvailable": true,
@@ -97,7 +137,8 @@
             "scripts/services/catalog-service.js",
             "scripts/services/chart-utils.js",
             "scripts/services/job-analytics-service.js",
-            "scripts/services/scheduler-service.js"
+            "scripts/services/scheduler-service.js",
+            "scripts/services/cloud-automation-service.js"
         ],
         "angularModuleName": "job-analytics",
         "cssFile": "job_analytics_custom_style.css",
@@ -187,6 +228,7 @@
         "htmlFile": "calendar-association/calendar_association.html",
         "tooltip": "Associate Workflows to Calendar",
         "secondaryHtmlFiles": [
+            "calendar-association/association_rbac.html",
             "calendar-association/calendar_list.html"
         ],
         "notAvailablePage": "page_not_available_calendar_association.html",
@@ -195,6 +237,7 @@
             "scripts/services/job-planner-service.js",
             "scripts/services/calendar-list-service.js",
             "scripts/controllers/components/calendar-list.component.js",
+            "scripts/controllers/components/association-RBAC-modal.js",
             "scripts/controllers/calendar-association-controller.js"
         ],
         "angularModuleName": "calendar-association",

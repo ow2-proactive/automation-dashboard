@@ -1,7 +1,8 @@
-angular.module('workflow-variables').controller('FileBrowserModalCtrl', function($scope, $rootScope, $http, $uibModalInstance, $q, dataspace, variable, selectFolder, SweetAlert, UtilsFactory) {
+angular.module('workflow-variables').controller('FileBrowserModalCtrl', function($scope, $rootScope, $http, $uibModalInstance, $q, dataspace, variable, selectFolder, allowToEdit, SweetAlert, UtilsFactory) {
     var dataspaceRestUrl = JSON.parse(localStorage.restUrl) + "/data/" + dataspace + "/";
     var restRequestHeader = { headers: {'sessionid': getSessionId() }};
     $scope.currentPath = "";
+    $scope.allowToEdit = allowToEdit;
     $scope.locationDescription = UtilsFactory.translate(dataspace.toUpperCase() + " DataSpace");
     $scope.title = UtilsFactory.translate(dataspace.toUpperCase() + " DataSpace File Browser");
     switch(dataspace.toUpperCase()){
@@ -20,6 +21,7 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
     $scope.variable = variable;
     $scope.selectFolder = selectFolder;
     $scope.showHiddenFiles = false;
+    $scope.filterValue = "*";
 
     $scope.enterDir = function (event) {
         $scope.currentPath = event.target.getAttribute('value');
@@ -47,11 +49,11 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
             pathname = "%2E"; // root path "." need to be encoded as "%2E"
         }
         var url = dataspaceRestUrl + encodeURIComponent(pathname);
-        $http.get(url + "?comp=list",
+        $http.get(url + "?comp=list-metadata&includes=" + $scope.filterValue,
             restRequestHeader)
             .success(function (data){
-                $scope.files = $scope.getFilesMetadata(data.fileListing.sort());
-                $scope.directories = $scope.getFilesMetadata(data.directoryListing.sort());
+                $scope.files = $scope.getFilesMetadata(data.fileListing, data);
+                $scope.directories = $scope.getFilesMetadata(data.directoryListing, data);
             })
             .error(function (xhr) {
                 var errorMessage = "";
@@ -63,28 +65,18 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
             });
     }
 
-    $scope.getFilesMetadata = function(fileNames) {
+    $scope.getFilesMetadata = function(fileNames, response) {
         var filesMetadata = [];
         fileNames.forEach(function(filename, index) {
-            var filePath = $scope.currentPath + filename;
-            $http({
-                url: dataspaceRestUrl + encodeURIComponent(filePath),
-                method: "HEAD",
-                headers: { "sessionid": localStorage['pa.session'] },
-                async: false
-            })
-            .success(function (data, status, headers, config){
-                filesMetadata[index] = {
-                    name: filename,
-                    type: headers('x-proactive-ds-type'),
-                    rights: headers('x-proactive-ds-permissions'),
-                    modified: $scope.toDateInClientFormat(headers('Last-Modified'))
-                };
-                if(filesMetadata[index].type == 'FILE') {
-                    filesMetadata[index].type = headers('Content-Type');
-                    filesMetadata[index].size = UtilsFactory.toReadableFileSize(headers('Content-Length'));
-                }
-            });
+            filesMetadata[index] = {
+                name: filename,
+                type: response.types[filename],
+                rights: response.permissions[filename],
+                modified: $scope.toDateInClientFormat(response.lastModifiedDates[filename])
+            };
+            if(filesMetadata[index].type != 'DIRECTORY') {
+                filesMetadata[index].size = UtilsFactory.toReadableFileSize(response.sizes[filename]);
+            }
         });
         return filesMetadata;
     }
@@ -170,8 +162,9 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
         $('#selected-upload-file').click();
     }
 
-    $scope.fileSelected = function(files) {
-        var selectedFile = files[0];
+    $scope.fileSelected = function() {
+        var element = document.getElementById('selected-upload-file');
+        var selectedFile = element.files[0];
         if (selectedFile) {
             var pathname = $scope.currentPath + selectedFile.name;
             if (selectedFile.name.includes(':')) {
@@ -184,6 +177,8 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                     $scope.refreshFiles();
                 }, function () {});
         }
+        // clean up the value to allow the user to upload twice the file with same name, otherwise the function won't be triggered.
+        element.value = '';
     }
 
     $scope.createFolder = function() {
@@ -223,6 +218,13 @@ angular.module('workflow-variables').controller('FileBrowserModalCtrl', function
                 });
             }
         });
+    }
+
+    $scope.filterFiles = function() {
+         if ($scope.filterValue === "") {
+            $scope.filterValue = "*";
+         }
+        $scope.refreshFiles();
     }
 
     $scope.downloadFile = function() {
