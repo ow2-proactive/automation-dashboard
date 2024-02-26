@@ -20,7 +20,8 @@
             "workflow-execution/templates/job-service-dropdown.html",
             "workflow-execution/templates/job-signals-dropdown.html",
             "workflow-execution/templates/typehead-bucket-dropdown.html",
-            "workflow-execution/templates/typehead-wf-dropdown.html"
+            "workflow-execution/templates/typehead-wf-dropdown.html",
+            "workflow-execution/templates/job-tasks-list-view.html"
         ],
         "notAvailablePage": "workflow-execution/page_not_available_wf_execution.html",
         "jsFiles": [
@@ -30,6 +31,7 @@
             "services/workflow-execution-utility-factory.js",
             "scripts/workflow-execution/job-information-controller.js",
             "scripts/workflow-execution/job-output-controller.js",
+            "scripts/workflow-execution/job-tasks-list-controller.js",
             "scripts/workflow-execution/signals-controller.js"
         ],
         "angularModuleName": "workflow-execution",
