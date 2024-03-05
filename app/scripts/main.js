@@ -397,6 +397,16 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
             $scope.contextDisplay = false;
     };
 
+    // display context-menu on node name
+
+    $scope.displayContextualMenuOnNodeName = function () {
+        //display the context menu on bucket
+        $scope.contextNodeNameDisplay = true;
+        // close context menu on objects
+        $scope.contextDisplay = false;
+    }
+
+
     function waitAndApplyWEJobRowContextMenuDisplay(data) {
         if(!$('#context-menu').length) {
             // we set an observation in order to wait for the render of the context menu
@@ -439,6 +449,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         } else {
             $scope.contextDisplay = false;
             $scope.contextBucketDisplay = false;
+            $scope.contextNodeNameDisplay = false;
         }
     };
 
