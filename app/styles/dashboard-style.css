@@ -1,3 +1,11 @@
+.m-r-auto {
+    margin-right: auto;
+}
+
+.m-l-auto {
+    margin-left: auto;
+}
+
 .btn.nohover {
     pointer-events: none;
 }
@@ -417,13 +425,6 @@ button[disabled="disabled"] {
     color: #FFF;
     border-radius: 3px;
     border: none;
-}
-
-#gantt-last-refresh-date {
-    color: #d9534f;
-    font-weight: bold;
-    font-size: 12px;
-    text-align: end;
 }
 
 .gantt-task-info-content {
