@@ -30,7 +30,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     }
 
     function getProxyName() {
-        return window.location.pathname.split('/')[1] === 'automation-dashboard' ? '' : '/' + window.location.pathname.split('/')[1];
+        const index = window.location.pathname.indexOf("automation-dashboard")
+        return window.location.pathname.substring(1,index > 1 ? index-1 : index);
     }
 
     function loadUserPreferences(itemName) {
