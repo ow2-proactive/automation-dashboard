@@ -29,6 +29,10 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         return JSON.parse(localStorage.schedulerRestUrl);
     }
 
+    function getProxyName() {
+        return window.location.pathname.split('/')[1] === 'automation-dashboard' ? '' : '/' + window.location.pathname.split('/')[1];
+    }
+
     function loadUserPreferences(itemName) {
         // Initialize them with defaults if they don't exist in the browser's Local Storage
         if (!localStorage.WizardUserPreferences) {
@@ -686,7 +690,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         getJobInfoForJob: getJobInfoForJob,
         getThirdPartyCredentials: getThirdPartyCredentials,
         postThirdPartyCredentials: postThirdPartyCredentials,
-        removeThirdPartyCredentials: removeThirdPartyCredentials
+        removeThirdPartyCredentials: removeThirdPartyCredentials,
+        getProxyName: getProxyName
     };
 }
 

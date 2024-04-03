@@ -12,11 +12,12 @@ function getSessionId() {
 function getProperties($http, $location, UtilsFactory) {
     return $http.get('resources/config.json')
         .success(function (response) {
-            var pcaServiceUrl = angular.toJson(response.confServer.pcaServiceUrl, true);
-            var schedulerRestUrl = angular.toJson(response.confServer.schedulerRestUrl, true);
-            var rmRestUrl = angular.toJson(response.confServer.rmRestUrl, true);
-            var notificationServiceUrl = angular.toJson(response.confServer.notificationServiceUrl, true);
-            var catalogServiceUrl = angular.toJson(response.confServer.catalogServiceUrl, true);
+            const proxyName = window.location.pathname.split('/')[1] === 'automation-dashboard' ? '' : '/' + window.location.pathname.split('/')[1];
+            var pcaServiceUrl = proxyName + angular.toJson(response.confServer.pcaServiceUrl, true);
+            var schedulerRestUrl = proxyName + angular.toJson(response.confServer.schedulerRestUrl, true);
+            var rmRestUrl = proxyName + angular.toJson(response.confServer.rmRestUrl, true);
+            var notificationServiceUrl = proxyName + angular.toJson(response.confServer.notificationServiceUrl, true);
+            var catalogServiceUrl = proxyName + angular.toJson(response.confServer.catalogServiceUrl, true);
             var wfAutomationQueryPeriod = angular.toJson(response.wfAutomationQueryPeriod, true);
             var workflowExecutionQueryPeriod = angular.toJson(response.workflowExecutionQueryPeriod, true);
             var cloudAutomationQueryPeriod = angular.toJson(response.cloudAutomationQueryPeriod, true);
@@ -26,17 +27,17 @@ function getProperties($http, $location, UtilsFactory) {
             var notificationPortalQueryPeriod = angular.toJson(response.notificationPortalQueryPeriod, true);
             var genericCatalogPortalQueryPeriod = angular.toJson(response.genericCatalogPortalQueryPeriod, true);
             var jobPlannerQueryPeriod = angular.toJson(response.jobPlannerQueryPeriod, true);
-            var appCatalogBucketsUrl = angular.toJson(response.confServer.catalogServiceUrl + 'buckets', true);
-            var appCatalogWorkflowsUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/catalog/buckets/' + response.view[0].catalog.bucketName + '/resources');
-            var jobPlannerServiceUrl = angular.toJson(response.confServer.jobPlannerServiceUrl, true);
-            var cloudWatchServiceUrl = angular.toJson(response.confServer.cloudWatchServiceUrl, true);
-            var jobAnalyticsServiceUrl = angular.toJson(response.confServer.jobAnalyticsServiceUrl, true);
+            var appCatalogBucketsUrl = proxyName + angular.toJson(response.confServer.catalogServiceUrl + 'buckets', true);
+            var appCatalogWorkflowsUrl = proxyName + angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/catalog/buckets/' + response.view[0].catalog.bucketName + '/resources');
+            var jobPlannerServiceUrl = proxyName + angular.toJson(response.confServer.jobPlannerServiceUrl, true);
+            var cloudWatchServiceUrl = proxyName + angular.toJson(response.confServer.cloudWatchServiceUrl, true);
+            var jobAnalyticsServiceUrl = proxyName + angular.toJson(response.confServer.jobAnalyticsServiceUrl, true);
             var configViews = angular.toJson(response.view, true);
             var appUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port());
-            var studioUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/studio');
-            var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/rest');
-            var schedulerPortalUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/scheduler');
-            var proactiveLanguage = angular.toJson(response.proactiveLanguage, true).replace(/"/g, '');
+            var studioUrl = proxyName + angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/studio');
+            var restUrl = proxyName + angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/rest');
+            var schedulerPortalUrl = proxyName + angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/scheduler');
+            var proactiveLanguage = proxyName + angular.toJson(response.proactiveLanguage, true).replace(/"/g, '');
 
             localStorage['pcaServiceUrl'] = pcaServiceUrl;
             localStorage['schedulerRestUrl'] = schedulerRestUrl;
