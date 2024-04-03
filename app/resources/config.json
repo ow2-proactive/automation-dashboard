@@ -2,14 +2,14 @@
   "proactiveDashboardVersion": "10.2.0-SNAPSHOT",
   "proactiveLanguage": "en",
 "confServer": {
-  "pcaServiceUrl": "/cloud-automation-service/",
-  "schedulerRestUrl": "/rest/scheduler/",
-  "rmRestUrl": "/rest/rm/",
-  "notificationServiceUrl": "/notification-service/",
-  "catalogServiceUrl": "/catalog/",
-  "jobPlannerServiceUrl": "/job-planner/",
-  "cloudWatchServiceUrl": "/proactive-cloud-watch/",
-  "jobAnalyticsServiceUrl": "/job-analytics/"
+  "pcaServiceUrl": "/proactive/cloud-automation-service/",
+  "schedulerRestUrl": "/proactive/rest/scheduler/",
+  "rmRestUrl": "/proactive/rest/rm/",
+  "notificationServiceUrl": "/proactive/notification-service/",
+  "catalogServiceUrl": "/proactive/catalog/",
+  "jobPlannerServiceUrl": "/proactive/job-planner/",
+  "cloudWatchServiceUrl": "/proactive/proactive-cloud-watch/",
+  "jobAnalyticsServiceUrl": "/proactive/job-analytics/"
 },
 "view": [{
   "viewname": "Workflow Execution",
