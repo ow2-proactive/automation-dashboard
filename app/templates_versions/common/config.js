@@ -12,7 +12,7 @@ function config($stateProvider, $urlRouterProvider) {
     $stateProvider
         .state('login', {
             url: '/login',
-            templateUrl: 'views/login.html',
+            templateUrl: '/automation-dashboard/views/login.html',
             authenticate: false,
             params: {
                 redirectsTo: ''
@@ -21,7 +21,7 @@ function config($stateProvider, $urlRouterProvider) {
         .state('portal', {
             abstract: true,
             url: '/portal',
-            templateUrl: 'views/common/content.html',
+            templateUrl: '/automation-dashboard/views/common/content.html',
             authenticate: true
         })
         .state('job-info', {
@@ -29,7 +29,7 @@ function config($stateProvider, $urlRouterProvider) {
             data: {
                 pageTitle: 'Job details'
             },
-            templateUrl: 'views/workflow-execution/workflow-execution/templates/job-details-container.html',
+            templateUrl: '/automation-dashboard/views/workflow-execution/workflow-execution/templates/job-details-container.html',
             css: 'styles/workflow-execution/workflow_execution_custom_style.css',
             authenticate: true
         })
@@ -70,7 +70,9 @@ angular
         $httpProvider.interceptors.push(function() {
             return {
                 'request': function(config) {
-                    config.url = proxyNames + config.url;
+                    if (!config.url.startsWith("http")) {
+                        config.url = proxyNames + config.url;
+                    }
                     return config;
                 }
             };
