@@ -53,6 +53,7 @@ angular
 angular
     .module('inspinia')
     .config(function($httpProvider) {
+
         $httpProvider.defaults.headers.common = {};
         $httpProvider.defaults.headers.post = {};
         $httpProvider.defaults.headers.put = {};
@@ -60,6 +61,21 @@ angular
         $httpProvider.defaults.headers.get = {};
         $httpProvider.defaults.useXDomain = true;
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
+        // Configure proxyName here
+        const index = window.location.pathname.indexOf("automation-dashboard")
+        const proxyNames = window.location.pathname.substring(0, index > 0 ? index - 1 : index);
+
+        // Add a custom interceptor to modify outgoing requests
+        $httpProvider.interceptors.push(function() {
+            return {
+                'request': function(config) {
+                    config.url = proxyNames + config.url;
+                    return config;
+                }
+            };
+        });
+
     });
 
 angular

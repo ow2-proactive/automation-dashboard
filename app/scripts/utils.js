@@ -29,11 +29,6 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         return JSON.parse(localStorage.schedulerRestUrl);
     }
 
-    function getProxyName() {
-        const index = window.location.pathname.indexOf("automation-dashboard")
-        return window.location.pathname.substring(1,index > 1 ? index-1 : index);
-    }
-
     function loadUserPreferences(itemName) {
         // Initialize them with defaults if they don't exist in the browser's Local Storage
         if (!localStorage.WizardUserPreferences) {
@@ -691,8 +686,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         getJobInfoForJob: getJobInfoForJob,
         getThirdPartyCredentials: getThirdPartyCredentials,
         postThirdPartyCredentials: postThirdPartyCredentials,
-        removeThirdPartyCredentials: removeThirdPartyCredentials,
-        getProxyName: getProxyName
+        removeThirdPartyCredentials: removeThirdPartyCredentials
     };
 }
 

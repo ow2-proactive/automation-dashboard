@@ -12,27 +12,11 @@ function getSessionId() {
 function getProperties($http, $location) {
     return $http.get('resources/config.json')
         .success(function (response) {
-            const index = window.location.pathname.indexOf("automation-dashboard")
-            const proxyNames =  window.location.pathname.substring(1,index > 1 ? index-1 : index);
-
-            var pcaServiceUrl = angular.toJson(proxyNames + response.confServer.pcaServiceUrl, true);
-            var schedulerRestUrl = angular.toJson(proxyNames + response.confServer.schedulerRestUrl, true);
-            var rmRestUrl = angular.toJson(proxyNames + response.confServer.rmRestUrl, true);
-            var notificationServiceUrl = angular.toJson(proxyNames + response.confServer.notificationServiceUrl, true);
-            var catalogServiceUrl = angular.toJson(proxyNames + response.confServer.catalogServiceUrl, true);
-            var appCatalogBucketsUrl = angular.toJson(proxyNames + response.confServer.catalogServiceUrl + 'buckets', true);
-            var appCatalogWorkflowsUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + proxyNames + '/catalog/buckets/' + response.view[0].catalog.bucketName + '/resources');
-            var jobPlannerServiceUrl = angular.toJson(proxyNames +  response.confServer.jobPlannerServiceUrl, true);
-            var cloudWatchServiceUrl = angular.toJson(proxyNames +  response.confServer.cloudWatchServiceUrl, true);
-            var jobAnalyticsServiceUrl = angular.toJson(proxyNames + response.confServer.jobAnalyticsServiceUrl, true);
-            var configViews = angular.toJson(response.view, true);
-            var appUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port());
-            var studioUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + proxyNames + '/studio');
-            var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + proxyNames + '/rest');
-            var schedulerPortalUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + proxyNames + '/scheduler');
-
-            var proactiveLanguage = angular.toJson(response.proactiveLanguage, true).replace(/"/g, '');
-
+            var pcaServiceUrl = angular.toJson(response.confServer.pcaServiceUrl, true);
+            var schedulerRestUrl = angular.toJson(response.confServer.schedulerRestUrl, true);
+            var rmRestUrl = angular.toJson(response.confServer.rmRestUrl, true);
+            var notificationServiceUrl = angular.toJson(response.confServer.notificationServiceUrl, true);
+            var catalogServiceUrl = angular.toJson(response.confServer.catalogServiceUrl, true);
             var wfAutomationQueryPeriod = angular.toJson(response.wfAutomationQueryPeriod, true);
             var workflowExecutionQueryPeriod = angular.toJson(response.workflowExecutionQueryPeriod, true);
             var cloudAutomationQueryPeriod = angular.toJson(response.cloudAutomationQueryPeriod, true);
@@ -42,12 +26,32 @@ function getProperties($http, $location) {
             var notificationPortalQueryPeriod = angular.toJson(response.notificationPortalQueryPeriod, true);
             var genericCatalogPortalQueryPeriod = angular.toJson(response.genericCatalogPortalQueryPeriod, true);
             var jobPlannerQueryPeriod = angular.toJson(response.jobPlannerQueryPeriod, true);
+            var appCatalogBucketsUrl = angular.toJson(response.confServer.catalogServiceUrl + 'buckets', true);
+            var appCatalogWorkflowsUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/catalog/buckets/' + response.view[0].catalog.bucketName + '/resources');
+            var jobPlannerServiceUrl = angular.toJson(response.confServer.jobPlannerServiceUrl, true);
+            var cloudWatchServiceUrl = angular.toJson(response.confServer.cloudWatchServiceUrl, true);
+            var jobAnalyticsServiceUrl = angular.toJson(response.confServer.jobAnalyticsServiceUrl, true);
+            var configViews = angular.toJson(response.view, true);
+            var appUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port());
+            var studioUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/studio');
+            var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/rest');
+            var schedulerPortalUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/scheduler');
+            var proactiveLanguage = angular.toJson(response.proactiveLanguage, true).replace(/"/g, '');
 
             localStorage['pcaServiceUrl'] = pcaServiceUrl;
             localStorage['schedulerRestUrl'] = schedulerRestUrl;
             localStorage['rmRestUrl'] = rmRestUrl;
             localStorage['notificationServiceUrl'] = notificationServiceUrl;
             localStorage['catalogServiceUrl'] = catalogServiceUrl;
+            localStorage['genericCatalogPortalQueryPeriod'] = genericCatalogPortalQueryPeriod;
+            localStorage['notificationPortalQueryPeriod'] = notificationPortalQueryPeriod;
+            localStorage['cloudAutomationQueryPeriod'] = cloudAutomationQueryPeriod;
+            localStorage['wfAutomationQueryPeriod'] = wfAutomationQueryPeriod;
+            localStorage['workflowExecutionQueryPeriod'] = workflowExecutionQueryPeriod;
+            localStorage['cloudWatchPortalQueryPeriod'] = cloudWatchPortalQueryPeriod;
+            localStorage['wfAutomationLast24hHistoryPeriod'] = wfAutomationLast24hHistoryPeriod;
+            localStorage['jobAnalyticsPortalRefreshRate'] = jobAnalyticsPortalRefreshRate;
+            localStorage['jobPlannerQueryPeriod'] = jobPlannerQueryPeriod;
             localStorage['appCatalogWorkflowsUrl'] = appCatalogWorkflowsUrl;
             localStorage['appCatalogBucketsUrl'] = appCatalogBucketsUrl;
             localStorage['configViews'] = configViews;
@@ -58,16 +62,6 @@ function getProperties($http, $location) {
             localStorage['restUrl'] = restUrl;
             localStorage['studioUrl'] = studioUrl;
             localStorage['schedulerPortalUrl'] = schedulerPortalUrl;
-
-            localStorage['genericCatalogPortalQueryPeriod'] = genericCatalogPortalQueryPeriod;
-            localStorage['notificationPortalQueryPeriod'] = notificationPortalQueryPeriod;
-            localStorage['cloudAutomationQueryPeriod'] = cloudAutomationQueryPeriod;
-            localStorage['wfAutomationQueryPeriod'] = wfAutomationQueryPeriod;
-            localStorage['workflowExecutionQueryPeriod'] = workflowExecutionQueryPeriod;
-            localStorage['cloudWatchPortalQueryPeriod'] = cloudWatchPortalQueryPeriod;
-            localStorage['wfAutomationLast24hHistoryPeriod'] = wfAutomationLast24hHistoryPeriod;
-            localStorage['jobAnalyticsPortalRefreshRate'] = jobAnalyticsPortalRefreshRate;
-            localStorage['jobPlannerQueryPeriod'] = jobPlannerQueryPeriod;
             if (!localStorage['proactiveLanguage']) {
                 localStorage['proactiveLanguage'] = proactiveLanguage;
             }
