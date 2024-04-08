@@ -70,7 +70,7 @@ angular
         $httpProvider.interceptors.push(function() {
             return {
                 'request': function(config) {
-                    if (!config.url.startsWith("http")) {
+                    if (config.url.startsWith("/")) {
                         config.url = proxyNames + config.url;
                     }
                     return config;

@@ -36,7 +36,7 @@ function getProperties($http, $location) {
             var cloudWatchServiceUrl = angular.toJson(response.confServer.cloudWatchServiceUrl, true);
             var jobAnalyticsServiceUrl = angular.toJson(response.confServer.jobAnalyticsServiceUrl, true);
             var configViews = angular.toJson(response.view, true);
-            var appUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port());
+            var appUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + proxyNames);
             var studioUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + proxyNames + '/studio');
             var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + proxyNames +  '/rest');
             var schedulerPortalUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + proxyNames +  '/scheduler');

@@ -65,6 +65,13 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         return userPreferences;
     }
 
+    // angular can not interceptor images, that's why we add proxy names for every url
+    function getProxyNames() {
+        const index = window.location.pathname.indexOf("automation-dashboard")
+        const proxyNames = window.location.pathname.substring(0, index > 0 ? index - 1 : index);
+        return proxyNames;
+    }
+
     function getOrSetNestedObjectProperty(targetObject, path, value) {
         var schema = targetObject;  // a moving reference to internal objects within obj
         var propertiesList = path.split('.');
@@ -686,7 +693,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         getJobInfoForJob: getJobInfoForJob,
         getThirdPartyCredentials: getThirdPartyCredentials,
         postThirdPartyCredentials: postThirdPartyCredentials,
-        removeThirdPartyCredentials: removeThirdPartyCredentials
+        removeThirdPartyCredentials: removeThirdPartyCredentials,
+        getProxyNames: getProxyNames
     };
 }
 
