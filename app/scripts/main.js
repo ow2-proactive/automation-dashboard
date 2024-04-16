@@ -1052,8 +1052,12 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
 
     $scope.findImageUrl = function (selectedWorkflow) {
         var icon = UtilsFactory.getByKey('generic_information', 'workflow.icon', selectedWorkflow.object_key_values);
-        return icon === '' ? 'styles/patterns/img/wf-icons/wf-default-icon.png' : icon
+        return icon === '' ? 'styles/patterns/img/wf-icons/wf-default-icon.png' : UtilsFactory.getProxyNames() + icon
     };
+
+    $scope.getImageUrlWithProxy = function(url) {
+        return UtilsFactory.getProxyNames() + url;
+    }
 
     /**
      * This function allows sorting buckets list and workflow lists
