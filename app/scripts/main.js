@@ -201,6 +201,10 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         $scope.automationDashboardPortals = {};
         $rootScope.errorMessage = undefined;
         if (getSessionId()) {
+            if(!localStorage['restUrl']) {
+                var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + UtilsFactory.getProxyNames() +  '/rest')
+                localStorage['restUrl'] = restUrl;
+            }
             $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($window.location.href);
         }
     };
