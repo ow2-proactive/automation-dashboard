@@ -565,12 +565,8 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     };
 
     $scope.displayAbout = function () {
-        var windowLocation = window.location;
-        var protocol = windowLocation.protocol;
-        var host = windowLocation.host;
-        var result = protocol + '//' + host + '/rest';
-
-        $scope.restUrl = result;
+        var url = window.location.href.split("/automation-dashboard")[0] + '/rest';
+        $scope.restUrl = url;
         $scope.year = new Date().getFullYear();
         $('#about-modal').modal('show');
     };
