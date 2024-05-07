@@ -1233,8 +1233,8 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                         $scope.isSubmissionGoingOn = false;
                         if( $scope.workflow.submissionMode === "catalog" ) {
                             toaster.pop('success', "", 'Your Workflow has been submitted successfully ' + ', Job Id:'+ JSON.stringify(submitResponse.id) + '<br>' +
-                                    '<a href="/automation-dashboard/#/workflow-execution" target="_blank">Open Job in Workflow Execution Portal</a></br>' +
-                                    '<a href="/scheduler" target="_blank">Open Job in Scheduler Portal</a>', 5000, 'trustedHtml');
+                                    '<a href="' +  UtilsFactory.getProxyNames() + '/automation-dashboard/#/workflow-execution" target="_blank">Open Job in Workflow Execution Portal</a></br>' +
+                                    '<a href="' + UtilsFactory.getProxyNames() + '/scheduler/" target="_blank">Open Job in Scheduler Portal</a>', 5000, 'trustedHtml');
                         } else {
                             toaster.pop('success',"", 'Your Workflow has been submitted successfully' + ', Job Id: ' + JSON.stringify(submitResponse.id), 5000, 'trustedHtml');
                         }
