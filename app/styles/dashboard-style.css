@@ -503,6 +503,31 @@ button[disabled="disabled"] {
     left: 45px ! important
 }
 
+.navbar {
+    display: -ms-flexbox;
+    display: flex;
+    -ms-flex-wrap: wrap;
+    flex-wrap: wrap;
+    -ms-flex-align: center;
+    align-items: center;
+    -ms-flex-pack: justify;
+    justify-content: space-between;
+    padding: .5rem 1rem;
+}
+
+body.fixed-nav #wrapper #page-wrapper, body.fixed-nav #wrapper .navbar-static-side {
+    margin-top: 88px !important;
+}
+
+body.fixed-sidebar.mini-navbar .nav-label, body.fixed-sidebar.mini-navbar .navbar-default .nav li a span {
+    display: none !important;
+
+}
+
+#page-header:after {
+    clear: both;
+}
+
 .dropdown-submenu > a:after {
     display: block;
     content: " ";
