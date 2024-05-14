@@ -201,8 +201,6 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         $scope.automationDashboardPortals = {};
         $rootScope.errorMessage = undefined;
         if (getSessionId()) {
-            var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/rest');
-            localStorage['restUrl'] = restUrl;
             $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($window.location.href);
         }
     };
@@ -231,6 +229,10 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
             $('#selected').html(flag + language);
         });
     };
+
+    $scope.getImageUrlWithProxy = function(url) {
+        return UtilsFactory.getProxyNames() + url;
+    }
 
     $scope.startRegularCheckSession = function () {
         if (!$scope.checkSessionInterval) {
@@ -1567,6 +1569,10 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
     $scope.manageFiles = function (variable, dataspace, selectFolder) {
         UtilsFactory.openFileBrowser(variable, dataspace, selectFolder);
     };
+
+    $scope.getImageUrlWithProxy = function(url) {
+        return UtilsFactory.getProxyNames() + url;
+    }
 
     // click on folder icon besides PA:CATALOG_OBJECT variable open a pop-up
     // this pop-up will be used to browse catalog objects, and user can select one as the variable value.

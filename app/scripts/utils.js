@@ -2,7 +2,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     const specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder',
         'pa:user_folder', 'pa:catalog_object', 'pa:credential'];
     const textAreaModel = ['pa:regexp', 'pa:spel', 'pa:json', 'pa:not_empty_string'];
-    const catalogUrlPrefix = $location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/catalog/buckets/';
+    const catalogUrlPrefix = $location.$$protocol + '://' + $location.$$host + ':' + $location.port() +  getProxyNames() + '/catalog/buckets/';
     const defaultUserPreferences = {
         submissionView: {
             selectedBucketName: '',
@@ -585,7 +585,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
 
     function getStringByUrl(url) {
         var request = new XMLHttpRequest();
-        request.open('GET', url, false);
+        request.open('GET',url, false);
         request.send();
         return request.responseText;
     }
