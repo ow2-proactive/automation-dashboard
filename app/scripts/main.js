@@ -9,9 +9,13 @@ function getSessionId() {
 }
 
 // ---------- Utilities -----------
-function getProperties($http, $location, UtilsFactory) {
-    return $http.get('resources/config.json')
+function getProperties($http, $location) {
+    return $http.get('/automation-dashboard/resources/config.json')
         .success(function (response) {
+            // Configure proxyName here
+            const index = window.location.pathname.indexOf("automation-dashboard")
+            const proxyNames = window.location.pathname.substring(0, index > 0 ? index - 1 : index);
+
             var pcaServiceUrl = angular.toJson(response.confServer.pcaServiceUrl, true);
             var schedulerRestUrl = angular.toJson(response.confServer.schedulerRestUrl, true);
             var rmRestUrl = angular.toJson(response.confServer.rmRestUrl, true);
@@ -27,15 +31,15 @@ function getProperties($http, $location, UtilsFactory) {
             var genericCatalogPortalQueryPeriod = angular.toJson(response.genericCatalogPortalQueryPeriod, true);
             var jobPlannerQueryPeriod = angular.toJson(response.jobPlannerQueryPeriod, true);
             var appCatalogBucketsUrl = angular.toJson(response.confServer.catalogServiceUrl + 'buckets', true);
-            var appCatalogWorkflowsUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/catalog/buckets/' + response.view[0].catalog.bucketName + '/resources');
+            var appCatalogWorkflowsUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + proxyNames +  '/catalog/buckets/' + response.view[0].catalog.bucketName + '/resources');
             var jobPlannerServiceUrl = angular.toJson(response.confServer.jobPlannerServiceUrl, true);
             var cloudWatchServiceUrl = angular.toJson(response.confServer.cloudWatchServiceUrl, true);
             var jobAnalyticsServiceUrl = angular.toJson(response.confServer.jobAnalyticsServiceUrl, true);
             var configViews = angular.toJson(response.view, true);
-            var appUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port());
-            var studioUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/studio');
-            var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/rest');
-            var schedulerPortalUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/scheduler');
+            var appUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + proxyNames);
+            var studioUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + proxyNames + '/studio');
+            var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + proxyNames +  '/rest');
+            var schedulerPortalUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + proxyNames +  '/scheduler');
             var proactiveLanguage = angular.toJson(response.proactiveLanguage, true).replace(/"/g, '');
 
             localStorage['pcaServiceUrl'] = pcaServiceUrl;
@@ -197,8 +201,10 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         $scope.automationDashboardPortals = {};
         $rootScope.errorMessage = undefined;
         if (getSessionId()) {
-            var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + '/rest');
-            localStorage['restUrl'] = restUrl;
+            if(!localStorage['restUrl']) {
+                var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + UtilsFactory.getProxyNames() +  '/rest')
+                localStorage['restUrl'] = restUrl;
+            }
             $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($window.location.href);
         }
     };
@@ -227,6 +233,10 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
             $('#selected').html(flag + language);
         });
     };
+
+    $scope.getImageUrlWithProxy = function(url) {
+        return UtilsFactory.getProxyNames() + url;
+    }
 
     $scope.startRegularCheckSession = function () {
         if (!$scope.checkSessionInterval) {
@@ -555,12 +565,8 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     };
 
     $scope.displayAbout = function () {
-        var windowLocation = window.location;
-        var protocol = windowLocation.protocol;
-        var host = windowLocation.host;
-        var result = protocol + '//' + host + '/rest';
-
-        $scope.restUrl = result;
+        var url = window.location.href.split("/automation-dashboard")[0] + '/rest/';
+        $scope.restUrl = url;
         $scope.year = new Date().getFullYear();
         $('#about-modal').modal('show');
     };
@@ -1048,8 +1054,12 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
 
     $scope.findImageUrl = function (selectedWorkflow) {
         var icon = UtilsFactory.getByKey('generic_information', 'workflow.icon', selectedWorkflow.object_key_values);
-        return icon === '' ? 'styles/patterns/img/wf-icons/wf-default-icon.png' : icon
+        return icon === '' ? 'styles/patterns/img/wf-icons/wf-default-icon.png' : UtilsFactory.getProxyNames() + icon
     };
+
+    $scope.getImageUrlWithProxy = function(url) {
+        return UtilsFactory.getProxyNames() + url;
+    }
 
     /**
      * This function allows sorting buckets list and workflow lists
@@ -1223,8 +1233,8 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                         $scope.isSubmissionGoingOn = false;
                         if( $scope.workflow.submissionMode === "catalog" ) {
                             toaster.pop('success', "", 'Your Workflow has been submitted successfully ' + ', Job Id:'+ JSON.stringify(submitResponse.id) + '<br>' +
-                                    '<a href="/automation-dashboard/#/workflow-execution" target="_blank">Open Job in Workflow Execution Portal</a></br>' +
-                                    '<a href="/scheduler" target="_blank">Open Job in Scheduler Portal</a>', 5000, 'trustedHtml');
+                                    '<a href="' +  UtilsFactory.getProxyNames() + '/automation-dashboard/#/workflow-execution" target="_blank">Open Job in Workflow Execution Portal</a></br>' +
+                                    '<a href="' + UtilsFactory.getProxyNames() + '/scheduler/" target="_blank">Open Job in Scheduler Portal</a>', 5000, 'trustedHtml');
                         } else {
                             toaster.pop('success',"", 'Your Workflow has been submitted successfully' + ', Job Id: ' + JSON.stringify(submitResponse.id), 5000, 'trustedHtml');
                         }
@@ -1559,6 +1569,10 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
     $scope.manageFiles = function (variable, dataspace, selectFolder) {
         UtilsFactory.openFileBrowser(variable, dataspace, selectFolder);
     };
+
+    $scope.getImageUrlWithProxy = function(url) {
+        return UtilsFactory.getProxyNames() + url;
+    }
 
     // click on folder icon besides PA:CATALOG_OBJECT variable open a pop-up
     // this pop-up will be used to browse catalog objects, and user can select one as the variable value.

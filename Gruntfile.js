@@ -291,7 +291,7 @@ module.exports = function (grunt) {
                                     result += "\nurl:'/" + subviewsDefinition[key].nameForUrl + "',";
                                     result += "\ndata: { pageTitle: '" + subviewsDefinition[key].name + "'},";
                                     if (subviewsDefinition[key].isAvailable) {
-                                        result += "\ntemplateUrl:'views/" + subviewsDefinition[key].nameForUrl + "/" + subviewsDefinition[key].htmlFile + "',";
+                                        result += "\ntemplateUrl:'/automation-dashboard/views/" + subviewsDefinition[key].nameForUrl + "/" + subviewsDefinition[key].htmlFile + "',";
                                         result += "\ncss:'styles/" + subviewsDefinition[key].nameForUrl + "/" + subviewsDefinition[key].cssFile + "',";
                                         result += "\nauthenticate:" + subviewsDefinition[key].authenticate + ",";
                                         if (subviewsDefinition[key].initFunction) {
@@ -302,7 +302,7 @@ module.exports = function (grunt) {
                                             result += "\n$rootScope.$broadcast('event:StopRefreshing');\n }";
                                         }
                                     } else {
-                                        result += "\ntemplateUrl:'views/" + subviewsDefinition[key].nameForUrl + "/" + subviewsDefinition[key].notAvailablePage + "',";
+                                        result += "\ntemplateUrl:'/automation-dashboard/views/" + subviewsDefinition[key].nameForUrl + "/" + subviewsDefinition[key].notAvailablePage + "',";
                                         result += "\nauthenticate:false,";
                                     }
                                     result += "\n})\n";
@@ -500,10 +500,10 @@ module.exports = function (grunt) {
         json_merge: {
             files: {
                 files: {
-                    '<%= inspinia.dist %>/resources/locales/locale-en.json': getJSONFilesToMerge("en"),
-                    '<%= inspinia.dist %>/resources/locales/locale-es.json': getJSONFilesToMerge("es"),
-                    '<%= inspinia.dist %>/resources/locales/locale-fr.json': getJSONFilesToMerge("fr"),
-                    '<%= inspinia.dist %>/resources/locales/locale-pt.json': getJSONFilesToMerge("pt")
+                    '<%= inspinia.dist %>/automation-dashboard/resources/locales/locale-en.json': getJSONFilesToMerge("en"),
+                    '<%= inspinia.dist %>/automation-dashboard/resources/locales/locale-es.json': getJSONFilesToMerge("es"),
+                    '<%= inspinia.dist %>/automation-dashboard/resources/locales/locale-fr.json': getJSONFilesToMerge("fr"),
+                    '<%= inspinia.dist %>/automation-dashboard/resources/locales/locale-pt.json': getJSONFilesToMerge("pt")
                 }
             },
         },

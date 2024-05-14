@@ -12,14 +12,14 @@
         <ul class="nav navbar-nav navbar-right" style="display: inline-flex;">
             <li class="m-r-xs">
                 <div class="btn-group pa-shortcuts" style="width: auto!important;">
-                    <a class="pa-shortcuts m-r-xl" style="width: auto!important;" href="/doc" target="_blank">
+                    <a class="pa-shortcuts m-r-xl" style="width: auto!important;" ng-href="{{getImageUrlWithProxy('/doc')}}" target="_blank">
                         <img src="../assets/image/custom-logo.png" style="height:40px;" align="right">
                     </a>
                 </div>
             </li>
             <li class="m-r-xs">
                 <div class="btn-group pa-shortcuts">
-                    <a class="btn btn-small btn-default active pa-shortcuts" href="/automation-dashboard/"
+                    <a class="btn btn-small btn-default active pa-shortcuts" ng-href="{{getImageUrlWithProxy('/automation-dashboard/')}}"
                        style="color:#fff;border-color: #ccc;padding:5px; background-color: #E86D1F;">
                         <img src="styles/patterns/automation_dashboard_30.png"
                              style="height:25px;padding-left: 4px;padding-right: 4px;">
@@ -29,7 +29,7 @@
             </li>
             <li class="m-r-xs" ng-if="portalsAccessPermission['studio']">
                 <div class="btn-group pa-shortcuts">
-                    <a class="btn btn-small btn-default pa-shortcuts" href="/studio/" style="color:#333;border-color: #ccc;padding:5px"
+                    <a class="btn btn-small btn-default pa-shortcuts" ng-href="{{getImageUrlWithProxy('/studio/')}}" style="color:#333;border-color: #ccc;padding:5px"
                        target="/studio/">
                         <img src="styles/patterns/studio_30.png"
                              style="height:25px;padding-left: 4px;padding-right: 4px;">
@@ -39,7 +39,7 @@
             </li>
             <li class="m-r-xs" ng-if="portalsAccessPermission['scheduler']">
                 <div class="btn-group pa-shortcuts">
-                    <a class="btn btn-small btn-default pa-shortcuts" href="/scheduler/" style="color:#333;border-color: #ccc;padding:5px"
+                    <a class="btn btn-small btn-default pa-shortcuts" ng-href="{{getImageUrlWithProxy('/scheduler/')}}" style="color:#333;border-color: #ccc;padding:5px"
                        target="/scheduler/">
                         <img src="styles/patterns/scheduler_30.png"
                              style="height:25px;padding-left: 4px;padding-right: 4px;">
@@ -49,7 +49,7 @@
             </li>
             <li ng-if="portalsAccessPermission['rm']">
                 <div class="btn-group pa-shortcuts">
-                    <a class="btn btn-small btn-default pa-shortcuts" href="/rm/"
+                    <a class="btn btn-small btn-default pa-shortcuts" ng-href="{{getImageUrlWithProxy('/rm/')}}"
                        style="color:#333;border-color: #ccc;padding:5px" target="/rm/">
                         <img src="styles/patterns/rm_30.png" style="height:25px;padding-left: 4px;padding-right: 4px;">
                         <div class="pa-shortcut" style="max-width: 300px;">{{ 'Resource Manager' | translate}}</div>
@@ -76,7 +76,7 @@
                     <a data-toggle="dropdown" href="javascript:void(0)" style="color: #676a6c;padding-left: 10px;font-size: 14px;background-color: transparent;">
                         {{'Help'|translate}} <b class="caret"></b></a>
                     <ul class="dropdown-menu">
-                        <li><a class="pointer" href="/doc/" target="_blank"><i aria-hidden="true" class="fa fa-book"></i>
+                        <li><a class="pointer" ng-href="{{getImageUrlWithProxy('/doc/')}}" target="_blank"><i aria-hidden="true" class="fa fa-book"></i>
                             {{'ProActive Documentations'|translate}}</a></li>
                         <li><a class="pointer" href id="about-button" ng-click="displayAbout()"><i aria-hidden="true" class="fa fa-question-circle"></i>
                             {{'About'|translate}}</a></li>

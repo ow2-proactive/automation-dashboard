@@ -12,7 +12,7 @@ function config($stateProvider, $urlRouterProvider) {
     $stateProvider
         .state('login', {
             url: '/login',
-            templateUrl: 'views/login.html',
+            templateUrl: '/automation-dashboard/views/login.html',
             authenticate: false,
             params: {
                 redirectsTo: ''
@@ -21,7 +21,7 @@ function config($stateProvider, $urlRouterProvider) {
         .state('portal', {
             abstract: true,
             url: '/portal',
-            templateUrl: 'views/common/content.html',
+            templateUrl: '/automation-dashboard/views/common/content.html',
             authenticate: true
         })
         .state('job-info', {
@@ -29,7 +29,7 @@ function config($stateProvider, $urlRouterProvider) {
             data: {
                 pageTitle: 'Job details'
             },
-            templateUrl: 'views/workflow-execution/workflow-execution/templates/job-details-container.html',
+            templateUrl: '/automation-dashboard/views/workflow-execution/workflow-execution/templates/job-details-container.html',
             css: 'styles/workflow-execution/workflow_execution_custom_style.css',
             authenticate: true
         })
@@ -53,6 +53,7 @@ angular
 angular
     .module('inspinia')
     .config(function($httpProvider) {
+
         $httpProvider.defaults.headers.common = {};
         $httpProvider.defaults.headers.post = {};
         $httpProvider.defaults.headers.put = {};
@@ -60,6 +61,23 @@ angular
         $httpProvider.defaults.headers.get = {};
         $httpProvider.defaults.useXDomain = true;
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
+
+        // Configure proxyName here
+        const index = window.location.pathname.indexOf("automation-dashboard")
+        const proxyNames = window.location.pathname.substring(0, index > 0 ? index - 1 : index);
+
+        // Add a custom interceptor to modify outgoing requests
+        $httpProvider.interceptors.push(function() {
+            return {
+                'request': function(config) {
+                    if (config.url.startsWith("/")) {
+                        config.url = proxyNames + config.url;
+                    }
+                    return config;
+                }
+            };
+        });
+
     });
 
 angular
