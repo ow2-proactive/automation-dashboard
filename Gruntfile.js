@@ -316,7 +316,7 @@ module.exports = function (grunt) {
                             match: /<!-- beginSubviews-->[\s\S]*<!-- endSubviews-->/g,
                             replacement: function () {
                                 var result = '';
-                                result = '\n<li id="collapse-menu" style="margin-top:-4px;"> <a href="javascript:void(0)"  ng-click ="collapseMenu()" style="background-color: #002d66;padding-right: 0px;padding-top: 0px; " ><i class="fa fa-angle-double-left pull-right" style="font-size:large;"></i></a></li>'
+                                result = '\n<li id="collapse-menu" style="margin-top:-1px;"> <a href="javascript:void(0)"  ng-click ="collapseMenu()" style="background-color: #002d66;padding-right: 0px;padding-top: 0px; " ><i class="fa fa-angle-double-left pull-right" style="font-size:large;"></i></a></li>'
                                 var cnt = 0;
                                 for (var key in subviewsDefinition) {
                                     if (subviewsDefinition[key].isSubMenuTitle) {
