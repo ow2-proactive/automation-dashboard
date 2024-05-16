@@ -483,6 +483,10 @@ button[disabled="disabled"] {
     display: block;
 }
 
+.navbar-default {
+    background-color: #002d66!important;
+}
+
 .mini-navbar .navbar-static-side {
     width: 50px ! important;
 }
@@ -521,7 +525,6 @@ body.fixed-nav #wrapper #page-wrapper, body.fixed-nav #wrapper .navbar-static-si
 
 body.fixed-sidebar.mini-navbar .nav-label, body.fixed-sidebar.mini-navbar .navbar-default .nav li a span {
     display: none !important;
-
 }
 
 #page-header:after {
