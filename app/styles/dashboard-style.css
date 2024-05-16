@@ -527,10 +527,6 @@ body.fixed-sidebar.mini-navbar .nav-label, body.fixed-sidebar.mini-navbar .navba
     display: none !important;
 }
 
-.navbar-fixed-top {
-    /*z-index: 900!important;*/
-}
-
 #page-header:after {
     clear: both;
 }
