@@ -1288,3 +1288,9 @@ md-virtual-repeat-container::-webkit-scrollbar {
     color: #888;
     font-weight: 500;
 }
+
+@media (min-width: 768px) {
+    .modal-dialog {
+        margin: 90px auto;
+    }
+}
