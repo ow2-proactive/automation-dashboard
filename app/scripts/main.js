@@ -604,6 +604,14 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         });
     };
 
+    // Close modals on escape key press
+    $(document).keydown(function (e) {
+        if (e.keyCode === 27) {
+            $('#account-modal').modal('hide');
+            $('#about-modal').modal('hide');
+        }
+    });
+
     function startRegularUpdateNotificationLabel() {
         if (!$scope.intervalNotificationUpdate) {
             $scope.intervalNotificationUpdate = $scope.$interval(queryNotificationService, localStorage['notificationPortalQueryPeriod']);
