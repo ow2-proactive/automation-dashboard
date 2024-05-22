@@ -3,7 +3,7 @@
     <div class="ibox wizard-content">
         <div class="ibox-content">
             <div class="ibox-tools headless" tooltip-placement="left" uib-tooltip="{{'Close'|translate}}">
-                <a class="close-link" ng-click="toggleOpenSubmitJobPanel(false)" style="font-size:x-large;">
+                <a class="close-link" ng-click="toggleOpenSubmitJobPanel(false)" ng-if="!isNotClosable" style="font-size:x-large;">
                     <i class="fa fa-times"></i>
                 </a>
             </div>
