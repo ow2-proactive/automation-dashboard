@@ -187,10 +187,15 @@ mainModule.config(function ($translateProvider, $translatePartialLoaderProvider)
 
 // --------------- Controllers -----------------
 
-mainModule.controller('mainController', function ($window, $http, $scope, $rootScope, $state, $location, $interval, $translate, $timeout, $uibModalStack, permissionService, SweetAlert, UtilsFactory) {
+mainModule.controller('mainController', function ($window, $http, $scope, $rootScope, $state, $stateParams, $location, $interval, $translate, $timeout, $uibModalStack, permissionService, SweetAlert, UtilsFactory) {
 
     this.$onInit = function () {
         $scope.main.userName = localStorage['pa.login'];
+
+        if($stateParams.sessionId && !localStorage['pa.session']) {
+            localStorage['pa.session'] = $stateParams.sessionId;
+        }
+
         $scope.startRegularCheckSession();
         $scope.contextDisplay = false;
         $scope.contextBucketDisplay = false;
@@ -308,11 +313,13 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 
     $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission = function (url) {
         var portal = '';
-        if (url) {
+        if (url && !url.includes("submit")) {
             portal = url.substring(url.lastIndexOf('/') + 1, (url.lastIndexOf('?') > 0 ? url.lastIndexOf('?') : undefined));
+        } else if(url) {
+            portal = 'submit'
         }
         $state.get().forEach(function (item) {
-            if (item.name && item.name !== 'login' && item.name !== 'portal' && item.name !== 'job-info') {
+            if (item.name && item.name !== 'login' && item.name !== 'portal' && item.name !== 'job-info' && item.name !== 'submit') {
                 $scope.automationDashboardPortals[item.url.substring(1)] = item.name;
                 $scope.portalsAccessPermission[item.url.substring(1)] = false;
             }
@@ -329,8 +336,10 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                 if (portal) {
                     if ($scope.portalsAccessPermission[portal]) {
                         $state.go($scope.automationDashboardPortals[portal]);
-                    } else if (portal !== 'job-info' || doHaveAccessToWA === -1) {
+                    } else if ((portal !== 'job-info' && portal !== 'submit') || doHaveAccessToWA === -1) {
                         displayAlertAndRedirectToFirstAccessiblePortalIfExist(portal);
+                    } else if( portal === 'submit') {
+                        window.open("/automation-dashboard/#/submit/", '_self')
                     }
                 } else {
                     $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal]);
@@ -1113,6 +1122,10 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
     this.$onInit = function () {
         $scope.workflow =
             $scope.$parent.$parent.$parent.$parent.$parent.$parent.workflowToSubmit;
+
+        // internal or extern window
+        $scope.isWindowClosable = $scope.$parent.$parent.$parent.$parent.$parent.$parent
+                                    .isNotClosable;
         // toast config
         $scope.toasterConfig = {closeButton: true, progressBar: true};
         const variablesTemplateFooterButtonInfo =
@@ -1153,6 +1166,9 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
             Check: check,
             Cancel: function () {
                 $scope.$parent.toggleOpenSubmitJobPanel(false);
+            },
+            Close: function () {
+                window.close();
             }
         };
         // footer section
@@ -1236,16 +1252,22 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
             if (response.valid === true) {
                 UtilsFactory.submitJob(bucketName, $scope.workflow.name, $scope.workflow.variables, $scope.workflow.submissionMode)
                     .success(function (submitResponse) {
-                        //close the Submit Workflow Panel
-                        $scope.$parent.toggleOpenSubmitJobPanel(false);
-                        $scope.isSubmissionGoingOn = false;
-                        if( $scope.workflow.submissionMode === "catalog" ) {
-                            toaster.pop('success', "", 'Your Workflow has been submitted successfully ' + ', Job Id:'+ JSON.stringify(submitResponse.id) + '<br>' +
-                                    '<a href="' +  UtilsFactory.getProxyNames() + '/automation-dashboard/#/workflow-execution" target="_blank">Open Job in Workflow Execution Portal</a></br>' +
-                                    '<a href="' + UtilsFactory.getProxyNames() + '/scheduler/" target="_blank">Open Job in Scheduler Portal</a>', 5000, 'trustedHtml');
-                        } else {
-                            toaster.pop('success',"", 'Your Workflow has been submitted successfully' + ', Job Id: ' + JSON.stringify(submitResponse.id), 5000, 'trustedHtml');
+
+                        if(!$scope.isWindowClosable) {
+                            //close the Submit Workflow Panel
+                            $scope.$parent.toggleOpenSubmitJobPanel(false);
+                            $scope.isSubmissionGoingOn = false;
+                            if( $scope.workflow.submissionMode === "catalog" ) {
+                                toaster.pop('success', "", 'Your Workflow has been submitted successfully ' + ', Job Id:'+ JSON.stringify(submitResponse.id) + '<br>' +
+                                        '<a href="' +  UtilsFactory.getProxyNames() + '/automation-dashboard/#/workflow-execution" target="_blank">Open Job in Workflow Execution Portal</a></br>' +
+                                        '<a href="' + UtilsFactory.getProxyNames() + '/scheduler/" target="_blank">Open Job in Scheduler Portal</a>', 5000, 'trustedHtml');
+                            } else {
+                                toaster.pop('success',"", 'Your Workflow has been submitted successfully' + ', Job Id: ' + JSON.stringify(submitResponse.id), 5000, 'trustedHtml');
+                            }
                         }
+
+                        $scope.successMessage = 'Your Workflow has been submitted successfully' + ', Job Id: ' + JSON.stringify(submitResponse.id);
+
                     })
                     .error(function (error) {
                         $scope.WEsubmissionErrorMessage = error.errorMessage;
