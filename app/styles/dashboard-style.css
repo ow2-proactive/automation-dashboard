@@ -960,6 +960,12 @@ md-virtual-repeat-container::-webkit-scrollbar {
     overflow: auto;
 }
 
+@media print {
+    body.fixed-nav #wrapper #page-wrapper {
+        margin-top: 0px !important;
+    }
+}
+
 /******************
 * Submission part *
 *******************/
