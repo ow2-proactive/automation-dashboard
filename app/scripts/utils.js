@@ -655,6 +655,10 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         return $http.delete(schedulerRestUrl() + 'credentials/' + encodeURIComponent(key), {headers: {'sessionID': getSessionId()}});
     }
 
+    function capitalizeFirstLetter(string) {
+        return string.charAt(0).toUpperCase() + string.slice(1).toLowerCase();
+    }
+
     return {
         openJobInSchedulerPortal: openJobInSchedulerPortal,
         openJobInfoPopup: openJobInfoPopup,
@@ -694,7 +698,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         getThirdPartyCredentials: getThirdPartyCredentials,
         postThirdPartyCredentials: postThirdPartyCredentials,
         removeThirdPartyCredentials: removeThirdPartyCredentials,
-        getProxyNames: getProxyNames
+        getProxyNames: getProxyNames,
+        capitalizeFirstLetter: capitalizeFirstLetter
     };
 }
 
