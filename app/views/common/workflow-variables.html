@@ -7,18 +7,18 @@
              ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:boolean') ==0">
             <div class="radio-div">
                 <label class="radio-inline">
-                    <input type="radio" name="{{variable.name}}" ng-model="variable.value"
+                    <input type="radio" name="{{variable.name}}" ng-model="variable.value" ng-disabled="disabledEditVars"
                            value="true" ng-change="validate()"/>{{'TRUE'|translate}}
                 </label>
                 <label class="radio-inline">
-                    <input type="radio" name="{{variable.name}}" ng-model="variable.value"
+                    <input type="radio" name="{{variable.name}}" ng-model="variable.value" ng-disabled="disabledEditVars"
                            value="false" ng-change="validate()"/>{{'FALSE'|translate}}
                 </label>
             </div>
         </div>
         <div class="col-md-4"
              ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:list')==0">
-            <select class="form-control"
+            <select class="form-control" ng-disabled="disabledEditVars"
                     ng-model="variable.value"
                     ng-options="opt for opt in modelToList(variable.resolvedModel)"
                     ng-change="validate()">
@@ -36,7 +36,7 @@
                         <span class="input-group-addon">
                             <i class="fa fa-calendar"></i>
                         </span>
-                <input class="form-control"
+                <input class="form-control" ng-disabled="disabledEditVars"
                        placeholder="Select a date"
                        ng-model="variable.value"
                        ng-model-options="{ updateOn: 'blur' }">
@@ -44,12 +44,12 @@
         </div>
         <div class="col-md-4"
              ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:hidden')==0">
-            <input class="form-control" type="password" autocomplete="new-password"
+            <input class="form-control" type="password" autocomplete="new-password" ng-disabled="disabledEditVars"
                    ng-model="variable.value">
         </div>
         <div class="col-md-4" ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:credential')==0">
             <div class="col-md-10" style="padding-left: 0px;">
-                <input class="form-control" type="text" ng-model="variable.value">
+                <input class="form-control" ng-disabled="disabledEditVars" type="text" ng-model="variable.value">
             </div>
             <div class="col-md-1">
                 <button title="{{'Manage third-party credentials'|translate}}"
@@ -60,7 +60,7 @@
         </div>
         <div class="col-md-4" ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:global_file') == 0">
             <div class="col-md-10" style="padding-left: 0px;">
-                <input class="form-control" type="text" ng-model="variable.value">
+                <input class="form-control" type="text" ng-disabled="disabledEditVars" ng-model="variable.value">
             </div>
             <div class="col-md-1">
                 <button title="{{'Browse Global Space files, Upload, and Select one file'|translate}}"
@@ -71,7 +71,7 @@
         </div>
         <div class="col-md-4" ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:user_file') == 0">
             <div class="col-md-10" style="padding-left: 0px;">
-                <input class="form-control" type="text" ng-model="variable.value">
+                <input class="form-control" ng-disabled="disabledEditVars" type="text" ng-model="variable.value">
             </div>
             <div class="col-md-1">
                 <button title="{{'Browse User Space files, Upload, and Select one file'|translate}}"
@@ -82,7 +82,7 @@
         </div>
         <div class="col-md-4" ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:global_folder') == 0">
             <div class="col-md-10" style="padding-left: 0px;">
-                <input class="form-control" type="text" ng-model="variable.value">
+                <input class="form-control" ng-disabled="disabledEditVars" type="text" ng-model="variable.value">
             </div>
             <div class="col-md-1">
                 <button title="{{'Browse, Upload Global Space files, and Select one folder'|translate}}"
@@ -93,7 +93,7 @@
         </div>
         <div class="col-md-4" ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:user_folder') == 0">
             <div class="col-md-10" style="padding-left: 0px;">
-                <input class="form-control" type="text" ng-model="variable.value">
+                <input class="form-control" ng-disabled="disabledEditVars" type="text" ng-model="variable.value">
             </div>
             <div class="col-md-1">
                 <button title="{{'Browse, Upload User Space files, and Select one folder'|translate}}"
@@ -104,7 +104,7 @@
         </div>
         <div class="col-md-4" ng-if="variable.resolvedModel && variable.resolvedModel.toLowerCase().indexOf('pa:catalog_object') == 0">
             <div class="col-md-10" style="padding-left: 0px;">
-                <input class="form-control" type="text" ng-model="variable.value">
+                <input class="form-control" ng-disabled="disabledEditVars" type="text" ng-model="variable.value">
             </div>
             <div class="col-md-1">
                 <button title="{{'Browse Catalog Objects and Select one'|translate}}"
@@ -117,11 +117,11 @@
         </div>
         <div class="col-md-4"
              ng-if="isTextAreaModel(variable)">
-            <textarea class="w-100" ng-model="variable.value" style="max-width: 100%;">
+            <textarea class="w-100" ng-model="variable.value" ng-disabled="disabledEditVars" style="max-width: 100%;">
             </textarea>
         </div>
         <div class="col-md-4" ng-if="!isSpecialUIModel(variable) && !isTextAreaModel(variable)">
-            <input class="form-control" type="text" ng-model="variable.value">
+            <input class="form-control" ng-disabled="disabledEditVars" type="text" ng-model="variable.value">
         </div>
         <div class="col-md-5">
             <p ng-bind-html="variable.description"></p>

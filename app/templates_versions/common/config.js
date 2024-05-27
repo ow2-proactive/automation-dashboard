@@ -34,6 +34,24 @@ function config($stateProvider, $urlRouterProvider) {
             authenticate: true
         })
         .state('submit', {
+            url: '/submit/{sessionid}/{name}/{bucket}',
+            data: {
+                url: 'Submit',
+            },
+            templateUrl: '/automation-dashboard/views/common/submission-window-view.html',
+            css: 'styles/workflow-execution/workflow_execution_custom_style.css',
+            authenticate: true
+        })
+        .state('submit-with-filter', {
+            url: '/submit/{name}/{bucket}',
+            data: {
+                url: 'Submit',
+            },
+            templateUrl: '/automation-dashboard/views/common/submission-window-view.html',
+            css: 'styles/workflow-execution/workflow_execution_custom_style.css',
+            authenticate: true
+        })
+        .state('submit-with-connect', {
             url: '/submit/{sessionid}',
             data: {
                 url: 'Submit',
