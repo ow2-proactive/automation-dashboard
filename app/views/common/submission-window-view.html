@@ -1,4 +1,19 @@
 <div ng-controller="SubmitViewController" style="height: 100vh;">
-    <ng-include class="droping-ibox"
+    <ng-include class="droping-ibox" ng-if="!statusCode"
                 src="'/automation-dashboard/views/common/wizard.html'"></ng-include>
+    <div ng-show="statusCode">
+        <div class="error-container"><div class="error-text">
+            <h1>Error</h1>
+        </div>
+            <div class="error-text-strong">
+                <h1>{{statusCode}}</h1>
+            </div>
+            <div class="error-text">
+                <h1>Not Found</h1>
+            </div>
+        </div>
+        <div class="error-descr-container">
+            <p>The request <b>{{currentURL}}</b> was not found on this server.</p>
+        </div>
+    </div>
 </div>

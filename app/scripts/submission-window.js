@@ -1,6 +1,7 @@
 angular.module('main').controller('SubmitViewController', function($scope, $stateParams,$http, $rootScope, UtilsFactory){
     // This flag will distinguish between the external view and the internal view
     $scope.isNotClosable = true;
+    $scope.statusCode = "";
     // extract workflow name and bucket name
     const bucketName = $stateParams.bucket;
     const objectName = $stateParams.name;
@@ -63,6 +64,8 @@ angular.module('main').controller('SubmitViewController', function($scope, $stat
                     ]
                 })
                 .error(function (response) {
+                    $scope.statusCode = response.httpErrorCode;
+                    $scope.currentURL = window.location.href;
                     console.error('Error while querying catalog service on URL ' + url + ': ' + response.status_code + ' - ' + response.error_message);
                 });
 
