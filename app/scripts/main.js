@@ -191,11 +191,6 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 
     this.$onInit = function () {
         $scope.main.userName = localStorage['pa.login'];
-
-        if($stateParams.sessionId && !localStorage['pa.session']) {
-            localStorage['pa.session'] = $stateParams.sessionId;
-        }
-
         $scope.startRegularCheckSession();
         $scope.contextDisplay = false;
         $scope.contextBucketDisplay = false;
@@ -251,6 +246,8 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 
     function checkSession() {
         var sessionId = getSessionId();
+        console.log("sessionId")
+        console.log(sessionId)
         if (!sessionId) {
             // Close all open Bootstrap modals
             $uibModalStack.dismissAll();
@@ -279,6 +276,11 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                 });
         }
     }
+
+    $rootScope.$on('checkSessionEvent', function() {
+        checkSession();
+        $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($window.location.href);
+    });
 
     function displayAlertAndRedirectToFirstAccessiblePortalIfExist(portal) {
         UtilsFactory.displayTranslatedMessage('warning', 'Access not authorized', ['Cannot connect to', portal + '.', 'The access is not authorized']);
@@ -319,7 +321,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
             portal = 'submit'
         }
         $state.get().forEach(function (item) {
-            if (item.name && item.name !== 'login' && item.name !== 'portal' && item.name !== 'job-info' && item.name !== 'submit') {
+            if (item.name && item.name !== 'login' && item.name !== 'portal' && item.name !== 'job-info' && !item.name.includes('submit')) {
                 $scope.automationDashboardPortals[item.url.substring(1)] = item.name;
                 $scope.portalsAccessPermission[item.url.substring(1)] = false;
             }
@@ -336,10 +338,11 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                 if (portal) {
                     if ($scope.portalsAccessPermission[portal]) {
                         $state.go($scope.automationDashboardPortals[portal]);
-                    } else if ((portal !== 'job-info' && portal !== 'submit') || doHaveAccessToWA === -1) {
+                    } else if ((portal !== 'job-info' && !portal.includes('submit')) || doHaveAccessToWA === -1) {
                         displayAlertAndRedirectToFirstAccessiblePortalIfExist(portal);
-                    } else if( portal === 'submit') {
-                        window.open("/automation-dashboard/#/submit/", '_self')
+                    } else if( portal.includes('submit') ) {
+                        // open the previous url with the same params
+                        window.open(sessionStorage['previousUrlBeforeLogin'], '_self')
                     }
                 } else {
                     $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal]);
@@ -1264,10 +1267,29 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                             } else {
                                 toaster.pop('success',"", 'Your Workflow has been submitted successfully' + ', Job Id: ' + JSON.stringify(submitResponse.id), 5000, 'trustedHtml');
                             }
+                        } else {
+                            // remove buttons
+                            $scope.footerTemplate = $scope.footerTemplate.filter(function(btn){
+                                return btn.name === 'Submit' || btn.name === 'Check' || btn.name === 'Previous'
+                            })
+
+                            // display job details
+                            $scope.footerTemplate.push ({
+                                className: "btn btn-info text-white",
+                                hasSpinner: false,
+                                label: "See Details",
+                                title: "See Details",
+                                action: function () {
+                                    window.open('#/job-info?jobid=' + submitResponse.id + '&tab=0',
+                                                'job-info-' + submitResponse.id,
+                                                'toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,directories=no,status=no');
+                                }
+                            })
                         }
 
                         $scope.successMessage = 'Your Workflow has been submitted successfully' + ', Job Id: ' + JSON.stringify(submitResponse.id);
-
+                        // disable editing vars
+                        $scope.disabledEditVars = true;
                     })
                     .error(function (error) {
                         $scope.WEsubmissionErrorMessage = error.errorMessage;
