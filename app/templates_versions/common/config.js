@@ -34,7 +34,7 @@ function config($stateProvider, $urlRouterProvider) {
             authenticate: true
         })
         .state('submit', {
-            url: '/submit/{sessionid}/{name}/{bucket}',
+            url: '/submit/{sessionid}/{bucket}/{name}',
             data: {
                 url: 'Submit',
             },
@@ -43,7 +43,7 @@ function config($stateProvider, $urlRouterProvider) {
             authenticate: true
         })
         .state('submit-with-filter', {
-            url: '/submit/{name}/{bucket}',
+            url: '/submit/{bucket}/{name}',
             data: {
                 url: 'Submit',
             },
