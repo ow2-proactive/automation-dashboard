@@ -4,19 +4,25 @@ angular.module('main').controller('SubmitViewController', function($scope, $stat
     $scope.statusCode = "";
     // extract workflow name and bucket name
     const bucketName = $stateParams.bucket;
-    const objectName = $stateParams.name;
+    const workflowName = $stateParams.name;
 
     // This will allow us to redirect to the current URL when we connect from the login page
-    sessionStorage['previousUrlBeforeLogin'] = window.location.href
-    const sessionId = sessionStorage['previousUrlBeforeLogin'] ? sessionStorage['previousUrlBeforeLogin'].split('/submit/')[1].split("/")[0] : null;
+    sessionStorage.setItem('previousUrlBeforeLogin', window.location.href);
+    const paramsString = window.location.href.split("submit?")[1]
+    const urlParams = new URLSearchParams(paramsString);
+    const sessionId = urlParams.get('sessionid');
     if( sessionId && !localStorage['pa.session'] ) {
-        localStorage['pa.session'] = sessionId;
-        $rootScope.$broadcast('checkSessionEvent')
+        try {
+            localStorage.setItem('pa.session', sessionId)
+            $rootScope.$broadcast('checkSessionEvent')
+        } catch (e){
+            throw new Error('Error while adding session id in the storage');
+        }
     }
 
     // If the workflow name and bucket name are provided, we jump to the vars edition view
-    if(bucketName && objectName){
-        var encodedName = encodeURIComponent(objectName);
+    if ( bucketName && workflowName ) {
+        var encodedName = encodeURIComponent(workflowName);
         const sessionId = localStorage['pa.session'];
         var catalogUrl = JSON.parse(localStorage.catalogServiceUrl);
         if (sessionId !== undefined) {
@@ -71,39 +77,72 @@ angular.module('main').controller('SubmitViewController', function($scope, $stat
 
         }
 
-    }
+    } else if( !bucketName && !workflowName ) {
+       $scope.tabs = [
+              {
+                  title: UtilsFactory.translate('Select Workflow'),
+                  url: "/automation-dashboard/views/common/catalog-view.html",
+              },
+              {
+                  title: UtilsFactory.translate('Submit'),
+                  url: "/automation-dashboard/views/common/workflow-info.html"
+              }
+          ]
 
-    // Otherwise, we allow navigation from the bucket to choose a workflow within the selected bucket.
-    if( !bucketName && !objectName) {
+          $scope.variablesTemplateFooterButtonInfo = [
+              {
+                  label: "Submit",
+                  title: UtilsFactory.translate('Submit'),
+                  className: "btn btn-primary m-r-xs text-white",
+                  hasSpinner: false
+              },
+              {
+                  label: "Check",
+                  title: UtilsFactory.translate('Check'),
+                  className: "btn btn-default m-r-xs"
+              },
+              {
+                  label: "Previous",
+                  title: UtilsFactory.translate('Previous'),
+                  className: "btn btn-default m-r-xs",
+                  hasSpinner: false
+              }
+          ]
+   } else if ( bucketName && !workflowName ) {
+        $scope.bucketName = bucketName;
         $scope.tabs = [
-               {
-                   title: UtilsFactory.translate('Select Workflow'),
-                   url: "/automation-dashboard/views/common/catalog-view.html",
-               },
-               {
-                   title: UtilsFactory.translate('Submit'),
-                   url: "/automation-dashboard/views/common/workflow-info.html"
-               }
-           ]
+              {
+                  title: UtilsFactory.translate('Select Workflow'),
+                  url: "/automation-dashboard/views/common/catalog-view.html",
+              },
+              {
+                  title: UtilsFactory.translate('Submit'),
+                  url: "/automation-dashboard/views/common/workflow-info.html"
+              }
+          ]
 
-           $scope.variablesTemplateFooterButtonInfo = [
-               {
-                   label: "Submit",
-                   title: UtilsFactory.translate('Submit'),
-                   className: "btn btn-primary m-r-xs text-white",
-                   hasSpinner: false
-               },
-               {
-                   label: "Check",
-                   title: UtilsFactory.translate('Check'),
-                   className: "btn btn-default m-r-xs"
-               },
-               {
-                   label: "Previous",
-                   title: UtilsFactory.translate('Previous'),
-                   className: "btn btn-default m-r-xs",
-                   hasSpinner: false
-               }
-           ]
-    }
+          $scope.variablesTemplateFooterButtonInfo = [
+              {
+                  label: "Submit",
+                  title: UtilsFactory.translate('Submit'),
+                  className: "btn btn-primary m-r-xs text-white",
+                  hasSpinner: false
+              },
+              {
+                  label: "Check",
+                  title: UtilsFactory.translate('Check'),
+                  className: "btn btn-default m-r-xs"
+              },
+              {
+                  label: "Previous",
+                  title: UtilsFactory.translate('Previous'),
+                  className: "btn btn-default m-r-xs",
+                  hasSpinner: false
+              }
+          ]
+   } else {
+        $scope.statusCode = 404;
+        $scope.currentURL = window.location.href;
+   }
+
 })
