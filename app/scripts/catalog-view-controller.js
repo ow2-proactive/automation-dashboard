@@ -8,6 +8,7 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
         $scope.selectedWorkflow = $scope.$parent.$parent.$parent.$parent.$parent.$parent.workflowToSubmit;
 
         $scope.filterBucketsByBucketName = $scope.$parent.$parent.$parent.$parent.$parent.$parent.bucketName;
+        $scope.filterWorkflowsByWorkflowName = $scope.$parent.$parent.$parent.$parent.$parent.$parent.workflowName;
         // Fetch defaults or cached values
         $scope.WEUserPreferences = UtilsFactory.loadUserPreferences();
         $scope.selectedBucketName = UtilsFactory.getUserPreference('submissionView.selectedBucketName');
@@ -29,8 +30,9 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
 
     function updateWorkflowsMetadataList() {
         $scope.isObjectsLoading = true;
-        var kind = $scope.showPSAWorkflowsOnly ? 'Workflow/psa' : 'Workflow/standard'
-        WECatalogService.getWorkflowsMetadataList($scope.workflowNameQuery, $scope.selectedBucket.name, kind).then(function (response) {
+        const kind = $scope.showPSAWorkflowsOnly ? 'Workflow/psa' : 'Workflow/standard';
+        const  filterByName = $scope.workflowNameQuery ? $scope.workflowNameQuery : ($scope.filterWorkflowsByWorkflowName ? $scope.filterWorkflowsByWorkflowName : "");
+        WECatalogService.getWorkflowsMetadataList(filterByName, $scope.selectedBucket.name, kind).then(function (response) {
             $scope.workflowsMetadataList = response;
             $timeout(function () {
                 $scope.isObjectsLoading = false;
@@ -98,8 +100,8 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
             headers: {'sessionid': getSessionId()},
             params: {
                 'kind': $scope.showPSAWorkflowsOnly ? 'Workflow/psa' : 'Workflow/standard',
-                'objectName': $scope.workflowNameQuery,
-                bucketName: $scope.filterBucketsByBucketName
+                'objectName': $scope.workflowNameQuery ? $scope.workflowNameQuery : ($scope.filterWorkflowsByWorkflowName ? $scope.filterWorkflowsByWorkflowName : ""),
+                bucketName: $scope.filterBucketsByBucketName ? $scope.filterBucketsByBucketName : ""
             }
         };
         $scope.isBucketsLoading = true;
@@ -108,7 +110,7 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
             .success(function (bucketList) {
                 $scope.bucketsMetadataList = bucketList;
                 // No empty bucket should appear for no empty workflowNameQuery
-                if ($scope.workflowNameQuery) {
+                if ( $scope.workflowNameQuery || $scope.filterWorkflowsByWorkflowName ) {
                     $scope.bucketsMetadataList = $scope.bucketsMetadataList.filter(function (bucket) {
                         return bucket.objectCount;
                     });
