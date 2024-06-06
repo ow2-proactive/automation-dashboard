@@ -261,11 +261,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                         if ($("#login-view").is(":visible") && !$scope.firstAccessiblePortal) {
                             $scope.main.userName = localStorage['pa.login'];
                             var sessionid = getSessionId();
-                            console.log("sessionid********")
-                            console.log(sessionid)
                             if (sessionid) {
-                                console.log("sessionid********")
-                                console.log(sessionid)
                                 $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($scope.redirectsTo);
                             }
                             $rootScope.serverIsDown = false;
@@ -278,13 +274,6 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                 });
         }
     }
-
-    $rootScope.$on('checkSessionEvent', function(event, data) {
-        $scope.redirectsTo = $window.location.href;
-        console.log("$on('checkSessionEvent') ------")
-        //checkSession();
-        $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($scope.redirectsTo);
-    });
 
     function displayAlertAndRedirectToFirstAccessiblePortalIfExist(portal) {
         UtilsFactory.displayTranslatedMessage('warning', 'Access not authorized', ['Cannot connect to', portal + '.', 'The access is not authorized']);
@@ -348,11 +337,8 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                         // open the previous url with the same params
                         window.open(sessionStorage['previousUrlBeforeLogin'], '_self')
                     }
-                } else if( sessionStorage['previousUrlBeforeLogin'] ) {
-                    // open the previous url with the same params
-                    window.open(sessionStorage['previousUrlBeforeLogin'], '_self')
                 } else {
-                    $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal]);
+                  $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal]);
                 }
             } else {
                 $rootScope.errorMessage = 'This user is not allowed to access to the Automation Dashboard Portal';

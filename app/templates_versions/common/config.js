@@ -96,6 +96,25 @@ angular
             if (!localStorage['pcaServiceUrl'] || !localStorage['schedulerRestUrl'] || !localStorage['notificationServiceUrl'] || !localStorage['catalogServiceUrl'] || !localStorage['appCatalogWorkflowsUrl'] || !localStorage['appCatalogBucketsUrl'] || !localStorage['configViews'] || !localStorage['rmRestUrl'] || !localStorage['restUrl']) {
                 getProperties($http, $location);
             }
+
+            if (window.location.href.includes('submit')) {
+                // This will allow us to redirect to the current URL when we connect from the login page
+                sessionStorage.setItem('previousUrlBeforeLogin', window.location.href);
+                // only when we try to open external window
+                const paramsString = window.location.href.split("submit?")[1]
+                const urlParams = new URLSearchParams(paramsString);
+                const sessionId = urlParams.get('sessionid');
+                if (sessionId && !localStorage['pa.session']) {
+                    try {
+                        localStorage.setItem('pa.session', sessionId);
+                        $rootScope.$broadcast('checkSessionEvent')
+                    } catch (e) {
+                        throw new Error('Error while adding session id in the storage');
+                    }
+                }
+            }
+
+
             var myDataPromise = isSessionValide($http, getSessionId(), $location);
             myDataPromise.then(function(result) {
                 if (!result && $location.$$url != '/login') {
