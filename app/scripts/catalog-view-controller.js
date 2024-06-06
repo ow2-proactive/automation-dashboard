@@ -32,7 +32,7 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
         $scope.isObjectsLoading = true;
         const kind = $scope.showPSAWorkflowsOnly ? 'Workflow/psa' : 'Workflow/standard';
 
-        let filterByName;
+        var filterByName;
 
         if ($scope.workflowNameQuery) {
             filterByName = $scope.workflowNameQuery;
@@ -107,7 +107,7 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
     function loadBuckets() {
         const appCatalog = JSON.parse(localStorage.appCatalogBucketsUrl);
 
-        let objectName;
+        var objectName;
         if ($scope.workflowNameQuery) {
             objectName = $scope.workflowNameQuery;
         } else if ($scope.filterWorkflowsByWorkflowName) {
@@ -116,7 +116,7 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
             objectName = "";
         }
 
-        let bucketName;
+        var bucketName;
         if ($scope.filterBucketsByBucketName) {
             bucketName = $scope.filterBucketsByBucketName;
         } else {
@@ -124,7 +124,7 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
         }
         const sessionIdHeader = {
             headers: {'sessionid': getSessionId()},
-            let params = {
+            params: {
                 'kind': $scope.showPSAWorkflowsOnly ? 'Workflow/psa' : 'Workflow/standard',
                 'objectName': objectName,
                 'bucketName': bucketName
