@@ -275,13 +275,6 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         }
     }
 
-    /*$rootScope.$on('checkSessionEvent', function(event, data) {
-        $scope.redirectsTo = $window.location.href;
-        console.log("$on('checkSessionEvent') ------" , $scope.redirectsTo)
-        //checkSession();
-        $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($scope.redirectsTo);
-    });*/
-
     function displayAlertAndRedirectToFirstAccessiblePortalIfExist(portal) {
         UtilsFactory.displayTranslatedMessage('warning', 'Access not authorized', ['Cannot connect to', portal + '.', 'The access is not authorized']);
         if (!$scope.firstAccessiblePortal) {

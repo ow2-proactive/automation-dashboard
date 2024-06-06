@@ -31,7 +31,17 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
     function updateWorkflowsMetadataList() {
         $scope.isObjectsLoading = true;
         const kind = $scope.showPSAWorkflowsOnly ? 'Workflow/psa' : 'Workflow/standard';
-        const  filterByName = $scope.workflowNameQuery ? $scope.workflowNameQuery : ($scope.filterWorkflowsByWorkflowName ? $scope.filterWorkflowsByWorkflowName : "");
+
+        let filterByName;
+
+        if ($scope.workflowNameQuery) {
+            filterByName = $scope.workflowNameQuery;
+        } else if ($scope.filterWorkflowsByWorkflowName) {
+            filterByName = $scope.filterWorkflowsByWorkflowName;
+        } else {
+            filterByName = "";
+        }
+
         WECatalogService.getWorkflowsMetadataList(filterByName, $scope.selectedBucket.name, kind).then(function (response) {
             $scope.workflowsMetadataList = response;
             $timeout(function () {
@@ -96,12 +106,28 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
      **/
     function loadBuckets() {
         const appCatalog = JSON.parse(localStorage.appCatalogBucketsUrl);
+
+        let objectName;
+        if ($scope.workflowNameQuery) {
+            objectName = $scope.workflowNameQuery;
+        } else if ($scope.filterWorkflowsByWorkflowName) {
+            objectName = $scope.filterWorkflowsByWorkflowName;
+        } else {
+            objectName = "";
+        }
+
+        let bucketName;
+        if ($scope.filterBucketsByBucketName) {
+            bucketName = $scope.filterBucketsByBucketName;
+        } else {
+            bucketName = "";
+        }
         const sessionIdHeader = {
             headers: {'sessionid': getSessionId()},
-            params: {
+            let params = {
                 'kind': $scope.showPSAWorkflowsOnly ? 'Workflow/psa' : 'Workflow/standard',
-                'objectName': $scope.workflowNameQuery ? $scope.workflowNameQuery : ($scope.filterWorkflowsByWorkflowName ? $scope.filterWorkflowsByWorkflowName : ""),
-                bucketName: $scope.filterBucketsByBucketName ? $scope.filterBucketsByBucketName : ""
+                'objectName': objectName,
+                'bucketName': bucketName
             }
         };
         $scope.isBucketsLoading = true;
