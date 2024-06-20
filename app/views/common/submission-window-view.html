@@ -1,4 +1,9 @@
 <div ng-controller="SubmitViewController" style="height: 100vh;">
+    <div class="col-flexbox m-t-sm">
+        <a class="pa-shortcuts  m-r-auto m-l-auto" style="width: auto!important;" ng-href="{{getImageUrlWithProxy('/doc')}}" target="_blank">
+            <img src="../assets/image/custom-logo.png" style="height:40px;" align="right">
+        </a>
+    </div>
     <ng-include class="droping-ibox" ng-if="!statusCode"
                 src="'/automation-dashboard/views/common/wizard.html'"></ng-include>
     <div ng-show="statusCode">
