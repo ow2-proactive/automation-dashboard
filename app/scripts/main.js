@@ -246,8 +246,6 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 
     function checkSession() {
         var sessionId = getSessionId();
-        console.log("sessionId")
-        console.log(sessionId)
         if (!sessionId) {
             // Close all open Bootstrap modals
             $uibModalStack.dismissAll();
