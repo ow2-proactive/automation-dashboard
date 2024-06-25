@@ -25,7 +25,7 @@ function config($stateProvider, $urlRouterProvider) {
             authenticate: true
         })
         .state('job-info', {
-            url: '/job-info?jobid&tab',
+            url: '/job-info?jobid&tab&sessionid',
             data: {
                 pageTitle: 'Job details'
             },
@@ -97,11 +97,11 @@ angular
                 getProperties($http, $location);
             }
 
-            if (window.location.href.includes('submit')) {
+            if (window.location.href.includes('submit') || window.location.href.includes('job-info')) {
                 // This will allow us to redirect to the current URL when we connect from the login page
                 sessionStorage.setItem('previousUrlBeforeLogin', window.location.href);
                 // only when we try to open external window
-                const paramsString = window.location.href.split("submit?")[1]
+                const paramsString = window.location.href.includes('submit') ? window.location.href.split("submit?")[1] : window.location.href.split("job-info?")[1];
                 const urlParams = new URLSearchParams(paramsString);
                 const sessionId = urlParams.get('sessionid');
                 if (sessionId && !localStorage['pa.session']) {
