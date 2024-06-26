@@ -308,10 +308,12 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 
     $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission = function (url) {
         var portal = '';
-        if (url && !url.includes("submit")) {
+        if (url && !url.includes("submit") && !url.includes("job-info")) {
             portal = url.substring(url.lastIndexOf('/') + 1, (url.lastIndexOf('?') > 0 ? url.lastIndexOf('?') : undefined));
-        } else if(url) {
+        } else if(url && url.includes("submit") ) {
             portal = 'submit'
+        } else if (url && url.includes("job-info") ) {
+            portal = 'job-info'
         }
         $state.get().forEach(function (item) {
             if (item.name && item.name !== 'login' && item.name !== 'portal' && item.name !== 'job-info' && !item.name.includes('submit')) {
@@ -333,7 +335,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                         $state.go($scope.automationDashboardPortals[portal]);
                     } else if ((portal !== 'job-info' && !portal.includes('submit')) || doHaveAccessToWA === -1) {
                         displayAlertAndRedirectToFirstAccessiblePortalIfExist(portal);
-                    } else if( portal.includes('submit') ) {
+                    } else if( portal.includes('submit') || portal.includes('job-info') ) {
                         // open the previous url with the same params
                         window.open(sessionStorage['previousUrlBeforeLogin'], '_self')
                     }
