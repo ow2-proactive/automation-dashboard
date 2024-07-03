@@ -682,7 +682,26 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
 mainModule.controller('loginController', function ($scope, $http, $state, permissionService, $stateParams, $location, $rootScope) {
     this.$onInit = function () {
         $scope.domains = [];
-        $scope.getDomains();
+        const login = localStorage['pa.login'];
+
+        if (!login) {
+            $scope.getDomains();
+            return;
+        }
+
+        const userNameDomainSplit = login.split("\\");
+
+        if (userNameDomainSplit.length === 1) {
+            $scope.username = userNameDomainSplit[0];
+            $scope.getDomains();
+        } else {
+            $scope.username = userNameDomainSplit[1];
+            $scope.getDomains(function () {
+                $scope.selectedDomain = $scope.domains.find(function(domain) {
+                    return domain === userNameDomainSplit[0];
+                });
+            });
+        }
     };
     $scope.redirectsTo = $stateParams.redirectsTo;
     var host = $location.host();
@@ -737,7 +756,7 @@ mainModule.controller('loginController', function ($scope, $http, $state, permis
             });
     };
 
-    $scope.getDomains = function () {
+    $scope.getDomains = function (callBack) {
         $http.get(JSON.parse(localStorage.schedulerRestUrl) + 'domains/')
             .then(function (response) {
                 $scope.domains = response.data;
@@ -749,6 +768,9 @@ mainModule.controller('loginController', function ($scope, $http, $state, permis
                 }
                 else {
                     $scope.selectedDomain = "";
+                }
+                if (callBack) {
+                    return callBack();
                 }
             })
             .catch(function (response) {
