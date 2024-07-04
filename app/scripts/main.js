@@ -680,16 +680,20 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
 });
 
 mainModule.controller('loginController', function ($scope, $http, $state, permissionService, $stateParams, $location, $rootScope) {
+    $scope.redirectsTo = $stateParams.redirectsTo;
+    var host = $location.host();
+    $scope.showLinkAccountCreation = (host === 'try.activeeon.com' || host === 'azure-try.activeeon.com');
+
     this.$onInit = function () {
         $scope.domains = [];
-        const login = localStorage['pa.login'];
+        var currentUserData = getCookie('username') ? getCookie('username') : localStorage['pa.login'];
 
-        if (!login) {
+        if (!currentUserData) {
             $scope.getDomains();
             return;
         }
 
-        const userNameDomainSplit = login.split("\\");
+        const userNameDomainSplit = currentUserData.split("\\");
 
         if (userNameDomainSplit.length === 1) {
             $scope.username = userNameDomainSplit[0];
@@ -703,26 +707,7 @@ mainModule.controller('loginController', function ($scope, $http, $state, permis
             });
         }
     };
-    $scope.redirectsTo = $stateParams.redirectsTo;
-    var host = $location.host();
-    $scope.showLinkAccountCreation = (host === 'try.activeeon.com' || host === 'azure-try.activeeon.com');
-    var username = getCookie('username');
-    if (username === 'null') {
-        var localStorageUser = localStorage['pa.login'];
-        if (localStorageUser && localStorageUser.includes("\\")) {
-            var domainUsername = localStorageUser.split("\\");
-            $scope.selectedDomain = domainUsername[0];
-            localStorageUser = domainUsername[1];
-        }
-        $scope.username = localStorageUser;
-    } else {
-        if (username && username.includes("\\")) {
-            var domainUsername = username.split("\\");
-            $scope.selectedDomain = domainUsername[0];
-            username = domainUsername[1];
-        }
-        $scope.username = username;
-    }
+
     $scope.login = function () {
         var username = $scope.username;
         if($scope.selectedDomain) {
