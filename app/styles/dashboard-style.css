@@ -1347,3 +1347,25 @@ md-virtual-repeat-container::-webkit-scrollbar {
         margin: 90px auto;
     }
 }
+
+body:not(.fixed-sidebar):not(.canvas-menu).mini-navbar .nav-second-level {
+    display: none;
+}
+
+.canvas-menu.mini-navbar .nav-second-level, .fixed-sidebar.mini-navbar .nav-second-level {
+    position: absolute;
+}
+
+.fixed-sidebar.mini-navbar .nav-second-level li a{
+    padding: 7px 10px!important;
+}
+
+.mini-navbar .nav .nav-second-level {
+    position: absolute!important;
+    left: 70px;
+    top: 0;
+    background-color: #2f4050;
+    padding: 10px!important;
+    font-size: 12px;
+    text-wrap: nowrap;
+}
