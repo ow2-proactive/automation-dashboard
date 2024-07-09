@@ -680,30 +680,34 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
 });
 
 mainModule.controller('loginController', function ($scope, $http, $state, permissionService, $stateParams, $location, $rootScope) {
-    this.$onInit = function () {
-        $scope.domains = [];
-        $scope.getDomains();
-    };
     $scope.redirectsTo = $stateParams.redirectsTo;
     var host = $location.host();
     $scope.showLinkAccountCreation = (host === 'try.activeeon.com' || host === 'azure-try.activeeon.com');
-    var username = getCookie('username');
-    if (username === 'null') {
-        var localStorageUser = localStorage['pa.login'];
-        if (localStorageUser && localStorageUser.includes("\\")) {
-            var domainUsername = localStorageUser.split("\\");
-            $scope.selectedDomain = domainUsername[0];
-            localStorageUser = domainUsername[1];
+
+    this.$onInit = function () {
+        $scope.domains = [];
+        var currentUserData = getCookie('username') ? getCookie('username') : localStorage['pa.login'];
+
+        if (!currentUserData) {
+            $scope.getDomains();
+            return;
         }
-        $scope.username = localStorageUser;
-    } else {
-        if (username && username.includes("\\")) {
-            var domainUsername = username.split("\\");
-            $scope.selectedDomain = domainUsername[0];
-            username = domainUsername[1];
+
+        const userNameDomainSplit = currentUserData.split("\\");
+
+        if (userNameDomainSplit.length === 1) {
+            $scope.username = userNameDomainSplit[0];
+            $scope.getDomains();
+        } else {
+            $scope.username = userNameDomainSplit[1];
+            $scope.getDomains(function () {
+                $scope.selectedDomain = $scope.domains.find(function(domain) {
+                    return domain === userNameDomainSplit[0];
+                });
+            });
         }
-        $scope.username = username;
-    }
+    };
+
     $scope.login = function () {
         var username = $scope.username;
         if($scope.selectedDomain) {
@@ -737,7 +741,7 @@ mainModule.controller('loginController', function ($scope, $http, $state, permis
             });
     };
 
-    $scope.getDomains = function () {
+    $scope.getDomains = function (callBack) {
         $http.get(JSON.parse(localStorage.schedulerRestUrl) + 'domains/')
             .then(function (response) {
                 $scope.domains = response.data;
@@ -749,6 +753,9 @@ mainModule.controller('loginController', function ($scope, $http, $state, permis
                 }
                 else {
                     $scope.selectedDomain = "";
+                }
+                if (callBack) {
+                    return callBack();
                 }
             })
             .catch(function (response) {
