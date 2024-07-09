@@ -500,10 +500,10 @@ module.exports = function (grunt) {
         json_merge: {
             files: {
                 files: {
-                    '<%= inspinia.dist %>/automation-dashboard/resources/locales/locale-en.json': getJSONFilesToMerge("en"),
-                    '<%= inspinia.dist %>/automation-dashboard/resources/locales/locale-es.json': getJSONFilesToMerge("es"),
-                    '<%= inspinia.dist %>/automation-dashboard/resources/locales/locale-fr.json': getJSONFilesToMerge("fr"),
-                    '<%= inspinia.dist %>/automation-dashboard/resources/locales/locale-pt.json': getJSONFilesToMerge("pt")
+                    '<%= inspinia.dist %>/resources/locales/locale-en.json': getJSONFilesToMerge("en"),
+                    '<%= inspinia.dist %>/resources/locales/locale-es.json': getJSONFilesToMerge("es"),
+                    '<%= inspinia.dist %>/resources/locales/locale-fr.json': getJSONFilesToMerge("fr"),
+                    '<%= inspinia.dist %>/resources/locales/locale-pt.json': getJSONFilesToMerge("pt")
                 }
             },
         },
