@@ -647,12 +647,18 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         };
-        return $http.post(schedulerRestUrl() + 'credentials/' + encodeURIComponent(key), $httpParamSerializerJQLike({value: value}), configHeaders);
+        return $http.post(schedulerRestUrl() + 'credentials', $httpParamSerializerJQLike({key: key, value: value}), configHeaders);
 
     }
 
     function removeThirdPartyCredentials(key) {
-        return $http.delete(schedulerRestUrl() + 'credentials/' + encodeURIComponent(key), {headers: {'sessionID': getSessionId()}});
+        const configHeaders = {
+            headers: {
+                'sessionid': getSessionId(),
+                'Content-Type': 'application/x-www-form-urlencoded'
+            }
+        };
+        return $http.delete(schedulerRestUrl() + 'credentials', $httpParamSerializerJQLike({key: key}), configHeaders);
     }
 
     function capitalizeFirstLetter(string) {
