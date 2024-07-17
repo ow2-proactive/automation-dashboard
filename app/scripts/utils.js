@@ -648,17 +648,10 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             }
         };
         return $http.post(schedulerRestUrl() + 'credentials', $httpParamSerializerJQLike({key: key, value: value}), configHeaders);
-
     }
 
     function removeThirdPartyCredentials(key) {
-        const configHeaders = {
-            headers: {
-                'sessionid': getSessionId(),
-                'Content-Type': 'application/x-www-form-urlencoded'
-            }
-        };
-        return $http.delete(schedulerRestUrl() + 'credentials', $httpParamSerializerJQLike({key: key}), configHeaders);
+        return $http.delete(schedulerRestUrl() + 'credentials?key=' + encodeURIComponent(key), {headers: {'sessionID': getSessionId()}});
     }
 
     function capitalizeFirstLetter(string) {
