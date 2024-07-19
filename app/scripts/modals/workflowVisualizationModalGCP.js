@@ -1,6 +1,7 @@
 angular.module('workflow-variables').controller('WorkflowVisualizationModalGCPCtrl', function ($scope, $uibModalInstance, workflow) {
     $scope.workflow = workflow;
     $scope.visualization = workflow.visualization;
+    $scope.visuZoomFactor = 1;
 
     $scope.catalogObjectKind = function () {
         return $scope.workflow.kind.slice(0, $scope.workflow.kind.indexOf('/'));
@@ -18,6 +19,16 @@ angular.module('workflow-variables').controller('WorkflowVisualizationModalGCPCt
         var url = JSON.parse(localStorage.studioUrl) + '/#workflowcatalog/' + workflow.bucket_name + '/workflow/' + workflow.name;
         var win = window.open(url);
         win.focus();
+    }
+
+    $scope.zoomInOut = function (factor) {
+        if (factor === 1 && $scope.visuZoomFactor <= 2) {
+            $scope.visuZoomFactor = $scope.visuZoomFactor + 0.1
+            angular.element('#workflow-visualization').css("transform", 'scale(' + $scope.visuZoomFactor + ')');
+        } else if (factor === -1 && $scope.visuZoomFactor >= 0.2) {
+            $scope.visuZoomFactor = $scope.visuZoomFactor - 0.1
+            angular.element('#workflow-visualization').css("transform", 'scale(' + $scope.visuZoomFactor + ')');
+        }
     }
 
     $scope.exportVisu = function () {

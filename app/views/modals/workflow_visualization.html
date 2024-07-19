@@ -8,6 +8,14 @@
     <div class="modal-body" style="padding:5px; background-color:transparent;">
         <h3 ng-show="!visualization" class="text-danger" style="text-align:center;">{{'This'|translate}} {{ catalogObjectKind() }} {{"catalog object cannot have a visualization"|translate}}.</h3>
         <h3 ng-show="isWorkflow() && !visualization" class="text-danger" style="text-align:center;">{{'To create one, open the workflow in the Studio and republish it to the Catalog'|translate}}.</h3>
+        <div style="position: absolute;top: 20px;right: 65px;font-size: 21px;">
+            <i class="fa fa-search-plus clickable" ng-click="zoomInOut(1)" aria-hidden="true"
+               ng-class="{'disabled text-muted':visuZoomFactor >=2}"
+               uib-tooltip="{{(visuZoomFactor * 100 | number:0) + '%'}}"></i>
+            <i class="fa fa-search-minus clickable" ng-click="zoomInOut(-1)" aria-hidden="true"
+               ng-class="{'disabled text-muted':visuZoomFactor <0.2 && visuZoomFactor >=0.1}"
+               uib-tooltip="{{(visuZoomFactor * 100 | number:0) + '%'}}"></i>
+        </div>
         <div class="workflow-visu" ng-controller="WorkflowVisualizationController" ng-bind-html="visualization"></div>
     </div>
 
