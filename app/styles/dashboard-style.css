@@ -1362,10 +1362,18 @@ body:not(.fixed-sidebar):not(.canvas-menu).mini-navbar .nav-second-level {
 
 .mini-navbar .nav .nav-second-level {
     position: absolute!important;
-    left: 70px;
+    left: 45px;
     top: 0;
     background-color: #2f4050;
-    padding: 10px!important;
     font-size: 12px;
     text-wrap: nowrap;
+}
+
+.mini-navbar .nav li:hover .nav-second-level{
+    display: block;
+}
+
+.fixed-sidebar.mini-navbar .nav-second-level.collapsing{
+    left: 45px!important;
+    transition:none!important;
 }

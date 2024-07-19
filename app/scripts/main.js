@@ -557,7 +557,27 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             $('#collapse-menu > a > i').addClass('fa-angle-double-left')
             localStorage.setItem('collapsePreference', 'out')
         }
-        $('.pace-done').toggleClass('mini-navbar');
+        $('body').toggleClass('mini-navbar');
+        if (!$('body').hasClass('mini-navbar') || $('body').hasClass('body-small')) {
+            // Hide menu in order to smoothly turn on when maximize menu
+            $('#side-menu').hide();
+            // For smoothly turn on menu
+            setTimeout(
+                function () {
+                    $('#side-menu').fadeIn(400);
+                }, 200);
+        } else if ($('body').hasClass('fixed-sidebar')) {
+            $('#side-menu').hide();
+            setTimeout(
+                function () {
+                    $('#side-menu').fadeIn(400);
+                }, 100);
+        } else {
+            // Remove all inline style from jquery fadeIn function to reset menu state
+            $('#side-menu').removeAttr('style');
+        }
+        $('#side-menu .nav.nav-second-level.collapse.in').parent().toggleClass("active")
+        $('#side-menu .nav.nav-second-level.collapse').collapse('hide')
     }
     $scope.changeFavicon = function (portal) {
         var link = document.createElement('link');
@@ -569,6 +589,8 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             document.head.removeChild(oldLink);
         }
         document.head.appendChild(link);
+        $('#side-menu .nav.nav-second-level.collapse.in').parent().toggleClass("active")
+        $('#side-menu .nav.nav-second-level.collapse').collapse('hide')
     };
 
     $scope.displayAbout = function () {
