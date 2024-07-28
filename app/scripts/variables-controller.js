@@ -1,6 +1,7 @@
 /*Workflow variables controller: submission template*/
 
-angular.module('main').controller('VariablesController', function ($scope, $uibModal, $http, $translate, $timeout, $sce, $rootScope, $location, toaster , PCAService, UtilsFactory, WESchedulerService) {
+angular.module('main').controller('VariablesController', function ($scope, $uibModal, $http, $translate, $timeout, $sce, $rootScope, $location, toaster , PCAService, UtilsFactory,
+ WESchedulerService, WEUtilsFactory) {
     this.$onInit = function () {
         $scope.workflow =
             $scope.$parent.$parent.$parent.$parent.$parent.$parent.workflowToSubmit;
@@ -142,6 +143,8 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                             if( $scope.workflow.submissionMode === "catalog" ) {
                                 toaster.pop('success', "", 'Your Workflow has been submitted successfully ' + ', Job Id:'+ JSON.stringify(submitResponse.id) + '<br>' +
                                         '<a href="' +  UtilsFactory.getProxyNames() + '/automation-dashboard/#/workflow-execution" target="_blank">Open Job in Workflow Execution Portal</a></br>' +
+                                        '<a href="javascript:void(0);" onclick="window.open(\'#/job-info?jobid=' + submitResponse.id + '&tab=0\', \'job-info-' + submitResponse.id +
+                                            '\', \'toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,directories=no,status=no\')" target="_blank">Open Job Details in a New Popup Window</a></br>' +
                                         '<a href="' + UtilsFactory.getProxyNames() + '/scheduler/" target="_blank">Open Job in Scheduler Portal</a>', 5000, 'trustedHtml');
                             } else {
                                 toaster.pop('success',"", 'Your Workflow has been submitted successfully' + ', Job Id: ' + JSON.stringify(submitResponse.id), 5000, 'trustedHtml');
@@ -321,13 +324,15 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
     /**
      * Requests the scheduler to resubmit a job then displays a confirmation toast.
      */
-    const reSubmitJob = function (id, variables) {
+    const reSubmitJob = function (jobId, variables) {
         $scope.isSubmissionGoingOn = true;
-        WESchedulerService.reSubmitJob(id, variables)
+        WESchedulerService.reSubmitJob(jobId, variables)
             .success(function (response) {
                 //close the Submit Workflow Panel
                 $scope.$parent.toggleOpenSubmitJobPanel(false);
-                toaster.success('Job ' + id + ' resubmitted successfully!');
+                const id = response.id;
+                const text = 'Your Job has been resubmitted successfully, Job Id: ' + id;
+                openDetailsView(id, text);
                 $scope.isSubmissionGoingOn = false;
             })
             .error(function (response) {
@@ -336,17 +341,29 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 console.error('Could not resubmit job ' + id + '! ' + response);
             });
     };
+
+    function openDetailsView(id, text) {
+        var height = WEUtilsFactory.getUserPreference('jobDetailsView.windowHeight');
+        var width = WEUtilsFactory.getUserPreference('jobDetailsView.windowWidth');
+        toaster.pop('success', "", text + '<br>' +
+            '<a href="javascript:void(0);" onclick="window.open(\'#/job-info?jobid=' + id + '&tab=0\', \'job-info-' + id +
+            '\', \'toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,directories=no,status=no\')" target="_blank">Open Job Details in a New Popup Window</a><br>' +
+            '<a href="' + UtilsFactory.getProxyNames() + '/scheduler/" target="_blank">Open Job in Scheduler Portal</a>', 5000, 'trustedHtml');
+    }
+
     /**
      * Requests the scheduler to resubmit and kill a job then display a confirmation toast
      **/
-    const killResubmitJob = function (id, variables) {
+    const killResubmitJob = function (jobId, variables) {
         $scope.isSubmissionGoingOn = true;
-        WESchedulerService.reSubmitJob(id, variables)
-            .success(function () {
-                WESchedulerService.killJob(id)
+        WESchedulerService.reSubmitJob(jobId, variables)
+            .success(function ( newJob) {
+                WESchedulerService.killJob(jobId)
                     .success(function (res) {
                         if (res) {
-                            toaster.success('Job ' + id + ' killed and resubmitted successfully!')
+                            const text = 'Your Job has been killed and resubmitted successfully, Job Id: ' + jobId;
+                            const newJobId = newJob.id;
+                            openDetailsView(newJobId, text);
                         } else {
                             toaster.warning('Could not kill job ' + id + '!')
                         }
