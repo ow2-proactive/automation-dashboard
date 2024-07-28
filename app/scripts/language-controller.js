@@ -1,4 +1,4 @@
-/*Catalog view controller: buckets and objects list*/
+/*Language view controller */
 angular.module('main').controller('LanguageController', function($scope, $rootScope, $translate){
 
     const mainCTR = $scope.$parent.$parent
