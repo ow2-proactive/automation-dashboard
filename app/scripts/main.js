@@ -515,7 +515,6 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         $timeout(function () {
             var splitUrl = window.location.hash.split('/');
             var portal = splitUrl[splitUrl.length - 1];
-            setDefaultSelectedLanguage(localStorage['proactiveLanguage']);
             if (jobAnalyticsChildren.indexOf(portal) !== -1) {
                 $scope.changeFavicon('analytics-portal');
             } else if (jobPlannerChildren.indexOf(portal) !== -1) {
@@ -684,14 +683,6 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     $rootScope.$on('event:updatedNotificationsCount', function (event, data) {
         $scope.nbNewNotifications = data['count'];
     });
-
-    //Set the locally stored language as default value for the language dropdown menu
-    function setDefaultSelectedLanguage(language) {
-        var lang = $('#' + language + '').text();
-        var flagObject = $('#' + language + '').find('img').attr('src');
-        var flag = '<img alt="' + language + '"style="height:25px;padding-left: 0px;padding-right: 5px;padding-top: 4px;padding-bottom: 4px;" src="' + flagObject + '"/>';
-        $('#selected').html(flag + lang);
-    }
 
     this.$onDestroy = function () {
         if (angular.isDefined($scope.intervalNotificationUpdate)) {
