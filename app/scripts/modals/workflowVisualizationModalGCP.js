@@ -22,13 +22,12 @@ angular.module('workflow-variables').controller('WorkflowVisualizationModalGCPCt
     }
 
     $scope.zoomInOut = function (factor) {
-        if (factor === 1 && $scope.visuZoomFactor <= 2) {
-            $scope.visuZoomFactor = $scope.visuZoomFactor + 0.1
-            angular.element('#workflow-visualization').css("transform", 'scale(' + $scope.visuZoomFactor + ')');
-        } else if (factor === -1 && $scope.visuZoomFactor >= 0.2) {
-            $scope.visuZoomFactor = $scope.visuZoomFactor - 0.1
-            angular.element('#workflow-visualization').css("transform", 'scale(' + $scope.visuZoomFactor + ')');
+        if ((factor === 1 && $scope.visuZoomFactor === 2) || (factor === -1 && $scope.visuZoomFactor === 0.1)) {
+            return;
         }
+        $scope.visuZoomFactor += factor === 1 ? 0.1 : -0.1;
+        angular.element('#workflow-graph-in-modal').css("transform", 'scale(' + $scope.visuZoomFactor + ','+ $scope.visuZoomFactor+')');
+        angular.element('#workflow-graph-in-modal').css("transform-origin", 'top left');
     }
 
     $scope.exportVisu = function () {
@@ -51,13 +50,15 @@ angular.module('workflow-variables').controller('WorkflowVisualizationModalGCPCt
             };
         });
 
-        var scrollHeight = $('#workflow-visualization-view').prop('scrollHeight');
+        $('#workflow-graph-in-modal').parent().scrollTop(0);
+        $('#workflow-graph-in-modal').parent().scrollLeft(0);
+        var scrollHeight = $('#workflow-graph-in-modal').parent().prop('scrollHeight');
         html2canvas($(".workflow-visu")[0], {
             allowTaint: true,
             useCORS: true,
             logging: false,
             scale: 2,
-            height: scrollHeight,
+            height: scrollHeight + 20,
             windowHeight: window.outerHeight + window.innerHeight
         }).then(function (canvas) {
             elements.each(function () {
