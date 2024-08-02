@@ -115,6 +115,8 @@
   "Submit": "Enviar",
   "Submit Workflows to Create/Execute/Control Jobs & Services": "Envíe flujos de Workflow para crear/ejecutar/controlar trabajos y Servicios",
   "The access is not authorized": "No se permite el acceso",
+  "The action has been executed": "La acción se ha ejecutado",
+  "The service instance has been executed": "Se ha ejecutado la instancia de servicio",
   "Tutorials": "Tutoriales",
   "Type": "Tipo",
   "Unable to login": "Imposible iniciar sesión",
@@ -138,6 +140,9 @@
   "Yes, download it!": "¡Sí, descarga!",
   "Yes, stop uploading!": "Sí, parada de la carga!",
   "You are about to download the folder": "Estás a punto de descargar la carpeta",
+  "Your Job has been resubmitted successfully": "Su trabajo ha sido reenviado con éxito",
+  "Your Job has been killed and resubmitted successfully": "Su trabajo ha sido eliminado y reenviado con éxito",
+  "Your Workflow has been submitted successfully": "Su flujo de trabajo se ha enviado correctamente",
   "Your": "Tu",
   "The server cannot be reached. Check first your network connection, and potentially the server status." : "No se puede acceder al servidor. Primero verifique su conexión de red y, potencialmente, el estado del servidor.",
   "You are logged out of the server. Please log into the portal again.": "Ha cerrado sesión en el servidor. Por favor inicie sesión en el portal nuevamente.",
@@ -149,5 +154,8 @@
   "Portal Access": "Acceso al portal",
   "Are you sure you want to exit?": "¿Estás seguro de que quieres salir?",
   "OK": "De acuerdo",
+  "Open Job Details in a New Popup Window": "Abrir los detalles del trabajo en una nueva ventana emergente",
+  "Open Job in Scheduler Portal": "Abrir trabajo en el Portal del Scheduler",
+  "Open Job in Workflow Execution Portal": "Abrir Trabajo en el Portal de Ejecución de Workflow",
   "Cancel": "Cancelar"
 }

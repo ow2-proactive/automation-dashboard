@@ -1365,3 +1365,7 @@ body:not(.fixed-sidebar):not(.canvas-menu).mini-navbar .nav-second-level {
     left: 45px!important;
     transition:none!important;
 }
+
+.ui-select-multiple.ui-select-bootstrap input.ui-select-search {
+    width: 100% !important;
+}
