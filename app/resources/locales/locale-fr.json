@@ -115,6 +115,8 @@
   "Submit": "Soumettre",
   "Submit Workflows to Create/Execute/Control Jobs & Services": "Soumettre des Workflows pour créer/exécuter/contrôler des tâches et des Services",
   "The access is not authorized": "L'accès n'est pas autorisé",
+  "The action has been executed": "L'action a été exécutée",
+  "The service instance has been executed": "L'instance de service a été exécutée",
   "Tutorials": "Tutoriels",
   "Type": "Type",
   "Unable to login": "Connexion impossible",
@@ -138,6 +140,9 @@
   "Yes, download it!": "Oui, téléchargez-le!",
   "Yes, stop uploading!": "Oui, arrêtez de télécharger!",
   "You are about to download the folder": "Vous êtes sur le point de télécharger le dossier",
+  "Your Job has been resubmitted successfully": "Votre Job a été soumis à nouveau avec succès",
+  "Your Job has been killed and resubmitted successfully": "Votre Job a été tué et soumis à nouveau avec succès",
+  "Your Workflow has been submitted successfully": "Votre Workflow a été soumis avec succès",
   "Your": "Votre",
   "The server cannot be reached. Check first your network connection, and potentially the server status." : "Le serveur n'est pas accessible. Vérifiez d'abord votre connexion réseau, et éventuellement l'état du serveur.",
   "You are logged out of the server. Please log into the portal again.": "Vous êtes déconnecté du serveur. Veuillez vous reconnecter au portail.",
@@ -149,5 +154,8 @@
   "Portal Access": "Accès au portail",
   "Are you sure you want to exit?": "Êtes-vous sûr de vouloir quitter?",
   "OK": "D'accord",
+  "Open Job Details in a New Popup Window": "Ouvrir les détails du Job dans une nouvelle fenêtre",
+  "Open Job in Scheduler Portal": "Ouvrir le job dans le portail du Scheduler",
+  "Open Job in Workflow Execution Portal": "Ouvrir le Job dans le Workflow Execution",
   "Cancel": "Annuler"
 }
