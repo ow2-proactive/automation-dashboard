@@ -92,8 +92,17 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 UtilsFactory.getVariablesInKeyValueFormat($scope.workflow.variables);
                 if ($scope.workflow.hasOwnProperty('isCreationWorkflow') && !$scope.workflow.isCreationWorkflow) {
                     var httpPromise = PCAService.submitActionWorkflow($scope.workflow.serviceInstance.instance_id, bucketName, $scope.workflow.name, variables);
-                    httpPromise.then(function () {
-                        toaster.success('The action has been executed.', JSON.stringify(response.id));
+                    httpPromise.then(function (response) {
+
+                        const obj = response.data.job_submissions.find(function(job){
+                            return job.hasOwnProperty('job_id')
+                        });
+                        const id = obj.job_id;
+                        const instanceId = response.data.instance_id;
+
+                        const text = UtilsFactory.translate('The service instance has been executed') + ', instance_id: ' + instanceId + ', jobId: ' + id;
+                        openDetailsView(id, text);
+
                         $rootScope.$broadcast('event:updateServiceInstanceList');
                         $rootScope.$broadcast('event:updateWorkflowsGroupedByInstance');
                         $scope.isLoading = false;
@@ -106,10 +115,17 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                     });
                 } else {
                     var httpPromise = PCAService.submitCreationWorkflow($scope.workflow.bucketName, $scope.workflow.name, variables, $scope.pcaWorkflowLabel);
-                    httpPromise.then(function () {
+                    httpPromise.then(function (response) {
+                        const obj = response.data.job_submissions.find(function(job){
+                            return job.hasOwnProperty('job_id')
+                        });
+                        const id = obj.job_id;
+                        const instanceId = response.data.instance_id;
+
+                        const text = UtilsFactory.translate('The service instance has been created') + ', instance_id: ' + instanceId + ', jobId: ' + id;
+                        openDetailsView(id, text);
                         //close the Submit Workflow Panel
                         $scope.$parent.toggleOpenSubmitJobPanel(false);
-                        toaster.success('The service instance has been created.', JSON.stringify(response.id));
                     }).catch(function (error) {
                         console.error('Error while submitting service: ' + angular.toJson(error));
                         toaster.error('Error', ['The service instance couldn\'t be created:', error.data.httpErrorCode + ' - ' + error.data.errorMessage]);
@@ -140,14 +156,14 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                             //close the Submit Workflow Panel
                             $scope.$parent.toggleOpenSubmitJobPanel(false);
                             $scope.isSubmissionGoingOn = false;
-                            if( $scope.workflow.submissionMode === "catalog" ) {
-                                toaster.pop('success', "", 'Your Workflow has been submitted successfully ' + ', Job Id:'+ JSON.stringify(submitResponse.id) + '<br>' +
-                                        '<a href="' +  UtilsFactory.getProxyNames() + '/automation-dashboard/#/workflow-execution" target="_blank">Open Job in Workflow Execution Portal</a></br>' +
+                            if( $scope.workflow.submissionMode !== "workflow-execution" ) {
+                                toaster.pop('success', "", UtilsFactory.translate('Your Workflow has been submitted successfully') + ' , Job Id:'+ JSON.stringify(submitResponse.id) + '<br>' +
+                                        '<a href="' +  UtilsFactory.getProxyNames() + '/automation-dashboard/#/workflow-execution" target="_blank">' + UtilsFactory.translate('Open Job in Workflow Execution Portal') + '</a></br>' +
                                         '<a href="javascript:void(0);" onclick="window.open(\'#/job-info?jobid=' + submitResponse.id + '&tab=0\', \'job-info-' + submitResponse.id +
-                                            '\', \'toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,directories=no,status=no\')" target="_blank">Open Job Details in a New Popup Window</a></br>' +
-                                        '<a href="' + UtilsFactory.getProxyNames() + '/scheduler/" target="_blank">Open Job in Scheduler Portal</a>', 5000, 'trustedHtml');
+                                            '\', \'toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,directories=no,status=no\')" target="_blank">' + UtilsFactory.translate('Open Job Details in a New Popup Window') + '</a></br>' +
+                                        '<a href="' + UtilsFactory.getProxyNames() + '/scheduler/" target="_blank">' + UtilsFactory.translate('Open Job in Scheduler Portal') + '</a>', 5000, 'trustedHtml');
                             } else {
-                                toaster.pop('success',"", 'Your Workflow has been submitted successfully' + ', Job Id: ' + JSON.stringify(submitResponse.id), 5000, 'trustedHtml');
+                                toaster.pop('success',"", UtilsFactory.translate('Your Workflow has been submitted successfully') + ', Job Id: ' + JSON.stringify(submitResponse.id), 5000, 'trustedHtml');
                             }
                         } else {
                             // remove buttons
@@ -331,7 +347,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 //close the Submit Workflow Panel
                 $scope.$parent.toggleOpenSubmitJobPanel(false);
                 const id = response.id;
-                const text = 'Your Job has been resubmitted successfully, Job Id: ' + id;
+                const text = UtilsFactory.translate('Your Job has been resubmitted successfully') + ', Job Id: ' + id;
                 openDetailsView(id, text);
                 $scope.isSubmissionGoingOn = false;
             })
@@ -347,8 +363,9 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         var width = WEUtilsFactory.getUserPreference('jobDetailsView.windowWidth');
         toaster.pop('success', "", text + '<br>' +
             '<a href="javascript:void(0);" onclick="window.open(\'#/job-info?jobid=' + id + '&tab=0\', \'job-info-' + id +
-            '\', \'toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,directories=no,status=no\')" target="_blank">Open Job Details in a New Popup Window</a><br>' +
-            '<a href="' + UtilsFactory.getProxyNames() + '/scheduler/" target="_blank">Open Job in Scheduler Portal</a>', 5000, 'trustedHtml');
+            '\', \'toolbar=no,menubar=no,scrollbars=yes,resizable=yes,location=no,directories=no,status=no\')" target="_blank">' +
+            UtilsFactory.translate('Open Job Details in a New Popup Window') + '</a><br>' +
+            '<a href="' + UtilsFactory.getProxyNames() + '/scheduler/" target="_blank">' + UtilsFactory.translate('Open Job in Scheduler Portal') + '</a>', 5000, 'trustedHtml');
     }
 
     /**
@@ -361,8 +378,8 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                 WESchedulerService.killJob(jobId)
                     .success(function (res) {
                         if (res) {
-                            const text = 'Your Job has been killed and resubmitted successfully, Job Id: ' + jobId;
                             const newJobId = newJob.id;
+                            const text = UtilsFactory.translate('Your Job has been killed and resubmitted successfully') + ', Job Id: ' + newJobId;
                             openDetailsView(newJobId, text);
                         } else {
                             toaster.warning('Could not kill job ' + id + '!')

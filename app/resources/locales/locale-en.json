@@ -115,6 +115,8 @@
   "Submit": "Submit",
   "Submit Workflows to Create/Execute/Control Jobs & Services": "Submit Workflows to Create/Execute/Control Jobs & Services",
   "The access is not authorized": "The access is not authorized",
+  "The action has been executed": "The action has been executed",
+  "The service instance has been executed": "The service instance has been executed",
   "Tutorials": "Tutorials",
   "Type": "Type",
   "Unable to login": "Unable to login",
@@ -138,6 +140,9 @@
   "Yes, download it!": "Yes, download it!",
   "Yes, stop uploading!": "Yes, stop uploading!",
   "You are about to download the folder": "You are about to download the folder",
+  "Your Job has been killed and resubmitted successfully": "Your Job has been killed and resubmitted successfully",
+  "Your Job has been resubmitted successfully": "Your Job has been resubmitted successfully",
+  "Your Workflow has been submitted successfully": "Your Workflow has been submitted successfully",
   "Your": "Your",
   "The server cannot be reached. Check first your network connection, and potentially the server status." : "The server cannot be reached. Check first your network connection, and potentially the server status.",
   "You are logged out of the server. Please log into the portal again.": "You are logged out of the server. Please log into the portal again.",
@@ -149,5 +154,8 @@
   "Portal Access": "Portal Access",
   "Are you sure you want to exit?": "Are you sure you want to exit?",
   "OK": "OK",
+  "Open Job Details in a New Popup Window": "Open Job Details in a New Popup Window",
+  "Open Job in Scheduler Portal": "Open Job in Scheduler Portal",
+  "Open Job in Workflow Execution Portal": "Open Job in Workflow Execution Portal",
   "Cancel": "Cancel"
 }
