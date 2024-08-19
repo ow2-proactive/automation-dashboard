@@ -1369,3 +1369,7 @@ body:not(.fixed-sidebar):not(.canvas-menu).mini-navbar .nav-second-level {
 .ui-select-multiple.ui-select-bootstrap input.ui-select-search {
     width: 100% !important;
 }
+
+.glyphicon-chevron-down, .glyphicon-chevron-up {
+    color: rgb(132, 128, 128) !important;
+}
