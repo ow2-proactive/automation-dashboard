@@ -509,6 +509,11 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 
 // controller used in navigation.html :
 mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval, $timeout) {
+    var favicon = new Favico({
+        animation:'fade',
+        position : 'up',
+        textColor : '#ff0'
+    });
     this.$onInit = function () {
         var jobAnalyticsChildren = ['health-dashboard', 'job-analytics', 'job-gantt', 'node-gantt'];
         var jobPlannerChildren = ['job-planner-calendar-def', 'job-planner-calendar-def-workflows', 'job-planner-execution-planning', 'job-planner-gantt-chart'];
@@ -590,6 +595,9 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         document.head.appendChild(link);
         $('#side-menu .nav.nav-second-level.collapse.in').parent().toggleClass("active")
         $('#side-menu .nav.nav-second-level.collapse').collapse('hide')
+        if($scope.nbNewNotifications) {
+            setNotificationNBOnFavicon($scope.nbNewNotifications)
+        }
     };
 
     $scope.displayAbout = function () {
@@ -661,6 +669,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             .success(function (response) {
                 if (Number.isInteger(response)) {
                     $scope.nbNewNotifications = response;
+                    setNotificationNBOnFavicon($scope.nbNewNotifications)
                 }
             })
             .error(function (response) {
@@ -670,6 +679,16 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
                     $rootScope.serverIsDown = true;
                 }
             });
+    }
+
+    // set notifications number on the favicon icon
+    function setNotificationNBOnFavicon(nb) {
+        if( !favicon) {
+            var favicon = new Favico({
+                animation:'fade',
+            });
+        }
+        favicon.badge(nb);
     }
 
     $rootScope.$on('event:notificationsDestroyed', function () {
