@@ -515,21 +515,9 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         textColor : '#ff0'
     });
     this.$onInit = function () {
-        var jobAnalyticsChildren = ['health-dashboard', 'job-analytics', 'job-gantt', 'node-gantt'];
-        var jobPlannerChildren = ['job-planner-calendar-def', 'job-planner-calendar-def-workflows', 'job-planner-execution-planning', 'job-planner-gantt-chart'];
-        $timeout(function () {
-            var splitUrl = window.location.hash.split('/');
-            var portal = splitUrl[splitUrl.length - 1];
-            if (jobAnalyticsChildren.indexOf(portal) !== -1) {
-                $scope.changeFavicon('analytics-portal');
-            } else if (jobPlannerChildren.indexOf(portal) !== -1) {
-                $scope.changeFavicon('job-planner-portal');
-            } else if (splitUrl[splitUrl.length - 1] === 'workflow-execution') {
-                $scope.changeFavicon('automation_dashboard_30');
-            } else {
-                $scope.changeFavicon(splitUrl[splitUrl.length - 1]);
-            }
-        }, 1000)
+
+        // set favicon icon of the current portal
+        setUpFavicon();
 
         $scope.view = JSON.parse(localStorage['configViews']);
         $http.get('resources/config.json')
@@ -583,7 +571,30 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         $('#side-menu .nav.nav-second-level.collapse.in').parent().toggleClass("active")
         $('#side-menu .nav.nav-second-level.collapse').collapse('hide')
     }
+
+    function setUpFavicon() {
+        var jobAnalyticsChildren = ['health-dashboard', 'job-analytics', 'job-gantt', 'node-gantt'];
+        var jobPlannerChildren = ['job-planner-calendar-def', 'job-planner-calendar-def-workflows', 'job-planner-execution-planning', 'job-planner-gantt-chart'];
+        $timeout(function () {
+            var splitUrl = window.location.hash.split('/');
+            var portal = splitUrl[splitUrl.length - 1];
+            if (jobAnalyticsChildren.indexOf(portal) !== -1) {
+                $scope.changeFavicon('analytics-portal');
+            } else if (jobPlannerChildren.indexOf(portal) !== -1) {
+                $scope.changeFavicon('job-planner-portal');
+            } else if (splitUrl[splitUrl.length - 1] === 'workflow-execution') {
+                $scope.changeFavicon('automation_dashboard_30');
+            } else {
+                $scope.changeFavicon(splitUrl[splitUrl.length - 1]);
+            }
+        }, 1000)
+    }
+
     $scope.changeFavicon = function (portal) {
+        changeFavicon(portal);
+        setNotificationNBOnFavicon($scope.nbNewNotifications);
+    }
+    function changeFavicon(portal) {
         var link = document.createElement('link');
         var oldLink = document.getElementById('favicon');
         link.id = 'favicon';
@@ -595,9 +606,6 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         document.head.appendChild(link);
         $('#side-menu .nav.nav-second-level.collapse.in').parent().toggleClass("active")
         $('#side-menu .nav.nav-second-level.collapse').collapse('hide')
-        if($scope.nbNewNotifications) {
-            setNotificationNBOnFavicon($scope.nbNewNotifications)
-        }
     };
 
     $scope.displayAbout = function () {
@@ -683,12 +691,25 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
 
     // set notifications number on the favicon icon
     function setNotificationNBOnFavicon(nb) {
-        if( !favicon) {
-            var favicon = new Favico({
-                animation:'fade',
+        // Initialize favicon variable if not already defined
+        if (!favicon) {
+             var favicon = new Favico({
+                animation: 'fade',
             });
+            // Set the badge based on the value of nb
+            if (nb) {
+                favicon.badge(nb);
+            } else {
+                setUpFavicon(); // Clear the badge when nb is 0 or undefined
+            }
+        } else {
+            // Set the badge based on the value of nb
+            if (nb) {
+                favicon.badge(nb);
+            } else {
+                setUpFavicon(); // Clear the badge when nb is 0 or undefined
+            }
         }
-        favicon.badge(nb);
     }
 
     $rootScope.$on('event:notificationsDestroyed', function () {
@@ -701,6 +722,8 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
 
     $rootScope.$on('event:updatedNotificationsCount', function (event, data) {
         $scope.nbNewNotifications = data['count'];
+        setNotificationNBOnFavicon($scope.nbNewNotifications)
+
     });
 
     this.$onDestroy = function () {
