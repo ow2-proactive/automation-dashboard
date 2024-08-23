@@ -53,7 +53,8 @@
     "angular-translate-loader-partial": "^2.18.1",
     "flag-icon-css": "^3.3.0",
     "angular-cookies": "1.5.X",
-    "md-virtual-repeater": "^1.0.4"
+    "md-virtual-repeater": "^1.0.4",
+    "favico.js": "^0.3.10"
   },
   "resolutions": {
     "jquery": "~2.1.4",
