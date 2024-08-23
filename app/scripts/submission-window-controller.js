@@ -49,6 +49,12 @@ angular.module('main').controller('SubmitViewController', function($scope, $stat
                         hasSpinner: true
                     },
                     {
+                        label: "Start at Date & Time",
+                        isToggle:true,
+                        title: UtilsFactory.translate('Start at Date & Time'),
+                        className: "btn btn-default m-r-xs"
+                    },
+                    {
                         label: "Check",
                         title: UtilsFactory.translate('Check'),
                         className: "btn btn-default m-r-xs"
@@ -81,6 +87,12 @@ angular.module('main').controller('SubmitViewController', function($scope, $stat
               title: UtilsFactory.translate('Submit'),
               className: "btn btn-primary m-r-xs text-white",
               hasSpinner: false
+          },
+          {
+              label: "Start at Date & Time",
+              isToggle:true,
+              title: UtilsFactory.translate('Start at Date & Time'),
+              className: "btn btn-default m-r-xs"
           },
           {
               label: "Check",

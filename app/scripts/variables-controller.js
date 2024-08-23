@@ -28,12 +28,14 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
             })
         }
 
-
         /**
          * footer button actions: functions that will be called when user clicks
          **/
         $scope.footerActions = {
             Submit: submit,
+            "Start at Date & Time":function (){
+                $scope.isStartAtToggled=!$scope.isStartAtToggled
+            },
             Launch: submit,
             'Execute Action': submitServicesAndAction,
             Resubmit: function () {
@@ -65,6 +67,9 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         $scope.pcaWorkflowLabel = '';
         // show advanced variables
         $scope.advancedVariables = false;
+        $scope.isStartAtToggled = false;
+        $scope.startAt = "";
+        $scope.startAtFormatted = "";
     };
 
     $scope.documentationUrlWfa = function (url) {
@@ -149,9 +154,8 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         // Validate + Submit if applicable
         validateWorkflow(function (response) {
             if (response.valid === true) {
-                UtilsFactory.submitJob(bucketName, $scope.workflow.name, $scope.workflow.variables, $scope.workflow.submissionMode)
+                UtilsFactory.submitJob(bucketName, $scope.workflow.name, $scope.workflow.variables, $scope.workflow.submissionMode,$scope.isStartAtToggled?$scope.startAt:false)
                     .success(function (submitResponse) {
-
                         if(!$scope.isWindowClosable) {
                             //close the Submit Workflow Panel
                             $scope.$parent.toggleOpenSubmitJobPanel(false);
