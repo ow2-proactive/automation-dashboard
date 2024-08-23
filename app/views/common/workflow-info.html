@@ -1,5 +1,5 @@
-<div class="ibox-content" ng-controller="VariablesController" style="padding-bottom:50px">
-    <div style="max-height:calc(100% - 70px);overflow-y: auto;overflow-x: hidden;" ng-class="{'last-wizard-step-content':WEsubmissionErrorMessage || successMessage}">
+<div class="ibox-content" ng-controller="VariablesController" style="padding-bottom:50px; overflow: auto">
+    <div ng-class="{'last-wizard-step-content':WEsubmissionErrorMessage || successMessage}">
         <h2 class="text-center wf-name-title">
             <a ng-href="/scheduler/?job={{::workflow.id}}" target="/scheduler/" title="{{'Open job in scheduler portal'|translate}}" ng-if="workflow.id">
                 <span class="job-id container-flex label label-default m-l-sm m-r-sm">{{::workflow.id}}</span>
@@ -59,10 +59,34 @@
             {{ WEsubmissionErrorMessage.length > 300 ? (WEsubmissionErrorMessage | limitTo: 300) + "..." : WEsubmissionErrorMessage }}
         </div>
         <div class="col-sm-9 col-sm-offset-3" style="padding-left: 8px;">
-            <button ng-repeat="button in footerTemplate" ng-class="button.className" ng-disabled="button.hasSpinner && isSubmissionGoingOn" ng-if="button.title !== 'Check' || workflow.variables.length" ng-click="button.action()">
+            <button ng-repeat="button in footerTemplate" ng-class="button.className" ng-disabled="button.hasSpinner && isSubmissionGoingOn" ng-if="button.title !== 'Check' || workflow.variables.length"
+                    ng-attr-data-toggle="{{'button' ||undefined}}" ng-click="button.action()">
+                <span class="fa fa-check" ng-show="button.isToggle && isStartAtToggled"></span>
                 {{::button.title}}
                 <span class="fa fa-spinner fa-spin" ng-show="button.hasSpinner && isSubmissionGoingOn"></span>
             </button>
+        </div>
+        <div class="col-sm-9 col-sm-offset-3 m-t-sm" id="start-at-input-wrapper" ng-show="isStartAtToggled">
+            <form ng-submit="submitSearch()" role="form">
+                <div class="form-group container-flexbox m-b-none p-h-xs  border-top border-bottom"
+                     moment-picker="startAtFormatted"
+                     min-view="year" start-view="month"
+                     today="true"
+                     ng-model="startAt" set-on-select="true"
+                     format="{{format}}"
+                     locale="{{ mainCtrl.locale }}">
+                    <label for="start-at-time">{{'Start at'|translate}}</label>
+                    <div class="date-picker-input p-w-md col-flex">
+                <span class="input-group-addon" style="width: auto;">
+                    <span class="glyphicon glyphicon-calendar"></span>
+                </span>
+                        <input class="form-control date-input" id="start-at-time"
+                               ng-model="startAtFormatted"
+                               ng-model-options="{ updateOn: 'blur' }"
+                               locale="{{ mainCtrl.locale }}">
+                    </div>
+                </div>
+            </form>
         </div>
     </div>
 </div>
