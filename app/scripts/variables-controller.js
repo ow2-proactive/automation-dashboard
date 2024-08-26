@@ -154,7 +154,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         // Validate + Submit if applicable
         validateWorkflow(function (response) {
             if (response.valid === true) {
-                UtilsFactory.submitJob(bucketName, $scope.workflow.name, $scope.workflow.variables, $scope.workflow.submissionMode,$scope.isStartAtToggled?$scope.startAt:false)
+                UtilsFactory.submitJob(bucketName, $scope.workflow.name, $scope.workflow.variables, $scope.workflow.submissionMode,$scope.isStartAtToggled?$scope.startAt.toISOString():false)
                     .success(function (submitResponse) {
                         if(!$scope.isWindowClosable) {
                             //close the Submit Workflow Panel
@@ -346,7 +346,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
      */
     const reSubmitJob = function (jobId, variables) {
         $scope.isSubmissionGoingOn = true;
-        WESchedulerService.reSubmitJob(jobId, variables)
+        WESchedulerService.reSubmitJob(jobId, variables, $scope.isStartAtToggled?$scope.startAt.toISOString():false)
             .success(function (response) {
                 //close the Submit Workflow Panel
                 $scope.$parent.toggleOpenSubmitJobPanel(false);
@@ -377,7 +377,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
      **/
     const killResubmitJob = function (jobId, variables) {
         $scope.isSubmissionGoingOn = true;
-        WESchedulerService.reSubmitJob(jobId, variables)
+        WESchedulerService.reSubmitJob(jobId, variables, $scope.isStartAtToggled?$scope.startAt.toISOString():false)
             .success(function ( newJob) {
                 WESchedulerService.killJob(jobId)
                     .success(function (res) {

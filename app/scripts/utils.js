@@ -610,7 +610,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         return $http.post(schedulerRestUrl() + 'validateurl/body', data, configHeaders);
     }
 
-    function submitJob(bucketName, workflowName, variables, submissionMode) {
+    function submitJob(bucketName, workflowName, variables, submissionMode, startAt) {
         const configHeaders = {
             headers: {
                 'link': catalogUrlPrefix + bucketName + '/resources/' + encodeURIComponent(workflowName) + '/raw',
@@ -623,7 +623,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             return map;
         }, {});
         var data = JSON.stringify(variablesMap);
-        return $http.post(schedulerRestUrl() + 'jobs/body?submission.mode='+ submissionMode, data, configHeaders);
+        var startAtParam=startAt?"&START_AT="+encodeURIComponent(startAt):''
+        return $http.post(schedulerRestUrl() + 'jobs/body?submission.mode='+ submissionMode+startAtParam, data, configHeaders);
     }
 
     function getJobInfoForJob(jobId) {
