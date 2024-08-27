@@ -42,9 +42,12 @@
             </div>
         </div>
         <div class="row m-b-xs container-flex w-100" ng-show="workflow.kind === 'Workflow/psa'">
-            <h4 class="col-lg-3 control-label text-right">{{'Label'|translate}}:</h4>
+            <h4 class="col-lg-3 control-label text-right">{{'Service Label'|translate}}:</h4>
             <div class="col-lg-4">
                 <input class="form-control" type="text" ng-model="pcaWorkflowLabel">
+            </div>
+            <div class="col-md-5">
+                <p>{{'Optional label that can be used to more easily identify your service in the Service Automation Portal.'|translate}}</p>
             </div>
         </div>
         <hr ng-show="workflow.variables.length">
