@@ -103,6 +103,7 @@
   "Select Workflow": "Select Workflow",
   "Service Automation": "Service Automation",
   "Service name": "Service name",
+  "Service Label": "etiqueta do serviço",
   "Settings": "Settings",
   "Show all": "Show all",
   "Show Hidden": "Show Hidden",
@@ -157,5 +158,6 @@
   "Open Job Details in a New Popup Window": "Open Job Details in a New Popup Window",
   "Open Job in Scheduler Portal": "Open Job in Scheduler Portal",
   "Open Job in Workflow Execution Portal": "Open Job in Workflow Execution Portal",
+  "Optional label that can be used to more easily identify your service in the Service Automation Portal.": "Optional label that can be used to more easily identify your service in the Service Automation Portal.",
   "Cancel": "Cancel"
 }

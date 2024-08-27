@@ -103,6 +103,7 @@
   "Select Workflow": "Sélectionner un Workflow",
   "Service Automation": "Service Automation",
   "Service name": "Nom du service",
+  "Service Label": "Étiquette du service",
   "Settings": "Paramètres",
   "Show all": "Afficher tout",
   "Show Hidden": "Afficher les fichiers cachés",
@@ -157,5 +158,6 @@
   "Open Job Details in a New Popup Window": "Ouvrir les détails du Job dans une nouvelle fenêtre",
   "Open Job in Scheduler Portal": "Ouvrir le job dans le portail du Scheduler",
   "Open Job in Workflow Execution Portal": "Ouvrir le Job dans le Workflow Execution",
+  "Optional label that can be used to more easily identify your service in the Service Automation Portal.": "Etiquette optionnelle qui peut être utilisée pour identifier plus facilement votre service dans le Portail Service Automation.",
   "Cancel": "Annuler"
 }
