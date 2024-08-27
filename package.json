@@ -18,7 +18,6 @@
     "file-saver": "^2.0.2",
     "grunt-cli": "^1.4.3",
     "html2canvas": "^1.0.0-rc.5",
-    "jspdf": "^2.5.1",
     "jsplumb": "^2.3.2",
     "moment": "^2.22.2",
     "moment-duration-format": "^2.2.2",
