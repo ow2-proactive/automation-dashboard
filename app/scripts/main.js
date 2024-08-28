@@ -604,8 +604,6 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             document.head.removeChild(oldLink);
         }
         document.head.appendChild(link);
-        $('#side-menu .nav.nav-second-level.collapse.in').parent().toggleClass("active")
-        $('#side-menu .nav.nav-second-level.collapse').collapse('hide')
     };
 
     $scope.displayAbout = function () {
