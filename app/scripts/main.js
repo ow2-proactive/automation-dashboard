@@ -510,9 +510,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 // controller used in navigation.html :
 mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval, $timeout) {
     var favicon = new Favico({
-        animation:'fade',
-        position : 'up',
-        textColor : '#ff0'
+        animation:'fade'
     });
     this.$onInit = function () {
 
