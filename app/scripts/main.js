@@ -706,7 +706,6 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
                 setUpFavicon(); // Clear the badge when nb is 0 or undefined
             }
         }
-        favicon.defaultPause = 1000;
     }
 
     $rootScope.$on('event:notificationsDestroyed', function () {
