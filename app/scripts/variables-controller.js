@@ -67,6 +67,8 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         $scope.pcaWorkflowLabel = '';
         // show advanced variables
         $scope.advancedVariables = false;
+
+        $scope.format = "DD/MM/YYYY HH:mm";
         $scope.isStartAtToggled = false;
         $scope.startAt = "";
         $scope.startAtFormatted = "";
