@@ -67,6 +67,8 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         $scope.pcaWorkflowLabel = '';
         // show advanced variables
         $scope.advancedVariables = false;
+
+        $scope.format = "DD/MM/YYYY HH:mm";
         $scope.isStartAtToggled = false;
         $scope.startAt = "";
         $scope.startAtFormatted = "";
@@ -119,7 +121,7 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
                         $scope.isLoading = false;
                     });
                 } else {
-                    var httpPromise = PCAService.submitCreationWorkflow($scope.workflow.bucketName, $scope.workflow.name, variables, $scope.pcaWorkflowLabel);
+                    var httpPromise = PCAService.submitCreationWorkflow($scope.workflow.bucketName, $scope.workflow.name, variables, $scope.pcaWorkflowLabel, $scope.isStartAtToggled?$scope.startAt.toISOString():false);
                     httpPromise.then(function (response) {
                         const obj = response.data.job_submissions.find(function(job){
                             return job.hasOwnProperty('job_id')
@@ -146,9 +148,9 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
     const submit = function () {
         $scope.isSubmissionGoingOn = true;
         const bucketName = $scope.workflow['bucketName'];
-        // submit a standard workflow
+        // launch a PSA workflow
         if ($scope.workflow.kind.toLowerCase().includes('workflow/psa')) {
-            submitServicesAndAction();
+            submitServicesAndAction($scope.isStartAtToggled?$scope.startAt.toISOString():false);
             return;
         }
         // Validate + Submit if applicable

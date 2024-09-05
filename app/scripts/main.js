@@ -509,10 +509,11 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 
 // controller used in navigation.html :
 mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval, $timeout) {
-    var favicon = new Favico({
-        animation:'fade'
-    });
     this.$onInit = function () {
+
+        $scope.favicon = new Favico({
+            animation:'fade'
+        });
 
         // set favicon icon of the current portal
         setUpFavicon();
@@ -598,6 +599,9 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         link.id = 'favicon';
         link.rel = 'icon';
         link.href = 'styles/patterns/' + portal + '.png';
+        if (oldLink.href === link.href) {
+            return;
+        }
         if (oldLink) {
             document.head.removeChild(oldLink);
         }
@@ -688,23 +692,16 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     // set notifications number on the favicon icon
     function setNotificationNBOnFavicon(nb) {
         // Initialize favicon variable if not already defined
-        if (!favicon) {
-             var favicon = new Favico({
-                animation: 'fade',
+        if (!$scope.favicon) {
+            $scope.favicon = new Favico({
+                animation: 'fade'
             });
-            // Set the badge based on the value of nb
-            if (nb) {
-                favicon.badge(nb);
-            } else {
-                setUpFavicon(); // Clear the badge when nb is 0 or undefined
-            }
+        }
+        // Set the badge based on the value of nb
+        if (nb) {
+            $scope.favicon.badge(nb);
         } else {
-            // Set the badge based on the value of nb
-            if (nb) {
-                favicon.badge(nb);
-            } else {
-                setUpFavicon(); // Clear the badge when nb is 0 or undefined
-            }
+            setUpFavicon(); // Clear the badge when nb is 0 or undefined
         }
     }
 
