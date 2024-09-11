@@ -127,3 +127,17 @@ angular
             });
         });
     });
+
+angular
+    .module('inspinia')
+    .config(function(anTinyconProvider) {
+        anTinyconProvider.setOptions({
+            width: 10,
+            height: 10,
+            font: '20px arial',
+            colour: '#ffffff',
+            background: '#ED5565',
+            abbreviate: true,
+            fallback: true
+        });
+    });

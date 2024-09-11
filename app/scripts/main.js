@@ -2,7 +2,7 @@
  * Created by ActiveEon Team on 18/04/2017.
  */
 
-var mainModule = angular.module('main', ['ngResource', 'spring-data-rest', 'angular-toArrayFilter', 'oitozero.ngSweetAlert', 'ngSanitize', 'pascalprecht.translate', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.moveColumns', 'ui.grid.pinning','toaster', 'ui.grid.autoResize',]);
+var mainModule = angular.module('main', ['ngResource', 'spring-data-rest', 'angular-toArrayFilter', 'oitozero.ngSweetAlert', 'ngSanitize', 'pascalprecht.translate', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.moveColumns', 'ui.grid.pinning','toaster', 'ui.grid.autoResize','angularTinycon']);
 
 function getSessionId() {
     return localStorage['pa.session'];
@@ -508,12 +508,9 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 });
 
 // controller used in navigation.html :
-mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval, $timeout) {
-    this.$onInit = function () {
+mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval, $timeout, anTinycon) {
 
-        $scope.favicon = new Favico({
-            animation:'fade'
-        });
+    this.$onInit = function () {
 
         // set favicon icon of the current portal
         setUpFavicon();
@@ -595,7 +592,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     }
     function changeFavicon(portal) {
         var link = document.createElement('link');
-        var oldLink = document.getElementById('favicon');
+        var oldLink = document.querySelector("link[rel='icon']");
         link.id = 'favicon';
         link.rel = 'icon';
         link.href = 'styles/patterns/' + portal + '.png';
@@ -689,19 +686,14 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             });
     }
 
-    // set notifications number on the favicon icon
+    /**
+     * Set notifications count on the favicon icon
+     */
     function setNotificationNBOnFavicon(nb) {
-        // Initialize favicon variable if not already defined
-        if (!$scope.favicon) {
-            $scope.favicon = new Favico({
-                animation: 'fade'
-            });
-        }
-        // Set the badge based on the value of nb
-        if (nb) {
-            $scope.favicon.badge(nb);
-        } else {
-            setUpFavicon(); // Clear the badge when nb is 0 or undefined
+        if (nb) { // Set the badge based on the value of nb
+            anTinycon.setBubble(nb);
+        } else { // Clear the badge when nb is 0 or undefined
+            anTinycon.reset();
         }
     }
 
