@@ -1075,10 +1075,6 @@ md-virtual-repeat-container::-webkit-scrollbar {
     overflow-y: auto;
 }
 
-.last-wizard-step-content {
-    max-height: calc(100% - 120px) ! important;
-}
-
 .alert {
     margin-bottom: 10px ! important;
 }
