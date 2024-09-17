@@ -2,7 +2,7 @@
  * Created by ActiveEon Team on 18/04/2017.
  */
 
-var mainModule = angular.module('main', ['ngResource', 'spring-data-rest', 'angular-toArrayFilter', 'oitozero.ngSweetAlert', 'ngSanitize', 'pascalprecht.translate', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.moveColumns', 'ui.grid.pinning','toaster', 'ui.grid.autoResize','angularTinycon']);
+var mainModule = angular.module('main', ['ngResource', 'spring-data-rest', 'angular-toArrayFilter', 'oitozero.ngSweetAlert', 'ngSanitize', 'pascalprecht.translate', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.moveColumns', 'ui.grid.pinning','toaster', 'ui.grid.autoResize']);
 
 function getSessionId() {
     return localStorage['pa.session'];
@@ -508,8 +508,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 });
 
 // controller used in navigation.html :
-mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval, $timeout, anTinycon) {
-
+mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval, $timeout) {
     this.$onInit = function () {
 
         // set favicon icon of the current portal
@@ -569,36 +568,39 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     }
 
     function setUpFavicon() {
+        $timeout(function () {
+            var portal = getCurrentPortalName();
+            $scope.changeFavicon(portal)
+        }, 1000)
+    }
+
+    function getCurrentPortalName() {
         var jobAnalyticsChildren = ['health-dashboard', 'job-analytics', 'job-gantt', 'node-gantt'];
         var jobPlannerChildren = ['job-planner-calendar-def', 'job-planner-calendar-def-workflows', 'job-planner-execution-planning', 'job-planner-gantt-chart'];
-        $timeout(function () {
-            var splitUrl = window.location.hash.split('/');
-            var portal = splitUrl[splitUrl.length - 1];
-            if (jobAnalyticsChildren.indexOf(portal) !== -1) {
-                $scope.changeFavicon('analytics-portal');
-            } else if (jobPlannerChildren.indexOf(portal) !== -1) {
-                $scope.changeFavicon('job-planner-portal');
-            } else if (splitUrl[splitUrl.length - 1] === 'workflow-execution') {
-                $scope.changeFavicon('automation_dashboard_30');
-            } else {
-                $scope.changeFavicon(splitUrl[splitUrl.length - 1]);
-            }
-        }, 1000)
+        var splitUrl = window.location.hash.split('/');
+        var urlParts = splitUrl[splitUrl.length - 1];
+        if (jobAnalyticsChildren.indexOf(urlParts) !== -1) {
+            portal = 'analytics-portal' ;
+        } else if (jobPlannerChildren.indexOf(urlParts) !== -1) {
+            portal = 'job-planner-portal';
+        } else if (splitUrl[splitUrl.length - 1] === 'workflow-execution') {
+            portal = 'automation_dashboard_30';
+        } else {
+            portal = splitUrl[splitUrl.length - 1];
+        }
+        return portal;
     }
 
     $scope.changeFavicon = function (portal) {
         changeFavicon(portal);
-        setNotificationNBOnFavicon($scope.nbNewNotifications);
+        setNotificationNBOnFavicon($scope.nbNewNotifications, true);
     }
     function changeFavicon(portal) {
         var link = document.createElement('link');
-        var oldLink = document.querySelector("link[rel='icon']");
+        var oldLink = document.getElementById('favicon');
         link.id = 'favicon';
         link.rel = 'icon';
         link.href = 'styles/patterns/' + portal + '.png';
-        if (oldLink.href === link.href) {
-            return;
-        }
         if (oldLink) {
             document.head.removeChild(oldLink);
         }
@@ -674,7 +676,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             .success(function (response) {
                 if (Number.isInteger(response)) {
                     $scope.nbNewNotifications = response;
-                    setNotificationNBOnFavicon($scope.nbNewNotifications)
+                    setNotificationNBOnFavicon($scope.nbNewNotifications, false)
                 }
             })
             .error(function (response) {
@@ -686,15 +688,25 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             });
     }
 
-    /**
-     * Set notifications count on the favicon icon
-     */
-    function setNotificationNBOnFavicon(nb) {
-        if (nb) { // Set the badge based on the value of nb
-            anTinycon.setBubble(nb);
-        } else { // Clear the badge when nb is 0 or undefined
-            anTinycon.reset();
+    // set notifications number on the favicon icon
+    function setNotificationNBOnFavicon(nb, isChangingPortal) {
+        // handle the case we don't need to add or update favicon
+        if ( ($scope.previousNotificationNumber === 0 && nb === 0)  || (!isChangingPortal && $scope.previousNotificationNumber === nb) ) return;
+
+        // Initialize favicon with notifications number
+        var favicon = new Favico({
+            animation: 'fade',
+        });
+        // Set the badge based on the value of nb
+        if (nb) {
+            favicon.badge(nb);
+        } else {
+            // Clear the badge when nb is 0 or undefined
+            var portal = getCurrentPortalName();
+            changeFavicon(portal)
         }
+
+        $scope.previousNotificationNumber = nb;
     }
 
     $rootScope.$on('event:notificationsDestroyed', function () {
@@ -707,8 +719,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
 
     $rootScope.$on('event:updatedNotificationsCount', function (event, data) {
         $scope.nbNewNotifications = data['count'];
-        setNotificationNBOnFavicon($scope.nbNewNotifications)
-
+        setNotificationNBOnFavicon($scope.nbNewNotifications, false);
     });
 
     this.$onDestroy = function () {
