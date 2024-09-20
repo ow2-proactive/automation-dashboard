@@ -1,7 +1,5 @@
 /*Language view controller */
-angular.module('main').controller('LanguageController', function($scope, $rootScope, $translate){
-
-    const mainCTR = $scope.$parent.$parent
+angular.module('main').controller('LanguageController', function ($scope, $rootScope, $translate) {
 
     this.$onInit = function () {
         setDefaultSelectedLanguage(localStorage['proactiveLanguage']);
@@ -26,7 +24,6 @@ angular.module('main').controller('LanguageController', function($scope, $rootSc
             $('#selected').html(flag + language);
         });
     };
-
 
 
     $scope.reloadPortal = function () {
