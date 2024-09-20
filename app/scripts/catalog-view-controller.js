@@ -39,7 +39,7 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
         } else if ($scope.filterWorkflowsByWorkflowName) {
             filterByName = $scope.filterWorkflowsByWorkflowName;
         } else {
-            filterByName = "";
+            filterByName = '';
         }
 
         WECatalogService.getWorkflowsMetadataList(filterByName, $scope.selectedBucket.name, kind).then(function (response) {
@@ -95,7 +95,7 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
 
     $scope.changeBucket = function (bucket) {
         $scope.selectedBucket = bucket;
-        if (!$scope.showPSAWorkflowsOnly){
+        if (!$scope.showPSAWorkflowsOnly) {
             UtilsFactory.setUserPreference('submissionView.selectedBucketName', $scope.selectedBucket.name);
         }
         updateWorkflowsMetadataList();
@@ -113,14 +113,14 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
         } else if ($scope.filterWorkflowsByWorkflowName) {
             objectName = $scope.filterWorkflowsByWorkflowName;
         } else {
-            objectName = "";
+            objectName = '';
         }
 
         var bucketName;
         if ($scope.filterBucketsByBucketName) {
             bucketName = $scope.filterBucketsByBucketName;
         } else {
-            bucketName = "";
+            bucketName = '';
         }
         const sessionIdHeader = {
             headers: {'sessionid': getSessionId()},
@@ -136,7 +136,7 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
             .success(function (bucketList) {
                 $scope.bucketsMetadataList = bucketList;
                 // No empty bucket should appear for no empty workflowNameQuery
-                if ( $scope.workflowNameQuery || $scope.filterWorkflowsByWorkflowName ) {
+                if ($scope.workflowNameQuery || $scope.filterWorkflowsByWorkflowName) {
                     $scope.bucketsMetadataList = $scope.bucketsMetadataList.filter(function (bucket) {
                         return bucket.objectCount;
                     });
@@ -152,7 +152,7 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
                     });
                     if (!$scope.selectedBucketName || selectedBucketIndex === -1) {
                         $scope.selectedBucket = $scope.bucketsMetadataList[0];
-                        if (!$scope.showPSAWorkflowsOnly){
+                        if (!$scope.showPSAWorkflowsOnly) {
                             UtilsFactory.setUserPreference('submissionView.selectedBucketName', $scope.selectedBucket.name);
                         }
                     } else {
@@ -186,7 +186,7 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
         loadBuckets();
     }
 
-    $scope.hideEmptyObject = function (bucket){
+    $scope.hideEmptyObject = function (bucket) {
         return bucket.objectCount > 0;
     }
 
@@ -195,7 +195,7 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
         return icon === '' ? 'styles/patterns/img/wf-icons/wf-default-icon.png' : UtilsFactory.getProxyNames() + icon
     };
 
-    $scope.getImageUrlWithProxy = function(url) {
+    $scope.getImageUrlWithProxy = function (url) {
         return UtilsFactory.getProxyNames() + url;
     }
 
@@ -223,7 +223,7 @@ angular.module('main').controller('CatalogViewController', function ($scope, $ro
         return UtilsFactory.getWorkflowMetadata(workflow, 'generic_information', 'pca.states') && UtilsFactory.getWorkflowMetadata(workflow, 'generic_information', 'pca.states').includes('VOID');
     };
 
-    $scope.getObjectDescription = function (object){
+    $scope.getObjectDescription = function (object) {
         return UtilsFactory.getWorkflowMetadata(object, 'General', 'description')
     }
 

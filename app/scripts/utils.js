@@ -2,7 +2,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
     const specialUIModel = ['pa:boolean', 'pa:list', 'pa:datetime', 'pa:hidden', 'pa:global_file', 'pa:user_file', 'pa:global_folder',
         'pa:user_folder', 'pa:catalog_object', 'pa:credential'];
     const textAreaModel = ['pa:regexp', 'pa:spel', 'pa:json', 'pa:not_empty_string'];
-    const catalogUrlPrefix = $location.$$protocol + '://' + $location.$$host + ':' + $location.port() +  getProxyNames() + '/catalog/buckets/';
+    const catalogUrlPrefix = $location.$$protocol + '://' + $location.$$host + ':' + $location.port() + getProxyNames() + '/catalog/buckets/';
     const defaultUserPreferences = {
         submissionView: {
             selectedBucketName: '',
@@ -67,9 +67,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
 
     // angular can not interceptor images, that's why we add proxy names for every url
     function getProxyNames() {
-        const index = window.location.pathname.indexOf("automation-dashboard")
-        const proxyNames = window.location.pathname.substring(0, index > 0 ? index - 1 : index);
-        return proxyNames;
+        const index = window.location.pathname.indexOf('automation-dashboard')
+        return window.location.pathname.substring(0, index > 0 ? index - 1 : index);
     }
 
     function getOrSetNestedObjectProperty(targetObject, path, value) {
@@ -125,7 +124,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                 return false;
             }
         });
-    };
+    }
 
     function isTextAreaModel(variable) {
         return -1 !== textAreaModel.findIndex(function (targetModel) {
@@ -135,7 +134,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                 return true;
             }
         });
-    };
+    }
 
     function getWorkflowMetadata(workflow, label, key) {
         var obj = workflow.object_key_values.find(function (okv) {
@@ -237,7 +236,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                 },
                 allowToEdit: function () {
                     return allowToEdit === undefined ? true : allowToEdit;
-                },
+                }
 
             }
         });
@@ -290,7 +289,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             uploadEventHandlers: {
                 progress: function (e) {
                     if (e.lengthComputable) {
-                        uploadProgress = (e.loaded / e.total) * 100;
+                        var uploadProgress = (e.loaded / e.total) * 100;
                         $('.' + uploadId + ' .progress-bar').css('width', uploadProgress + '%');
                         $('.' + uploadId + ' .upload-progress').html(toReadableFileSize(e.loaded) + '/' + toReadableFileSize(e.total));
 
@@ -385,7 +384,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                 stringsToTranslate = [stringsToTranslate];
             }
 
-            for (i = 0; i < stringsToTranslate.length; i++) {
+            for (var i = 0; i < stringsToTranslate.length; i++) {
                 translatedStr = translatedStr.concat(' ').concat($filter('translate')(stringsToTranslate[i].replace(/\n/gm, '<br>')));
             }
         }
@@ -483,14 +482,14 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             result[name] = value;
         });
         return result;
-    };
+    }
 
     function modelToDateFormat(model) {
         var indexBegin = model.indexOf('(');
         var indexEnd = model.lastIndexOf(')');
         var javaDateTimeFormat = model.substring(indexBegin + 1, indexEnd).trim();
         return moment().toMomentFormatString(javaDateTimeFormat);
-    };
+    }
 
     function modelToList(model) {
         var indexBegin = model.indexOf('(');
@@ -499,7 +498,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         return options.map(function (option) {
             return option.trim();
         });
-    };
+    }
 
     function modelToDateScope(model) {
         var indexBegin = model.indexOf('[');
@@ -511,7 +510,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             dateScope.max = dates[1].trim();
         }
         return dateScope;
-    };
+    }
 
     /**
      * Transforms a map into a string with the following format : key1=value1;key2=value2;
@@ -554,7 +553,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
         // Replace ${PA_CATALOG_REST_PUBLIC_URL} OR $PA_CATALOG_REST_PUBLIC_URL by origin + 'catalog'
         urlToFetch = urlToFetch.replace(/(\$\{PA_CATALOG_REST_PUBLIC_URL\}|\$PA_CATALOG_REST_PUBLIC_URL)/g, origin + 'catalog');
         return getStringByUrl(urlToFetch);
-    };
+    }
 
     function replaceVariableModelsIfNeeded(variables) {
         if (Array.isArray(variables)) {
@@ -565,7 +564,7 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                 // replace models with response
                 variable.resolvedModel = replaceModelWithFetched(variable.resolvedModel);
                 // select the first item in the list
-                if(variable.resolvedModel.toLowerCase().indexOf('pa:list') == 0 && !variable.value) {
+                if (variable.resolvedModel.toLowerCase().indexOf('pa:list') == 0 && !variable.value) {
                     variable.value = modelToList(variable.resolvedModel)[0];
                 }
             })
@@ -576,16 +575,16 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                     variable.resolvedModel = replaceModelWithFetched(variable.resolvedModel);
                 }
                 // select the first item in the list
-                if(variable.resolvedModel.toLowerCase().indexOf('pa:list') == 0 && !variable.value) {
+                if (variable.resolvedModel.toLowerCase().indexOf('pa:list') == 0 && !variable.value) {
                     variable.value = modelToList(variable.resolvedModel)[0];
                 }
             }
         }
-    };
+    }
 
     function getStringByUrl(url) {
         var request = new XMLHttpRequest();
-        request.open('GET',url, false);
+        request.open('GET', url, false);
         request.send();
         return request.responseText;
     }
@@ -601,7 +600,6 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                 'Content-Type': 'application/json'
             }
         };
-        const path = createPathStringFromMap(parseEmptyVariablesValue(variables), 'value')
         var variablesMap = variables.reduce(function (map, obj) {
             map[obj.name] = obj.value;
             return map;
@@ -623,8 +621,8 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
             return map;
         }, {});
         var data = JSON.stringify(variablesMap);
-        var startAtParam=startAt?"&START_AT="+encodeURIComponent(startAt):''
-        return $http.post(schedulerRestUrl() + 'jobs/body?submission.mode='+ submissionMode+startAtParam, data, configHeaders);
+        var startAtParam = startAt ? '&START_AT=' + encodeURIComponent(startAt) : ''
+        return $http.post(schedulerRestUrl() + 'jobs/body?submission.mode=' + submissionMode + startAtParam, data, configHeaders);
     }
 
     function getJobInfoForJob(jobId) {
@@ -648,7 +646,10 @@ function UtilsFactory($window, $uibModal, $filter, $cookies, $http, $rootScope, 
                 'Content-Type': 'application/x-www-form-urlencoded'
             }
         };
-        return $http.post(schedulerRestUrl() + 'credentials', $httpParamSerializerJQLike({key: key, value: value}), configHeaders);
+        return $http.post(schedulerRestUrl() + 'credentials', $httpParamSerializerJQLike({
+            key: key,
+            value: value
+        }), configHeaders);
     }
 
     function removeThirdPartyCredentials(key) {
