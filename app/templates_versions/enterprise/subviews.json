@@ -145,7 +145,6 @@
         "cssFile": "job_analytics_custom_style.css",
         "authenticate": true
     },
-
     "jobGantt": {
         "isAvailable": true,
         "isSubMenuItem": true,

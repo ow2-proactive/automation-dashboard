@@ -36,7 +36,7 @@ function config($stateProvider, $urlRouterProvider) {
         .state('submit', {
             url: '/submit?sessionid&name&bucket',
             data: {
-                url: 'Submit',
+                url: 'Submit'
             },
             templateUrl: '/automation-dashboard/views/common/submission-window-view.html',
             css: 'styles/workflow-execution/workflow_execution_custom_style.css',
@@ -72,14 +72,14 @@ angular
         delete $httpProvider.defaults.headers.common['X-Requested-With'];
 
         // Configure proxyName here
-        const index = window.location.pathname.indexOf("automation-dashboard")
+        const index = window.location.pathname.indexOf('automation-dashboard')
         const proxyNames = window.location.pathname.substring(0, index > 0 ? index - 1 : index);
 
         // Add a custom interceptor to modify outgoing requests
         $httpProvider.interceptors.push(function() {
             return {
                 'request': function(config) {
-                    if (config.url.startsWith("/")) {
+                    if (config.url.startsWith('/')) {
                         config.url = proxyNames + config.url;
                     }
                     return config;
@@ -101,7 +101,7 @@ angular
                 // This will allow us to redirect to the current URL when we connect from the login page
                 sessionStorage.setItem('previousUrlBeforeLogin', window.location.href);
                 // only when we try to open external window
-                const paramsString = window.location.href.includes('submit') ? window.location.href.split("submit?")[1] : window.location.href.split("job-info?")[1];
+                const paramsString = window.location.href.includes('submit') ? window.location.href.split('submit?')[1] : window.location.href.split('job-info?')[1];
                 const urlParams = new URLSearchParams(paramsString);
                 const sessionId = urlParams.get('sessionid');
                 if (sessionId && !localStorage['pa.session']) {

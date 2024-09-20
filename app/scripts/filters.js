@@ -36,7 +36,7 @@ function escapeQuotes() {
         if (input === null) {
             return input;
         } else {
-            return input.replace(/["']/g, "&lsquo;");
+            return input.replace(/["']/g, '&lsquo;');
         }
     };
 }

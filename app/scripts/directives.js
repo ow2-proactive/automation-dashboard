@@ -352,26 +352,27 @@ function showDropdownFromTemplate($document, $timeout, $uibPosition) {
 }
 
 /**
-* Upload the file, call the function specified in "input-file-change" attribute on change event.
-*/
+ * Upload the file, call the function specified in "input-file-change" attribute on change event.
+ */
 function inputFileChange($parse, $timeout) {
     return {
         restrict: 'A',
         link: function (scope, element, attrs) {
             var onChangeHandler = $parse(attrs.inputFileChange);
-            element.bind('change', function() {
-                $timeout (function () {
+            element.bind('change', function () {
+                $timeout(function () {
                     onChangeHandler(scope);
                 });
             });
         }
     };
 }
+
 /**
-* Upload the selected items: push new items to selected items
-* inputs: selectedItems and allItems
-* output: a new selectedItems
-*/
+ * Upload the selected items: push new items to selected items
+ * inputs: selectedItems and allItems
+ * output: a new selectedItems
+ */
 function multiselectShiftKey() {
     return {
         restrict: 'AE',
@@ -379,19 +380,19 @@ function multiselectShiftKey() {
             selectedItems: '=selectedItems',
             allItems: '=items'
         },
-        link: function(scope, element) {
+        link: function (scope, element) {
             const shiftKey = 16;
             const upKey = 38;
             const downKey = 40;
             var ctrlDown = false;
-            element.keydown(function(event) {
+            element.keydown(function (event) {
                 if (event.keyCode == shiftKey) ctrlDown = true;
-            }).keyup(function(event) {
+            }).keyup(function (event) {
                 if (event.keyCode == shiftKey) ctrlDown = false;
             });
 
             // select rows in table when user press shift key and ArrowUp or ArrowDown
-            element.keydown(function(event) {
+            element.keydown(function (event) {
                 if (scope.allItems.result && !Array.isArray(scope.allItems.result)) return;
                 if (ctrlDown && event.keyCode == upKey && scope.selectedItems && scope
                     .selectedItems.length) {
@@ -403,11 +404,11 @@ function multiselectShiftKey() {
             })
 
             function moveUp() {
-                const lastSelectIndex = scope.allItems.result.findIndex(function(association) {
+                const lastSelectIndex = scope.allItems.result.findIndex(function (association) {
                     return association.id === scope.selectedItems[scope.selectedItems
                         .length - 1].id;
                 });
-                var index = scope.selectedItems.findIndex(function(item, index) {
+                var index = scope.selectedItems.findIndex(function (item, index) {
                     return index > 0 && item.id === scope.allItems.result[lastSelectIndex - 1].id;
                 })
 
@@ -422,18 +423,18 @@ function multiselectShiftKey() {
                     nextWorkflow = scope.allItems.result[scope.allItems.result.length - 1];
                 }
 
-                scope.$apply(function() {
+                scope.$apply(function () {
                     scope.selectedItems.push(nextWorkflow);
                 });
             }
 
             function moveDown() {
-                const lastSelectIndex = scope.allItems.result.findIndex(function(association) {
+                const lastSelectIndex = scope.allItems.result.findIndex(function (association) {
                     return association.id === scope.selectedItems[scope.selectedItems
                         .length - 1].id;
                 });
 
-                var index = scope.selectedItems.findIndex(function(item) {
+                var index = scope.selectedItems.findIndex(function (item) {
                     return item.id === scope.allItems.result[lastSelectIndex + 1].id;
                 })
 
@@ -442,32 +443,35 @@ function multiselectShiftKey() {
                 }
 
                 if (lastSelectIndex !== scope.allItems.result.length - 1) {
-                    scope.$apply(function() {
+                    scope.$apply(function () {
                         scope.selectedItems.push(scope.allItems.result[lastSelectIndex + 1]);
                     });
                 }
             }
 
-            scope.$on('$destroy', function() {
-                element.off("keydown");
+            scope.$on('$destroy', function () {
+                element.off('keydown');
             })
         }
     }
 }
+
 function copyClipBoard() {
-        return {
-            restrict: 'A',
-            link:link
-        };
-        function link(scope, element, attrs) {
-            element.bind('click',function(){
-                var copyInput = document.getElementById('direct-object-url-input');
-                copyInput.select(); //select the text area
-                document.execCommand("copy");
-            });
-        }
+    return {
+        restrict: 'A',
+        link: link
+    };
+
+    function link(scope, element, attrs) {
+        element.bind('click', function () {
+            var copyInput = document.getElementById('direct-object-url-input');
+            copyInput.select(); //select the text area
+            document.execCommand('copy');
+        });
+    }
 
 }
+
 /**
  * Displays a tooltip that shows the whole text of a truncated element (by ellipsis or else)
  * Requires using a "tooltip-enable=true" attribute and set by default to true.
@@ -507,19 +511,19 @@ function ellipsisTooltip() {
 function uiSelectDirective($timeout) {
     return {
         restrict: 'E',
-        scope:false,
-        link: function(scope, element, attrs){
-            $timeout(function(){
-              const selectElement = element[0].querySelector('.ui-select-container');
-              const uiSelect = angular.element(selectElement).controller('uiSelect');
-              $timeout(
-                  function(){
-                      uiSelect.open = true;
-                      uiSelect.activate(false, true);
-                  });
-              });
-            }
-      }
+        scope: false,
+        link: function (scope, element, attrs) {
+            $timeout(function () {
+                const selectElement = element[0].querySelector('.ui-select-container');
+                const uiSelect = angular.element(selectElement).controller('uiSelect');
+                $timeout(
+                    function () {
+                        uiSelect.open = true;
+                        uiSelect.activate(false, true);
+                    });
+            });
+        }
+    }
 }
 
 /**
