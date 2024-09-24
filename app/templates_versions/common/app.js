@@ -39,9 +39,4 @@
                 calendarConfig.showTimesOnWeekView = true;
             }
         ])
-        .config(['$compileProvider',
-            function($compileProvider) {
-                $compileProvider.debugInfoEnabled(false);
-            }
-        ]);
 })();
