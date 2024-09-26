@@ -53,6 +53,8 @@ angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCt
                         key: '',
                         value: ''
                     }
+                    // Reset credentials value textarea to default size
+                    document.getElementById('add-credential-textarea').style.height = '';
                 }
             })
             .catch(function (response) {
