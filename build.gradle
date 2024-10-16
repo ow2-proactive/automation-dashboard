@@ -46,7 +46,7 @@ node {
     // npmVersion = '3.8.6'
 
     // Base URL for fetching node distributions (change if you have a mirror).
-    distBaseUrl = 'https://mirrors.dotsrc.org/nodejs/release'
+    distBaseUrl = 'http://mirrors.dotsrc.org/nodejs/release'
 
     // If true, it will download node using above parameters.
     // If false, it will try to use globally installed node.
