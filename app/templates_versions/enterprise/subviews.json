@@ -372,6 +372,7 @@
         "htmlFile": "notification-portal.html",
         "tooltip": "Configure and Receive Notifications",
         "secondaryHtmlFiles": [
+            "modals/delete_all_notifications.html",
             "templates/notification.html",
             "templates/basic-subscription.html",
             "templates/multi-subscription.html",
@@ -391,7 +392,8 @@
             "scripts/services/notification-service-api.js",
             "scripts/services/catalog-service.js",
             "scripts/services/scheduler-service.js",
-            "scripts/services/channel-service.js"
+            "scripts/services/channel-service.js",
+            "scripts/modals/delete-all-notifications-modal-controller.js"
         ],
         "angularModuleName": "notification-service",
         "cssFile": "notifportal_custom_style.css",
