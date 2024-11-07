@@ -441,23 +441,6 @@ button[disabled="disabled"] {
     margin: 7px 2px;
 }
 
-@media (max-width: 1199px) {
-    .pa-shortcut {
-        width: 0px !important;
-        padding: 0px;
-    }
-
-    .pa-shortcuts:not(.logout-btn) {
-        width: 45px !important;
-    }
-}
-
-@media (max-width: 768px) {
-    .second-row-bar {
-        display: none;
-    }
-}
-
 @-moz-document url-prefix() {
     button[class~="fa"] {
         padding: 2px !important;
@@ -1374,4 +1357,41 @@ body:not(.fixed-sidebar):not(.canvas-menu).mini-navbar .nav-second-level {
 .tooltip-fit-content {
     width: fit-content !important;
     word-break: break-word;
+}
+
+.only-mobile {
+    display: none;
+}
+
+@media (max-width: 1199px) {
+    .pa-shortcut {
+        width: 0px !important;
+        padding: 0px;
+        line-height: 0;
+    }
+
+    .pa-shortcuts:not(.logout-btn) {
+        width: 45px !important;
+    }
+}
+
+@media (max-width: 870px) {
+    .last-refresh-date {
+        display: none;
+    }
+}
+
+@media (max-width: 768px) {
+
+    .second-row-bar {
+        display: none;
+    }
+
+    .only-mobile {
+        display: block;
+    }
+
+    .only-desktop {
+        display: none;
+    }
 }

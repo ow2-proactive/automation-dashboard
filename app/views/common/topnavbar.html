@@ -1,6 +1,6 @@
 <nav class="navbar navbar-fixed-top no-padding m-b-none no-borders" role="navigation" style="flex-direction: column; z-index: 997;">
-    <div class="top-navbar w-100">
-        <ul class="nav navbar-nav navbar-left" style="display: inline-flex;">
+    <div class="top-navbar w-100 col-flexbox">
+        <ul class="nav navbar-nav navbar-left m-r-auto col-flex only-desktop">
             <li class="m-r-xs">
                 <div class="btn-group pa-shortcuts" style="width: auto!important;">
                     <a href="https://www.activeeon.com/" target="_blank" style="padding: 0px 30px 0px 6px!important;">
@@ -9,10 +9,10 @@
                 </div>
             </li>
         </ul>
-        <ul class="nav navbar-nav navbar-right" style="display: inline-flex;">
+        <ul class="nav navbar-nav navbar-right col-flex m-l-auto">
             <li class="m-r-xs">
                 <div class="btn-group pa-shortcuts" style="width: auto!important;">
-                    <a class="pa-shortcuts m-r-xl" style="width: auto!important;" ng-href="{{getImageUrlWithProxy('/doc')}}" target="_blank">
+                    <a class="pa-shortcuts m-r-xl only-desktop" style="width: auto!important;" ng-href="{{getImageUrlWithProxy('/doc')}}" target="_blank">
                         <img src="../assets/image/custom-logo.png" style="height:40px;" align="right">
                     </a>
                 </div>
@@ -71,7 +71,7 @@
     </div>
     <div class="bottom-navbar w-100">
         <div class="gray-bg">
-            <div class="second-row-bar pull-left" style="display: inline-flex;">
+            <div class="second-row-bar col-flex">
                 <div class="dropdown" id="help-dropdown">
                     <a data-toggle="dropdown" href="javascript:void(0)" style="color: #676a6c;padding-left: 10px;font-size: 14px;background-color: transparent;">
                         {{'Help'|translate}} <b class="caret"></b></a>
@@ -89,7 +89,7 @@
                     <strong>{{'The server cannot be reached. Check first your network connection, and potentially the server status.'|translate}}</strong>
                 </div>
             </div>
-            <div class="navbar-right p-w-md">
+            <div class="navbar-right p-w-md only-desktop">
                 <a ng-click="showAccountInfo()">
                     <span style="color:#676a6c; font-size:14px;" >{{'Account Info'|translate}}</span>
                 </a>
