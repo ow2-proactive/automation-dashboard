@@ -72,6 +72,8 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
         $scope.isStartAtToggled = false;
         $scope.startAt = "";
         $scope.startAtFormatted = "";
+
+        $scope.descriptionLimit = 200;
     };
 
     $scope.documentationUrlWfa = function (url) {
@@ -580,6 +582,14 @@ angular.module('main').controller('VariablesController', function ($scope, $uibM
 
     $scope.objectKeys = function (obj) {
         return Object.keys(obj);
+    }
+
+    $scope.showMore = function (limit){
+        $scope.descriptionLimit = limit
+    }
+
+    $scope.showLess = function (){
+        $scope.descriptionLimit = 200;
     }
 
     // Close the window if ESC key pressed
