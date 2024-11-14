@@ -1,8 +1,8 @@
 <nav class="navbar navbar-fixed-top no-padding m-b-none no-borders" role="navigation" style="flex-direction: column; z-index: 997;">
     <div class="top-navbar w-100 col-flexbox">
-        <ul class="nav navbar-nav navbar-left m-r-auto col-flex only-desktop">
+        <ul class="nav navbar-nav navbar-left m-r-auto col-flex">
             <li class="m-r-xs">
-                <div class="btn-group pa-shortcuts" style="width: auto!important;">
+                <div class="btn-group pa-shortcuts ae-logo-container">
                     <a href="https://www.activeeon.com/" target="_blank" style="padding: 0px 30px 0px 6px!important;">
                         <img src="styles/patterns/AE-Logo.png" style="height: 40px;padding-right: 40px;">
                     </a>
@@ -10,14 +10,14 @@
             </li>
         </ul>
         <ul class="nav navbar-nav navbar-right col-flex m-l-auto">
-            <li class="m-r-xs">
+            <li>
                 <div class="btn-group pa-shortcuts" style="width: auto!important;">
-                    <a class="pa-shortcuts m-r-xl only-desktop" style="width: auto!important;" ng-href="{{getImageUrlWithProxy('/doc')}}" target="_blank">
+                    <a class="pa-shortcuts" style="width: auto!important;" ng-href="{{getImageUrlWithProxy('/doc')}}" target="_blank">
                         <img src="../assets/image/custom-logo.png" style="height:40px;" align="right">
                     </a>
                 </div>
             </li>
-            <li class="m-r-xs">
+            <li class="m-r-xs m-l-lg only-desktop">
                 <div class="btn-group pa-shortcuts">
                     <a class="btn btn-small btn-default active pa-shortcuts" ng-href="{{getImageUrlWithProxy('/automation-dashboard/')}}"
                        style="color:#fff;border-color: #ccc;padding:5px; background-color: #E86D1F;">
@@ -27,7 +27,7 @@
                     </a>
                 </div>
             </li>
-            <li class="m-r-xs" ng-if="portalsAccessPermission['studio']">
+            <li class="m-r-xs only-desktop" ng-if="portalsAccessPermission['studio']">
                 <div class="btn-group pa-shortcuts">
                     <a class="btn btn-small btn-default pa-shortcuts" ng-href="{{getImageUrlWithProxy('/studio/')}}" style="color:#333;border-color: #ccc;padding:5px"
                        target="/studio/">
@@ -37,7 +37,7 @@
                     </a>
                 </div>
             </li>
-            <li class="m-r-xs" ng-if="portalsAccessPermission['scheduler']">
+            <li class="m-r-xs only-desktop" ng-if="portalsAccessPermission['scheduler']">
                 <div class="btn-group pa-shortcuts">
                     <a class="btn btn-small btn-default pa-shortcuts" ng-href="{{getImageUrlWithProxy('/scheduler/')}}" style="color:#333;border-color: #ccc;padding:5px"
                        target="/scheduler/">
@@ -47,7 +47,7 @@
                     </a>
                 </div>
             </li>
-            <li ng-if="portalsAccessPermission['rm']">
+            <li class="m-r-xs only-desktop" ng-if="portalsAccessPermission['rm']">
                 <div class="btn-group pa-shortcuts">
                     <a class="btn btn-small btn-default pa-shortcuts" ng-href="{{getImageUrlWithProxy('/rm/')}}"
                        style="color:#333;border-color: #ccc;padding:5px" target="/rm/">
@@ -56,13 +56,13 @@
                     </a>
                 </div>
             </li>
-            <li style="height: 38px; margin: 6px 5px; border-right: 1px solid #777;border-left:  1px solid #f2f2f2"></li>
+            <li class="m-t-xs m-b-xs only-desktop" style="height: 38px; border-right: 1px solid #777;border-left:  1px solid #f2f2f2"></li>
 
-            <li style="padding-bottom: 6px;padding-right: 25px">
+            <li class="m-l-xs" style="padding-bottom: 6px;padding-right: 25px">
                 <div class="btn-group logout-btn pa-shortcuts" ng-controller="logoutController">
                     <a class="btn btn-small btn-default logout-btn pa-shortcuts" ng-click="logout()"
                        style="color:#333;border-color:#ccc;padding:6px;">
-                        <b> {{main.userName}}</b>
+                        <b class="pa-shortcut"> {{main.userName}}</b>
                         <img src="styles/patterns/logout_30.png" style="height:25px;  padding-left: 5px;">
                     </a>
                 </div>

@@ -1384,7 +1384,11 @@ body:not(.fixed-sidebar):not(.canvas-menu).mini-navbar .nav-second-level {
 @media (max-width: 768px) {
 
     .second-row-bar {
-        display: none;
+        display: none !important;
+    }
+
+    .ae-logo-container {
+        padding-left: 20px;
     }
 
     .only-mobile {
@@ -1392,6 +1396,6 @@ body:not(.fixed-sidebar):not(.canvas-menu).mini-navbar .nav-second-level {
     }
 
     .only-desktop {
-        display: none;
+        display: none !important;
     }
 }
