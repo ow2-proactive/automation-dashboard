@@ -324,8 +324,9 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         var portals = Object.keys($scope.automationDashboardPortals).concat(['studio', 'rm', 'scheduler']);
         permissionService.getPortalsAccessPermission(portals).then(function (response) {
             if (Array.isArray(response.data) && response.data.length) {
-                //Choose the workflow-execution portal as default portal if it exists, otherwise we choose the first portal in the list
-                var doHaveAccessToWA = response.data.indexOf('workflow-execution');
+                const name = getDefaultPortalName();
+                var doHaveAccessToWA = response.data.indexOf(name);
+
                 $scope.firstAccessiblePortal = doHaveAccessToWA !== -1 ? response.data[doHaveAccessToWA] : response.data[0];
                 response.data.forEach(function (authorizedPortal) {
                     $scope.portalsAccessPermission[authorizedPortal] = true;
@@ -354,6 +355,19 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                 console.error('Error while checking portals access permission', error)
             })
     };
+    // the default portal is 'health-dashboard' on mobile device and 'workflow-execution' on desktop
+    function getDefaultPortalName(data) {
+        if( isMobileDevice() ) {
+            return 'health-dashboard';
+        } else {
+            return 'workflow-execution'
+        }
+    }
+
+    function isMobileDevice() {
+      const userAgent = navigator.userAgent.toLowerCase();
+      return /iphone|ipod|android|blackberry|windows phone|mobile/i.test(userAgent);
+    }
 
 
     $scope.stopRegularCheckSession = function () {
@@ -589,6 +603,10 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             portal = splitUrl[splitUrl.length - 1];
         }
         return portal;
+    }
+
+    $scope.openCloseNav = function () {
+        angular.element('body').toggleClass("mini-navbar")
     }
 
     $scope.changeFavicon = function (portal) {
