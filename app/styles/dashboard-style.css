@@ -1398,4 +1398,9 @@ body:not(.fixed-sidebar):not(.canvas-menu).mini-navbar .nav-second-level {
     .only-desktop {
         display: none !important;
     }
+
+    .notification-item {
+        flex-direction: column !important;
+        align-items: start !important;
+    }
 }
