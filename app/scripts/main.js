@@ -927,7 +927,7 @@ mainModule.controller('changeLogoController', function ($scope, $state, $uibModa
                 SweetAlert.swal(UtilsFactory.translate('Logo successfully updated'), "", "success");
             })
             .catch(function (error) {
-                SweetAlert.swal(UtilsFactory.translate('Logo update failed'), error.error_message, "error");
+                SweetAlert.swal(UtilsFactory.translate('Logo update failed'), "Make sure that image format and size are correct", "error");
             });
     };
 
