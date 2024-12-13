@@ -871,6 +871,7 @@ mainModule.controller('changeLogoController', function ($scope, $state, $uibModa
         query param of the PUT request sent to the server to update the Logo
     */
     $scope.timeRoundedToTenth = getNextTenthMinute();
+    $scope.selectedFile = undefined;
 
     $scope.openUploadWindow = function () {
         $('#selected-image').click();
@@ -878,12 +879,11 @@ mainModule.controller('changeLogoController', function ($scope, $state, $uibModa
 
     $scope.fileSelected = function () {
         const fileInput = document.getElementById('selected-image');
-        const file = fileInput.files[0];
-        const imageASByteArray = fileInput.files[0];
-        if (file) {
+        $scope.selectedFile = fileInput.files[0];
+        if ($scope.selectedFile) {
             // Check file type
             const allowedTypes = ['image/png', 'image/jpeg'];
-            if (!allowedTypes.includes(file.type)) {
+            if (!allowedTypes.includes($scope.selectedFile.type)) {
                 alert("Invalid file type. Please upload a PNG or JPEG image.");
                 return;
             }
@@ -896,21 +896,11 @@ mainModule.controller('changeLogoController', function ($scope, $state, $uibModa
                     $scope.isFileSelected = true;
                 });
             };
-            imagePreviewReader.readAsDataURL(file);
-
-            // Save as a byte array for request
-            var byteReader = new FileReader();
-            byteReader.onload = function (event) {
-                var byteArray = new Uint8Array(event.target.result);
-                $scope.$apply(function () {
-                    $scope.fileAsByteArray = byteArray;
-                });
-            };
-            byteReader.readAsArrayBuffer(file);
+            imagePreviewReader.readAsDataURL($scope.selectedFile);
         } else {
             // No file is selected
             $scope.uploadedImageSrc = null;
-            $scope.fileAsByteArray = null;
+            $scope.selectedFile = null;
             $scope.isFileSelected = false;
         }
     };
@@ -918,10 +908,12 @@ mainModule.controller('changeLogoController', function ($scope, $state, $uibModa
     $scope.applyNewLogo = function () {
         var headers = {
             'sessionid': localStorage['pa.session'],
-            'Content-Type': 'application/octet-stream'
         };
 
-        $http.put(JSON.parse(localStorage.schedulerRestUrl) + 'logo?timeTenth='+ $scope.timeRoundedToTenth, $scope.fileAsByteArray, { headers: headers, transformRequest: angular.identity })
+        var formData = new FormData();
+        formData.append('fileContent', $scope.selectedFile);
+
+        $http.post(JSON.parse(localStorage.schedulerRestUrl) + 'logo?timeTenth='+ $scope.timeRoundedToTenth, formData, { headers: headers, transformRequest: angular.identity })
             .then(function (response) {
                 $scope.clearFile();
                 SweetAlert.swal(UtilsFactory.translate('Logo successfully updated'), "", "success");
@@ -935,7 +927,7 @@ mainModule.controller('changeLogoController', function ($scope, $state, $uibModa
         const fileInput = document.getElementById('selected-image');
         fileInput.value = '';
         $scope.uploadedImageSrc = null;
-        $scope.fileAsByteArray = null;
+        $scope.selectedFile = null;
         $scope.isFileSelected = false;
 
     };
