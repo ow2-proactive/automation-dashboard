@@ -865,12 +865,6 @@ mainModule.controller('logoutController', function ($scope, $state) {
 mainModule.controller('changeLogoController', function ($scope, $state, $uibModalInstance, $http, UtilsFactory, SweetAlert, accountAdminRolesArray) {
 
     $scope.isFileSelected = false;
-
-    /*
-        The goal is to trigger a cache refresh every 10 minutes by changing a
-        query param of the PUT request sent to the server to update the Logo
-    */
-    $scope.timeRoundedToTenth = getNextTenthMinute();
     $scope.selectedFile = undefined;
 
     $scope.openUploadWindow = function () {
@@ -913,7 +907,7 @@ mainModule.controller('changeLogoController', function ($scope, $state, $uibModa
         var formData = new FormData();
         formData.append('fileContent', $scope.selectedFile);
 
-        $http.post(JSON.parse(localStorage.schedulerRestUrl) + 'logo?timeTenth='+ $scope.timeRoundedToTenth, formData, { headers: headers, transformRequest: angular.identity })
+        $http.post(JSON.parse(localStorage.schedulerRestUrl) + 'logo?cacheRfrsh='+ Math.random(), formData, { headers: headers, transformRequest: angular.identity })
             .then(function (response) {
                 $scope.clearFile();
                 SweetAlert.swal(UtilsFactory.translate('Logo successfully updated'), "", "success");
@@ -935,15 +929,6 @@ mainModule.controller('changeLogoController', function ($scope, $state, $uibModa
     $scope.cancel = function () {
         $uibModalInstance.dismiss('cancel');
     };
-
-    function getNextTenthMinute() {
-        const now = new Date();
-        const minutes = now.getMinutes();
-        // Round up to the next 10th minute
-        const roundedMinutes = Math.ceil(minutes / 10) * 10;
-        now.setMinutes(roundedMinutes, 0, 0);
-        return now.getTime();
-    }
 
     $(document).keydown(function (e) {
         // Escape keypress
