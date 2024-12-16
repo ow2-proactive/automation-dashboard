@@ -521,7 +521,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 });
 
 // controller used in navigation.html :
-mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval, $timeout) {
+mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval, $timeout, $uibModal) {
     this.$onInit = function () {
 
         // set favicon icon of the current portal
@@ -537,6 +537,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             });
         $scope.nbNewNotifications = 0;
         startRegularUpdateNotificationLabel();
+        fetchUserData();
 
         $timeout(function () {
             if (localStorage.getItem('collapsePreference') && localStorage.getItem('collapsePreference') === 'in') {
@@ -578,6 +579,32 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         }
         $('#side-menu .nav.nav-second-level.collapse.in').parent().toggleClass('active')
         $('#side-menu .nav.nav-second-level.collapse').collapse('hide')
+    }
+
+    function fetchUserData() {
+        var requestGetAccountInfoUrl = JSON.parse(localStorage['restUrl']) + '/common/currentuserdata';
+        var config = {headers: {'sessionid': getSessionId()}};
+        $http.get(requestGetAccountInfoUrl, config).then(function (result) {
+            $scope.accountUsername = result.data.userName;
+            $scope.accountDomain = result.data.domain;
+            $scope.accountGroups = '';
+            for (var i = 0; i < result.data.groups.length; i++) {
+                $scope.accountGroups = $scope.accountGroups + result.data.groups[i];
+                if (i < result.data.groups.length - 1) {
+                    $scope.accountGroups = $scope.accountGroups + ', ';
+                }
+            }
+            $scope.accountTenant = result.data.tenant;
+            $scope.accountAdminRolesArray = result.data.adminRoles;
+            $scope.accountAdminRoles = result.data.adminRoles.join(", ");
+            $scope.accountPortalAccessPermissionDisplay = '';
+            for (var i = 0; i < result.data.portalAccessPermissionDisplay.length; i++) {
+                $scope.accountPortalAccessPermissionDisplay = $scope.accountPortalAccessPermissionDisplay + result.data.portalAccessPermissionDisplay[i];
+                if (i < result.data.portalAccessPermissionDisplay.length - 1) {
+                    $scope.accountPortalAccessPermissionDisplay = $scope.accountPortalAccessPermissionDisplay + ', ';
+                }
+            }
+        });
     }
 
     function setUpFavicon() {
@@ -633,37 +660,26 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         $('#about-modal').modal('show');
     };
 
+    $scope.openChangeLogoModal = function () {
+        if ($scope.accountAdminRolesArray && $scope.accountAdminRolesArray.includes("Scheduler")) {
+            $uibModal.open({
+                templateUrl: 'views/modals/change_logo_modal.html',
+                controller: 'changeLogoController',
+                windowClass: 'fadeIn',
+                keyboard: true,
+                backdrop: 'static',
+                size: 'm',
+                resolve: {
+                    accountAdminRolesArray: function () {
+                        return $scope.accountAdminRolesArray;
+                    }
+                }
+            });
+        }
+    };
+
     $scope.showAccountInfo = function () {
-        var requestGetAccountInfoUrl = JSON.parse(localStorage['restUrl']) + '/common/currentuserdata';
-        var config = {headers: {'sessionid': getSessionId()}};
-        $http.get(requestGetAccountInfoUrl, config).then(function (result) {
-            $scope.accountUsername = result.data.userName;
-            $scope.accountDomain = result.data.domain;
-            $scope.accountGroups = '';
-            for (var i = 0; i < result.data.groups.length; i++) {
-                $scope.accountGroups = $scope.accountGroups + result.data.groups[i];
-                if (i < result.data.groups.length - 1) {
-                    $scope.accountGroups = $scope.accountGroups + ', ';
-                }
-            }
-            $scope.accountTenant = result.data.tenant;
-            $scope.accountAdminRoles = '';
-            for (var i = 0; i < result.data.adminRoles.length; i++) {
-                $scope.accountAdminRoles = $scope.accountAdminRoles + result.data.adminRoles[i];
-                if (i < result.data.adminRoles.length - 1) {
-                    $scope.accountAdminRoles = $scope.accountAdminRoles + ', ';
-                }
-            }
-            $scope.accountPortalAccessPermissionDisplay = '';
-            for (var i = 0; i < result.data.portalAccessPermissionDisplay.length; i++) {
-                $scope.accountPortalAccessPermissionDisplay = $scope.accountPortalAccessPermissionDisplay + result.data.portalAccessPermissionDisplay[i];
-                if (i < result.data.portalAccessPermissionDisplay.length - 1) {
-                    $scope.accountPortalAccessPermissionDisplay = $scope.accountPortalAccessPermissionDisplay + ', ';
-                }
-            }
-            $('#account-modal').modal('show');
-            return result.data;
-        });
+        $('#account-modal').modal('show');
     };
 
     // Close modals on escape key press
@@ -844,6 +860,82 @@ mainModule.controller('logoutController', function ($scope, $state) {
         $scope.disconnect();
         $scope.closeSession();
     };
+});
+
+mainModule.controller('changeLogoController', function ($scope, $state, $uibModalInstance, $http, UtilsFactory, SweetAlert, accountAdminRolesArray) {
+
+    $scope.isFileSelected = false;
+    $scope.selectedFile = undefined;
+
+    $scope.openUploadWindow = function () {
+        $('#selected-image').click();
+    };
+
+    $scope.fileSelected = function () {
+        const fileInput = document.getElementById('selected-image');
+        $scope.selectedFile = fileInput.files[0];
+        if ($scope.selectedFile) {
+            // Check file type
+            const allowedTypes = ['image/png', 'image/jpeg'];
+            if (!allowedTypes.includes($scope.selectedFile.type)) {
+                alert("Invalid file type. Please upload a PNG or JPEG image.");
+                return;
+            }
+
+            // Save as data URL for image preview
+            const imagePreviewReader = new FileReader();
+            imagePreviewReader.onload = function (event) {
+                $scope.$apply(function () {
+                    $scope.uploadedImageSrc = event.target.result;
+                    $scope.isFileSelected = true;
+                });
+            };
+            imagePreviewReader.readAsDataURL($scope.selectedFile);
+        } else {
+            // No file is selected
+            $scope.uploadedImageSrc = null;
+            $scope.selectedFile = null;
+            $scope.isFileSelected = false;
+        }
+    };
+
+    $scope.applyNewLogo = function () {
+        var headers = {
+            'sessionid': localStorage['pa.session'],
+        };
+
+        var formData = new FormData();
+        formData.append('fileContent', $scope.selectedFile);
+
+        $http.post(JSON.parse(localStorage.schedulerRestUrl) + 'logo?cacheRfrsh='+ Math.random(), formData, { headers: headers, transformRequest: angular.identity })
+            .then(function (response) {
+                $scope.clearFile();
+                SweetAlert.swal(UtilsFactory.translate('Logo successfully updated'), "", "success");
+            })
+            .catch(function (error) {
+                SweetAlert.swal(UtilsFactory.translate('Logo update failed'), "Make sure that image format and size are correct", "error");
+            });
+    };
+
+    $scope.clearFile = function () {
+        const fileInput = document.getElementById('selected-image');
+        fileInput.value = '';
+        $scope.uploadedImageSrc = null;
+        $scope.selectedFile = null;
+        $scope.isFileSelected = false;
+
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+
+    $(document).keydown(function (e) {
+        // Escape keypress
+        if (e.keyCode === 27) {
+            $uibModalInstance.dismiss('cancel');
+        }
+    });
 });
 
 mainModule.controller('footerController', function ($scope) {
