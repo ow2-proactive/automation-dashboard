@@ -862,7 +862,7 @@ mainModule.controller('logoutController', function ($scope, $state) {
     };
 });
 
-mainModule.controller('changeLogoController', function ($scope, $state, $uibModalInstance, $http, UtilsFactory, SweetAlert, accountAdminRolesArray) {
+mainModule.controller('changeLogoController', function ($scope, $state, $uibModalInstance, $http, $timeout, UtilsFactory, SweetAlert, accountAdminRolesArray) {
 
     $scope.isFileSelected = false;
     $scope.selectedFile = undefined;
@@ -910,7 +910,16 @@ mainModule.controller('changeLogoController', function ($scope, $state, $uibModa
         $http.post(JSON.parse(localStorage.schedulerRestUrl) + 'logo?cacheRfrsh='+ Math.random(), formData, { headers: headers, transformRequest: angular.identity })
             .then(function (response) {
                 $scope.clearFile();
-                SweetAlert.swal(UtilsFactory.translate('Logo successfully updated'), "", "success");
+                SweetAlert.swal({
+                    title: UtilsFactory.translate('Logo successfully updated'),
+                    type: "success",
+                    timer: 1500,
+                    showCancelButton: false,
+                    showConfirmButton: false
+                })
+                $timeout(function () {
+                    $scope.cancel();
+                }, 1500)
             })
             .catch(function (error) {
                 SweetAlert.swal(UtilsFactory.translate('Logo update failed'), "Make sure that image format and size are correct", "error");
@@ -923,7 +932,6 @@ mainModule.controller('changeLogoController', function ($scope, $state, $uibModa
         $scope.uploadedImageSrc = null;
         $scope.selectedFile = null;
         $scope.isFileSelected = false;
-
     };
 
     $scope.cancel = function () {
