@@ -866,6 +866,7 @@ mainModule.controller('changeLogoController', function ($scope, $state, $uibModa
 
     $scope.isFileSelected = false;
     $scope.selectedFile = undefined;
+    $scope.imgMaxSize = 1500;
 
     $scope.openUploadWindow = function () {
         $('#selected-image').click();
@@ -878,13 +879,37 @@ mainModule.controller('changeLogoController', function ($scope, $state, $uibModa
             // Check file type
             const allowedTypes = ['image/png', 'image/jpeg'];
             if (!allowedTypes.includes($scope.selectedFile.type)) {
-                alert("Invalid file type. Please upload a PNG or JPEG image.");
+                SweetAlert.swal({
+                    title: UtilsFactory.translate('Bad format'),
+                    text: UtilsFactory.translate('Image must be PNG or Baseline JPEG'),
+                    type: "error",
+                    timer: 1500,
+                    showCancelButton: false,
+                    showConfirmButton: false
+                })
+                $scope.clearFile();
                 return;
             }
 
             // Save as data URL for image preview
             const imagePreviewReader = new FileReader();
             imagePreviewReader.onload = function (event) {
+                var image = new Image();
+                image.src = event.target.result;
+                image.onload = function() {
+                    if (this.width > $scope.imgMaxSize || this.height > $scope.imgMaxSize) {
+                        SweetAlert.swal({
+                            title: UtilsFactory.translate('Wrong dimensions'),
+                            text: UtilsFactory.translate('Image height and width must be lower than 1500 pixels'),
+                            type: "error",
+                            timer: 2000,
+                            showCancelButton: false,
+                            showConfirmButton: false
+                        })
+                        $scope.clearFile();
+                    }
+                };
+
                 $scope.$apply(function () {
                     $scope.uploadedImageSrc = event.target.result;
                     $scope.isFileSelected = true;
@@ -919,6 +944,7 @@ mainModule.controller('changeLogoController', function ($scope, $state, $uibModa
                 })
                 $timeout(function () {
                     $scope.cancel();
+                    location.reload();
                 }, 1500)
             })
             .catch(function (error) {
