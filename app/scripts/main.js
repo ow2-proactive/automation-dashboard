@@ -817,7 +817,7 @@ mainModule.controller('loginController', function ($scope, $http, $state, permis
                     var error = JSON.parse(response);
                     $rootScope.errorMessage = error.errorMessage;
                     if (error.httpErrorCode === 404) {
-                        if (error.stackTrace.indexOf('login.LoginException') < 0) {
+                        if (error.stackTrace !== null && error.stackTrace.indexOf('login.LoginException') < 0) {
                             $rootScope.errorMessage = 'The server is not available, please try again later.';
                         }
                     }
