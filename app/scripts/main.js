@@ -757,6 +757,11 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         setNotificationNBOnFavicon($scope.nbNewNotifications, false);
     });
 
+    $rootScope.$on('event:updatedNotificationsCount', function (event, data) {
+        $scope.nbNewNotifications = data['count'];
+        setNotificationNBOnFavicon($scope.nbNewNotifications, false);
+    });
+
     this.$onDestroy = function () {
         if (angular.isDefined($scope.intervalNotificationUpdate)) {
             $interval.cancel($scope.intervalNotificationUpdate);
