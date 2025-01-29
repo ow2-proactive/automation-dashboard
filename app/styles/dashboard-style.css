@@ -327,7 +327,6 @@ button[disabled="disabled"] {
 }
 
 .gantt-date-change-button {
-    height: 80%;
     padding: 7px;
     border-radius: 3px;
     border: 1px solid #e7eaec;
@@ -352,7 +351,6 @@ button[disabled="disabled"] {
 
 .gantt-scales-btn-group label {
     font-size: 12px;
-    height: 80%;
 }
 
 #gantt-legend-panel {
@@ -1403,4 +1401,9 @@ body:not(.fixed-sidebar):not(.canvas-menu).mini-navbar .nav-second-level {
         flex-direction: column !important;
         align-items: start !important;
     }
+}
+
+.job-issues-striped {
+    background-image: linear-gradient(45deg, rgb(248 172 89) 25%, transparent 25%, transparent 50%, rgb(248 172 89) 50%, rgb(248 172 89) 75%, transparent 75%, transparent);
+    background-size: 1rem 1rem;
 }
