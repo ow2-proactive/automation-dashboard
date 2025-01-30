@@ -1,5 +1,5 @@
 {
-  "proactiveDashboardVersion": "14.0.0-rc1",
+  "proactiveDashboardVersion": "14.0.4",
   "proactiveLanguage": "en",
 "confServer": {
   "pcaServiceUrl": "/cloud-automation-service/",
