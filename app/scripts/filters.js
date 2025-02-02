@@ -66,6 +66,10 @@ function durationFormatWE() {
             formatString = 'D[d]H[h]m[m]'
         } else if (input > 60000) { // more than 1 min
             formatString = 'D[d]H[h]m[m]s[s]'
+        } else if (input > 1000) { // more than 1 sec
+            formatString = 's[s]SSS[ms]'
+        } else {
+            formatString = 'SSS[ms]'
         }
         return input ? moment.duration(input).format(formatString) : '';
     };
