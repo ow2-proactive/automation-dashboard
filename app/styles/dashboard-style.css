@@ -599,8 +599,7 @@ body.fixed-sidebar.mini-navbar .nav-label, body.fixed-sidebar.mini-navbar .navba
     border-color: #ed5565 !important;
 }
 
-.description {
-    text-align: justify;
+.description p {
     white-space: pre-wrap;
     font-family: inherit;
 }
