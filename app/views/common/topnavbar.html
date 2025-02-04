@@ -1,23 +1,26 @@
 <nav class="navbar navbar-fixed-top no-padding m-b-none no-borders" role="navigation" style="flex-direction: column; z-index: 2041;">
-    <div class="top-navbar w-100">
-        <ul class="nav navbar-nav navbar-left" style="display: inline-flex;">
+    <div class="top-navbar w-100 col-flexbox">
+        <div class="navbar-header only-mobile">
+            <a class="navbar-minimalize m-l-sm m-t-md m-b-sm btn btn-primary" ng-click="openCloseNav()" href="#"><i class="fa fa-bars"></i> </a>
+        </div>
+        <ul class="nav navbar-nav navbar-left m-r-auto col-flex">
             <li class="m-r-xs">
-                <div class="btn-group pa-shortcuts" style="width: auto!important;">
+                <div class="btn-group pa-shortcuts ae-logo-container">
                     <a href="https://www.activeeon.com/" target="_blank" style="padding: 0px 30px 0px 6px!important;">
                         <img src="styles/patterns/AE-Logo.png" style="height: 40px;padding-right: 40px;">
                     </a>
                 </div>
             </li>
         </ul>
-        <ul class="nav navbar-nav navbar-right" style="display: inline-flex;">
-            <li class="m-r-xs">
+        <ul class="nav navbar-nav navbar-right col-flex m-l-auto">
+            <li>
                 <div class="btn-group pa-shortcuts" style="width: auto!important;">
-                    <a class="pa-shortcuts m-r-xl" style="width: auto!important;" ng-href="{{getImageUrlWithProxy('/doc')}}" target="_blank">
+                    <a class="pa-shortcuts" style="width: auto!important;" ng-href="{{getImageUrlWithProxy('/doc')}}" target="_blank">
                         <img src="../assets/image/custom-logo.png" style="height:40px;" align="right">
                     </a>
                 </div>
             </li>
-            <li class="m-r-xs">
+            <li class="m-r-xs m-l-lg only-desktop">
                 <div class="btn-group pa-shortcuts">
                     <a class="btn btn-small btn-default active pa-shortcuts" ng-href="{{getImageUrlWithProxy('/automation-dashboard/')}}"
                        style="color:#fff;border-color: #ccc;padding:5px; background-color: #E86D1F;">
@@ -27,7 +30,7 @@
                     </a>
                 </div>
             </li>
-            <li class="m-r-xs" ng-if="portalsAccessPermission['studio']">
+            <li class="m-r-xs only-desktop" ng-if="portalsAccessPermission['studio']">
                 <div class="btn-group pa-shortcuts">
                     <a class="btn btn-small btn-default pa-shortcuts" ng-href="{{getImageUrlWithProxy('/studio/')}}" style="color:#333;border-color: #ccc;padding:5px"
                        target="/studio/">
@@ -37,7 +40,7 @@
                     </a>
                 </div>
             </li>
-            <li class="m-r-xs" ng-if="portalsAccessPermission['scheduler']">
+            <li class="m-r-xs only-desktop" ng-if="portalsAccessPermission['scheduler']">
                 <div class="btn-group pa-shortcuts">
                     <a class="btn btn-small btn-default pa-shortcuts" ng-href="{{getImageUrlWithProxy('/scheduler/')}}" style="color:#333;border-color: #ccc;padding:5px"
                        target="/scheduler/">
@@ -47,7 +50,7 @@
                     </a>
                 </div>
             </li>
-            <li ng-if="portalsAccessPermission['rm']">
+            <li class="m-r-xs only-desktop" ng-if="portalsAccessPermission['rm']">
                 <div class="btn-group pa-shortcuts">
                     <a class="btn btn-small btn-default pa-shortcuts" ng-href="{{getImageUrlWithProxy('/rm/')}}"
                        style="color:#333;border-color: #ccc;padding:5px" target="/rm/">
@@ -56,13 +59,13 @@
                     </a>
                 </div>
             </li>
-            <li style="height: 38px; margin: 6px 5px; border-right: 1px solid #777;border-left:  1px solid #f2f2f2"></li>
+            <li class="m-t-xs m-b-xs only-desktop" style="height: 38px; border-right: 1px solid #777;border-left:  1px solid #f2f2f2"></li>
 
-            <li style="padding-bottom: 6px;padding-right: 25px">
+            <li class="m-l-xs" style="padding-bottom: 6px;padding-right: 25px">
                 <div class="btn-group logout-btn pa-shortcuts" ng-controller="logoutController">
                     <a class="btn btn-small btn-default logout-btn pa-shortcuts" ng-click="logout()"
                        style="color:#333;border-color:#ccc;padding:6px;">
-                        <b> {{main.userName}}</b>
+                        <b class="pa-shortcut"> {{main.userName}}</b>
                         <img src="styles/patterns/logout_30.png" style="height:25px;  padding-left: 5px;">
                     </a>
                 </div>
@@ -71,7 +74,7 @@
     </div>
     <div class="bottom-navbar w-100">
         <div class="gray-bg">
-            <div class="second-row-bar pull-left" style="display: inline-flex;">
+            <div class="second-row-bar col-flex">
                 <div class="dropdown" id="help-dropdown">
                     <a data-toggle="dropdown" href="javascript:void(0)" style="color: #676a6c;padding-left: 10px;font-size: 14px;background-color: transparent;">
                         {{'Help'|translate}} <b class="caret"></b></a>
@@ -82,6 +85,8 @@
                             {{'About'|translate}}</a></li>
                         <li><a class="pointer" href="https://try.activeeon.com/tutorials.html" target="_blank"><i aria-hidden="true" class="fa fa-mortar-board" style="margin-left: -2px;"></i>
                             {{'Tutorials'|translate}}</a></li>
+                        <li><a id="change-logo-button" class="pointer" ng-class="{'text-disabled disabled':!accountAdminRolesArray.includes('Scheduler')}" ng-click="openChangeLogoModal()" target="_blank"><i aria-hidden="true" class="fa fa-file-image-o" style="margin-left: -2px;"></i>
+                            {{'Change Customer Logo'|translate}}</a></li>
                     </ul>
                 </div>
                 <ng-include src="'views/common/language-dropdown.html'"></ng-include>
@@ -89,7 +94,7 @@
                     <strong>{{'The server cannot be reached. Check first your network connection, and potentially the server status.'|translate}}</strong>
                 </div>
             </div>
-            <div class="navbar-right p-w-md">
+            <div class="navbar-right p-w-md only-desktop">
                 <a ng-click="showAccountInfo()">
                     <span style="color:#676a6c; font-size:14px;" >{{'Account Info'|translate}}</span>
                 </a>

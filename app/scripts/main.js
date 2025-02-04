@@ -2,7 +2,7 @@
  * Created by ActiveEon Team on 18/04/2017.
  */
 
-var mainModule = angular.module('main', ['ngResource', 'spring-data-rest', 'angular-toArrayFilter', 'oitozero.ngSweetAlert', 'ngSanitize', 'pascalprecht.translate', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.moveColumns', 'ui.grid.pinning','toaster', 'ui.grid.autoResize',]);
+var mainModule = angular.module('main', ['ngResource', 'spring-data-rest', 'angular-toArrayFilter', 'oitozero.ngSweetAlert', 'ngSanitize', 'pascalprecht.translate', 'ui.grid', 'ui.grid.resizeColumns', 'ui.grid.selection', 'ui.grid.exporter', 'ui.grid.moveColumns', 'ui.grid.pinning', 'toaster', 'ui.grid.autoResize', 'btford.markdown']);
 
 function getSessionId() {
     return localStorage['pa.session'];
@@ -13,7 +13,7 @@ function getProperties($http, $location) {
     return $http.get('/automation-dashboard/resources/config.json')
         .success(function (response) {
             // Configure proxyName here
-            const index = window.location.pathname.indexOf("automation-dashboard")
+            const index = window.location.pathname.indexOf('automation-dashboard')
             const proxyNames = window.location.pathname.substring(0, index > 0 ? index - 1 : index);
 
             var pcaServiceUrl = angular.toJson(response.confServer.pcaServiceUrl, true);
@@ -31,15 +31,15 @@ function getProperties($http, $location) {
             var genericCatalogPortalQueryPeriod = angular.toJson(response.genericCatalogPortalQueryPeriod, true);
             var jobPlannerQueryPeriod = angular.toJson(response.jobPlannerQueryPeriod, true);
             var appCatalogBucketsUrl = angular.toJson(response.confServer.catalogServiceUrl + 'buckets', true);
-            var appCatalogWorkflowsUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + proxyNames +  '/catalog/buckets/' + response.view[0].catalog.bucketName + '/resources');
+            var appCatalogWorkflowsUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + proxyNames + '/catalog/buckets/' + response.view[0].catalog.bucketName + '/resources');
             var jobPlannerServiceUrl = angular.toJson(response.confServer.jobPlannerServiceUrl, true);
             var cloudWatchServiceUrl = angular.toJson(response.confServer.cloudWatchServiceUrl, true);
             var jobAnalyticsServiceUrl = angular.toJson(response.confServer.jobAnalyticsServiceUrl, true);
             var configViews = angular.toJson(response.view, true);
             var appUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + proxyNames);
             var studioUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + proxyNames + '/studio');
-            var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + proxyNames +  '/rest');
-            var schedulerPortalUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + proxyNames +  '/scheduler');
+            var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + proxyNames + '/rest');
+            var schedulerPortalUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + proxyNames + '/scheduler');
             var proactiveLanguage = angular.toJson(response.proactiveLanguage, true).replace(/"/g, '');
 
             localStorage['pcaServiceUrl'] = pcaServiceUrl;
@@ -201,8 +201,8 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         $scope.automationDashboardPortals = {};
         $rootScope.errorMessage = undefined;
         if (getSessionId()) {
-            if(!localStorage['restUrl']) {
-                var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + UtilsFactory.getProxyNames() +  '/rest')
+            if (!localStorage['restUrl']) {
+                var restUrl = angular.toJson($location.$$protocol + '://' + $location.$$host + ':' + $location.port() + UtilsFactory.getProxyNames() + '/rest')
                 localStorage['restUrl'] = restUrl;
             }
             $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission($window.location.href);
@@ -234,7 +234,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         });
     };
 
-    $scope.getImageUrlWithProxy = function(url) {
+    $scope.getImageUrlWithProxy = function (url) {
         return UtilsFactory.getProxyNames() + url;
     }
 
@@ -258,7 +258,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                         $scope.closeSession();
                     } else {
                         $rootScope.isLoggedOut = false;
-                        if ($("#login-view").is(":visible") && !$scope.firstAccessiblePortal) {
+                        if ($('#login-view').is(':visible') && !$scope.firstAccessiblePortal) {
                             $scope.main.userName = localStorage['pa.login'];
                             var sessionid = getSessionId();
                             if (sessionid) {
@@ -308,11 +308,11 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 
     $scope.determineFirstAuthorizedPortalAndAllPortalsAccessPermission = function (url) {
         var portal = '';
-        if (url && !url.includes("submit") && !url.includes("job-info")) {
+        if (url && !url.includes('submit') && !url.includes('job-info')) {
             portal = url.substring(url.lastIndexOf('/') + 1, (url.lastIndexOf('?') > 0 ? url.lastIndexOf('?') : undefined));
-        } else if(url && url.includes("submit") ) {
+        } else if (url && url.includes('submit')) {
             portal = 'submit'
-        } else if (url && url.includes("job-info") ) {
+        } else if (url && url.includes('job-info')) {
             portal = 'job-info'
         }
         $state.get().forEach(function (item) {
@@ -324,8 +324,9 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
         var portals = Object.keys($scope.automationDashboardPortals).concat(['studio', 'rm', 'scheduler']);
         permissionService.getPortalsAccessPermission(portals).then(function (response) {
             if (Array.isArray(response.data) && response.data.length) {
-                //Choose the workflow-execution portal as default portal if it exists, otherwise we choose the first portal in the list
-                var doHaveAccessToWA = response.data.indexOf('workflow-execution');
+                const name = getDefaultPortalName();
+                var doHaveAccessToWA = response.data.indexOf(name);
+
                 $scope.firstAccessiblePortal = doHaveAccessToWA !== -1 ? response.data[doHaveAccessToWA] : response.data[0];
                 response.data.forEach(function (authorizedPortal) {
                     $scope.portalsAccessPermission[authorizedPortal] = true;
@@ -335,12 +336,12 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                         $state.go($scope.automationDashboardPortals[portal]);
                     } else if ((portal !== 'job-info' && !portal.includes('submit')) || doHaveAccessToWA === -1) {
                         displayAlertAndRedirectToFirstAccessiblePortalIfExist(portal);
-                    } else if( portal.includes('submit') || portal.includes('job-info') ) {
+                    } else if (portal.includes('submit') || portal.includes('job-info')) {
                         // open the previous url with the same params
                         window.open(sessionStorage['previousUrlBeforeLogin'], '_self')
                     }
                 } else {
-                  $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal]);
+                    $state.go($scope.automationDashboardPortals[$scope.firstAccessiblePortal]);
                 }
             } else {
                 $rootScope.errorMessage = 'This user is not allowed to access to the Automation Dashboard Portal';
@@ -354,6 +355,19 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
                 console.error('Error while checking portals access permission', error)
             })
     };
+    // the default portal is 'health-dashboard' on mobile device and 'workflow-execution' on desktop
+    function getDefaultPortalName(data) {
+        if( isMobileDevice() ) {
+            return 'health-dashboard';
+        } else {
+            return 'workflow-execution'
+        }
+    }
+
+    function isMobileDevice() {
+      const userAgent = navigator.userAgent.toLowerCase();
+      return /iphone|ipod|android|blackberry|windows phone|mobile/i.test(userAgent);
+    }
 
 
     $scope.stopRegularCheckSession = function () {
@@ -385,33 +399,31 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 
     $scope.disconnect = function () {
         var disconnectUrlPrefix = JSON.parse(localStorage.schedulerRestUrl) + 'disconnect';
-        $http.put(disconnectUrlPrefix, null, { headers: {'sessionid': getSessionId() }})
-            .then(function (response) {
-            })
+        $http.put(disconnectUrlPrefix, null, {headers: {'sessionid': getSessionId()}})
             .catch(function (response) {
                 console.error('Error while disconnecting:', response);
             });
     };
 
     $scope.displayContextualMenu = function (clickEvent, position, isWEJobRowContextMenu, data) {
-            clickEvent.stopPropagation();
-            $scope.contextPosition = position;
-            $scope.contextDisplay = true;
-            var isNeedToInjectDataInContextMenuScope = false;
-            if (isWEJobRowContextMenu) {
-                isNeedToInjectDataInContextMenuScope = waitAndApplyWEJobRowContextMenuDisplay(data);
-            }
-            if (data && isNeedToInjectDataInContextMenuScope) {
-                injectDataInContextMenuScope(data);
-            }
+        clickEvent.stopPropagation();
+        $scope.contextPosition = position;
+        $scope.contextDisplay = true;
+        var isNeedToInjectDataInContextMenuScope = false;
+        if (isWEJobRowContextMenu) {
+            isNeedToInjectDataInContextMenuScope = waitAndApplyWEJobRowContextMenuDisplay(data);
+        }
+        if (data && isNeedToInjectDataInContextMenuScope) {
+            injectDataInContextMenuScope(data);
+        }
     };
 
     // display context-menu on buckets in the catalog
     $scope.displayContextualMenuOnBucket = function (clickEvent, position) {
-            //display the context menu on bucket
-            $scope.contextBucketDisplay = true;
-            // close context menu on objects
-            $scope.contextDisplay = false;
+        //display the context menu on bucket
+        $scope.contextBucketDisplay = true;
+        // close context menu on objects
+        $scope.contextDisplay = false;
     };
 
     // display context-menu on node name
@@ -425,7 +437,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 
 
     function waitAndApplyWEJobRowContextMenuDisplay(data) {
-        if(!$('#context-menu').length) {
+        if (!$('#context-menu').length) {
             // we set an observation in order to wait for the render of the context menu
             var observer = new MutationObserver(function (mutations) {
                 var contextMenuIncludeElement = angular.element('#context-menu')[0].children[0].children[0];
@@ -447,7 +459,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
     }
 
     function injectDataInContextMenuScope(data) {
-        Object.keys(data).forEach(function(key) {
+        Object.keys(data).forEach(function (key) {
             angular.element(document.getElementById('context-menu')).scope()[key] = data[key];
         });
     }
@@ -478,6 +490,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
     // Move the contextual menu near the click according to its position in the window
     $scope.moveContextualMenu = function (clickEvent) {
         $timeout(callBack, 10);
+
         function callBack() {
             var contextMenuHeight = angular.element('#context-menu')[0].offsetHeight;
             //if contextual menu will get out of the panel catalog-tab-content, we display it upper
@@ -494,7 +507,7 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
             } else {
                 angular.element('#context-menu').css('left', (clickEvent['clientX'] - contextMenuWidth) + 'px')
             }
-            angular.element('#context-menu').removeClass("opacity-0");
+            angular.element('#context-menu').removeClass('opacity-0');
         }
     };
 
@@ -508,12 +521,8 @@ mainModule.controller('mainController', function ($window, $http, $scope, $rootS
 });
 
 // controller used in navigation.html :
-mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval, $timeout) {
+mainModule.controller('navBarController', function ($scope, $rootScope, $http, $interval, $timeout, $uibModal) {
     this.$onInit = function () {
-
-        $scope.favicon = new Favico({
-            animation:'fade'
-        });
 
         // set favicon icon of the current portal
         setUpFavicon();
@@ -528,6 +537,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             });
         $scope.nbNewNotifications = 0;
         startRegularUpdateNotificationLabel();
+        fetchUserData();
 
         $timeout(function () {
             if (localStorage.getItem('collapsePreference') && localStorage.getItem('collapsePreference') === 'in') {
@@ -567,85 +577,109 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             // Remove all inline style from jquery fadeIn function to reset menu state
             $('#side-menu').removeAttr('style');
         }
-        $('#side-menu .nav.nav-second-level.collapse.in').parent().toggleClass("active")
+        $('#side-menu .nav.nav-second-level.collapse.in').parent().toggleClass('active')
         $('#side-menu .nav.nav-second-level.collapse').collapse('hide')
     }
 
+    function fetchUserData() {
+        var requestGetAccountInfoUrl = JSON.parse(localStorage['restUrl']) + '/common/currentuserdata';
+        var config = {headers: {'sessionid': getSessionId()}};
+        $http.get(requestGetAccountInfoUrl, config).then(function (result) {
+            $scope.accountUsername = result.data.userName;
+            $scope.accountDomain = result.data.domain;
+            $scope.accountGroups = '';
+            for (var i = 0; i < result.data.groups.length; i++) {
+                $scope.accountGroups = $scope.accountGroups + result.data.groups[i];
+                if (i < result.data.groups.length - 1) {
+                    $scope.accountGroups = $scope.accountGroups + ', ';
+                }
+            }
+            $scope.accountTenant = result.data.tenant;
+            $scope.accountAdminRolesArray = result.data.adminRoles;
+            $scope.accountAdminRoles = result.data.adminRoles.join(", ");
+            $scope.accountPortalAccessPermissionDisplay = '';
+            for (var i = 0; i < result.data.portalAccessPermissionDisplay.length; i++) {
+                $scope.accountPortalAccessPermissionDisplay = $scope.accountPortalAccessPermissionDisplay + result.data.portalAccessPermissionDisplay[i];
+                if (i < result.data.portalAccessPermissionDisplay.length - 1) {
+                    $scope.accountPortalAccessPermissionDisplay = $scope.accountPortalAccessPermissionDisplay + ', ';
+                }
+            }
+        });
+    }
+
     function setUpFavicon() {
+        $timeout(function () {
+            var portal = getCurrentPortalName();
+            $scope.changeFavicon(portal)
+        }, 1000)
+    }
+
+    function getCurrentPortalName() {
         var jobAnalyticsChildren = ['health-dashboard', 'job-analytics', 'job-gantt', 'node-gantt'];
         var jobPlannerChildren = ['job-planner-calendar-def', 'job-planner-calendar-def-workflows', 'job-planner-execution-planning', 'job-planner-gantt-chart'];
-        $timeout(function () {
-            var splitUrl = window.location.hash.split('/');
-            var portal = splitUrl[splitUrl.length - 1];
-            if (jobAnalyticsChildren.indexOf(portal) !== -1) {
-                $scope.changeFavicon('analytics-portal');
-            } else if (jobPlannerChildren.indexOf(portal) !== -1) {
-                $scope.changeFavicon('job-planner-portal');
-            } else if (splitUrl[splitUrl.length - 1] === 'workflow-execution') {
-                $scope.changeFavicon('automation_dashboard_30');
-            } else {
-                $scope.changeFavicon(splitUrl[splitUrl.length - 1]);
-            }
-        }, 1000)
+        var splitUrl = window.location.hash.split('/');
+        var urlParts = splitUrl[splitUrl.length - 1];
+        var portal;
+        if (jobAnalyticsChildren.indexOf(urlParts) !== -1) {
+            portal = 'analytics-portal';
+        } else if (jobPlannerChildren.indexOf(urlParts) !== -1) {
+            portal = 'job-planner-portal';
+        } else if (splitUrl[splitUrl.length - 1] === 'workflow-execution') {
+            portal = 'automation_dashboard_30';
+        } else {
+            portal = splitUrl[splitUrl.length - 1];
+        }
+        return portal;
+    }
+
+    $scope.openCloseNav = function () {
+        angular.element('body').toggleClass("mini-navbar")
     }
 
     $scope.changeFavicon = function (portal) {
         changeFavicon(portal);
-        setNotificationNBOnFavicon($scope.nbNewNotifications);
+        setNotificationNBOnFavicon($scope.nbNewNotifications, true);
     }
+
     function changeFavicon(portal) {
         var link = document.createElement('link');
         var oldLink = document.getElementById('favicon');
         link.id = 'favicon';
         link.rel = 'icon';
         link.href = 'styles/patterns/' + portal + '.png';
-        if (oldLink.href === link.href) {
-            return;
-        }
         if (oldLink) {
             document.head.removeChild(oldLink);
         }
         document.head.appendChild(link);
-    };
+    }
 
     $scope.displayAbout = function () {
-        var url = window.location.href.split("/automation-dashboard")[0] + '/rest/';
+        var url = window.location.href.split('/automation-dashboard')[0] + '/rest/';
         $scope.restUrl = url;
         $scope.year = new Date().getFullYear();
         $('#about-modal').modal('show');
     };
 
+    $scope.openChangeLogoModal = function () {
+        if ($scope.accountAdminRolesArray && $scope.accountAdminRolesArray.includes("Scheduler")) {
+            $uibModal.open({
+                templateUrl: 'views/modals/change_logo_modal.html',
+                controller: 'changeLogoController',
+                windowClass: 'fadeIn',
+                keyboard: true,
+                backdrop: 'static',
+                size: 'm',
+                resolve: {
+                    accountAdminRolesArray: function () {
+                        return $scope.accountAdminRolesArray;
+                    }
+                }
+            });
+        }
+    };
+
     $scope.showAccountInfo = function () {
-        var requestGetAccountInfoUrl = JSON.parse(localStorage['restUrl']) + '/common/currentuserdata';
-        var config = { headers: {'sessionid': getSessionId()} };
-        $http.get(requestGetAccountInfoUrl, config).then(function (result) {
-           $scope.accountUsername = result.data.userName;
-           $scope.accountDomain = result.data.domain;
-           $scope.accountGroups = "";
-           for (var i=0; i<result.data.groups.length; i++) {
-              $scope.accountGroups = $scope.accountGroups + result.data.groups[i];
-              if (i< result.data.groups.length -1) {
-                $scope.accountGroups = $scope.accountGroups + ", ";
-              }
-           }
-           $scope.accountTenant = result.data.tenant;
-           $scope.accountAdminRoles = "";
-            for (var i=0; i<result.data.adminRoles.length; i++) {
-                $scope.accountAdminRoles = $scope.accountAdminRoles + result.data.adminRoles[i];
-                 if (i< result.data.adminRoles.length -1) {
-                    $scope.accountAdminRoles = $scope.accountAdminRoles + ", ";
-                }
-            }
-            $scope.accountPortalAccessPermissionDisplay = "";
-            for (var i=0; i<result.data.portalAccessPermissionDisplay.length; i++) {
-                $scope.accountPortalAccessPermissionDisplay = $scope.accountPortalAccessPermissionDisplay + result.data.portalAccessPermissionDisplay[i];
-                 if (i< result.data.portalAccessPermissionDisplay.length -1) {
-                    $scope.accountPortalAccessPermissionDisplay = $scope.accountPortalAccessPermissionDisplay + ", ";
-                }
-            }
-           $('#account-modal').modal('show');
-           return result.data;
-        });
+        $('#account-modal').modal('show');
     };
 
     // Close modals on escape key press
@@ -677,7 +711,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
             .success(function (response) {
                 if (Number.isInteger(response)) {
                     $scope.nbNewNotifications = response;
-                    setNotificationNBOnFavicon($scope.nbNewNotifications)
+                    setNotificationNBOnFavicon($scope.nbNewNotifications, false)
                 }
             })
             .error(function (response) {
@@ -690,19 +724,24 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
     }
 
     // set notifications number on the favicon icon
-    function setNotificationNBOnFavicon(nb) {
-        // Initialize favicon variable if not already defined
-        if (!$scope.favicon) {
-            $scope.favicon = new Favico({
-                animation: 'fade'
-            });
-        }
+    function setNotificationNBOnFavicon(nb, isChangingPortal) {
+        // handle the case we don't need to add or update favicon
+        if (($scope.previousNotificationNumber === 0 && nb === 0) || (!isChangingPortal && $scope.previousNotificationNumber === nb)) return;
+
+        // Initialize favicon with notifications number
+        var favicon = new Favico({
+            animation: 'fade'
+        });
         // Set the badge based on the value of nb
         if (nb) {
-            $scope.favicon.badge(nb);
+            favicon.badge(nb);
         } else {
-            setUpFavicon(); // Clear the badge when nb is 0 or undefined
+            // Clear the badge when nb is 0 or undefined
+            var portal = getCurrentPortalName();
+            changeFavicon(portal)
         }
+
+        $scope.previousNotificationNumber = nb;
     }
 
     $rootScope.$on('event:notificationsDestroyed', function () {
@@ -715,8 +754,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
 
     $rootScope.$on('event:updatedNotificationsCount', function (event, data) {
         $scope.nbNewNotifications = data['count'];
-        setNotificationNBOnFavicon($scope.nbNewNotifications)
-
+        setNotificationNBOnFavicon($scope.nbNewNotifications, false);
     });
 
     this.$onDestroy = function () {
@@ -741,7 +779,7 @@ mainModule.controller('loginController', function ($scope, $http, $state, permis
             return;
         }
 
-        const userNameDomainSplit = currentUserData.split("\\");
+        const userNameDomainSplit = currentUserData.split('\\');
 
         if (userNameDomainSplit.length === 1) {
             $scope.username = userNameDomainSplit[0];
@@ -749,7 +787,7 @@ mainModule.controller('loginController', function ($scope, $http, $state, permis
         } else {
             $scope.username = userNameDomainSplit[1];
             $scope.getDomains(function () {
-                $scope.selectedDomain = $scope.domains.find(function(domain) {
+                $scope.selectedDomain = $scope.domains.find(function (domain) {
                     return domain === userNameDomainSplit[0];
                 });
             });
@@ -758,8 +796,8 @@ mainModule.controller('loginController', function ($scope, $http, $state, permis
 
     $scope.login = function () {
         var username = $scope.username;
-        if($scope.selectedDomain) {
-            username = $scope.selectedDomain + "\\" + $scope.username;
+        if ($scope.selectedDomain) {
+            username = $scope.selectedDomain + '\\' + $scope.username;
         }
         var password = $scope.password;
         localStorage['pa.login'] = username;
@@ -779,7 +817,7 @@ mainModule.controller('loginController', function ($scope, $http, $state, permis
                     var error = JSON.parse(response);
                     $rootScope.errorMessage = error.errorMessage;
                     if (error.httpErrorCode === 404) {
-                        if (error.stackTrace.indexOf('login.LoginException') < 0) {
+                        if (error.stackTrace !== null && error.stackTrace.indexOf('login.LoginException') < 0) {
                             $rootScope.errorMessage = 'The server is not available, please try again later.';
                         }
                     }
@@ -793,21 +831,20 @@ mainModule.controller('loginController', function ($scope, $http, $state, permis
         $http.get(JSON.parse(localStorage.schedulerRestUrl) + 'domains/')
             .then(function (response) {
                 $scope.domains = response.data;
-                if($scope.domains.length && !$scope.domains.includes("")) {
-                    $scope.domains.unshift("");
+                if ($scope.domains.length && !$scope.domains.includes('')) {
+                    $scope.domains.unshift('');
                 }
                 if ($scope.domains.length) {
                     $scope.selectedDomain = $scope.domains[0];
-                }
-                else {
-                    $scope.selectedDomain = "";
+                } else {
+                    $scope.selectedDomain = '';
                 }
                 if (callBack) {
                     return callBack();
                 }
             })
             .catch(function (response) {
-                 console.error('Error getting domains:', response);
+                console.error('Error getting domains:', response);
             });
     }
 
@@ -823,6 +860,116 @@ mainModule.controller('logoutController', function ($scope, $state) {
         $scope.disconnect();
         $scope.closeSession();
     };
+});
+
+mainModule.controller('changeLogoController', function ($scope, $state, $uibModalInstance, $http, $timeout, UtilsFactory, SweetAlert, accountAdminRolesArray) {
+
+    $scope.isFileSelected = false;
+    $scope.selectedFile = undefined;
+    $scope.imgMaxSize = 1500;
+
+    $scope.openUploadWindow = function () {
+        $('#selected-image').click();
+    };
+
+    $scope.fileSelected = function () {
+        const fileInput = document.getElementById('selected-image');
+        $scope.selectedFile = fileInput.files[0];
+        if ($scope.selectedFile) {
+            // Check file type
+            const allowedTypes = ['image/png', 'image/jpeg'];
+            if (!allowedTypes.includes($scope.selectedFile.type)) {
+                SweetAlert.swal({
+                    title: UtilsFactory.translate('Bad format'),
+                    text: UtilsFactory.translate('Image must be PNG or Baseline JPEG'),
+                    type: "error",
+                    timer: 1500,
+                    showCancelButton: false,
+                    showConfirmButton: false
+                })
+                $scope.clearFile();
+                return;
+            }
+
+            // Save as data URL for image preview
+            const imagePreviewReader = new FileReader();
+            imagePreviewReader.onload = function (event) {
+                var image = new Image();
+                image.src = event.target.result;
+                image.onload = function() {
+                    if (this.width > $scope.imgMaxSize || this.height > $scope.imgMaxSize) {
+                        SweetAlert.swal({
+                            title: UtilsFactory.translate('Wrong dimensions'),
+                            text: UtilsFactory.translate('Image height and width must be lower than 1500 pixels'),
+                            type: "error",
+                            timer: 2000,
+                            showCancelButton: false,
+                            showConfirmButton: false
+                        })
+                        $scope.clearFile();
+                    }
+                };
+
+                $scope.$apply(function () {
+                    $scope.uploadedImageSrc = event.target.result;
+                    $scope.isFileSelected = true;
+                });
+            };
+            imagePreviewReader.readAsDataURL($scope.selectedFile);
+        } else {
+            // No file is selected
+            $scope.uploadedImageSrc = null;
+            $scope.selectedFile = null;
+            $scope.isFileSelected = false;
+        }
+    };
+
+    $scope.applyNewLogo = function () {
+        var headers = {
+            'sessionid': localStorage['pa.session'],
+        };
+
+        var formData = new FormData();
+        formData.append('fileContent', $scope.selectedFile);
+
+        $http.post(JSON.parse(localStorage.schedulerRestUrl) + 'logo?cacheRfrsh='+ Math.random(), formData, { headers: headers, transformRequest: angular.identity })
+            .then(function (response) {
+                $scope.clearFile();
+                SweetAlert.swal({
+                    title: UtilsFactory.translate('Logo successfully updated'),
+                    type: "success",
+                    timer: 1500,
+                    showCancelButton: false,
+                    showConfirmButton: false
+                })
+                $timeout(function () {
+                    $scope.cancel();
+                    location.reload();
+                }, 1500)
+            })
+            .catch(function (error) {
+                SweetAlert.swal(UtilsFactory.translate('Logo update failed'), "Make sure that image format and size are correct", "error");
+            });
+    };
+
+    $scope.clearFile = function () {
+        const fileInput = document.getElementById('selected-image');
+        fileInput.value = '';
+        $scope.uploadedImageSrc = null;
+        $scope.selectedFile = null;
+        $scope.isFileSelected = false;
+    };
+
+    $scope.cancel = function () {
+        $uibModalInstance.dismiss('cancel');
+    };
+
+    $(document).keydown(function (e) {
+        // Escape keypress
+        if (e.keyCode === 27) {
+            $uibModalInstance.dismiss('cancel');
+        }
+    });
 });
 
 mainModule.controller('footerController', function ($scope) {

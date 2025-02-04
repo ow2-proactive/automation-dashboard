@@ -145,7 +145,6 @@
         "cssFile": "job_analytics_custom_style.css",
         "authenticate": true
     },
-
     "jobGantt": {
         "isAvailable": true,
         "isSubMenuItem": true,
@@ -230,6 +229,7 @@
         "tooltip": "Associate Workflows to Calendar",
         "secondaryHtmlFiles": [
             "calendar-association/association_rbac.html",
+            "calendar-association/association_deviation_modal.html",
             "calendar-association/calendar_list.html"
         ],
         "notAvailablePage": "page_not_available_calendar_association.html",
@@ -239,6 +239,7 @@
             "scripts/services/calendar-list-service.js",
             "scripts/controllers/calendar-association-controller.js",
             "scripts/controllers/components/association-RBAC-modal.js",
+            "scripts/controllers/components/association-deviation-modal.js",
             "scripts/controllers/components/calendar-list.component.js"
         ],
         "angularModuleName": "calendar-association",
@@ -372,6 +373,7 @@
         "htmlFile": "notification-portal.html",
         "tooltip": "Configure and Receive Notifications",
         "secondaryHtmlFiles": [
+            "modals/delete_all_notifications.html",
             "templates/notification.html",
             "templates/basic-subscription.html",
             "templates/multi-subscription.html",
@@ -391,7 +393,8 @@
             "scripts/services/notification-service-api.js",
             "scripts/services/catalog-service.js",
             "scripts/services/scheduler-service.js",
-            "scripts/services/channel-service.js"
+            "scripts/services/channel-service.js",
+            "scripts/modals/delete-all-notifications-modal-controller.js"
         ],
         "angularModuleName": "notification-service",
         "cssFile": "notifportal_custom_style.css",

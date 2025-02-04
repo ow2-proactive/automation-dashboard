@@ -1,0 +1,34 @@
+<div class="inmodal">
+    <div class="modal-header">
+        <button class="btn btn-link text-muted p-w-xs pull-right" ng-click="cancel()"
+                uib-tooltip="{{'Close'|translate}}" tooltip-append-to-body="true">
+            <i class="fa fa-times" aria-hidden="true" style="font-size: 17px"></i>
+        </button>
+        <h4 class="modal-title">{{'Upload new image as customer logo'|translate}}</h4>
+    </div>
+    <div class="modal-body">
+        <div class="text-center" style="line-height: 1.5">
+        <span>{{'Upload a new image that will replace the current logo in the top navbar.'|translate}}</span>
+        <span>{{'The image must be of'|translate}} <b>{{'PNG or Baseline JPEG'|translate}} </b>{{'format, with a'|translate}} <b>{{'maximum size of 1500 x 1500'|translate}}</b>.</span>
+        </div>
+
+        <!-- Image preview -->
+        <div style="text-align: center; margin-top: 15px;">
+            <img ng-if="uploadedImageSrc" ng-src="{{uploadedImageSrc}}" alt="Image Preview" style="max-width: 116px; max-height: 40px;" />
+        </div>
+
+        <div style="display:flex; justify-content:center; margin-top: 15px">
+            <input type="file" accept="image/png, image/jpeg" id="selected-image" input-file-change="fileSelected()" class="hidden" />
+            <button id="upload-image-btn" class="m-r-xs btn btn-white" ng-click="openUploadWindow()" uib-tooltip="{{'Upload a file'|translate}}">
+                <i class="fa fa-upload"></i>
+                {{'Upload image'|translate}}
+            </button>
+            <button uib-tooltip="{{'Save image as new logo'|translate}}" class="m-r-xs btn btn-primary" ng-click="applyNewLogo()" ng-disabled="!isFileSelected">
+                {{'Save'|translate}}
+            </button>
+            <button uib-tooltip="{{'Clear file'|translate}}" class="btn btn-danger" ng-click="clearFile()" ng-disabled="!isFileSelected">
+                {{'Clear'|translate}}
+            </button>
+        </div>
+    </div>
+</div>

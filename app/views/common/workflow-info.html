@@ -1,5 +1,5 @@
 <div class="ibox-content" ng-controller="VariablesController" style="padding-bottom:50px; overflow: auto">
-    <div ng-class="{'last-wizard-step-content':WEsubmissionErrorMessage || successMessage}">
+    <div>
         <h2 class="text-center wf-name-title">
             <a ng-href="/scheduler/?job={{::workflow.id}}" target="/scheduler/" title="{{'Open job in scheduler portal'|translate}}" ng-if="workflow.id">
                 <span class="job-id container-flex label label-default m-l-sm m-r-sm">{{::workflow.id}}</span>
@@ -21,7 +21,11 @@
                 </div>
                 <div>
                     <span class="font-bold m-r-sm">{{'Description'|translate}} :</span>
-                    <span class="description">{{::workflow.description.trim()}}</span>
+                    <span class="description" btf-markdown="workflow.description.trim() | limitTo:descriptionLimit"></span>
+                    <span ng-if="workflow.description.trim().length > 200 && workflow.description.trim().length != descriptionLimit"
+                          class="m-l-xs clickable text-success" ng-click="showMore(workflow.description.trim().length)" style="font-size: 13px">... {{'Show more' | translate}}</span>
+                    <span ng-if="workflow.description.trim().length === descriptionLimit"
+                          class="m-l-xs clickable text-success" ng-click="showLess()" style="font-size: 13px"> {{'Show less' | translate}}</span>
                 </div>
                 <div ng-if="workflow.projectName">
                     <span class="font-bold m-r-sm">{{'Project name'|translate}} :</span>

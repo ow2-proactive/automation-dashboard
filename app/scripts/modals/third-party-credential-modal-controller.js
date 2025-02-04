@@ -58,6 +58,13 @@ angular.module('workflow-variables', []).controller('ThirdPartyCredentialModalCt
             .catch(function (response) {
                 console.error('Error while getting third party credentials: ', response);
                 toaster.error((response.errorMessage ? response.errorMessage : 'Something went wrong!'), (response.httpErrorCode === 403 ? 'Permission denied!' : 'Cannot create a or update third party credential ' + key));
+            })
+            .finally(function () {
+                var credentialValueTextArea = document.getElementById('add-credential-textarea');
+                // Reset credentials value textarea to default size (1 liner)
+                credentialValueTextArea.style.height = '';
+                // Get the scope of the modal and set the value input back to hidden
+                angular.element(credentialValueTextArea).scope().isTextAreaMode = false;
             });
     }
 
