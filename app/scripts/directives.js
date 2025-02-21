@@ -208,6 +208,23 @@ function slimScroll($timeout) {
     };
 }
 
+function noNegative() {
+    return {
+          restrict: 'A',
+          require: 'ngModel',
+          link: function(scope, element, attrs, ngModel) {
+            ngModel.$validators.noNegative = function(value) {
+              return value >= 0;
+            };
+
+            element.on('keydown', function(event) {
+              if (event.key === '-' || event.key === 'e' || event.key === 'E') {
+                event.preventDefault();
+              }
+            });
+          }
+        };
+}
 
 /**
  * backToTop - from https://github.com/padsbanger/angular-backtop
@@ -545,4 +562,5 @@ angular
     .directive('ellipsisTooltip', ellipsisTooltip)
     .directive('copyClipBoard', copyClipBoard)
     .directive('multiselectShiftKey', multiselectShiftKey)
-    .directive('uiSelectDirective', uiSelectDirective);
+    .directive('uiSelectDirective', uiSelectDirective)
+    .directive('noNegative', noNegative);
