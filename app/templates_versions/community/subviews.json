@@ -401,5 +401,21 @@
         "angularModuleName": "notification-service",
         "cssFile": "notifportal_custom_style.css",
         "authenticate": true
+    },
+    "userManagement": {
+        "isAvailable": true,
+        "name": "User Management",
+        "nameForUrl": "admin-portal",
+        "appFolder": "admin-portal/app/",
+        "htmlFile": "main_user_management_view.html",
+        "tooltip": "manage users rights",
+        "secondaryHtmlFiles": [],
+        "notAvailablePage": "page_not_available.html",
+        "jsFiles": [
+            "scripts/main-user-management-controller.js"
+        ],
+        "angularModuleName": "user-management-module",
+        "cssFile": "user_management_custom_style.css",
+        "authenticate": true
     }
 }
