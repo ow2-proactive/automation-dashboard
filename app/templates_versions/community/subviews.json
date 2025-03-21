@@ -405,10 +405,10 @@
     "userManagement": {
         "isAvailable": true,
         "name": "User Management",
-        "nameForUrl": "admin-portal",
+        "nameForUrl": "user-management",
         "appFolder": "admin-portal/app/",
         "htmlFile": "main_user_management_view.html",
-        "tooltip": "manage users rights",
+        "tooltip": "Manage internal users and manage groups authorizations",
         "secondaryHtmlFiles": [],
         "notAvailablePage": "page_not_available.html",
         "jsFiles": [

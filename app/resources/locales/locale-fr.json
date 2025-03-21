@@ -87,6 +87,7 @@
   "login": "Authentification",
   "Logo successfully updated": "Logo téléversé avec succès",
   "Manage third-party credentials": "Gérer les identités tierces",
+  "Manage internal users and manage groups authorizations": "Gérer les utilisateurs internes et les autorisations des groupes",
   "maximum size of 1500 x 1500":"taille maximale de 1500 x 1500",
   "Multiline credential": "Identité multiligne",
   "Name": "Nom",
