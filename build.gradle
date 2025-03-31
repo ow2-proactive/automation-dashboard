@@ -158,6 +158,7 @@ configurations {
     notificationDep
     cloudWatchDep
     jobAnalyticsDep
+    adminPortalDep
 }
 
 dependencies {
@@ -220,7 +221,7 @@ copyNotificationDep.dependsOn copyGenericCatalogDep
 copyCloudWatchDep.dependsOn copyNotificationDep
 copyJobAnalyticsDep.dependsOn copyCloudWatchDep
 copyAdminPortalDep.dependsOn copyJobAnalyticsDep
-grunt_build.dependsOn copyJobAnalyticsDep
+grunt_build.dependsOn copyAdminPortalDep
 
 // makes sure on each build that bower downloaded the dependencies
 grunt_build.dependsOn 'bowerInstall'
