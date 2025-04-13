@@ -410,9 +410,10 @@
         "secondaryHtmlFiles": [],
         "notAvailablePage": "page_not_available.html",
         "jsFiles": [
-            "scripts/main-user-management-controller.js"
+            "scripts/main-user-management-controller.js",
+            "scripts/services/scheduler-service.js"
         ],
-        "angularModuleName": "user-management-module",
+        "angularModuleName": "user-management",
         "cssFile": "user_management_custom_style.css",
         "authenticate": true
     }
