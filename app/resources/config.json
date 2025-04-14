@@ -4,6 +4,7 @@
 "confServer": {
   "pcaServiceUrl": "/cloud-automation-service/",
   "schedulerRestUrl": "/rest/scheduler/",
+  "commonRestUrl": "/rest/common/",
   "rmRestUrl": "/rest/rm/",
   "notificationServiceUrl": "/notification-service/",
   "catalogServiceUrl": "/catalog/",

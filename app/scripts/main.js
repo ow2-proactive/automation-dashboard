@@ -18,6 +18,7 @@ function getProperties($http, $location) {
 
             var pcaServiceUrl = angular.toJson(response.confServer.pcaServiceUrl, true);
             var schedulerRestUrl = angular.toJson(response.confServer.schedulerRestUrl, true);
+            var commonRestUrl = angular.toJson(response.confServer.commonRestUrl, true);
             var rmRestUrl = angular.toJson(response.confServer.rmRestUrl, true);
             var notificationServiceUrl = angular.toJson(response.confServer.notificationServiceUrl, true);
             var catalogServiceUrl = angular.toJson(response.confServer.catalogServiceUrl, true);
@@ -44,6 +45,7 @@ function getProperties($http, $location) {
 
             localStorage['pcaServiceUrl'] = pcaServiceUrl;
             localStorage['schedulerRestUrl'] = schedulerRestUrl;
+            localStorage['commonRestUrl'] = commonRestUrl;
             localStorage['rmRestUrl'] = rmRestUrl;
             localStorage['notificationServiceUrl'] = notificationServiceUrl;
             localStorage['catalogServiceUrl'] = catalogServiceUrl;
