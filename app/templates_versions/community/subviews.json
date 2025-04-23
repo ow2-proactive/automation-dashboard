@@ -409,11 +409,16 @@
         "appFolder": "admin-portal/app/",
         "htmlFile": "main_user_management_view.html",
         "tooltip": "Manage internal users and manage groups authorizations",
-        "secondaryHtmlFiles": [],
+        "secondaryHtmlFiles": [
+            "modals/update_user_modal.html",
+            "modals/create_new_user_modal.html"
+        ],
         "notAvailablePage": "page_not_available.html",
         "jsFiles": [
             "scripts/main-user-management-controller.js",
-            "scripts/services/scheduler-service.js"
+            "scripts/services/scheduler-service.js",
+            "scripts/update-user-modal-controller.js",
+            "scripts/create-new-user-modal-controller.js"
         ],
         "angularModuleName": "user-management",
         "cssFile": "user_management_custom_style.css",
