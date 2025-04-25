@@ -587,6 +587,7 @@ mainModule.controller('navBarController', function ($scope, $rootScope, $http, $
         var requestGetAccountInfoUrl = JSON.parse(localStorage['restUrl']) + '/common/currentuserdata';
         var config = {headers: {'sessionid': getSessionId()}};
         $http.get(requestGetAccountInfoUrl, config).then(function (result) {
+            localStorage['userData'] = JSON.stringify(result.data);
             $scope.accountUsername = result.data.userName;
             $scope.accountDomain = result.data.domain;
             $scope.accountGroups = '';
