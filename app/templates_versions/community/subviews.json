@@ -410,13 +410,17 @@
         "htmlFile": "main_user_management_view.html",
         "tooltip": "Manage internal users and manage groups authorizations",
         "secondaryHtmlFiles": [
-            "modals/user_modal.html"
+            "modals/user_modal.html",
+            "modals/create_new_tenant_modal.html",
+            "modals/update_tenant_modal.html"
         ],
         "notAvailablePage": "page_not_available.html",
         "jsFiles": [
             "scripts/main-user-management-controller.js",
             "scripts/services/scheduler-service.js",
-            "scripts/user-modal-controller.js"
+            "scripts/user-modal-controller.js",
+            "scripts/update-tenant-modal-controller.js",
+            "scripts/create-new-tenant-modal-controller.js"
         ],
         "angularModuleName": "user-management",
         "cssFile": "user_management_custom_style.css",
