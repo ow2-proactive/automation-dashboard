@@ -117,6 +117,26 @@ Then build automation-dashboard, that will compose all subviews.
 
 In order to test subviews and automation dashboard locally, it is required not to publish the subviews archives to main repository, but to local repository of machine.
 
+### Line break issue:
+If you are building automation dashboard or subviews using different OS over time you can face an encoding issue. It usually manifest with
+a blank automation-dashboard page, when looking at the browser console a lot of warnings appear and some code can be recognized as error.
+
+When you look at the differences with the master branch using git, messages like
+`The file will have its original line endings in your working directory
+warning: LF will be replaced by CRLF in ...` can appear for each file having an issue. 
+
+To fix the problem the encoding must be consistent in automation-dashboard and all the sub-projects. We will use Dos2Unix tool To achieve that.
+
+Example: To encode all the files of the project from windows to unix encoding use the following: 
+- Open a terminal on the unix machine (where the project is)
+- Go to the automation-dashboard project directory
+- Use `find . -type f -print0 | xargs -0 dos2unix -s`
+
+This command will convert all files that are not binary files.
+
+Dos2Unix tool can convert files with DOS or Mac line breaks to Unix line breaks and vice versa.  
+Go to http://dos2unix.sourceforge.net/dos2unix.htm for more informations about the tool.
+
 ### What does grunt building do with subviews?
 
 With the following tasks, grunt injects subviews in the dashboard, depending on the requested VERSION :
