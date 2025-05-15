@@ -412,15 +412,20 @@
         "secondaryHtmlFiles": [
             "modals/user_modal.html",
             "modals/create_new_tenant_modal.html",
-            "modals/update_tenant_modal.html"
+            "modals/update_tenant_modal.html",
+            "modals/group_editor_modal.html",
+            "templates/permission_set.html"
         ],
         "notAvailablePage": "page_not_available.html",
         "jsFiles": [
             "scripts/main-user-management-controller.js",
             "scripts/services/scheduler-service.js",
             "scripts/user-modal-controller.js",
+            "scripts/group-modal-controller.js",
             "scripts/update-tenant-modal-controller.js",
-            "scripts/create-new-tenant-modal-controller.js"
+            "scripts/create-new-tenant-modal-controller.js",
+            "scripts/components/permission-set.js",
+            "scripts/services/scheduler-service.js"
         ],
         "angularModuleName": "user-management",
         "cssFile": "user_management_custom_style.css",
