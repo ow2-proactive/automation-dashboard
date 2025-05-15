@@ -419,6 +419,7 @@
             "scripts/main-user-management-controller.js",
             "scripts/services/scheduler-service.js",
             "scripts/user-modal-controller.js",
+            "scripts/group-modal-controller.js",
             "scripts/update-tenant-modal-controller.js",
             "scripts/create-new-tenant-modal-controller.js",
             "scripts/components/permission-set.js",
